@@ -1,7 +1,8 @@
 <?php
-/*
-Count Per Day - Options and Uninstall
-*/
+/**
+ * Filename: counter-options.php
+ * Count Per Day - Options and Uninstall
+ */
 
 // Form auswerten 
 if(!empty($_POST['do']))
@@ -13,6 +14,8 @@ if(!empty($_POST['do']))
 			update_option( 'cpd_onlinetime', $_POST['cpd_onlinetime'] );
 			$u = empty( $_POST['cpd_user'] ) ? 0 : 1 ;
 			update_option( 'cpd_user', $u );
+			$a = empty( $_POST['cpd_autocount'] ) ? 0 : 1 ;
+			update_option( 'cpd_autocount', $a );
 			update_option( 'cpd_bots', $_POST['cpd_bots'] );
 			echo '<div id="message" class="updated fade"><p>'.__('Options updated', 'cpd').'</p></div>';
 			break;
@@ -26,11 +29,14 @@ if(!empty($_POST['do']))
 				delete_option('cpd_codb_version');
 				delete_option('cpd_onlinetime');
 				delete_option('cpd_user');
+				delete_option('cpd_autocount');
 				delete_option('cpd_bots');
-				echo '<div id="message" class="updated fade" style="color:green;"><p>';
-				echo __('Table', 'cpd').' '.CPD_C_TABLE.' '.__('deleted', 'cpd').'<br/>';
-				echo __('Table', 'cpd').' '.CPD_CO_TABLE.' '.__('deleted', 'cpd').'<br/>';
-				echo __('Options', 'cpd').' '.__('deleted', 'cpd').'</p></div>';
+				echo '<div id="message" class="updated fade"><p>';
+				printf(__('Table %s deleted', 'cpd'), CPD_C_TABLE);
+				echo '<br/>';
+				printf(__('Table %s deleted', 'cpd'), CPD_CO_TABLE);
+				echo '<br/>';
+				echo __('Options deleted', 'cpd').'</p></div>';
 				$mode = 'end-UNINSTALL';
 			}
 			break;
@@ -39,12 +45,11 @@ if(!empty($_POST['do']))
 	}
 }
 
-
 switch($mode) {
 	// Deaktivierung
 	case 'end-UNINSTALL':
 		$deactivate_url = 'plugins.php?action=deactivate&amp;plugin='.dirname(plugin_basename(__FILE__)).'/counter.php';
-		if(function_exists('wp_nonce_url')) 
+		if ( function_exists('wp_nonce_url') ) 
 			$deactivate_url = wp_nonce_url($deactivate_url, 'deactivate-plugin_'.dirname(plugin_basename(__FILE__)).'/counter.php');
 		echo '<div class="wrap">';
 		echo '<h2>'.__('Uninstall', 'cpd').' "Count per Day"</h2>';
@@ -65,6 +70,9 @@ switch($mode) {
 		</tr><tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Loged on Users', 'cpd') ?>:</th>
 			<td><input type="checkbox" name="cpd_user" id="cpd_user" <?php if(get_option('cpd_user')==1) echo 'checked="checked"'; ?> /> <label for="cpd_user"><?php _e('count too', 'cpd') ?></label></td>
+		</tr><tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Auto counter', 'cpd') ?>:</th>
+			<td><input type="checkbox" name="cpd_autocount" id="cpd_autocount" <?php if(get_option('cpd_autocount')==1) echo 'checked="checked"'; ?> /> <label for="cpd_autocount"><?php _e('Counts automatically single-posts and pages, no changes on template needed.', 'cpd') ?></label></td>
 		</tr><tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Bots to ignore', 'cpd') ?>:</th>
 			<td><textarea name="cpd_bots" cols="50" rows="10"><?php echo get_option('cpd_bots'); ?></textarea></td>

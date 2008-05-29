@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Count Per Day
-Plugin URI: http://www.tomsdimension.de/wp-plugins/countperday
+Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard.
-Version: 1.1
+Version: 1.2
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -29,7 +29,8 @@ function cpdShow( $before='', $after=' reads', $show = true, $count = true )
 {
 	global $wpdb;
 	$page = get_the_ID();
-	if ( $count == true )
+	// nur zählen wenn Parameter stimmt und Autocounter aus ist (doppelt muss nicht sein)
+	if ( $count == true && get_option('cpd_autocount') == 0 )
 		cpdCount();
 	$visits = $wpdb->get_results("SELECT page FROM ".CPD_C_TABLE." WHERE page='$page';");
 	$visits_per_page = count($visits);
@@ -39,14 +40,20 @@ function cpdShow( $before='', $after=' reads', $show = true, $count = true )
 		return $visits_per_page;
 }
 
-// Seitenaufruf nur zählen, keine Anzeige
+/**
+ * Seitenaufruf nur zählen, keine Anzeige
+ */
 function cpdCount()
 {
 	global $wpdb;
-	cpdCreateTables();
-	if ( function_exists('get_the_ID') )
+	cpdCreateTables(); // DB-Tabellen erstellen, falls sie noch nicht existieren
+	
+	$page = 0;
+	// Post-ID finden
+	if (have_posts()) : while (have_posts()) : the_post();
 		$page = get_the_ID();
-		
+	endwhile; endif;
+
 	$countUser = ( get_option('cpd_user') == 0 && is_user_logged_in() == true ) ? 0 : 1;
 
 	// nur zählen wenn: kein Bot, PostID vorhanden, Anmeldung passt
@@ -70,7 +77,9 @@ function cpdCount()
 	}
 }
 
-// Bot oder Mensch?
+/**
+ * Bot oder Mensch?
+ */
 function cpdIsBot()
 {
 	// Strings die auf Suchmaschinen deuten
@@ -84,7 +93,9 @@ function cpdIsBot()
 	return $isBot;
 }
 
-// Tabellen erstellen wenn nicht vorhanden
+/**
+ * Tabellen erstellen wenn nicht vorhanden
+ */
 function cpdCreateTables() {
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	global $wpdb;
@@ -119,11 +130,14 @@ function cpdCreateTables() {
 	
 	add_option( 'cpd_onlinetime', 300 );
 	add_option( 'cpd_user', 0 );
+	add_option( 'cpd_autocount', 0 );
 	add_option( 'cpd_bots', "bot\nspider\nsearch\ncrawler\nask.com\nvalidator\nsnoopy\n".
 		"suchen.de\nsuchbaer.de\nshelob\nsemager\nxenu\nsuch_de\nia_archiver\nMicrosoft URL Control\nnetluchs" );
 }
 
-// Statistikseite
+/**
+ * Statistikseite
+ */
 function cpdDashbord()
 {
 	?>
@@ -146,7 +160,7 @@ function cpdDashbord()
 			</div>
 		</td>
 		<td>
-			<div><h3><?php _e('Reads per Month', 'cpd') ?></h3><?php cpdGetUserPerMonth(); ?></div>
+			<div><h3><?php _e('Reads per month', 'cpd') ?></h3><?php cpdGetUserPerMonth(); ?></div>
 		</td>
 		<td>
 			<div><h3><?php _e('Reads per post', 'cpd') ?></h3><?php cpdGetUserPerPost(50); ?></div>
@@ -287,6 +301,8 @@ function cpdGetUserPerDay()
 		echo number_format($count, 0);
 }
 
+
+
 /**
  * fügt Stylesheet in WP-Head ein
  *
@@ -308,7 +324,6 @@ function cpdMenu($content)
 	}
 }
 
-
 /**
  * lädt lokale Sprachdatei
  */
@@ -320,12 +335,27 @@ function cpd_init_locale()
 	load_plugin_textdomain('cpd', dirname(__FILE__));
 }
 
-//if (eregi("phpmyadmin",$_REQUEST['page'])) {
-//add_action('admin_head', 'silpstream_wp_phpmyadmin_add_style');
-//}
+/**
+ * lädt automatischen Counter
+ * Zum reinen Zählen ist kein Eingriff ins Template mehr notwendig.
+ */
+function cpd_autocount( )
+{
+	if ( is_single() || is_page() )
+		cpdCount();
+}
 
+// Funktionen adden
 add_action('init', 'cpd_init_locale', 98);
-add_action( 'admin_head', 'cpdAddCSS', 1000 );
 add_action('admin_menu', 'cpdMenu');
 register_activation_hook(__FILE__,'cpdCreateTables');
+
+// Stylesheet nur bei Statistik-Seite laden
+if ( eregi( "count-per-day", $_REQUEST['page']) )
+	add_action( 'admin_head', 'cpdAddCSS', 100 );
+
+// Autocounter laden, wenn in Optionen angegeben
+if ( get_option('cpd_autocount') == 1 )	
+	add_action('wp', 'cpd_autocount');
+	
 ?>
