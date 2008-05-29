@@ -94,9 +94,9 @@ function cpdCreateTables() {
 		// Counter-Tabelle existieren nicht - anlegen
 		$sql ="CREATE TABLE IF NOT EXISTS `".CPD_C_TABLE."` (
 			`id` int(10) NOT NULL auto_increment,
-  			`ip` varchar(15) collate latin1_general_ci NOT NULL,
-  			`client` varchar(100) collate latin1_general_ci NOT NULL,
-  			`date` char(6) collate latin1_general_ci NOT NULL,
+  			`ip` varchar(15) NOT NULL,
+  			`client` varchar(100) NOT NULL,
+  			`date` char(6) NOT NULL,
   			`page` int(11) NOT NULL,
   			PRIMARY KEY  (`id`)
 			);";
@@ -109,7 +109,7 @@ function cpdCreateTables() {
 		// CounterOnline-Tabelle existieren nicht - anlegen
 		$sql ="CREATE TABLE IF NOT EXISTS `".CPD_CO_TABLE."` (
 			`timestamp` int(15) NOT NULL default '0',
-			`ip` varchar(15) collate latin1_general_ci NOT NULL default '',
+			`ip` varchar(15) NOT NULL default '',
 			`page` int(11) NOT NULL default '0',
 			PRIMARY KEY  (`ip`)
 			);";
