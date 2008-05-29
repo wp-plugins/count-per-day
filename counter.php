@@ -52,6 +52,7 @@ function cpdCount()
 	// Post-ID finden
 	if (have_posts()) : while (have_posts()) : the_post();
 		$page = get_the_ID();
+		break;
 	endwhile; endif;
 
 	$countUser = ( get_option('cpd_user') == 0 && is_user_logged_in() == true ) ? 0 : 1;
