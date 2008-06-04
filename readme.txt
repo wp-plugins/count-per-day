@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads
 Requires at least: 2.0
 Tested up to: 2.5.1
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -17,7 +17,7 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 It counts 1 visit per IP per day. So any reload of the page don't increment the counter.
 
-Languages: english, german
+Languages: english, german, italian
 
 == Installation ==
 
@@ -44,8 +44,8 @@ no answers
 
 == Screenshots ==
 
-1. Statistics on Count-per-Day-Dashboard (german)
-2. Options (german)
+1. Statistics on Count-per-Day Dashboard (german)
+2. Options (italian)
 
 == Arbitrary section ==
 
@@ -108,8 +108,14 @@ _cpdGetUserPerPost( $limit = 0 )_
 * counter.css
 * locale/de_DE.mo
 * locale/de_DE.po
+* locale/it_IT.mo
+* locale/it_IT.po
 
 **Changelog**
+
+_Version 1.2.2_
+
++ New language: Italian, thanks to Gianni Diurno http://gidibao.net/index.php/portfolio/
 
 _Version 1.2.1_
 
