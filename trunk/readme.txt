@@ -45,7 +45,7 @@ no answers
 == Screenshots ==
 
 1. Statistics on Count-per-Day Dashboard (german)
-2. Options (italian)
+2. Options (german)
 
 == Arbitrary section ==
 
