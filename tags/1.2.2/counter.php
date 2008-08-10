@@ -48,12 +48,17 @@ function cpdCount()
 	global $wpdb;
 	cpdCreateTables(); // DB-Tabellen erstellen, falls sie noch nicht existieren
 	
-	$page = 0;
+		$page = 0;
 	// Post-ID finden
-	if (have_posts()) : while ( have_posts() && $page == 0 ) : the_post();
+/* if (have_posts()) : while ( have_posts() && $page == 0 ) : the_post();
 		$page = get_the_ID();
 	endwhile; endif;
 	rewind_posts();
+*/
+	if ( function_exists('get_the_ID') )
+		$page = get_the_ID();
+	
+	// echo $page;
 
 	$countUser = ( get_option('cpd_user') == 0 && is_user_logged_in() == true ) ? 0 : 1;
 
