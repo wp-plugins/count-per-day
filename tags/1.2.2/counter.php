@@ -48,15 +48,21 @@ function cpdCount()
 	global $wpdb;
 	cpdCreateTables(); // DB-Tabellen erstellen, falls sie noch nicht existieren
 	
-	$page = 0;
 	// Post-ID finden
-	if (have_posts()) : while ( have_posts() && $page == 0 ) : the_post();
+	if ( get_option('cpd_autocount') == 1 )
+	{
+		if (have_posts()) : while ( have_posts() && $page == 0 ) : the_post();
+			$page = get_the_ID();
+		endwhile; endif;
+		rewind_posts();
+	}
+	else if ( is_single() || is_page() )
 		$page = get_the_ID();
-	endwhile; endif;
-	rewind_posts();
-
+	else
+		$page = 0;
+	
 	$countUser = ( get_option('cpd_user') == 0 && is_user_logged_in() == true ) ? 0 : 1;
-
+	
 	// nur zählen wenn: kein Bot, PostID vorhanden, Anmeldung passt
 	if ( cpdIsBot() == false && !empty($page) && $countUser == 1 )
 	{
