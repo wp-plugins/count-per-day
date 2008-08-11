@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads
 Requires at least: 2.0
 Tested up to: 2.6
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -112,6 +112,10 @@ _cpdGetUserPerPost( $limit = 0 )_
 * locale/it_IT.po
 
 **Changelog**
+
+_Version 1.2.3_
+
++ Bugfix: autocount endless looping
 
 _Version 1.2.2_
 
