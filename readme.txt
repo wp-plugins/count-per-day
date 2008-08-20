@@ -113,6 +113,11 @@ _cpdGetUserPerPost( $limit = 0 )_
 
 **Changelog**
 
+_Version 1.3_
+
++ New: you can delete old data if you add a new bot string
++ Bugfix: Bot check was case-sensitive
+
 _Version 1.2.3_
 
 + Bugfix: autocount endless looping

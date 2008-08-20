@@ -19,6 +19,11 @@ if(!empty($_POST['do']))
 			update_option( 'cpd_bots', $_POST['cpd_bots'] );
 			echo '<div id="message" class="updated fade"><p>'.__('Options updated', 'cpd').'</p></div>';
 			break;
+		// clean database
+		case 'cpd_clean' :
+			$rows = cpdCleanDB();
+			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Database cleaned. %s rows deleted.', 'cpd'), $rows).'</p></div>';
+			break;
 		//  uninstall plugin
 		case __('UNINSTALL Count per Day', 'cpd') :
 			if(trim($_POST['uninstall_cpd_yes']) == 'yes')
@@ -78,9 +83,26 @@ switch($mode) {
 			<td><textarea name="cpd_bots" cols="50" rows="10"><?php echo get_option('cpd_bots'); ?></textarea></td>
 		</tr>
 		</table>
-		<p class="submit">
+		<p>
 			<input type="hidden" name="do" value="cpd_update" />
 			<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button" />
+		</p>
+		</form>
+	</div>
+
+
+	<!-- Cleaner -->
+	<div class="wrap" style="margin-top: 50px;">
+		<h2>Count per Day - <?php _e('Clean the database', 'cpd') ?></h2>
+		
+		<p>
+			<?php _e('You can clean the counter table by delete the "spam data".<br />If you add new bots above the old "spam data" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots.', 'cpd') ?>
+		</p>
+		
+		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+		<p>
+			<input type="hidden" name="do" value="cpd_clean" />
+			<input type="submit" name="clean" value="<?php _e('Clean the database', 'cpd') ?>" class="button" />
 		</p>
 		</form>
 	</div>
