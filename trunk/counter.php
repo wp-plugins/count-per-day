@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard.
-Version: 1.2.3
+Version: 1.3
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -86,16 +86,29 @@ function cpdCount()
 
 /**
  * Bot oder Mensch?
+ * @param string $client String der auf Bot getestet werden soll
  */
-function cpdIsBot()
+function cpdIsBot( $client = '' )
 {
 	// Strings die auf Suchmaschinen deuten
 	$bots = explode( "\n", get_option('cpd_bots') );
 	$isBot = false;
 	foreach ( $bots as $bot )
 	{
-		if ( strpos( $_SERVER['HTTP_USER_AGENT'], trim($bot) ) !== false )
-			$isBot = true;
+		$b = trim($bot);
+		if ( !empty($b) )
+		{
+			if ( empty($client) )
+			{
+				if ( strpos( strtolower($_SERVER['HTTP_USER_AGENT']), strtolower($b) ) !== false )
+					$isBot = true;
+			}
+			else
+			{
+				if ( strpos( strtolower($client), strtolower($b) ) !== false )
+					$isBot = true;
+			}
+		}
 	}
 	return $isBot;
 }
@@ -308,7 +321,25 @@ function cpdGetUserPerDay()
 		echo number_format($count, 0);
 }
 
-
+/**
+ * loescht alten Spam
+ */
+function cpdCleanDB()
+{
+	global $wpdb;
+	
+	$rows = 0;
+	$v = $wpdb->get_results("SELECT * FROM ".CPD_C_TABLE.";");
+	foreach ($v as $row)
+	{
+		if ( cpdIsBot($row->client) )
+		{
+			$wpdb->query("DELETE FROM ".CPD_C_TABLE." WHERE id = ".$row->id.";");
+			$rows++;
+		}
+	}
+	return $rows;
+}
 
 /**
  * fügt Stylesheet in WP-Head ein
