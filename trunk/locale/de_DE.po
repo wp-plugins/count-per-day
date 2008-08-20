@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Count per Day\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-29 20:03+0100\n"
+"POT-Creation-Date: 2008-08-20 20:46+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Tom Braider <post@tomsdimension.de>\n"
 "Language-Team: \n"
@@ -12,143 +12,157 @@ msgstr ""
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-KeywordsList: __;_e\n"
-"X-Poedit-Basepath: P:\\xampp\\htdocs\\td\\wp\\wp-content\\plugins\\\n"
+"X-Poedit-Basepath: P:\\xampp\\htdocs\\wp\\wp-content\\plugins\\\n"
 "X-Poedit-SearchPath-0: count-per-day\n"
 
-#: count-per-day/counter-options.php:19
+#: count-per-day/counter-options.php:20
 msgid "Options updated"
 msgstr "Einstellungen aktualisiert"
 
-#: count-per-day/counter-options.php:22
-#: count-per-day/counter-options.php:105
+#: count-per-day/counter-options.php:25
+#, php-format
+msgid "Database cleaned. %s rows deleted."
+msgstr "Datenbank aufger&auml;umt. %s Datens&auml;tze gelöscht."
+
+#: count-per-day/counter-options.php:28
+#: count-per-day/counter-options.php:128
 msgid "UNINSTALL Count per Day"
 msgstr "DEINSTALLIERE Count per Day"
 
-#: count-per-day/counter-options.php:34
-#: count-per-day/counter-options.php:36
+#: count-per-day/counter-options.php:40
+#: count-per-day/counter-options.php:42
 #, php-format
 msgid "Table %s deleted"
 msgstr "Tabelle %s gelöscht"
 
-#: count-per-day/counter-options.php:38
+#: count-per-day/counter-options.php:44
 msgid "Options deleted"
 msgstr "Einstellungen gelöscht"
 
-#: count-per-day/counter-options.php:54
-#: count-per-day/counter-options.php:91
+#: count-per-day/counter-options.php:60
+#: count-per-day/counter-options.php:114
 msgid "Uninstall"
 msgstr "Deinstallation"
 
-#: count-per-day/counter-options.php:55
+#: count-per-day/counter-options.php:61
 msgid "Click here"
 msgstr "Klick hier"
 
-#: count-per-day/counter-options.php:55
+#: count-per-day/counter-options.php:61
 msgid "to finish the uninstall and to deactivate \"Count per Day\"."
 msgstr "um die Deinstallation zu beenden und \"Count per Day\" zu deaktivieren."
 
-#: count-per-day/counter-options.php:62
+#: count-per-day/counter-options.php:68
 msgid "Options"
 msgstr "Einstellungen"
 
-#: count-per-day/counter-options.php:67
+#: count-per-day/counter-options.php:73
 msgid "Online time"
 msgstr "Onlinezeit"
 
-#: count-per-day/counter-options.php:68
+#: count-per-day/counter-options.php:74
 msgid "Seconds for online counter"
 msgstr "Sekunden für Onlinecounter"
 
-#: count-per-day/counter-options.php:70
+#: count-per-day/counter-options.php:76
 msgid "Loged on Users"
 msgstr "Angemeldete Benutzer"
 
-#: count-per-day/counter-options.php:71
+#: count-per-day/counter-options.php:77
 msgid "count too"
 msgstr "auch mit zählen"
 
-#: count-per-day/counter-options.php:73
+#: count-per-day/counter-options.php:79
 msgid "Auto counter"
 msgstr "Auto-Counter"
 
-#: count-per-day/counter-options.php:74
+#: count-per-day/counter-options.php:80
 msgid "Counts automatically single-posts and pages, no changes on template needed."
 msgstr "Zählt automatisch Besuche auf Single-Posts und Seiten ohne Änderungen am Template."
 
-#: count-per-day/counter-options.php:76
+#: count-per-day/counter-options.php:82
 msgid "Bots to ignore"
 msgstr "Bots ignorieren"
 
-#: count-per-day/counter-options.php:82
+#: count-per-day/counter-options.php:88
 msgid "Update options"
 msgstr "Einstellungen aktualisieren"
 
-#: count-per-day/counter-options.php:93
+#: count-per-day/counter-options.php:96
+#: count-per-day/counter-options.php:105
+msgid "Clean the database"
+msgstr "Datenbank aufr&auml;umen"
+
+#: count-per-day/counter-options.php:99
+msgid "You can clean the counter table by delete the \"spam data\".<br />If you add new bots above the old \"spam data\" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots."
+msgstr "Du kannst die Counter-Tabelle von \"Spam-Daten\" befreien.<br />Wenn du neue Bots zu der Liste oben hinzuf&uuml;gst bleiben die alten \"Spam-Daten\" erhalten.<br />Hier kannst du den Filter erneut laufen lassen und die Besuche von Bots nachtr&auml;glich l&ouml;schen."
+
+#: count-per-day/counter-options.php:116
 msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
 msgstr "Wenn \"Count per Day\" nur deaktiviert wird, bleiben die Tabellen in der Datenbank erhalten."
 
-#: count-per-day/counter-options.php:94
+#: count-per-day/counter-options.php:117
 msgid "Here you can delete the tables and disable \"Count per Day\"."
 msgstr "Hier kannst du \"Count per Day\" deinstallieren und die Tabellen löschen."
 
-#: count-per-day/counter-options.php:97
+#: count-per-day/counter-options.php:120
 msgid "WARNING"
 msgstr "WARNUNG"
 
-#: count-per-day/counter-options.php:98
+#: count-per-day/counter-options.php:121
 msgid "These tables (with ALL counter data) will be deleted."
 msgstr "Diese Tabellen werden mit ALLEN Zählerdaten gelöscht."
 
-#: count-per-day/counter-options.php:100
+#: count-per-day/counter-options.php:123
 msgid "If \"Count per Day\" re-installed, the counter starts at 0."
 msgstr "Wenn \"Count per Day\" erneut installiert wird, beginnt der Zähler bei 0."
 
-#: count-per-day/counter-options.php:104
+#: count-per-day/counter-options.php:127
 msgid "Yes"
 msgstr "Ja, los!"
 
-#: count-per-day/counter-options.php:105
+#: count-per-day/counter-options.php:128
 msgid "You are sure to disable Count per Day and delete all data?"
 msgstr "Bist du sicher, dass du Count per Day deaktivieren und alle Daten löschen willst?"
 
-#: count-per-day/counter.php:137
+#: count-per-day/counter.php:165
 msgid "Statistics"
 msgstr "Statistiken"
 
-#: count-per-day/counter.php:142
-#: count-per-day/counter.php:144
+#: count-per-day/counter.php:170
+#: count-per-day/counter.php:172
 msgid "Reads at all"
 msgstr "Besucher gesamt"
 
-#: count-per-day/counter.php:145
+#: count-per-day/counter.php:173
 msgid "Reads currently online"
 msgstr "Besucher momentan online"
 
-#: count-per-day/counter.php:146
+#: count-per-day/counter.php:174
 msgid "Reads today"
 msgstr "Besucher heute"
 
-#: count-per-day/counter.php:147
+#: count-per-day/counter.php:175
 msgid "Reads yesterday"
 msgstr "Besucher gestern"
 
-#: count-per-day/counter.php:148
+#: count-per-day/counter.php:176
 msgid "Reads last week"
 msgstr "Besucher letzte Woche"
 
-#: count-per-day/counter.php:149
+#: count-per-day/counter.php:177
 msgid "Counter starts at"
 msgstr "gezählt ab"
 
-#: count-per-day/counter.php:150
+#: count-per-day/counter.php:178
 msgid "Reads per day"
 msgstr "Besucher pro Tag"
 
-#: count-per-day/counter.php:155
+#: count-per-day/counter.php:183
 msgid "Reads per month"
 msgstr "Besucher pro Monat"
 
-#: count-per-day/counter.php:158
+#: count-per-day/counter.php:186
 msgid "Reads per post"
 msgstr "Besucher pro Artikel"
 
