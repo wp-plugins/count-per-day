@@ -71,7 +71,7 @@ switch($mode) {
 		<table class="form-table">
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Online time', 'cpd') ?>:</th>
-			<td><input class="code" type="text" name="cpd_onlinetime" size="3" value="<?php echo get_option('cpd_onlinetime'); ?>" /> <?php _e('Seconds for online counter', 'cpd') ?></td>
+			<td><input class="code" type="text" name="cpd_onlinetime" size="3" value="<?php echo get_option('cpd_onlinetime'); ?>" /> <?php _e('Seconds for online counter. Used for "Visitors online" on dashboard page.', 'cpd') ?></td>
 		</tr><tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Loged on Users', 'cpd') ?>:</th>
 			<td><input type="checkbox" name="cpd_user" id="cpd_user" <?php if(get_option('cpd_user')==1) echo 'checked="checked"'; ?> /> <label for="cpd_user"><?php _e('count too', 'cpd') ?></label></td>

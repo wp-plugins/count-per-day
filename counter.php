@@ -170,7 +170,7 @@ function cpdDashbord()
 			<h3><?php _e('Reads at all', 'cpd') ?></h3>
 			<ul>
 				<li><?php _e('Reads at all', 'cpd') ?>: <span><?php cpdGetUserAll(); ?></span></li>
-				<li><?php _e('Reads currently online', 'cpd') ?>: <span><?php cpdGetUserOnline(); ?></span></li>
+				<li><?php _e('Visitors currently online', 'cpd') ?>: <span><?php cpdGetUserOnline(); ?></span></li>
 				<li><?php _e('Reads today', 'cpd') ?>: <b><?php cpdGetUserToday(); ?></b></li>
 				<li><?php _e('Reads yesterday', 'cpd') ?>: <b><?php cpdGetUserYesterday(); ?></b></li>
 				<li><?php _e('Reads last week', 'cpd') ?>: <b><?php cpdGetUserLastWeek(); ?></b></li>
@@ -356,7 +356,7 @@ function cpdAddCSS() {
 function cpdMenu($content)
 {
 	if (function_exists('add_options_page')) {
-		add_options_page('CountPerDay', 'Count Per Day', 'manage_options', 'options-general.php?page='.dirname(plugin_basename(__FILE__)).'/counter-options.php') ;
+		add_options_page('CountPerDay', 'Count Per Day', 'manage_options', dirname(plugin_basename(__FILE__)).'/counter-options.php') ;
 		// Dashboard Menüpunkt
 		add_submenu_page('index.php','CountPerDay','Count per Day',1,__FILE__,'cpdDashbord');
 	}
