@@ -1,169 +1,175 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Count per Day in italiano\n"
+"Project-Id-Version: Count per Day\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-03 20:08+0100\n"
+"POT-Creation-Date: 2008-09-03 20:03+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Tom Braider <post@tomsdimension.de>\n"
-"Language-Team: Gianni Diurno | http://gidibao.net <gidibao@gmail.com>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Italian\n"
-"X-Poedit-Country: ITALY\n"
+"X-Poedit-Language: Portuguese\n"
+"X-Poedit-Country: BRAZIL\n"
 "X-Poedit-KeywordsList: __;_e\n"
-"X-Poedit-Basepath: P:\\xampp\\htdocs\\wp\\wp-content\\plugins\\count-per-day\n"
+"X-Poedit-Basepath: P:\\xampp\\htdocs\\levelbase_tribune\\wp-content\\plugins\\count-per-day\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: counter-options.php:20
 msgid "Options updated"
-msgstr "Le opzioni sono state aggiornate"
+msgstr "Op&ccedil;&otilde;es atualizadas"
 
 #: counter-options.php:25
 #, php-format
 msgid "Database cleaned. %s rows deleted."
-msgstr "Database svuotato. %s record cancellato."
+msgstr "Banco de dados limpo. %s linhas apagadas."
 
 #: counter-options.php:28
 #: counter-options.php:128
 msgid "UNINSTALL Count per Day"
-msgstr "DISINSTALLA Count per Day"
+msgstr "DESINSTALAR o Count per Day"
 
 #: counter-options.php:40
 #: counter-options.php:42
 #, php-format
 msgid "Table %s deleted"
-msgstr "La tabella %s &eacute; stata cancellata"
+msgstr "Tabela %s apagada"
 
 #: counter-options.php:44
 msgid "Options deleted"
-msgstr "Le opzioni sono state cancellate"
+msgstr "Op&ccedil;&otilde;es apagadas"
 
 #: counter-options.php:60
 #: counter-options.php:114
 msgid "Uninstall"
-msgstr "Disinstalla"
+msgstr "Desinstalar"
 
 #: counter-options.php:61
 msgid "Click here"
-msgstr "Clicca qui"
+msgstr "Clique aqui"
 
 #: counter-options.php:61
 msgid "to finish the uninstall and to deactivate \"Count per Day\"."
-msgstr "per completare la disinstallazione e disattivare \"Count per Day\"."
+msgstr "Para terminar a desinstala&ccedil;&atilde;o e desativar o  \"Count per Day\". "
 
 #: counter-options.php:68
 msgid "Options"
-msgstr "Opzioni"
+msgstr "Op&ccedil;&otilde;es"
 
 #: counter-options.php:73
 msgid "Online time"
-msgstr "Durata del collegamento"
+msgstr "Per&iacute;odo online"
 
 #: counter-options.php:74
 msgid "Seconds for online counter. Used for \"Visitors online\" on dashboard page."
-msgstr "Secondi per il counter online. In uso per \"Visitors online\" nella Bacheca."
+msgstr "Seconds for online counter. Usado no \"Visitantes online\" na p&aacute;gina do painel."
 
 #: counter-options.php:76
 msgid "Loged on Users"
-msgstr "Utenti accreditati"
+msgstr "Usu&aacute;rios logados"
 
 #: counter-options.php:77
 msgid "count too"
-msgstr "conteggia anche loro"
+msgstr "contar tamb&eacute;m"
 
 #: counter-options.php:79
 msgid "Auto counter"
-msgstr "Contatore-automatico"
+msgstr "Autocontador"
 
 #: counter-options.php:80
 msgid "Counts automatically single-posts and pages, no changes on template needed."
-msgstr "Conta in automatico i singoli articoli e le pagine. Non &eacute; necessaria alcuna modifica del template."
+msgstr "Conta automaticamente posts e p&aacute;ginas, sem a necessidade de altera&ccedil;&otilde;es em templates."
 
 #: counter-options.php:82
 msgid "Bots to ignore"
-msgstr "Bots da ignorare"
+msgstr "Bots a serem ignorados"
 
 #: counter-options.php:88
 msgid "Update options"
-msgstr "Aggiorna le opzioni"
+msgstr "Atualizar op&ccedil;&otilde;es"
 
 #: counter-options.php:96
 #: counter-options.php:105
 msgid "Clean the database"
-msgstr "Svuota il database"
+msgstr "Limpar o banco de dados"
 
 #: counter-options.php:99
 msgid "You can clean the counter table by delete the \"spam data\".<br />If you add new bots above the old \"spam data\" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots."
-msgstr "Puoi svuotare la tabella del contatore dai \"dati spam\".<br />Aggiungendo dei nuovi bots sopra ai vecchi \"dati spam\" conservati nel database.<br />Qui tu puoi avviare nuovamente il filtro per i bot e cancellare le visite dei bots."
+msgstr "Voc&ecirc; pode limpar os \"dados de spam\" da tabela de contadores. <br />Caso voc&ecirc; adicione novos bots acima, os \"dados de spam\" deles continuar&atilde;o no banco de dados. <br />Para limpar as visitas desses bots, voc&ecirc; pode executar novamente o filtro de bot aqui."
 
 #: counter-options.php:116
 msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
-msgstr "La disattivazione in s&egrave; di \"Count per Day\" non canceller&agrave; le tabelle del database."
+msgstr "Se o plugin \"Count per Day\" for desativado apenas, as tabelas do banco de dados ser&atilde;o preservadas."
 
 #: counter-options.php:117
 msgid "Here you can delete the tables and disable \"Count per Day\"."
-msgstr "Qui potrai cancellare le tabelle e disattivare \"Count per Day\"."
+msgstr "A op&ccedil;&atilde;o a seguir permite apagar definitivamente as tabelas do banco de dados, al&eacute;m de desabilitar o plugin."
 
 #: counter-options.php:120
 msgid "WARNING"
-msgstr "ATTENZIONE"
+msgstr "ATEN&Ccedil;&Atilde;O"
 
 #: counter-options.php:121
 msgid "These tables (with ALL counter data) will be deleted."
-msgstr "Queste tabelle (compresi TUTTI i dati) saranno cancellate."
+msgstr "As seguintes tabelas (incluindo TODOS os dados dos contadores) ser&atilde;o apagadas:"
 
 #: counter-options.php:123
 msgid "If \"Count per Day\" re-installed, the counter starts at 0."
-msgstr "Qualora desiderassi re-installare \"Count per Day\", ricordati che il contatore ripartir&agrave; da 0."
+msgstr "Se o \"Count per Day\" for reinstalado, os contadores reiniciar&atilde;o a partir do 0."
 
 #: counter-options.php:127
 msgid "Yes"
-msgstr "S&igrave;"
+msgstr "Sim, quero"
 
 #: counter-options.php:128
 msgid "You are sure to disable Count per Day and delete all data?"
-msgstr "Sei certo di volere disattivare Count per Day e cancellare tutti i dati?"
+msgstr "Confirma a desativa&ccedil;&atilde;o do Count per Day e a exclus&atilde;o de todos os dados?"
 
 #: counter.php:167
 msgid "Statistics"
-msgstr "Satistiche"
+msgstr "Estat&iacute;sticas"
 
 #: counter.php:172
 #: counter.php:174
 msgid "Reads at all"
-msgstr "generali"
+msgstr "Total de visitas"
 
 #: counter.php:175
+#, fuzzy
 msgid "Visitors currently online"
-msgstr "Utenti attualmente in linea"
+msgstr "Visitantes online"
 
 #: counter.php:176
 msgid "Reads today"
-msgstr "Oggi"
+msgstr "Visitas hoje"
 
 #: counter.php:177
 msgid "Reads yesterday"
-msgstr "Ieri"
+msgstr "Visitas ontem"
 
 #: counter.php:178
 msgid "Reads last week"
-msgstr "La scorsa settimana"
+msgstr "Visitas semana passada"
 
 #: counter.php:179
 msgid "Counter starts at"
-msgstr "Il contatore parte dal"
+msgstr "In&iacute;cio da contagem"
 
 #: counter.php:180
 msgid "Reads per day"
-msgstr "per giorno"
+msgstr "(m&eacute;dia) de visitas por dia"
 
 #: counter.php:185
 msgid "Reads per month"
-msgstr "per mese"
+msgstr "Visitas por m&ecirc;s"
 
 #: counter.php:188
 msgid "Reads per post"
-msgstr "per articolo"
+msgstr "Visitas por post"
+
+#~ msgid "Seconds for online counter"
+#~ msgstr "Segundos desde a visita para ser considerado online"
+#~ msgid "Table"
+#~ msgstr "Tabelle"
 

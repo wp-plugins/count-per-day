@@ -3,8 +3,8 @@ Contributors: Tom Braider
 Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads
 Requires at least: 2.0
-Tested up to: 2.6.1
-Stable tag: 1.2.3
+Tested up to: 2.6
+Stable tag: 1.3
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -17,7 +17,7 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 It counts 1 visit per IP per day. So any reload of the page don't increment the counter.
 
-Languages: english, german, italian
+Languages: english, german, italian, portuguese
 
 == Installation ==
 
@@ -28,7 +28,7 @@ First activation will create the 2 tables wp _ cpd _ counter and wp _ cpd _ coun
 
 **Configuration**
 
-go to Options Page :)
+See the Options Page. It's easy. :)
 
 If "Auto counter" is on reads on single-posts and pages will count without any changes on template.<br>
 
@@ -110,6 +110,8 @@ _cpdGetUserPerPost( $limit = 0 )_
 * locale/de_DE.po
 * locale/it_IT.mo
 * locale/it_IT.po
+* locale/pt_BR.mo
+* locale/pt_BR.po
 
 **Changelog**
 
@@ -117,6 +119,7 @@ _Version 1.3_
 
 + New: you can delete old data if you add a new bot string
 + Bugfix: Bot check was case-sensitive
++ New language: Portuguese, thanks to Filipe
 
 _Version 1.2.3_
 
