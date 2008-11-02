@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads
 Requires at least: 2.0
-Tested up to: 2.6
+Tested up to: 2.7b1
 Stable tag: 1.3
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
@@ -114,6 +114,11 @@ _cpdGetUserPerPost( $limit = 0 )_
 * locale/pt_BR.po
 
 **Changelog**
+
+_Version 1.4_
+
++ NEW: uninstall function of WP 2.7 implemented
++ litle changes on layout to be suitable for WP 2.7
 
 _Version 1.3_
 
