@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard.
-Version: 1.3
+Version: 1.4
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -17,13 +17,13 @@ define('CPD_C_TABLE', $table_prefix.'cpd_counter');
 define('CPD_CO_TABLE', $table_prefix.'cpd_counter_useronline');
 
 /**
- * Seitenaufruf zählen und Counter anzeigen
+ * counts and shows visits
  *
- * @param String $before Text vor Zählerstand
- * @param String $after Text nach Zählerstand
- * @param boolean $show "echo" (true, standard) oder "return"
- * @param boolean $count zählen (true, standard) oder nur anzeigen
- *  * @return String Zählerstand
+ * @param string $before string before the number
+ * @param string $after string after the number
+ * @param boolean $show "echo" (true, standard) or "return"
+ * @param boolean $count count visits (true, standard) or only show vistis
+ * @return string counter string
  */
 function cpdShow( $before='', $after=' reads', $show = true, $count = true )
 {
@@ -383,10 +383,31 @@ function cpd_autocount( )
 		cpdCount();
 }
 
+
+/**
+ * löscht DB-Einträge ab WP 2.7
+ */
+function cpd_uninstall()
+{
+	global $wpdb;
+	$wpdb->query("DROP TABLE IF EXISTS ".CPD_C_TABLE.";");
+	$wpdb->query("DROP TABLE IF EXISTS ".CPD_CO_TABLE.";");
+	delete_option('cpd_cdb_version');
+	delete_option('cpd_codb_version');
+	delete_option('cpd_onlinetime');
+	delete_option('cpd_user');
+	delete_option('cpd_autocount');
+	delete_option('cpd_bots');
+}
+
 // Funktionen adden
 add_action('init', 'cpd_init_locale', 98);
 add_action('admin_menu', 'cpdMenu');
 register_activation_hook(__FILE__,'cpdCreateTables');
+
+// ab Version 2.7
+if ( function_exists('register_uninstall_hook') )
+	register_uninstall_hook(__FILE__, 'cpd_uninstall'); 
 
 // Stylesheet nur bei Statistik-Seite laden
 if ( eregi( "count-per-day", $_REQUEST['page']) )
