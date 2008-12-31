@@ -1,0 +1,177 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Count per Day\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-11-02 12:13+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Tom Braider <post@tomsdimension.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: P:\\xampp\\htdocs\\wp\\wp-content\\plugins\\count-per-day\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: counter-options.php:20
+msgid "Options updated"
+msgstr "Einstellungen aktualisiert"
+
+#: counter-options.php:25
+#, php-format
+msgid "Database cleaned. %s rows deleted."
+msgstr "Datenbank aufger&auml;umt. %s Datens&auml;tze gel&ouml;scht."
+
+#: counter-options.php:28
+#: counter-options.php:129
+msgid "UNINSTALL Count per Day"
+msgstr "DEINSTALLIERE Count per Day"
+
+#: counter-options.php:40
+#: counter-options.php:42
+#, php-format
+msgid "Table %s deleted"
+msgstr "Tabelle %s gel&ouml;scht"
+
+#: counter-options.php:44
+msgid "Options deleted"
+msgstr "Einstellungen gel&ouml;scht"
+
+#: counter-options.php:60
+#: counter-options.php:114
+msgid "Uninstall"
+msgstr "Deinstallation"
+
+#: counter-options.php:61
+msgid "Click here"
+msgstr "Klick hier"
+
+#: counter-options.php:61
+msgid "to finish the uninstall and to deactivate \"Count per Day\"."
+msgstr "um die Deinstallation zu beenden und \"Count per Day\" zu deaktivieren."
+
+#: counter-options.php:68
+msgid "Options"
+msgstr "Einstellungen"
+
+#: counter-options.php:73
+msgid "Online time"
+msgstr "Onlinezeit"
+
+#: counter-options.php:74
+msgid "Seconds for online counter. Used for \"Visitors online\" on dashboard page."
+msgstr "Sekunden f&uuml;r Onlinecounter. Wird f&uuml;r die Anzeige der \"Besucher momentan online\" im Dashboard verwendet."
+
+#: counter-options.php:76
+msgid "Loged on Users"
+msgstr "Angemeldete Benutzer"
+
+#: counter-options.php:77
+msgid "count too"
+msgstr "auch mit z&auml;hlen"
+
+#: counter-options.php:79
+msgid "Auto counter"
+msgstr "Auto-Counter"
+
+#: counter-options.php:80
+msgid "Counts automatically single-posts and pages, no changes on template needed."
+msgstr "Z&auml;hlt automatisch Besuche auf Single-Posts und Seiten ohne &Auml;nderungen am Template."
+
+#: counter-options.php:82
+msgid "Bots to ignore"
+msgstr "Bots ignorieren"
+
+#: counter-options.php:88
+msgid "Update options"
+msgstr "Einstellungen aktualisieren"
+
+#: counter-options.php:96
+#: counter-options.php:105
+msgid "Clean the database"
+msgstr "Datenbank aufr&auml;umen"
+
+#: counter-options.php:99
+msgid "You can clean the counter table by delete the \"spam data\".<br />If you add new bots above the old \"spam data\" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots."
+msgstr "Du kannst die Counter-Tabelle von \"Spam-Daten\" befreien.<br />Wenn du neue Bots zu der Liste oben hinzuf&uuml;gst bleiben die alten \"Spam-Daten\" erhalten.<br />Hier kannst du den Filter erneut laufen lassen und die Besuche von Bots nachtr&auml;glich l&ouml;schen."
+
+#: counter-options.php:116
+msgid "Since WP 2.7 you can delete the plugin directly after deactivation on the plugins page."
+msgstr "Ab WP 2.7 kannst du das Plugin direkt nach der Deaktivierung auf der Pluginseite löschen."
+
+#: counter-options.php:117
+msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
+msgstr "Wenn \"Count per Day\" nur deaktiviert wird, bleiben die Tabellen in der Datenbank erhalten."
+
+#: counter-options.php:118
+msgid "Here you can delete the tables and disable \"Count per Day\"."
+msgstr "Hier kannst du \"Count per Day\" deinstallieren und die Tabellen l&ouml;schen."
+
+#: counter-options.php:121
+msgid "WARNING"
+msgstr "WARNUNG"
+
+#: counter-options.php:122
+msgid "These tables (with ALL counter data) will be deleted."
+msgstr "Diese Tabellen werden mit ALLEN Z&auml;hlerdaten gel&ouml;scht."
+
+#: counter-options.php:124
+msgid "If \"Count per Day\" re-installed, the counter starts at 0."
+msgstr "Wenn \"Count per Day\" erneut installiert wird, beginnt der Z&auml;hler bei 0."
+
+#: counter-options.php:128
+msgid "Yes"
+msgstr "Ja, los!"
+
+#: counter-options.php:129
+msgid "You are sure to disable Count per Day and delete all data?"
+msgstr "Bist du sicher, dass du Count per Day deaktivieren und alle Daten l&ouml;schen willst?"
+
+#: counter.php:165
+msgid "Statistics"
+msgstr "Statistiken"
+
+#: counter.php:170
+#: counter.php:172
+msgid "Reads at all"
+msgstr "Besucher gesamt"
+
+#: counter.php:173
+msgid "Visitors currently online"
+msgstr "Besucher momentan online"
+
+#: counter.php:174
+msgid "Reads today"
+msgstr "Besucher heute"
+
+#: counter.php:175
+msgid "Reads yesterday"
+msgstr "Besucher gestern"
+
+#: counter.php:176
+msgid "Reads last week"
+msgstr "Besucher letzte Woche"
+
+#: counter.php:177
+msgid "Counter starts at"
+msgstr "gez&auml;hlt ab"
+
+#: counter.php:178
+msgid "Reads per day"
+msgstr "Besucher pro Tag"
+
+#: counter.php:183
+msgid "Reads per month"
+msgstr "Besucher pro Monat"
+
+#: counter.php:186
+msgid "Reads per post"
+msgstr "Besucher pro Artikel"
+
+#~ msgid "Seconds for online counter"
+#~ msgstr "Sekunden f&uuml;r Onlinecounter"
+#~ msgid "Table"
+#~ msgstr "Tabelle"
+
