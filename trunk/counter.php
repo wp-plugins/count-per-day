@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard.
-Version: 1.5
+Version: 1.5.1
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -367,9 +367,9 @@ function cpdAddCSS() {
 // only on statistics page
 if ( eregi( 'count-per-day', $_REQUEST['page']) )
 	add_action( 'admin_head', 'cpdAddCSS', 100 );
-
+	
 /**
- * adss menu
+ * adds menu
  * @param string $content WP-"Content"
  */
 function cpdMenu($content)
@@ -379,7 +379,7 @@ function cpdMenu($content)
 	{
 		$menutitle = '';
 		if ( version_compare( $wp_version, '2.6.999', '>' ) )
-			$menutitle = '<img src="'.cpdGetResource('cpd_menu_2.gif').'" alt="" /> ';
+			$menutitle = '<img src="'.cpdGetResource('cpd_menu.gif').'" alt="" /> ';
 		$menutitle .= 'Count per Day';
 
 		add_options_page('CountPerDay', $menutitle, 'manage_options', dirname(plugin_basename(__FILE__)).'/counter-options.php') ;
@@ -393,8 +393,7 @@ function cpdMenu($content)
 
 if ( is_admin() )
 	add_action('admin_menu', 'cpdMenu');
-
-
+	
 /**
  * adds an action link to the plugins page
  */
@@ -410,10 +409,8 @@ function cpdPluginActions($links, $file)
 
 add_filter('plugin_action_links', 'cpdPluginActions', 10, 2);
 
-
 /**
  * adds locale support
- */
 function cpdInitLocale()
 {
 	$locale = get_locale();
@@ -423,6 +420,14 @@ function cpdInitLocale()
 }
 
 add_action('init', 'cpdInitLocale', 98);
+ */
+
+
+/**
+ * adds locale support
+ */
+if (defined('WPLANG') && function_exists('load_plugin_textdomain'))
+	load_plugin_textdomain('cpd', '', dirname(plugin_basename(__FILE__)).'/locale');
 
 
 /**
@@ -436,7 +441,28 @@ function cpdAutocount( )
 
 if ( get_option('cpd_autocount') == 1 )	
 	add_action('wp', 'cpdAutocount');
+	
+/**
+ * dashboard widget
+ */
+function cpdDashboardWidget()
+{
+	echo '<a href="?page='.dirname(plugin_basename(__FILE__)).'/counter.php"><b>';
+	cpdGetUserAll();
+	echo '</b></a> '.__('Reads at all', 'cpd').' - <b>';
+	cpdGetUserPerDay();
+	echo '</b> '.__('Reads per day', 'cpd');
+}
 
+/**
+ * adds dashboard widget
+ */
+function cpdDashboardWidgetSetup()
+{
+	wp_add_dashboard_widget( 'cpdDashboardWidget', 'Count per Day', 'cpdDashboardWidget' );
+}
+
+add_action('wp_dashboard_setup', 'cpdDashboardWidgetSetup');
 
 /**
  * uninstall functions, deletes tables and options
@@ -454,7 +480,6 @@ function cpdUninstall()
 	delete_option('cpd_bots');
 }
 
-
 /**
  * defines base64 encoded image recources
  */
@@ -462,10 +487,6 @@ if( isset($_GET['resource']) && !empty($_GET['resource'])) {
 	# base64 encoding
 	$resources = array(
 		'cpd_menu.gif' =>
-		'R0lGODlhDAAMAJECAHFxcUNDQ////wAAACH5BAEAAAIALAAAAA'.
-		'AMAAwAAAIdjI4ppsqNngA0PYDwZDrjUEGLGJGHBKFNwLYuWwAA'.
-		'Ow==',
-		'cpd_menu_2.gif' =>
 		'R0lGODlhDAAMAJECAP8AAAAAAP///wAAACH5BAEAAAIALAAAAA'.
 		'AMAAwAAAIdjI4ppsqNngA0PYDwZDrjUEGLGJGHBKFNwLYuWwAA'.
 		'Ow==');
@@ -489,7 +510,6 @@ if( isset($_GET['resource']) && !empty($_GET['resource'])) {
 	}
 }
 
-
 /**
  * gets image recource with given name
  */
@@ -500,6 +520,4 @@ function cpdGetResource( $resourceID ) {
 // since WP 2.7
 if ( function_exists('register_uninstall_hook') )
 	register_uninstall_hook(__FILE__, 'cpdUninstall'); 
-
-	
 ?>
