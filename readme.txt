@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads
 Requires at least: 2.7
 Tested up to: 2.7
-Stable tag: 1.5
+Stable tag: 1.5.1
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -112,11 +112,18 @@ You can place these functions in your template.
 * locale/it_IT.po
 * locale/pt_BR.mo
 * locale/pt_BR.po
+* locale/by_BY.mo
+* locale/by_BY.po
 
 **Changelog**
 
+_Version 1.5.1_
+
++ New language: Belorussian, thanks to Marcis Gasuns http://www.fatcow.com
+
 _Version 1.5_
 
++ NEW: Dashboard Widget
 + WP 2.7 optimized, for WP<2.7 please use CPD 1.4 
 
 _Version 1.4_
