@@ -3,8 +3,8 @@ Contributors: Tom Braider
 Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads
 Requires at least: 2.7
-Tested up to: 2.7
-Stable tag: 1.5.1
+Tested up to: 2.8
+Stable tag: 2.0
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -18,7 +18,7 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 It counts 1 visit per IP per day. So any reload of the page don't increment the counter.
 
-Languages: english, german, italian, portuguese
+Languages: english, german, italian, portuguese, belorussian
 
 == Installation ==
 
@@ -29,13 +29,11 @@ First activation will create the 2 tables wp _ cpd _ counter and wp _ cpd _ coun
 
 **Configuration**
 
-See the Options Page. It's easy. :)
+See the Options Page and check the default values. It's easy. :)
 
-If "Auto counter" is on reads on single-posts and pages will count without any changes on template.<br>
+If "Auto counter" is on reads on single-posts and pages will count without any changes on template.
 
-* place functions within post-loop (e.g. in single.php)<br/>
-	'&lt;?php if(function_exists("cpdShow")) { cpdShow(); } ?&gt;'
-* for more informations see "Other Notes"
+For more informations see "Other Notes".
 
 == Frequently Asked Questions ==
 
@@ -46,60 +44,71 @@ read and write comments on <a href="http://www.tomsdimension.de/wp-plugins/count
 
 1. Statistics on Count-per-Day Dashboard (german)
 2. Options (german)
+3. Widget sample
 
 == Arbitrary section ==
 
 **Functions**
 
-You can place these functions in your template.
+You can place these functions in your template.<br/>
+Place functions within post-loop (e.g. in single.php)<br/>
+Use '&lt;?php if(method _ exists($count _ per _ day, 'show')) $count _ per _ day->show(); ?&gt;' to check if plugin is aktivated.
 
-'cpdShow( $before, $after, $show, $count )'
+'show( $before, $after, $show, $count )'
 
 * $before = text before number e.g. '&lt;p&gt;' (standard "")
 * $after = text after number e.g. 'reads&lt;/p&gt;' (standard " reads")
 * $show = true/false, "echo" complete string or "return" number only (standard true)
 * $count = true/false, false will not count the reads (standard true)
 
-'cpdCount()'
+'count()'
 
 * only count reads, without any output
 * cpdShow call it
 
-'cpdGetFirstCount()'
+'getFirstCount()'
 
 * shows date of first count
 
-'cpdGetUserPerDay()'
+'getUserPerDay()'
 
 * shows average number of visitors per day
 
-'cpdGetUserAll()'
+'getUserAll()'
  
 * shows number of total visitors
 
-'cpdGetUserOnline()'
+'getUserOnline()'
 
 * shows number of visitors just online
 
-'cpdGetUserToday()'
+'getUserToday()'
 
 * shows number of visitors today
 
-'cpdGetUserYesterday()'
+'getUserYesterday()'
  
 * shows number of visitors yesterday
 
-'cpdGetUserLastWeek()'
+'getUserLastWeek()'
 
 * shows number of visitors last week (7 days)
 
-'cpdGetUserPerMonth()'
+'getUserPerMonth()'
  
 * lists number of visitors per month
 
-'cpdGetUserPerPost( $limit = 0 )'
+'getUserPerPost( $limit = 0 )'
 
 * lists _$limit_ posts with number of visits
+
+'getUserPerPost( $limit = 0 )'
+
+* lists _$limit_ number of posts, -1 = all, 0 = get option from db, x = number
+
+'getMostVisitedPosts()'
+
+* shows a list with the most visited posts in the last days
 
 **Filelist**
 
@@ -115,67 +124,57 @@ You can place these functions in your template.
 * locale/by_BY.mo
 * locale/by_BY.po
 
-**Changelog**
 
-_Version 1.5.1_
+== Changelog ==
 
+= 2.0 =
++ NEW: sidebar widget
++ NEW: reset button to set all counter to 0
++ NEW: custom number of 'reads per post' on dashboard page
++ NEW: little chart of 'reads per day' on dashboard page
++ NEW: reads in post and page lists (optional)
++ NEW: most visited posts in last days on dashboard page
++ NEW: recognize bots by IP address 
++ NEW: moveble metaboxes on dashboard page
++ NEW: clean function now deletes counter of deleted pages too
++ Bugfix: updates online counter on every load
++ Bugfix: now empty user agents/clients will not be count
++ change options to array
++ create class, update/clean up/rename functions
+
+= 1.5.1 =
 + New language: Belorussian, thanks to Marcis Gasuns http://www.fatcow.com
 
-_Version 1.5_
-
+= 1.5 =
 + NEW: Dashboard Widget
 + WP 2.7 optimized, for WP<2.7 please use CPD 1.4 
 
-_Version 1.4_
-
+= 1.4 =
 + NEW: uninstall function of WP 2.7 implemented
 + litle changes on layout to be suitable for WP 2.7
 
-_Version 1.3_
-
+= 1.3 =
 + New: you can delete old data if you add a new bot string
 + Bugfix: Bot check was case-sensitive
 + New language: Portuguese, thanks to Filipe
 
-_Version 1.2.3_
-
+= 1.2.3 =
 + Bugfix: autocount endless looping
 
-_Version 1.2.2_
-
+= 1.2.2 =
 + New language: Italian, thanks to Gianni Diurno http://gidibao.net/index.php/portfolio/
 
-_Version 1.2.1_
-
+= 1.2.1 =
 + Bugfix: Error 404 "Page not found" with "auto count"
 
-_Version 1.2_
-
+= 1.2 =
 + Bugfix: tables in DB were not be created every time (seen on mysql < 5)
 + New: "auto count" can count visits without changes on template
 
-_Version 1.1_
-
+= 1.1 =
 + Languages: english, german 
 + HTTP _ USER _ AGENT will be saved, identification of new search bots
 + Stylesheet in file counter.css
 
-Functions:
-
-+ cpdShow (updated)
-+ cpdGetUserPerPost
-+ cpdGetFirstCount
-+ cpdGetUserPerDay
-+ cpdGetUserAll
-
-_Version 1.0_
-
-Functions:
-
-+ cpdShow
-+ cpdCount
-+ cpdGetUserOnline
-+ cpdGetUserToday
-+ cpdGetUserYesterday
-+ cpdGetUserLastWeek
-+ cpdGetUserPerMonth
+= 1.0 =
++ first release

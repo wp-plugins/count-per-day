@@ -1,26 +1,27 @@
-.cpd_table {
-	width: 100%;	
+.cpd-dashboard .inside {
+	padding: 5px;
 }
 
-.cpd_table td {
-	padding-right: 10px;
-	vertical-align: top;
-}
-
-.cpd_table li {
+.cpd-dashboard li {
 	color: #777;
 }
 
-.cpd_table li b {
+.cpd-dashboard li b {
 	font-family: Georgia,"Times New Roman",Times,serif;
-	color: #2583ad;
 	font-size: 18px;
+	color: #2583ad;
 }
 
-.cpd_table li span {
+.cpd-dashboard li span {
 	color: #f00;
 }
 
-.cpd_table ul {
-	list-style: none;
+.cpd-dashboard a {
+	text-decoration: none;
+}
+/* column on post and page lists */
+.column-cpd_reads {
+	width: 50px;
+	white-space: nowrap;
+	overflow: visible;
 }
