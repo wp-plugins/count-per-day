@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads
 Requires at least: 2.7
 Tested up to: 2.8
-Stable tag: 2.0
+Stable tag: 1.5.1
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -52,7 +52,7 @@ read and write comments on <a href="http://www.tomsdimension.de/wp-plugins/count
 
 You can place these functions in your template.<br/>
 Place functions within post-loop (e.g. in single.php)<br/>
-Use '&lt;?php if(method _ exists($count _ per _ day, 'show')) $count _ per _ day->show(); ?&gt;' to check if plugin is aktivated.
+Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day->show(); ?&gt;' to check if plugin is aktivated.
 
 'show( $before, $after, $show, $count )'
 
@@ -104,7 +104,7 @@ Use '&lt;?php if(method _ exists($count _ per _ day, 'show')) $count _ per _ day
 
 'getUserPerPost( $limit = 0 )'
 
-* lists _$limit_ number of posts, -1 = all, 0 = get option from db, x = number
+* lists _$limit_ number of posts, -1: all, 0: get option from db, x: number
 
 'getMostVisitedPosts()'
 
@@ -124,14 +124,13 @@ Use '&lt;?php if(method _ exists($count _ per _ day, 'show')) $count _ per _ day
 * locale/by_BY.mo
 * locale/by_BY.po
 
-
 == Changelog ==
 
 = 2.0 =
 + NEW: sidebar widget
 + NEW: reset button to set all counter to 0
-+ NEW: custom number of 'reads per post' on dashboard page
-+ NEW: little chart of 'reads per day' on dashboard page
++ NEW: custom number of "reads per post" on dashboard page
++ NEW: little chart of "reads per day" on dashboard page
 + NEW: reads in post and page lists (optional)
 + NEW: most visited posts in last days on dashboard page
 + NEW: recognize bots by IP address 
