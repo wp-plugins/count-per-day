@@ -1,0 +1,28 @@
+.cpd-dashboard .inside {
+	padding: 5px;
+}
+
+.cpd-dashboard li {
+	color: #777;
+}
+
+.cpd-dashboard li b {
+	float: right;
+	font-family: Georgia,"Times New Roman",Times,serif;
+	font-size: 18px;
+	color: #2583ad;
+}
+
+.cpd-dashboard li span {
+	color: #f00;
+}
+
+.cpd-dashboard a {
+	text-decoration: none;
+}
+/* column on post and page lists */
+.column-cpd_reads {
+	width: 50px;
+	white-space: nowrap;
+	overflow: visible;
+}
