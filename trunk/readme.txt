@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads
 Requires at least: 2.7
 Tested up to: 2.8
-Stable tag: 1.5.1
+Stable tag: 2.0
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -42,8 +42,8 @@ read and write comments on <a href="http://www.tomsdimension.de/wp-plugins/count
 
 == Screenshots ==
 
-1. Statistics on Count-per-Day Dashboard (german)
-2. Options (german)
+1. Statistics on Count-per-Day Dashboard
+2. Options
 3. Widget sample
 
 == Arbitrary section ==
@@ -133,7 +133,7 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 + NEW: little chart of "reads per day" on dashboard page
 + NEW: reads in post and page lists (optional)
 + NEW: most visited posts in last days on dashboard page
-+ NEW: recognize bots by IP address 
++ NEW: recognize bots by IP address
 + NEW: moveble metaboxes on dashboard page
 + NEW: clean function now deletes counter of deleted pages too
 + Bugfix: updates online counter on every load
