@@ -435,7 +435,7 @@ function getUserPerMonth()
 	foreach ( $m as $row )
 	{
 		$v = $wpdb->get_results("SELECT page FROM ".CPD_C_TABLE." WHERE left(date,4) = ".$row->month." GROUP BY ip, date;");
-		echo '<li><b style="float:right">'.count($v).'</b>20'.substr($row->month,0,2).'/'.substr($row->month,2,2).':</li>'."\n";
+		echo '<li><b>'.count($v).'</b> 20'.substr($row->month,0,2).'/'.substr($row->month,2,2).'</li>'."\n";
 	}
 	echo '</ul>';
 }
@@ -467,7 +467,7 @@ function getUserPerPost( $limit = 0 )
 	$m = $wpdb->get_results($sql);
 	echo '<ul>';
 	foreach ( $m as $row )
-		echo '<li><b style="float:right">'.$row->count.'</b><a href="'.get_bloginfo('url').'?p='.$row->post_id.'">'.$row->post.'</a>:</li>'."\n";
+		echo '<li><b>'.$row->count.'</b> <a href="'.get_bloginfo('url').'?p='.$row->post_id.'">'.$row->post.'</a></li>'."\n";
 	echo '</ul>';
 }
 
@@ -536,7 +536,7 @@ function getMostVisitedPosts()
 	echo '<small>'.sprintf(__('The %s most visited posts in last %s days:', 'cpd'), $count, $days).'<br/>&nbsp;</small>';
 	echo '<ul>';
 	foreach ( $m as $row )
-		echo '<li><b style="float:right">'.$row->count.'</b><a href="'.get_bloginfo('url').'?p='.$row->post_id.'">'.$row->post.'</a>:</li>'."\n";
+		echo '<li><b>'.$row->count.'</b> <a href="'.get_bloginfo('url').'?p='.$row->post_id.'">'.$row->post.'</a></li>'."\n";
 	echo '</ul>';
 }
 
@@ -940,10 +940,12 @@ function onShowPage()
 	?>
 	<div id="cpd-metaboxes" class="wrap">
 		<h2><img src="<?php echo $this->getResource('cpd_menu.gif') ?>" alt="" style="width:24px;height:24px" /> Count per Day - <?php _e('Statistics', 'cpd') ?></h2>
-		<?php wp_nonce_field('cpd-metaboxes'); ?>
-		<?php wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false ); ?>
-		<?php wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false ); ?>
-		<?php $cpd_style = 'style="width:'.round(98 / $screen_layout_columns, 1).'%;"'; ?>
+		<?php
+		wp_nonce_field('cpd-metaboxes');
+		wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false );
+		wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false );
+		$cpd_style = 'style="width:'.round(98 / $screen_layout_columns, 1).'%;"';
+		?>
 
 		<div id="dashboard-widgets" class="metabox-holder cpd-dashboard">
 			<div class="postbox-container" <?php echo $cpd_style; ?>>
