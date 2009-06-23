@@ -841,6 +841,9 @@ function widgetCpdInit()
 			}
 			echo '</ul>';
 			echo $after_widget;
+			
+			// to find this text for translation
+			__('This post', 'cpd');
 		}
 	}
 	register_sidebar_widget('Count per Day', 'widgetCpd');
@@ -936,6 +939,8 @@ function onLoadPage()
 function onShowPage()
 {
 	global $screen_layout_columns, $count_per_day;
+	if ( empty($screen_layout_columns) )
+		$screen_layout_columns = 4;
 	$data = '';
 	?>
 	<div id="cpd-metaboxes" class="wrap">
