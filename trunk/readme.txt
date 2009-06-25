@@ -126,6 +126,10 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 == Changelog ==
 
+= 2.1 =
++ NEW: custom names on widget
++ NEW: function "first count" on widget
+
 = 2.0 =
 + NEW: sidebar widget
 + NEW: reset button to set all counter to 0
