@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard.
-Version: 2.0
+Version: 2.1
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -144,12 +144,7 @@ function count()
 	// only count if: non bot, PostID exists, Logon is ok
 	if ( !$this->isBot() && !empty($page) && $countUser )
 	{
-		// a bit data privacy, we save crypted ip adresses
-//		if ( $_options['privacy'] )
-//			$userip = crypt($_SERVER['REMOTE_ADDR'], 'ip');
-//		else
-			$userip = $_SERVER['REMOTE_ADDR'];
-			
+		$userip = $_SERVER['REMOTE_ADDR'];
 		$client = $_SERVER['HTTP_USER_AGENT'];
 		$date = date('ymd');
 		
@@ -828,15 +823,16 @@ function widgetCpdInit()
 			echo $before_widget;
 			echo $before_title.$title.$after_title;
 			echo '<ul class="cpd">';
-			
 			foreach ( $count_per_day->options['widget_functions'] as $f )
 			{
 				$s = explode('|', $f);
 				if ( ($s[0] == 'show' && is_singular()) || $s[0] != 'show' )
 				{
+					$name = (!empty($count_per_day->options['name_'.$s[0]])) ? $count_per_day->options['name_'.$s[0]] : __($s[1], 'cpd');
+					
 					echo '<li><span style="float:right">';
 					eval('echo $count_per_day->'.$s[0].'("","",false,false);'); // params for 'show' only. don't count! ;)
-					echo '</span>'.__($s[1], 'cpd').':</li>';
+					echo '</span>'.$name.':</li>';
 				}
 			}
 			echo '</ul>';
@@ -852,16 +848,6 @@ function widgetCpdInit()
 	{
 		global $count_per_day;
 
-		if ( !empty($_POST['widget_cpd_title']) )
-		{
-			$count_per_day->options['widget_title'] = stripslashes($_POST['widget_cpd_title']);
-			$count_per_day->options['widget_functions'] = $_POST['widget_cpd_functions'];
-			update_option('count_per_day', $count_per_day->options);
-		}
-		
-		$title = (!empty($count_per_day->options['widget_title'])) ? $count_per_day->options['widget_title'] : 'Count per Day';
-		echo '<p><label for="widget_cpd_title">Title: <input style="width: 150px;" id="widget_cpd_title" name="widget_cpd_title" type="text" value="'.$title.'" /></label></p>'."\n";
-		
 		// show the possible functions
 		$funcs = array(
 			'show'=>'This post',
@@ -870,8 +856,23 @@ function widgetCpdInit()
 			'getUserLastWeek'=>'Reads last week',
 			'getUserPerDay'=>'Reads per day',
 			'getUserAll'=>'Reads at all',
-			'getUserOnline'=>'Visitors currently online'
+			'getUserOnline'=>'Visitors currently online',
+			'getFirstCount'=>'Counter starts at',
 			);
+
+		if ( !empty($_POST['widget_cpd_title']) )
+		{
+			$count_per_day->options['widget_title'] = stripslashes($_POST['widget_cpd_title']);
+			$count_per_day->options['widget_functions'] = $_POST['widget_cpd_functions'];
+			// custom names
+			foreach ( $funcs as $k=>$v )
+				$count_per_day->options['name_'.$k] = stripslashes($_POST['name_'.$k]);
+			update_option('count_per_day', $count_per_day->options);
+		}
+		
+		$title = (!empty($count_per_day->options['widget_title'])) ? $count_per_day->options['widget_title'] : 'Count per Day';
+		echo '<p><label for="widget_cpd_title">Title: <input style="width: 150px;" id="widget_cpd_title" name="widget_cpd_title" type="text" value="'.$title.'" /></label></p>'."\n";
+		
 
 		foreach ( $funcs as $k=>$v )
 		{
@@ -879,7 +880,10 @@ function widgetCpdInit()
 				value="'.$k.'|'.$v.'" ';
 			if ( !empty($count_per_day->options['widget_functions']) && in_array($k.'|'.$v, $count_per_day->options['widget_functions']) )
 				echo 'checked="checked"';
-			echo '/> '.__($v, 'cpd').'</label></p>'."\n";
+			echo '/> '.__($v, 'cpd').'</label><br />'."\n";
+			// custom names
+			$name = (isset($count_per_day->options['name_'.$k])) ? $count_per_day->options['name_'.$k] : '';
+			echo '&nbsp; &nbsp; &nbsp;'.__('Label', 'cpd').': <input name="name_'.$k.'" value="'.$name.'" type="text" title="'.__('empty = name above', 'cpd').'" /></p>';
 		}
 		
 	}
