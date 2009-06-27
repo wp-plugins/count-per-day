@@ -109,15 +109,15 @@ switch($mode) {
 			<th colspan="2"><h3><?php _e('Dashboard') ?></h3></th>
 		</tr>
 		<tr>
-			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Reads per post', 'cpd') ?>:</th>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Visitors per post', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_dashboard_posts" size="3" value="<?php echo $o['dashboard_posts']; ?>" /> <?php _e('How many posts do you want to see on dashboard page?', 'cpd') ?></td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Last Reads - Posts', 'cpd') ?>:</th>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Latest Counts - Posts', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_dashboard_last_posts" size="3" value="<?php echo $o['dashboard_last_posts']; ?>" /> <?php _e('How many posts do you want to see on dashboard page?', 'cpd') ?></td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Last Reads - Days', 'cpd') ?>:</th>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Latest Counts - Days', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_dashboard_last_days" size="3" value="<?php echo $o['dashboard_last_days']; ?>" /> <?php _e('How many days do you want look back?', 'cpd') ?></td>
 		</tr>
 		<tr>

@@ -137,7 +137,7 @@ msgstr "Statistiken"
 #: counter.php:257
 #: counter.php:652
 #: counter.php:925
-msgid "Reads at all"
+msgid "Total visitors"
 msgstr "Besucher gesamt"
 
 #: counter.php:258
@@ -145,34 +145,34 @@ msgid "Visitors currently online"
 msgstr "Besucher momentan online"
 
 #: counter.php:259
-msgid "Reads today"
+msgid "Visitors today"
 msgstr "Besucher heute"
 
 #: counter.php:260
-msgid "Reads yesterday"
+msgid "Visitors yesterday"
 msgstr "Besucher gestern"
 
 #: counter.php:261
-msgid "Reads last week"
+msgid "Visitors last week"
 msgstr "Besucher letzte Woche"
 
 #: counter.php:263
-msgid "Counter starts at"
+msgid "Counter starts on"
 msgstr "gez&auml;hlt ab"
 
 #: counter.php:262
 #: counter.php:654
 #: counter.php:926
-msgid "Reads per day"
+msgid "Visitors per day"
 msgstr "Besucher pro Tag"
 
 #: counter.php:927
-msgid "Reads per month"
+msgid "Visitors per month"
 msgstr "Besucher pro Monat"
 
 #: counter-options.php:112
 #: counter.php:928
-msgid "Reads per post"
+msgid "Visitors per post"
 msgstr "Besucher pro Artikel"
 
 #: counter-options.php:41
@@ -185,11 +185,11 @@ msgid "How many posts do you want to see on dashboard page?"
 msgstr "Wie viele Eintr&auml;ge m&ouml;chtest du auf der Dashboard Seite sehen?"
 
 #: counter-options.php:116
-msgid "Last Reads - Posts"
+msgid "Latest Counts - Posts"
 msgstr "Aktuelle Besuche - Artikel"
 
 #: counter-options.php:120
-msgid "Last Reads - Days"
+msgid "Latest Counts - Days"
 msgstr "Aktuelle Besuche - Tage"
 
 #: counter-options.php:121
@@ -229,7 +229,7 @@ msgid "Reads"
 msgstr "Besucher"
 
 #: counter.php:929
-msgid "Last Reads"
+msgid "Latest Counts"
 msgstr "Aktuelle Besuche"
 
 #: counter-options.php:124

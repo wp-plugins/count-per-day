@@ -132,7 +132,7 @@ msgstr "Estat&iacute;sticas"
 
 #: counter.php:172
 #: counter.php:174
-msgid "Reads at all"
+msgid "Total visitors"
 msgstr "Total de visitas"
 
 #: counter.php:175
@@ -141,31 +141,31 @@ msgid "Visitors currently online"
 msgstr "Visitantes online"
 
 #: counter.php:176
-msgid "Reads today"
+msgid "Visitors today"
 msgstr "Visitas hoje"
 
 #: counter.php:177
-msgid "Reads yesterday"
+msgid "Visitors yesterday"
 msgstr "Visitas ontem"
 
 #: counter.php:178
-msgid "Reads last week"
+msgid "Visitors last week"
 msgstr "Visitas semana passada"
 
 #: counter.php:179
-msgid "Counter starts at"
+msgid "Counter starts on"
 msgstr "In&iacute;cio da contagem"
 
 #: counter.php:180
-msgid "Reads per day"
+msgid "Visitors per day"
 msgstr "(m&eacute;dia) de visitas por dia"
 
 #: counter.php:185
-msgid "Reads per month"
+msgid "Visitors per month"
 msgstr "Visitas por m&ecirc;s"
 
 #: counter.php:188
-msgid "Reads per post"
+msgid "Visitors per post"
 msgstr "Visitas por post"
 
 #~ msgid "Seconds for online counter"
