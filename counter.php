@@ -242,6 +242,7 @@ function createTables() {
 }
 
 
+
 /**
  * creates dashboard summary metabox content
  */
@@ -249,13 +250,13 @@ function dashboardReadsAtAll()
 {
 	?>
 	<ul>
-		<li><b style="float:right"><span><?php $this->getUserAll(); ?></span></b><?php _e('Reads at all', 'cpd') ?>:</li>
+		<li><b style="float:right"><span><?php $this->getUserAll(); ?></span></b><?php _e('Total visitors', 'cpd') ?>:</li>
 		<li><b style="float:right"><span><?php $this->getUserOnline(); ?></span></b><?php _e('Visitors currently online', 'cpd') ?>:</li>
-		<li><b style="float:right"><?php $this->getUserToday(); ?></b><?php _e('Reads today', 'cpd') ?>:</li>
-		<li><b style="float:right"><?php $this->getUserYesterday(); ?></b><?php _e('Reads yesterday', 'cpd') ?>:</li>
-		<li><b style="float:right"><?php $this->getUserLastWeek(); ?></b><?php _e('Reads last week', 'cpd') ?>:</li>
-		<li><b style="float:right"><?php $this->getUserPerDay(); ?></b>&Oslash; <?php _e('Reads per day', 'cpd') ?>:</li>
-		<li><b style="float:right"><?php $this->getFirstCount(); ?></b><?php _e('Counter starts at', 'cpd') ?>:</li>
+		<li><b style="float:right"><?php $this->getUserToday(); ?></b><?php _e('Visitors today', 'cpd') ?>:</li>
+		<li><b style="float:right"><?php $this->getUserYesterday(); ?></b><?php _e('Visitors yesterday', 'cpd') ?>:</li>
+		<li><b style="float:right"><?php $this->getUserLastWeek(); ?></b><?php _e('Visitors last week', 'cpd') ?>:</li>
+		<li><b style="float:right"><?php $this->getUserPerDay(); ?></b>&Oslash; <?php _e('Visitors per day', 'cpd') ?>:</li>
+		<li><b style="float:right"><?php $this->getFirstCount(); ?></b><?php _e('Counter starts on', 'cpd') ?>:</li>
 	</ul>
 	<?php
 }
@@ -399,7 +400,7 @@ function getUserToday()
 function getUserYesterday()
 {
 	global $wpdb;
-	$date = date('ymd',time()-60*60*24);
+	$date = date('ymd',time()-86400);
 	$v = $wpdb->get_results("SELECT page FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip;");
 	echo count($v);
 }
@@ -412,7 +413,7 @@ function getUserYesterday()
 function getUserLastWeek()
 {
 	global $wpdb;
-	$date = date('ymd',time()-60*60*24*7);
+	$date = date('ymd',time()-86400*7);
 	$v = $wpdb->get_results("SELECT page FROM ".CPD_C_TABLE." WHERE date >= '$date' GROUP BY ip;");
 	echo count($v);
 }
@@ -851,13 +852,13 @@ function widgetCpdInit()
 		// show the possible functions
 		$funcs = array(
 			'show'=>'This post',
-			'getUserToday'=>'Reads today',
-			'getUserYesterday'=>'Reads yesterday',
-			'getUserLastWeek'=>'Reads last week',
-			'getUserPerDay'=>'Reads per day',
-			'getUserAll'=>'Reads at all',
+			'getUserToday'=>'Visitors today',
+			'getUserYesterday'=>'Visitors yesterday',
+			'getUserLastWeek'=>'Visitors last week',
+			'getUserPerDay'=>'Visitors per day',
+			'getUserAll'=>'Total visitors',
 			'getUserOnline'=>'Visitors currently online',
-			'getFirstCount'=>'Counter starts at',
+			'getFirstCount'=>'Counter starts on',
 			);
 
 		if ( !empty($_POST['widget_cpd_title']) )
@@ -889,7 +890,6 @@ function widgetCpdInit()
 	}
 	register_widget_control('Count per Day', 'widgetCpdControl');
 }
-
 
 
 
@@ -929,11 +929,11 @@ function onLoadPage()
 	wp_enqueue_script('postbox');
 
 	//add the metaboxes
-	add_meta_box('reads_at_all', __('Reads at all', 'cpd'), array(&$this, 'dashboardReadsAtAll'), $this->pagehook, 'cpdrow1', 'core');
-	add_meta_box('chart', __('Reads per day', 'cpd'), array(&$this, 'dashboardChart'), $this->pagehook, 'cpdrow1', 'core');
-	add_meta_box('reads_per_month', __('Reads per month', 'cpd'), array(&$this, 'getUserPerMonth'), $this->pagehook, 'cpdrow2', 'core');
-	add_meta_box('reads_per_post', __('Reads per post', 'cpd'), array(&$this, 'getUserPerPost'), $this->pagehook, 'cpdrow3', 'core');
-	add_meta_box('last_reads', __('Last Reads', 'cpd'), array(&$this, 'getMostVisitedPosts'), $this->pagehook, 'cpdrow4', 'core');
+	add_meta_box('reads_at_all', __('Total visitors', 'cpd'), array(&$this, 'dashboardReadsAtAll'), $this->pagehook, 'cpdrow1', 'core');
+	add_meta_box('chart', __('Visitors per day', 'cpd'), array(&$this, 'dashboardChart'), $this->pagehook, 'cpdrow1', 'core');
+	add_meta_box('reads_per_month', __('Visitors per month', 'cpd'), array(&$this, 'getUserPerMonth'), $this->pagehook, 'cpdrow2', 'core');
+	add_meta_box('reads_per_post', __('Visitors per post', 'cpd'), array(&$this, 'getUserPerPost'), $this->pagehook, 'cpdrow3', 'core');
+	add_meta_box('last_reads', __('Latest Counts', 'cpd'), array(&$this, 'getMostVisitedPosts'), $this->pagehook, 'cpdrow4', 'core');
 }
 
 
