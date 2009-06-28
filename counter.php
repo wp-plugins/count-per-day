@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard.
-Version: 2.1
+Version: 2.2
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -17,7 +17,7 @@ class CountPerDay
 	
 var $options; // options array
 var $dir; // this plugin dir
-
+var $dbcon; // DB connection
 
 
 /**
@@ -83,7 +83,17 @@ function CountPerDay()
 	
 	// uninstall hook
 	if ( function_exists('register_uninstall_hook') )
-		register_uninstall_hook(__FILE__, array(&$this, 'uninstall')); 
+		register_uninstall_hook(__FILE__, array(&$this, 'uninstall'));
+		
+	$this->connect_db();
+}
+
+
+
+function connect_db()
+{
+	$this->dbcon = @mysql_connect(DB_HOST, DB_USER, DB_PASSWORD, true);
+	@mysql_select_db(DB_NAME, $this->dbcon);
 }
 
 
@@ -374,9 +384,8 @@ function getUserOnline()
  */
 function getUserAll()
 {
-	global $wpdb;
-	$v = $wpdb->get_results("SELECT page FROM ".CPD_C_TABLE." GROUP BY ip, date;");
-	echo count($v);
+	$res = mysql_query("SELECT 1 FROM ".CPD_C_TABLE." GROUP BY ip, date;", $this->dbcon);
+	echo mysql_num_rows($res);
 }
 
 
@@ -386,10 +395,9 @@ function getUserAll()
  */
 function getUserToday()
 {
-	global $wpdb;
 	$date = date('ymd',time());
-	$v = $wpdb->get_results("SELECT page FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip;");
-	echo count($v);
+	$res = mysql_query("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip;", $this->dbcon);
+	echo mysql_num_rows($res);
 }
 
 
@@ -399,10 +407,9 @@ function getUserToday()
  */
 function getUserYesterday()
 {
-	global $wpdb;
 	$date = date('ymd',time()-86400);
-	$v = $wpdb->get_results("SELECT page FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip;");
-	echo count($v);
+	$res = mysql_query("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip;", $this->dbcon);
+	echo mysql_num_rows($res);
 }
 
 
@@ -412,10 +419,9 @@ function getUserYesterday()
  */
 function getUserLastWeek()
 {
-	global $wpdb;
 	$date = date('ymd',time()-86400*7);
-	$v = $wpdb->get_results("SELECT page FROM ".CPD_C_TABLE." WHERE date >= '$date' GROUP BY ip;");
-	echo count($v);
+	$res = mysql_query("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$date' GROUP BY ip;", $this->dbcon);
+	echo mysql_num_rows($res);
 }
 
 
@@ -430,8 +436,8 @@ function getUserPerMonth()
 	echo '<ul>';
 	foreach ( $m as $row )
 	{
-		$v = $wpdb->get_results("SELECT page FROM ".CPD_C_TABLE." WHERE left(date,4) = ".$row->month." GROUP BY ip, date;");
-		echo '<li><b>'.count($v).'</b> 20'.substr($row->month,0,2).'/'.substr($row->month,2,2).'</li>'."\n";
+		$res = mysql_query("SELECT page FROM ".CPD_C_TABLE." WHERE left(date,4) = ".$row->month." GROUP BY ip, date;", $this->dbcon);
+		echo '<li><b>'.mysql_num_rows($res).'</b> 20'.substr($row->month,0,2).'/'.substr($row->month,2,2).'</li>'."\n";
 	}
 	echo '</ul>';
 }
@@ -452,7 +458,7 @@ function getUserPerPost( $limit = 0 )
 	
 	$sql = "SELECT	count(c.id) as count,
 					p.post_title as post,
-					p.ID as post_id
+					c.page as post_id
 			FROM 	".CPD_C_TABLE." c
 			LEFT	JOIN ".$wpdb->posts." p
 					ON p.id = c.page
@@ -463,7 +469,10 @@ function getUserPerPost( $limit = 0 )
 	$m = $wpdb->get_results($sql);
 	echo '<ul>';
 	foreach ( $m as $row )
-		echo '<li><b>'.$row->count.'</b> <a href="'.get_bloginfo('url').'?p='.$row->post_id.'">'.$row->post.'</a></li>'."\n";
+	{
+		$postname = ( !empty($row->post) ) ? $row->post : '---';
+		echo '<li><b>'.$row->count.'</b> <a href="'.get_bloginfo('url').'?p='.$row->post_id.'">'.$postname.'</a></li>'."\n";
+	}
 	echo '</ul>';
 }
 
@@ -496,8 +505,10 @@ function getUserPerDay()
 		$max = strtotime( '20'.substr($row->max,0,2).'-'.substr($row->max,2,2).'-'.substr($row->max,4,2) );
 		$tage =  (($max - $min) / 86400 + 1);
 	}
-	$v = $wpdb->get_results('SELECT page FROM '.CPD_C_TABLE.' GROUP BY ip, date');
-	$count = count($v) / $tage;
+	
+	$res = @mysql_query("SELECT 1 FROM ".CPD_C_TABLE." GROUP BY ip, date;", $this->dbcon);
+	$count = @mysql_num_rows($res) / $tage;
+	
 	if ( $count < 5 )
 		echo number_format($count, 2);
 	else
@@ -519,7 +530,7 @@ function getMostVisitedPosts()
 
 	$sql = "SELECT	count(c.id) as count,
 					p.post_title as post,
-					p.ID as post_id
+					c.page as post_id
 			FROM	".CPD_C_TABLE." c
 			LEFT	JOIN ".$wpdb->posts." p
 					ON p.id = c.page
@@ -532,7 +543,10 @@ function getMostVisitedPosts()
 	echo '<small>'.sprintf(__('The %s most visited posts in last %s days:', 'cpd'), $count, $days).'<br/>&nbsp;</small>';
 	echo '<ul>';
 	foreach ( $m as $row )
-		echo '<li><b>'.$row->count.'</b> <a href="'.get_bloginfo('url').'?p='.$row->post_id.'">'.$row->post.'</a></li>'."\n";
+	{
+		$postname = ( !empty($row->post) ) ? $row->post : '---';
+		echo '<li><b>'.$row->count.'</b> <a href="'.get_bloginfo('url').'?p='.$row->post_id.'">'.$postname.'</a></li>'."\n";
+	}
 	echo '</ul>';
 }
 
