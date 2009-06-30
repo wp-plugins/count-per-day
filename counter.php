@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard.
-Version: 2.2
+Version: 2.1
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -659,9 +659,9 @@ function dashboardWidget()
 {
 	echo '<a href="?page=cpd_metaboxes"><b>';
 	$this->getUserAll();
-	echo '</b></a> '.__('Reads at all', 'cpd').' - <b>';
+	echo '</b></a> '.__('Total visitors', 'cpd').' - <b>';
 	$this->getUserPerDay();
-	echo '</b> '.__('Reads per day', 'cpd');
+	echo '</b> '.__('Visitors per day', 'cpd');
 }
 
 
@@ -944,7 +944,7 @@ function onLoadPage()
 
 	//add the metaboxes
 	add_meta_box('reads_at_all', __('Total visitors', 'cpd'), array(&$this, 'dashboardReadsAtAll'), $this->pagehook, 'cpdrow1', 'core');
-	add_meta_box('chart', __('Visitors per day', 'cpd'), array(&$this, 'dashboardChart'), $this->pagehook, 'cpdrow1', 'core');
+	add_meta_box('chart', __('Reads per day', 'cpd'), array(&$this, 'dashboardChart'), $this->pagehook, 'cpdrow1', 'core');
 	add_meta_box('reads_per_month', __('Visitors per month', 'cpd'), array(&$this, 'getUserPerMonth'), $this->pagehook, 'cpdrow2', 'core');
 	add_meta_box('reads_per_post', __('Visitors per post', 'cpd'), array(&$this, 'getUserPerPost'), $this->pagehook, 'cpdrow3', 'core');
 	add_meta_box('last_reads', __('Latest Counts', 'cpd'), array(&$this, 'getMostVisitedPosts'), $this->pagehook, 'cpdrow4', 'core');
