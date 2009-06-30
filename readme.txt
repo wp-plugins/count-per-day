@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads
 Requires at least: 2.7
 Tested up to: 2.8
-Stable tag: 2.1
+Stable tag: 2.0
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -129,6 +129,7 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 = 2.1 =
 + NEW: custom names on widget
 + NEW: function "first count" on widget
++ little changes on german translation
 
 = 2.0 =
 + NEW: sidebar widget
