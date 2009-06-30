@@ -130,48 +130,47 @@ msgstr "Ja, los!"
 msgid "You are sure to disable Count per Day and delete all data?"
 msgstr "Bist du sicher, dass du Count per Day deaktivieren und alle Daten l&ouml;schen willst?"
 
-#: counter.php:944
+#: counter.php:965
 msgid "Statistics"
 msgstr "Statistiken"
 
-#: counter.php:257
-#: counter.php:652
-#: counter.php:925
+#: counter.php:263
+#: counter.php:662
+#: counter.php:946
 msgid "Total visitors"
 msgstr "Besucher gesamt"
 
-#: counter.php:258
+#: counter.php:264
 msgid "Visitors currently online"
 msgstr "Besucher momentan online"
 
-#: counter.php:259
+#: counter.php:265
 msgid "Visitors today"
 msgstr "Besucher heute"
 
-#: counter.php:260
+#: counter.php:266
 msgid "Visitors yesterday"
 msgstr "Besucher gestern"
 
-#: counter.php:261
+#: counter.php:267
 msgid "Visitors last week"
 msgstr "Besucher letzte Woche"
 
-#: counter.php:263
+#: counter.php:269
 msgid "Counter starts on"
 msgstr "gez&auml;hlt ab"
 
-#: counter.php:262
-#: counter.php:654
-#: counter.php:926
+#: counter.php:268
+#: counter.php:664
 msgid "Visitors per day"
 msgstr "Besucher pro Tag"
 
-#: counter.php:927
+#: counter.php:948
 msgid "Visitors per month"
 msgstr "Besucher pro Monat"
 
 #: counter-options.php:112
-#: counter.php:928
+#: counter.php:949
 msgid "Visitors per post"
 msgstr "Besucher pro Artikel"
 
@@ -214,23 +213,23 @@ msgstr "Z&auml;hler zur&uuml;cksetzen"
 msgid "You can reset the counter by empty the table. ALL TO 0!<br />Make a backup if you need the current data!"
 msgstr "Du kannst die Z&auml;hler zur&uuml;cksetzen und die Tabelle leeren. Alles auf 0!<br />Wenn du die aktuellen Zahlen brauchst, mache ein Backup der Datenbank!"
 
-#: counter.php:536
+#: counter.php:543
 #, php-format
 msgid "The %s most visited posts in last %s days:"
 msgstr "Die %s am meisten besuchten Seiten der letzten %s Tage:"
 
-#: counter.php:626
+#: counter.php:636
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: counter.php:718
-#: counter.php:718
+#: counter.php:728
+#: counter.php:728
 msgid "Reads"
 msgstr "Besucher"
 
-#: counter.php:929
+#: counter.php:950
 msgid "Latest Counts"
-msgstr "Aktuelle Besuche"
+msgstr "Letzte Seitenaufrufe"
 
 #: counter-options.php:124
 msgid "Chart - Days"
@@ -244,15 +243,39 @@ msgstr "Diagramm - H&ouml;he"
 msgid "Height of the biggest bar"
 msgstr "H&ouml;he des gr&ouml;&szlig;ten Balkens"
 
-#: counter.php:333
+#: counter.php:339
 msgid "no reads at this time"
 msgstr "keine Seitenaufrufe"
 
-#: counter.php:352
+#: counter.php:358
 msgid "days"
 msgstr "Tage"
 
-#: counter.php:839
+#: counter.php:857
 msgid "This post"
 msgstr "Diese Seite"
+
+#: counter-options.php:109
+msgid "Dashboard"
+msgstr ""
+
+#: counter-options.php:132
+msgid "Edit Posts"
+msgstr ""
+
+#: counter-options.php:132
+msgid "Edit Pages"
+msgstr ""
+
+#: counter.php:901
+msgid "Label"
+msgstr ""
+
+#: counter.php:901
+msgid "empty = name above"
+msgstr ""
+
+#: counter.php:947
+msgid "Reads per day"
+msgstr "Seitenaufrufe pro Tag"
 
