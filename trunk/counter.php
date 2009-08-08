@@ -343,7 +343,7 @@ function dashboardChart()
 	$end_time = strtotime("20$end");
 	$start_time = max( array($end_time - ($limit - 1) * 86400, strtotime("20$start")) );
 	$days = ($end_time - $start_time) / 86400 + 1;
-	$bar_width = round( 100 / $days, 2); // as %
+	$bar_width = str_replace(',', '.', round( 100 / $days, 2)); // as %, comma to point in some php versions needed
 	
 	// find max count
 	$max = 1;
