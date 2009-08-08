@@ -2,12 +2,22 @@
 /*
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
-Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard.
-Version: 2.1
+Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
+Version: 2.2
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
+
+
+/**
+ * include GeoIP addon
+ */
+$cpd_path = ABSPATH.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__));
+if ( file_exists($cpd_path.'/geoip/geoip.php') )
+	include_once($cpd_path.'/geoip/geoip.php');
+
+
 
 /**
  * Count per Day
@@ -15,9 +25,9 @@ Author URI: http://www.tomsdimension.de
 class CountPerDay
 {
 	
-var $options; // options array
-var $dir; // this plugin dir
-var $dbcon; // DB connection
+var $options;	// options array
+var $dir;		// this plugin dir
+var $dbcon;		// database connection
 
 
 /**
@@ -33,7 +43,7 @@ function CountPerDay()
 	
 	$this->options = get_option('count_per_day');
 	$this->dir = get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__));
-	
+
 	// update online counter
 	add_action('wp', array(&$this, 'deleteOnlineCounter'));
 	
@@ -90,6 +100,9 @@ function CountPerDay()
 
 
 
+/**
+ * direct database connection without wordpress functions saves memory
+ */
 function connect_db()
 {
 	$this->dbcon = @mysql_connect(DB_HOST, DB_USER, DB_PASSWORD, true);
@@ -109,8 +122,8 @@ function connect_db()
  */
 function show( $before='', $after=' reads', $show = true, $count = true )
 {
-	global $wpdb, $count_per_day; //, $_options;
-	// only count once
+	global $wpdb;
+	// count once only
 	if ( $count && $this->options['autocount'] == 0 )
 		$this->count();
 	$page = get_the_ID();
@@ -130,8 +143,8 @@ function show( $before='', $after=' reads', $show = true, $count = true )
 function count()
 {
 	global $wpdb;
-//	cpdCreateTables(); // create tables if necessary
-	
+	global $cpd_path;
+
 	// find PostID
 	if ( $this->options['autocount'] == 1 && is_singular() )
 	{
@@ -161,8 +174,20 @@ function count()
 		// memorize UserIP 
 		$user_ip = $wpdb->get_results("SELECT * FROM ".CPD_C_TABLE." WHERE ip='$userip' AND date='$date' AND page='$page';");
 		if ( count($user_ip) == 0 )
-			$wpdb->query($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date)
-				VALUES (%s, %s, %s, %s)", $page, $userip, $client, $date));
+		{
+			if ( class_exists('CpdGeoIp') )
+			{
+				// with GeoIP addon save country
+				$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
+				$country = strtolower(geoip_country_code_by_addr($gi, $userip));
+				$wpdb->query($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, country)
+					VALUES (%s, %s, %s, %s, %s)", $page, $userip, $client, $date, $country));
+			}
+			else
+				// without country
+				$wpdb->query($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date)
+					VALUES (%s, %s, %s, %s)", $page, $userip, $client, $date));
+		}
 		
 		// online counter
 		$timestamp = time();  
@@ -195,8 +220,8 @@ function isBot( $client = '', $bots = '' )
 	if ( empty($client) )
 		$client = $_SERVER['HTTP_USER_AGENT'];
 
-	// empty client -> not normal browser -> bot
-	if ( empty($client) )
+	// empty/short client -> not normal browser -> bot
+	if ( empty($client) || strlen($client) < 20 )
 		return true;
 	
 	if ( empty($bots) )
@@ -207,7 +232,7 @@ function isBot( $client = '', $bots = '' )
 	{
 		$b = trim($bot);
 		if ( !empty($b) && ( $_SERVER['REMOTE_ADDR'] == $b || strpos( strtolower($client), strtolower($b) ) !== false ) )
-				$isBot = true;
+			$isBot = true;
 	}
 	return $isBot;
 }
@@ -217,34 +242,49 @@ function isBot( $client = '', $bots = '' )
 /**
  * creates tables if not exists
  */
-function createTables() {
+function createTables()
+{
+	// for plugin activation, creates $wpdb
 	require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+	
 	global $wpdb;
 	
 	if ( $wpdb->get_var( "SHOW TABLES LIKE '".CPD_C_TABLE."'" ) != CPD_C_TABLE )
 	{
 		// table "counter" is not exists
-		$sql ="CREATE TABLE IF NOT EXISTS `".CPD_C_TABLE."` (
-			`id` int(10) NOT NULL auto_increment,
-  			`ip` varchar(15) NOT NULL,
-  			`client` varchar(100) NOT NULL,
-  			`date` char(6) NOT NULL,
-  			`page` int(11) NOT NULL,
-  			PRIMARY KEY  (`id`)
-			);";
+		$sql = "CREATE TABLE IF NOT EXISTS `".CPD_C_TABLE."` (
+				`id` int(10) NOT NULL auto_increment,
+	  			`ip` varchar(15) NOT NULL,
+	  			`client` varchar(100) NOT NULL,
+	  			`date` char(6) NOT NULL,
+	  			`page` int(11) NOT NULL,
+	  			PRIMARY KEY  (`id`),
+				KEY `idx_ip` (`ip`(3)),
+				KEY `idx_date` (`date`),
+				KEY `idx_page` (`page`)	);";
 		dbDelta($sql);
 	}
 	
 	if ( $wpdb->get_var( "SHOW TABLES LIKE '".CPD_CO_TABLE."'" ) != CPD_CO_TABLE )
 	{
 		// table "counter-online" is not exists
-		$sql ="CREATE TABLE IF NOT EXISTS `".CPD_CO_TABLE."` (
-			`timestamp` int(15) NOT NULL default '0',
-			`ip` varchar(15) NOT NULL default '',
-			`page` int(11) NOT NULL default '0',
-			PRIMARY KEY  (`ip`)
-			);";
+		$sql = "CREATE TABLE IF NOT EXISTS `".CPD_CO_TABLE."` (
+				`timestamp` int(15) NOT NULL default '0',
+				`ip` varchar(15) NOT NULL default '',
+				`page` int(11) NOT NULL default '0',
+				PRIMARY KEY  (`ip`) );";
 		dbDelta($sql);
+	}
+	
+	// make new keys if needed
+	$keys = $wpdb->query( "SHOW KEYS FROM '".CPD_C_TABLE."'" );
+	if ( sizeof($keys) == 1 )
+	{
+		$sql = "ALTER TABLE `".CPD_C_TABLE."`
+				ADD KEY `idx_ip` (`ip`(3)),
+				ADD KEY `idx_date` (`date`),
+				ADD KEY `idx_page` (`page`)";
+		$wpdb->query($sql);
 	}
 	
 	// update options to array
@@ -306,7 +346,7 @@ function dashboardChart()
 	$bar_width = round( 100 / $days, 2); // as %
 	
 	// find max count
-	$max = 0;
+	$max = 1;
 	foreach ( $res as $day )
 	{
 		$date = strtotime('20'.$day->date);
@@ -551,9 +591,7 @@ function getMostVisitedPosts()
 }
 
 
-
 // end of statistic functions
-
 
 
 /**
@@ -615,11 +653,7 @@ function menu($content)
 	global $wp_version;
 	if (function_exists('add_options_page'))
 	{
-		$menutitle = '';
-		if ( version_compare( $wp_version, '2.6.999', '>' ) )
-			$menutitle = '<img src="'.$this->getResource('cpd_menu.gif').'" alt="" /> ';
-		$menutitle .= 'Count per Day';
-
+		$menutitle = '<img src="'.$this->getResource('cpd_menu.gif').'" alt="" /> Count per Day';
 		add_options_page('CountPerDay', $menutitle, 'manage_options', dirname(plugin_basename(__FILE__)).'/counter-options.php') ;
 	}
 }
@@ -694,14 +728,15 @@ function updateOptions()
 			'user' => $user,
 			'autocount' => $autocount,
 			'bots' => $bots,
-			'dashboard_posts' => 50,
+			'dashboard_posts' => 20,
 			'dashboard_last_posts' => 20,
 			'dashboard_last_days' => 14,
 			'widget_title' => 'Count per Day',
 			'widget_functions' => '',
 			'show_in_lists' => 1,
-			'chart_days' => 30,
-			'chart_height' => 200);
+			'chart_days' => 60,
+			'chart_height' => 100,
+			'countries' => 20);
 		
 		// add array
 		add_option('count_per_day', $o);
@@ -720,7 +755,6 @@ function updateOptions()
 
 /**
  * add counter column to page/post lists
- * you MUST have WP >= 2.7
  */
 function cpdColumn($defaults)
 {
@@ -865,14 +899,14 @@ function widgetCpdInit()
 
 		// show the possible functions
 		$funcs = array(
-			'show'=>'This post',
-			'getUserToday'=>'Visitors today',
-			'getUserYesterday'=>'Visitors yesterday',
-			'getUserLastWeek'=>'Visitors last week',
-			'getUserPerDay'=>'Visitors per day',
-			'getUserAll'=>'Total visitors',
-			'getUserOnline'=>'Visitors currently online',
-			'getFirstCount'=>'Counter starts on',
+			'show' => 'This post',
+			'getUserToday' => 'Visitors today',
+			'getUserYesterday' => 'Visitors yesterday',
+			'getUserLastWeek' => 'Visitors last week',
+			'getUserPerDay' => 'Visitors per day',
+			'getUserAll' => 'Total visitors',
+			'getUserOnline' => 'Visitors currently online',
+			'getFirstCount' => 'Counter starts on',
 			);
 
 		if ( !empty($_POST['widget_cpd_title']) )
@@ -886,7 +920,7 @@ function widgetCpdInit()
 		}
 		
 		$title = (!empty($count_per_day->options['widget_title'])) ? $count_per_day->options['widget_title'] : 'Count per Day';
-		echo '<p><label for="widget_cpd_title">Title: <input style="width: 150px;" id="widget_cpd_title" name="widget_cpd_title" type="text" value="'.$title.'" /></label></p>'."\n";
+		echo '<p><label for="widget_cpd_title">'.__('Title:').' <input style="width: 150px;" id="widget_cpd_title" name="widget_cpd_title" type="text" value="'.$title.'" /></label></p>'."\n";
 		
 
 		foreach ( $funcs as $k=>$v )
@@ -908,7 +942,7 @@ function widgetCpdInit()
 
 
 /**
- * sets columns on dashborad page
+ * sets columns on dashboard page
  */ 
 function screenLayoutColumns($columns, $screen)
 {
@@ -942,13 +976,18 @@ function onLoadPage()
 	wp_enqueue_script('wp-lists');
 	wp_enqueue_script('postbox');
 
-	//add the metaboxes
+	// add the metaboxes
 	add_meta_box('reads_at_all', __('Total visitors', 'cpd'), array(&$this, 'dashboardReadsAtAll'), $this->pagehook, 'cpdrow1', 'core');
 	add_meta_box('chart', __('Reads per day', 'cpd'), array(&$this, 'dashboardChart'), $this->pagehook, 'cpdrow1', 'core');
 	add_meta_box('reads_per_month', __('Visitors per month', 'cpd'), array(&$this, 'getUserPerMonth'), $this->pagehook, 'cpdrow2', 'core');
 	add_meta_box('reads_per_post', __('Visitors per post', 'cpd'), array(&$this, 'getUserPerPost'), $this->pagehook, 'cpdrow3', 'core');
 	add_meta_box('last_reads', __('Latest Counts', 'cpd'), array(&$this, 'getMostVisitedPosts'), $this->pagehook, 'cpdrow4', 'core');
+	
+	// countries with GeoIP addon only
+	if ( class_exists('CpdGeoIp') )
+		add_meta_box('countries', __('Reads per Country', 'cpd'), array(&$this, 'getCountries'), $this->pagehook, 'cpdrow2', 'core');
 }
+
 
 
 /**
@@ -998,6 +1037,39 @@ function onShowPage()
 	</script>
 	<?php
 }
+
+
+
+/**
+ * gets country flags and page views
+ */
+function getCountries()
+{
+	global $cpd_path;
+
+	// with GeoIP addon only
+	if ( class_exists('CpdGeoIp') )
+	{
+		$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
+		$geoip = new GeoIP();
+		$limit = max( 0, $this->options['countries'] );
+
+		$res = mysql_query("SELECT country, count(*) as c FROM ".CPD_C_TABLE." WHERE IP > '' GROUP BY country ORDER BY count(*) desc LIMIT $limit;", $this->dbcon);
+		
+		echo '<ul>';
+		while ( $r = mysql_fetch_array($res) )
+		{
+			$id = $geoip->GEOIP_COUNTRY_CODE_TO_NUMBER[strtoupper($r['country'])];
+			$name = $geoip->GEOIP_COUNTRY_NAMES[$id];
+			echo '<li><b>'.$r['c'].'</b>
+			<img src="http://www.easywhois.com/images/flags/'.$r['country'].'.gif" alt="'.$r['country'].'" /> '
+			.$name.'&nbsp;</li>'."\n";
+		}
+		echo '</ul>';
+	}
+}
+
+
 
 } // class end
 

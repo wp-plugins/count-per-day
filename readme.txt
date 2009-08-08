@@ -1,7 +1,7 @@
 === Count per Day ===
 Contributors: Tom Braider
 Donate link: http://www.unicef.org
-Tags: counter, count, posts, visits, reads
+Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
 Tested up to: 2.8
 Stable tag: 2.1
@@ -24,6 +24,7 @@ Languages: english, german, italian, portuguese, belorussian
 
 1. unzip plugin directory into the '/wp-content/plugins/' directory
 1. activate the plugin through the 'Plugins' menu in WordPress
+1. install optional GeoIP addon to show countries of your visitors
 
 First activation will create the 2 tables wp _ cpd _ counter and wp _ cpd _ counter _ useronline.
 
@@ -110,37 +111,44 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 * shows a list with the most visited posts in the last days
 
-**Filelist**
 
-* counter.php
-* counter-options.php
-* counter.css
-* locale/de_DE.mo
-* locale/de_DE.po
-* locale/it_IT.mo
-* locale/it_IT.po
-* locale/pt_BR.mo
-* locale/pt_BR.po
-* locale/by_BY.mo
-* locale/by_BY.po
+**GeoIP addon**
+
+* With the GeoIP addon you can associate your visitors to an country using the ip adress.
+* Download the addon on <a href="http://www.tomsdimension.de/wp-plugins/count-per-day">plugin page</a> and unzip into count-per-day directory. Directory 'geoip' will be create. 
+* In the database a new column 'country' will be insert.
+* On options page you can update you current visits. This take a while!
+  The Script checks 100 IP adresses at once an reload itself until less then 100 adresses left.
+  Click the update button to check the rest.
+* Click the button once at least to create the column in datebase! You can abort the update process.
+* If the rest remains greater than 0 the IP adress is not in GeoIP database (accuracy 99.5%).
+* You can update the GeoIP database from time to time to get new IP data.
+  This necessitates write rights to geoip directory (e.g. chmod 777).
+* If the automaticaly update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz">GeoIP.dat.gz</a> and extract it to the "geoip" directory.
+* More information about GeoIP on http://www.maxmind.com/app/geoip_country
+
 
 == Changelog ==
 
+= 2.2 =
++ Change: USER_AGENT must have > 20 chars, otherwise we call it "bot"
++ New: optional GeoIP addon to show page views per country - see Section "GeoIP addon"
+
 = 2.1 =
-+ NEW: custom names on widget
-+ NEW: function "first count" on widget
++ New: custom names on widget
++ New: function "first count" on widget
 + little changes on german translation
 
 = 2.0 =
-+ NEW: sidebar widget
-+ NEW: reset button to set all counter to 0
-+ NEW: custom number of "reads per post" on dashboard page
-+ NEW: little chart of "reads per day" on dashboard page
-+ NEW: reads in post and page lists (optional)
-+ NEW: most visited posts in last days on dashboard page
-+ NEW: recognize bots by IP address
-+ NEW: moveble metaboxes on dashboard page
-+ NEW: clean function now deletes counter of deleted pages too
++ New: sidebar widget
++ New: reset button to set all counter to 0
++ New: custom number of "reads per post" on dashboard page
++ New: little chart of "reads per day" on dashboard page
++ New: reads in post and page lists (optional)
++ New: most visited posts in last days on dashboard page
++ New: recognize bots by IP address
++ New: movable metaboxes on dashboard page
++ New: clean function now deletes counter of deleted pages too
 + Bugfix: updates online counter on every load
 + Bugfix: now empty user agents/clients will not be count
 + change options to array
@@ -150,11 +158,11 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 + New language: Belorussian, thanks to Marcis Gasuns http://www.fatcow.com
 
 = 1.5 =
-+ NEW: Dashboard Widget
++ New: Dashboard Widget
 + WP 2.7 optimized, for WP<2.7 please use CPD 1.4 
 
 = 1.4 =
-+ NEW: uninstall function of WP 2.7 implemented
++ New: uninstall function of WP 2.7 implemented
 + litle changes on layout to be suitable for WP 2.7
 
 = 1.3 =
