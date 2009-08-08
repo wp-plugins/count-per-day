@@ -1,0 +1,177 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Count per Day\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-11-02 12:13+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Tom Braider <post@tomsdimension.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: P:\\xampp\\htdocs\\wp\\wp-content\\plugins\\count-per-day\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: counter-options.php:20
+msgid "Options updated"
+msgstr "Налады абноўленыя"
+
+#: counter-options.php:25
+#, php-format
+msgid "Database cleaned. %s rows deleted."
+msgstr "База дадзеных ачышчана. %s радкоў выдалена."
+
+#: counter-options.php:28
+#: counter-options.php:129
+msgid "UNINSTALL Count per Day"
+msgstr "Колькасць дэінсталяцый за дзень. "
+
+#: counter-options.php:40
+#: counter-options.php:42
+#, php-format
+msgid "Table %s deleted"
+msgstr "Табліца %s выдалена"
+
+#: counter-options.php:44
+msgid "Options deleted"
+msgstr "Налады выдаленыя"
+
+#: counter-options.php:60
+#: counter-options.php:114
+msgid "Uninstall"
+msgstr "Дэінсталяцыя"
+
+#: counter-options.php:61
+msgid "Click here"
+msgstr "Націсніце сюды"
+
+#: counter-options.php:61
+msgid "to finish the uninstall and to deactivate \"Count per Day\"."
+msgstr "скончыць дэінсталяцыю і дэактываваць \"Колькасць па днях\". "
+
+#: counter-options.php:68
+msgid "Options"
+msgstr "Налады"
+
+#: counter-options.php:73
+msgid "Online time"
+msgstr "Час онлайн"
+
+#: counter-options.php:74
+msgid "Seconds for online counter. Used for \"Visitors online\" on dashboard page."
+msgstr "Секунд для для падліку онлайн. Выкарыстоўваецца для \"Карыстачоў онлайн \" на староны \"Панэль інструментаў\"."
+
+#: counter-options.php:76
+msgid "Loged on Users"
+msgstr "Увайшоўшых карыстачоў"
+
+#: counter-options.php:77
+msgid "count too"
+msgstr "лік таксама"
+
+#: counter-options.php:79
+msgid "Auto counter"
+msgstr "Аўтападлічванне"
+
+#: counter-options.php:80
+msgid "Counts automatically single-posts and pages, no changes on template needed."
+msgstr "Лічыльнікі аўтаматычна ў пасты і старонкі, ніякіх змен у шаблон не патрабуецца. "
+
+#: counter-options.php:82
+msgid "Bots to ignore"
+msgstr "Ботаў ігнаравана"
+
+#: counter-options.php:88
+msgid "Update options"
+msgstr "Налады абнаўлення"
+
+#: counter-options.php:96
+#: counter-options.php:105
+msgid "Clean the database"
+msgstr "Чыстка базы дадзеных"
+
+#: counter-options.php:99
+msgid "You can clean the counter table by delete the \"spam data\".<br />If you add new bots above the old \"spam data\" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots."
+msgstr "Вы можаце пачысціць лічыльнік табліц праз\"Спам \". <br /> Калі вы дададзіце новых ботаў паверх \"Спама \", вы захаваеце базу дадзеных. <br /> Тут вы можаце запусціць бот-фільтр зноў і выдаліць візіты ботаў."
+
+#: counter-options.php:116
+msgid "Since WP 2.7 you can delete the plugin directly after deactivation on the plugins page."
+msgstr "З WP 2.7 вы можаце выдаліць плагін непасрэдна пасля дэактывацыі плагіна на староныц плагінаў."
+
+#: counter-options.php:117
+msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
+msgstr "Калі \"Колькасць па днях\"актывавана, табліцы ў базах дадзеных будуць прэзерваваныя :)."
+
+#: counter-options.php:118
+msgid "Here you can delete the tables and disable \"Count per Day\"."
+msgstr "Тут вы можаце выдаліць табліцы і дэактываваць  \"Лік па днях\"."
+
+#: counter-options.php:121
+msgid "WARNING"
+msgstr "УВАГА"
+
+#: counter-options.php:122
+msgid "These tables (with ALL counter data) will be deleted."
+msgstr "Гэтыя табліцы (з усімі дадзенымі лічыльнікаў), будць выдаленыя."
+
+#: counter-options.php:124
+msgid "If \"Count per Day\" re-installed, the counter starts at 0."
+msgstr "Калі \"Лічыльнік па днях \" рэ-інсталяваны,лічыльнік пачынаецца з 0."
+
+#: counter-options.php:128
+msgid "Yes"
+msgstr "Так"
+
+#: counter-options.php:129
+msgid "You are sure to disable Count per Day and delete all data?"
+msgstr "Вы ўпэўніліся, што адключылі падлік па днях і выдалілі ўсе дадзеныя?"
+
+#: counter.php:165
+msgid "Statistics"
+msgstr "Статыстыка"
+
+#: counter.php:170
+#: counter.php:172
+msgid "Reads at all"
+msgstr "Прачытана ўсімі"
+
+#: counter.php:173
+msgid "Visitors currently online"
+msgstr "Наведвальнікаў зараз онлайн"
+
+#: counter.php:174
+msgid "Reads today"
+msgstr "Чытачоў сёння"
+
+#: counter.php:175
+msgid "Reads yesterday"
+msgstr "Чытачоў учора"
+
+#: counter.php:176
+msgid "Reads last week"
+msgstr "Чытачоў на мінулай нядзелі"
+
+#: counter.php:177
+msgid "Counter starts at"
+msgstr "Падлік пачаць"
+
+#: counter.php:178
+msgid "Reads per day"
+msgstr "Чытачоў за дзень"
+
+#: counter.php:183
+msgid "Reads per month"
+msgstr "Чытачоў за месяц"
+
+#: counter.php:186
+msgid "Reads per post"
+msgstr "Чытачоў на пост"
+
+#~ msgid "Seconds for online counter"
+#~ msgstr "Sekunden f&uuml;r Onlinecounter"
+#~ msgid "Table"
+#~ msgstr "Tabelle"
+
