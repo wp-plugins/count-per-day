@@ -1,0 +1,158 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Count per Day in italiano\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-05-29 20:03+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Gianni Diurno (aka gidibao) <gidibao@gmail.com>\n"
+"Language-Team: Gianni Diurno | http://gidibao.net <gidibao@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Italian\n"
+"X-Poedit-Country: ITALY\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: P:\\xampp\\htdocs\\td\\wp\\wp-content\\plugins\\\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: count-per-day\n"
+
+#: count-per-day/counter-options.php:19
+msgid "Options updated"
+msgstr "Le opzioni sono state aggiornate"
+
+#: count-per-day/counter-options.php:22
+#: count-per-day/counter-options.php:105
+msgid "UNINSTALL Count per Day"
+msgstr "DISINSTALLA Count per Day"
+
+#: count-per-day/counter-options.php:34
+#: count-per-day/counter-options.php:36
+#, php-format
+msgid "Table %s deleted"
+msgstr "La tabella %s é stata cancellata"
+
+#: count-per-day/counter-options.php:38
+msgid "Options deleted"
+msgstr "Le opzioni sono state cancellate"
+
+#: count-per-day/counter-options.php:54
+#: count-per-day/counter-options.php:91
+msgid "Uninstall"
+msgstr "Disinstalla"
+
+#: count-per-day/counter-options.php:55
+msgid "Click here"
+msgstr "Clicca qui"
+
+#: count-per-day/counter-options.php:55
+msgid "to finish the uninstall and to deactivate \"Count per Day\"."
+msgstr "per completare la disinstallazione e disattivare \"Count per Day\"."
+
+#: count-per-day/counter-options.php:62
+msgid "Options"
+msgstr "Opzioni"
+
+#: count-per-day/counter-options.php:67
+msgid "Online time"
+msgstr "Durata del collegamento"
+
+#: count-per-day/counter-options.php:68
+msgid "Seconds for online counter"
+msgstr "Il numero dei secondi per il contatore in linea"
+
+#: count-per-day/counter-options.php:70
+msgid "Loged on Users"
+msgstr "Utenti accreditati"
+
+#: count-per-day/counter-options.php:71
+msgid "count too"
+msgstr "conteggia anche loro"
+
+#: count-per-day/counter-options.php:73
+msgid "Auto counter"
+msgstr "Contatore-automatico"
+
+#: count-per-day/counter-options.php:74
+msgid "Counts automatically single-posts and pages, no changes on template needed."
+msgstr "Conta in automatico i singoli articoli e le pagine. Non é necessaria alcuna modifica del template."
+
+#: count-per-day/counter-options.php:76
+msgid "Bots to ignore"
+msgstr "Bots da ignorare"
+
+#: count-per-day/counter-options.php:82
+msgid "Update options"
+msgstr "Aggiorna le opzioni"
+
+#: count-per-day/counter-options.php:93
+msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
+msgstr "La disattivazione in sè di \"Count per Day\" non cancellerà le tabelle del database."
+
+#: count-per-day/counter-options.php:94
+msgid "Here you can delete the tables and disable \"Count per Day\"."
+msgstr "Qui potrai cancellare le tabelle e disattivare \"Count per Day\"."
+
+#: count-per-day/counter-options.php:97
+msgid "WARNING"
+msgstr "ATTENZIONE"
+
+#: count-per-day/counter-options.php:98
+msgid "These tables (with ALL counter data) will be deleted."
+msgstr "Queste tabelle (compresi TUTTI i dati) saranno cancellate."
+
+#: count-per-day/counter-options.php:100
+msgid "If \"Count per Day\" re-installed, the counter starts at 0."
+msgstr "Qualora desiderassi re-installare \"Count per Day\", ricordati che il contatore ripartirà da 0."
+
+#: count-per-day/counter-options.php:104
+msgid "Yes"
+msgstr "Sì"
+
+#: count-per-day/counter-options.php:105
+msgid "You are sure to disable Count per Day and delete all data?"
+msgstr "Sei certo di volere disattivare Count per Day e cancellare tutti i dati?"
+
+#: count-per-day/counter.php:137
+msgid "Statistics"
+msgstr "Satistiche"
+
+#: count-per-day/counter.php:142
+#: count-per-day/counter.php:144
+msgid "Reads at all"
+msgstr "generali"
+
+#: count-per-day/counter.php:145
+msgid "Reads currently online"
+msgstr "Utenti attualmente in linea"
+
+#: count-per-day/counter.php:146
+msgid "Reads today"
+msgstr "Oggi"
+
+#: count-per-day/counter.php:147
+msgid "Reads yesterday"
+msgstr "Ieri"
+
+#: count-per-day/counter.php:148
+msgid "Reads last week"
+msgstr "La scorsa settimana"
+
+#: count-per-day/counter.php:149
+msgid "Counter starts at"
+msgstr "Il contatore parte dal"
+
+#: count-per-day/counter.php:150
+msgid "Reads per day"
+msgstr "per giorno"
+
+#: count-per-day/counter.php:155
+msgid "Reads per month"
+msgstr "per mese"
+
+#: count-per-day/counter.php:158
+msgid "Reads per post"
+msgstr "per articolo"
+
+#~ msgid "Table"
+#~ msgstr "Tabelle"
+
