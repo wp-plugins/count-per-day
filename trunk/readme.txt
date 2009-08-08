@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
 Tested up to: 2.8
-Stable tag: 2.1
+Stable tag: 2.2
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
