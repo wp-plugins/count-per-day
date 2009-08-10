@@ -199,18 +199,26 @@ switch($mode) {
 				</td>
 				<td><?php _e('You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!', 'cpd') ?></td>
 			</tr>
-			<tr>
-				<td>
-					<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-					<input type="hidden" name="do" value="cpd_countrydb" />
-					<input type="submit" name="updcondb" value="<?php _e('Update GeoIP database', 'cpd') ?>" class="button" />
-					</form>
-				</td>
-				<td><?php _e('Download a new version of GeoIP.dat file.', 'cpd') ?></td>
-			</tr>
+			<?php if ( ini_get('allow_url_fopen') && function_exists('gzopen') ) { ?>
+				<tr>
+					<td>
+						<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+						<input type="hidden" name="do" value="cpd_countrydb" />
+						<input type="submit" name="updcondb" value="<?php _e('Update GeoIP database', 'cpd') ?>" class="button" />
+						</form>
+					</td>
+					<td><?php _e('Download a new version of GeoIP.dat file.', 'cpd') ?></td>
+				</tr>
+			<?php } ?>
 			</table>
 			
-			<p style="text-align: right"><?php _e('More informations about GeoIP', 'cpd') ?>: <a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a></p>
+			<p style="text-align: right">
+				<?php _e('More informations about GeoIP', 'cpd') ?>: <a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a><br />
+				DEBUG: 
+				fopen=<?php echo (function_exists('fopen')) ? 'true' : 'false' ?>
+				gzopen=<?php echo (function_exists('gzopen')) ? 'true' : 'false' ?>
+				allow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
+			</p>
 
 		</div>
 		</div>
