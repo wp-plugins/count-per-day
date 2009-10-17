@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
-Tested up to: 2.8
+Tested up to: 2.8.4
 Stable tag: 2.2
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
@@ -53,7 +53,7 @@ read and write comments on <a href="http://www.tomsdimension.de/wp-plugins/count
 
 You can place these functions in your template.<br/>
 Place functions within post-loop (e.g. in single.php)<br/>
-Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day->show(); ?&gt;' to check if plugin is aktivated.
+Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day->show(); ?&gt;' to check if plugin is activated.
 
 'show( $before, $after, $show, $count )'
 
@@ -71,9 +71,10 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 * shows date of first count
 
-'getUserPerDay()'
+'getUserPerDay( $days )'
 
-* shows average number of visitors per day
+* shows average number of visitors per day of the last _$days_ days
+* default on dashboard (see it with mouse over number) = "Latest Counts - Days" in options
 
 'getUserAll()'
  
@@ -101,15 +102,18 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 'getUserPerPost( $limit = 0 )'
 
-* lists _$limit_ posts with number of visits
+* lists _$limit_ number of posts, -1: all, 0: get option from DB, x: number
 
-'getUserPerPost( $limit = 0 )'
-
-* lists _$limit_ number of posts, -1: all, 0: get option from db, x: number
-
-'getMostVisitedPosts()'
+'getMostVisitedPosts( $days, $limits )'
 
 * shows a list with the most visited posts in the last days
+* $days = days to calc (last days), 0: get option from DB
+* $limit = count of posts (last posts), 0: get option from DB
+
+'getClients()'
+
+* shows visits per client/browser in percent
+* clients are hardcoded in function but easy to change ;)
 
 
 **GeoIP addon**
@@ -129,6 +133,12 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 
 == Changelog ==
+
+= 2.3 =
++ New: chart "visitors per day"
++ New: counts index pages: homepage, categories, tags (if autocount is on)
++ New: visits per client/browser in percent
++ added some parameters to functions to overwrite default values
 
 = 2.2 =
 + Change: USER_AGENT must have > 20 chars, otherwise we call it "bot"
