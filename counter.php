@@ -194,7 +194,7 @@ function count()
 				// without country
 				$country = '';
 			$wpdb->query($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, country)
-				VALUES (%s, %s, %s, %s, %s)", $page, $userip, $client, $date, $counted));
+				VALUES (%s, %s, %s, %s, %s)", $page, $userip, $client, $date, $country));
 		}
 		
 		// online counter
