@@ -589,8 +589,10 @@ function getFirstCount()
 function getUserPerDay( $days = 0 )
 {
 	global $wpdb;
+	$datemax = date('ymd', time());
 	if ( $days > 0 )
-		$datemin = date('ymd', time() - $days * 86400);
+		// last $days days without today
+		$datemin = date('ymd', time() - ($days + 1) * 86400);
 	else
 	{ 
 		$v = $wpdb->get_results('SELECT MIN(date) as min, MAX(date) as max FROM '.CPD_C_TABLE);
@@ -602,10 +604,10 @@ function getUserPerDay( $days = 0 )
 			$datemin = 0;
 		}
 	}
-	$res = @mysql_query('SELECT 1 FROM '.CPD_C_TABLE.' WHERE date > '.$datemin.' GROUP BY ip,date', $this->dbcon);
+	$res = @mysql_query('SELECT 1 FROM '.CPD_C_TABLE.' WHERE date > '.$datemin.' AND date < '.$datemax.' GROUP BY ip,date', $this->dbcon);
 	$count = @mysql_num_rows($res) / $days;
 	
-	echo '<abbr title="last '.$days.' days">';
+	echo '<abbr title="last '.$days.' days without today">';
 	if ( $count < 5 )
 		echo number_format($count, 2);
 	else
@@ -660,7 +662,7 @@ function getMostVisitedPosts( $days = 0, $limit = 0 )
 function getClients()
 {
 	global $wpdb;
-	$clients = array('Firefox', 'MSIE', 'Chrome', 'AppleWebKit', 'Opera', 'Iceweasel');
+	$clients = array('Firefox', 'MSIE', 'Chrome', 'AppleWebKit', 'Opera');
 	
 	$all = $wpdb->get_var("SELECT COUNT(*) as count FROM ".CPD_C_TABLE);
 	$rest = 100;
@@ -668,12 +670,12 @@ function getClients()
 	foreach ($clients as $c)
 	{
 		$count = $wpdb->get_var("SELECT COUNT(*) as count FROM ".CPD_C_TABLE." WHERE client like '%$c%'");
-		$percent = number_format(100 * $count / $all, 1);
+		$percent = number_format(100 * $count / $all, 0);
 		$rest -= $percent;
 		echo '<li>'.$c.'<b>'.$percent.' %</b></li>';
 	}
-	
-	echo '<li>'.__('Other', 'cpd').'<b>'.$rest.' %</b></li>';
+	if ( $rest > 0 )
+		echo '<li>'.__('Other', 'cpd').'<b>'.$rest.' %</b></li>';
 	echo '</ul>';
 }
 

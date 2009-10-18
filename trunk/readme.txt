@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
 Tested up to: 2.8.4
-Stable tag: 2.2
+Stable tag: 2.3
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -18,7 +18,7 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 It counts 1 visit per IP per day. So any reload of the page don't increment the counter.
 
-Languages: english, german, italian, portuguese, belorussian
+Languages: english, german, italian, portuguese, belorussian, uzbek
 
 == Installation ==
 
@@ -139,6 +139,7 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 + New: counts index pages: homepage, categories, tags (if autocount is on)
 + New: visits per client/browser in percent
 + added some parameters to functions to overwrite default values
++ New language: Usbek, thanks to Alisher
 
 = 2.2 =
 + Change: USER_AGENT must have > 20 chars, otherwise we call it "bot"
