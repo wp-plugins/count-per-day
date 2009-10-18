@@ -987,7 +987,7 @@ function widgetCpdInit()
 		if ( !empty($count_per_day->options['widget_functions']) )
 		{
 			// show widget only if functions are defined
-			$title = (!empty($count_per_day->options['widget_title'])) ? $count_per_day->options['widget_title'] : 'Count per Day vvv';
+			$title = (!empty($count_per_day->options['widget_title'])) ? $count_per_day->options['widget_title'] : 'Count per Day';
 	
 			echo $before_widget;
 			echo $before_title.$title.$after_title;
