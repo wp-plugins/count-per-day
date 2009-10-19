@@ -4,11 +4,10 @@
  * Count Per Day - Options and Administration
  */
 
-// Form auswerten 
+
+// check form 
 if(!empty($_POST['do']))
 {
-	//global $wpdb;
-	
 	switch($_POST['do'])
 	{
 		// update options
@@ -24,11 +23,45 @@ if(!empty($_POST['do']))
 			$count_per_day->options['chart_days'] = $_POST['cpd_chart_days'];
 			$count_per_day->options['chart_height'] = $_POST['cpd_chart_height'];
 			
+			if ( isset($_POST['cpd_countries']) )
+				$count_per_day->options['countries'] = $_POST['cpd_countries'];
+			
 			update_option('count_per_day', $count_per_day->options);
 			
 			echo '<div id="message" class="updated fade"><p>'.__('Options updated', 'cpd').'</p></div>';
 			break;
+
+		// update countries
+		case 'cpd_countries' :
+			if ( class_exists('CpdGeoIp') )
+			{
+				$rest = CpdGeoIp::updateDB();
+				echo '<div id="message" class="updated fade">
+					<form name="cpdcountries" method="post" action="'.$_SERVER['REQUEST_URI'].'">
+					<p>'.sprintf(__('Countries updated. <b>%s</b> entries in %s without country left', 'cpd'), $rest, CPD_C_TABLE);
+				if ( $rest > 100 )
+					// reload page per javascript until less than 100 entries without country
+					// is not optimal...
+					echo '<input type="hidden" name="do" value="cpd_countries" />
+						<input type="submit" name="updcon" value="'.__('update next', 'cpd').'" class="button" />
+						<script type="text/javascript">document.cpdcountries.submit();</script>';
+				echo '</p>
+					</form>
+					</div>';
+				if ( $rest > 100 )
+					while (@ob_end_flush());
+			}
+			break;
 			
+		// download new GeoIP database
+		case 'cpd_countrydb' :
+			if ( class_exists('CpdGeoIp') )
+			{
+				$result = CpdGeoIp::updateGeoIpFile();
+				echo '<div id="message" class="updated fade"><p>'.$result.'</p></div>';
+			}
+			break;
+		
 		// clean database
 		case 'cpd_clean' :
 			$rows = $count_per_day->cleanDB();
@@ -128,6 +161,12 @@ switch($mode) {
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Chart - Height', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_chart_height" size="3" value="<?php echo $o['chart_height']; ?>" /> px - <?php _e('Height of the biggest bar', 'cpd') ?></td>
 		</tr>
+		<?php if ( class_exists('CpdGeoIp') ) { ?>
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Countries', 'cpd') ?>:</th>
+			<td><input class="code" type="text" name="cpd_countries" size="3" value="<?php echo $o['countries']; ?>" /> <?php _e('How many countries do you want to see on dashboard page?', 'cpd') ?></td>
+		</tr>
+		<?php } ?>
 		<tr>
 			<th colspan="2"><h3><?php _e('Edit Posts') ?> / <?php _e('Edit Pages') ?></h3></th>
 		</tr>
@@ -143,6 +182,47 @@ switch($mode) {
 		</form>
 	</div>
 	</div>
+
+	<?php if ( class_exists('CpdGeoIp') ) { ?>
+		<!-- Countries -->
+		<div class="postbox">
+		<h3><?php _e('GeoIP - Countries', 'cpd') ?></h3>
+		<div class="inside">
+			
+			<table class="form-table">
+			<tr>
+				<td>
+					<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+					<input type="hidden" name="do" value="cpd_countries" />
+					<input type="submit" name="updcon" value="<?php _e('Update old counter data', 'cpd') ?>" class="button" />
+					</form>
+				</td>
+				<td><?php _e('You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!', 'cpd') ?></td>
+			</tr>
+			<?php if ( ini_get('allow_url_fopen') && function_exists('gzopen') ) { ?>
+				<tr>
+					<td>
+						<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+						<input type="hidden" name="do" value="cpd_countrydb" />
+						<input type="submit" name="updcondb" value="<?php _e('Update GeoIP database', 'cpd') ?>" class="button" />
+						</form>
+					</td>
+					<td><?php _e('Download a new version of GeoIP.dat file.', 'cpd') ?></td>
+				</tr>
+			<?php } ?>
+			</table>
+			
+			<p style="text-align: right">
+				<?php _e('More informations about GeoIP', 'cpd') ?>: <a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a><br />
+				DEBUG: 
+				fopen=<?php echo (function_exists('fopen')) ? 'true' : 'false' ?>
+				gzopen=<?php echo (function_exists('gzopen')) ? 'true' : 'false' ?>
+				allow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
+			</p>
+
+		</div>
+		</div>
+	<?php } ?>
 
 	<!-- Cleaner -->
 	<div class="postbox">
@@ -184,7 +264,6 @@ switch($mode) {
 	<h3><?php _e('Uninstall', 'cpd') ?></h3>
 	<div class="inside"> 
 		<p>
-			<b><?php _e('Since WP 2.7 you can delete the plugin directly after deactivation on the plugins page.', 'cpd') ?></b><br />
 			<?php _e('If "Count per Day" only disabled the tables in the database will be preserved.', 'cpd') ?><br/>
 			<?php _e('Here you can delete the tables and disable "Count per Day".', 'cpd') ?>
 		</p>
