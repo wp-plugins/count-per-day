@@ -135,7 +135,6 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 == Changelog ==
 
 = 2.3.1 =
-
 + Bugfix: counter don't work without GeoIP Addon (nonexisting row 'country' in table)
 
 = 2.3 =
