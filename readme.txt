@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
 Tested up to: 2.8.4
-Stable tag: 2.3
+Stable tag: 2.3.1
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -133,6 +133,10 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 
 == Changelog ==
+
+= 2.3.1 =
+
++ Bugfix: counter now works without GeoIP Addon (nonexisting row 'country' in table)
 
 = 2.3 =
 + New: chart "visitors per day"

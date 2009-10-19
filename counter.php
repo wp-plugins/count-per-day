@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
-Version: 2.3
+Version: 2.3.1
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -189,12 +189,14 @@ function count()
 				// with GeoIP addon save country
 				$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
 				$country = strtolower(geoip_country_code_by_addr($gi, $userip));
+				$wpdb->query($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, country)
+				VALUES (%s, %s, %s, %s, %s)", $page, $userip, $client, $date, $country));
+
 			}
 			else
 				// without country
-				$country = '';
-			$wpdb->query($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, country)
-				VALUES (%s, %s, %s, %s, %s)", $page, $userip, $client, $date, $country));
+				$wpdb->query($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date)
+				VALUES (%s, %s, %s, %s)", $page, $userip, $client, $date));
 		}
 		
 		// online counter
@@ -293,6 +295,14 @@ function createTables()
 				ADD KEY `idx_date` (`date`),
 				ADD KEY `idx_page` (`page`)";
 		$wpdb->query($sql);
+	}
+	
+	// if GeoIP installed add row "country" to table if needed
+	if ( class_exists('CpdGeoIp') )
+	{
+		@mysql_query("SELECT country FROM `".CPD_C_TABLE."`", $this->dbcon);
+		if ((int) mysql_errno() == 1054)
+			mysql_query("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR(2) NOT NULL", $this->dbcon);
 	}
 	
 	// update options to array
@@ -987,7 +997,7 @@ function widgetCpdInit()
 		if ( !empty($count_per_day->options['widget_functions']) )
 		{
 			// show widget only if functions are defined
-			$title = (!empty($count_per_day->options['widget_title'])) ? $count_per_day->options['widget_title'] : 'Count per Day';
+			$title = (!empty($count_per_day->options['widget_title'])) ? $count_per_day->options['widget_title'] : 'Count per Day vvv';
 	
 			echo $before_widget;
 			echo $before_title.$title.$after_title;
