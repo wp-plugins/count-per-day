@@ -136,7 +136,7 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 = 2.3.1 =
 
-+ Bugfix: counter now works without GeoIP Addon (nonexisting row 'country' in table)
++ Bugfix: counter don't work without GeoIP Addon (nonexisting row 'country' in table)
 
 = 2.3 =
 + New: chart "visitors per day"
