@@ -9,14 +9,12 @@ Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
-
 /**
  * include GeoIP addon
  */
 $cpd_path = ABSPATH.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__));
 if ( file_exists($cpd_path.'/geoip/geoip.php') )
 	include_once($cpd_path.'/geoip/geoip.php');
-
 
 /**
  * Count per Day
@@ -27,7 +25,6 @@ class CountPerDay
 var $options;	// options array
 var $dir;		// this plugin dir
 var $dbcon;		// database connection
-
 
 /**
  * Constructor
@@ -55,7 +52,7 @@ function CountPerDay()
 	
 	// auto counter
 	if ( $this->options['autocount'] == 1 )	
-		add_action('wp', array(&$this,'autocount'));
+		add_action('wp', array(&$this,'count'));
 
 	// widget on dashboard page
 	add_action('wp_dashboard_setup', array(&$this, 'dashboardWidgetSetup'));
@@ -97,8 +94,6 @@ function CountPerDay()
 	$this->connect_db();
 }
 
-
-
 /**
  * direct database connection without wordpress functions saves memory
  */
@@ -107,8 +102,6 @@ function connect_db()
 	$this->dbcon = @mysql_connect(DB_HOST, DB_USER, DB_PASSWORD, true);
 	@mysql_select_db(DB_NAME, $this->dbcon);
 }
-
-
 
 /**
  * counts and shows visits
@@ -133,8 +126,6 @@ function show( $before='', $after=' reads', $show = true, $count = true )
 	else
 		return $visits_per_page;
 }
-
-
 
 /**
  * counts visits (without show)
@@ -166,7 +157,7 @@ function count()
 		// "index" pages only with autocount	
 		else if ( is_category() || is_tag() )
 			// category or tag => negativ ID in CpD DB
-			$page = 0 - $wp_query->get_queried_object()->term_id;
+			$page = 0 - $wp_query->get_queried_object_id();
 		else
 			// index, date, search and other "list" pages will count only once
 			$page = 0;
@@ -206,8 +197,6 @@ function count()
 	}
 }
 
-
-
 /**
  * deletes old online user 
  */
@@ -215,10 +204,8 @@ function deleteOnlineCounter()
 {
 	global $wpdb;
 	$timeout = time() - $this->options['onlinetime'];
-	$wpdb->query($wpdb->prepare("DELETE FROM ".CPD_CO_TABLE." WHERE timestamp < %s", $timeout));
+	@mysql_query("DELETE FROM ".CPD_CO_TABLE." WHERE timestamp < $timeout", $this->dbcon);
 }
-
-
 
 /**
  * bot or human?
@@ -247,8 +234,6 @@ function isBot( $client = '', $bots = '' )
 	return $isBot;
 }
 
-
-
 /**
  * creates tables if not exists
  */
@@ -263,15 +248,15 @@ function createTables()
 	{
 		// table "counter" is not exists
 		$sql = "CREATE TABLE IF NOT EXISTS `".CPD_C_TABLE."` (
-				`id` int(10) NOT NULL auto_increment,
-	  			`ip` varchar(15) NOT NULL,
-	  			`client` varchar(100) NOT NULL,
-	  			`date` char(6) NOT NULL,
-	  			`page` int(11) NOT NULL,
-	  			PRIMARY KEY  (`id`),
-				KEY `idx_ip` (`ip`(3)),
-				KEY `idx_date` (`date`),
-				KEY `idx_page` (`page`)	);";
+		`id` int(10) NOT NULL auto_increment,
+		`ip` varchar(15) NOT NULL,
+		`client` varchar(100) NOT NULL,
+		`date` char(6) NOT NULL,
+		`page` int(11) NOT NULL,
+		PRIMARY KEY  (`id`),
+		KEY `idx_ip` (`ip`(3)),
+		KEY `idx_date` (`date`),
+		KEY `idx_page` (`page`)	);";
 		dbDelta($sql);
 	}
 	
@@ -279,10 +264,10 @@ function createTables()
 	{
 		// table "counter-online" is not exists
 		$sql = "CREATE TABLE IF NOT EXISTS `".CPD_CO_TABLE."` (
-				`timestamp` int(15) NOT NULL default '0',
-				`ip` varchar(15) NOT NULL default '',
-				`page` int(11) NOT NULL default '0',
-				PRIMARY KEY  (`ip`) );";
+		`timestamp` int(15) NOT NULL default '0',
+		`ip` varchar(15) NOT NULL default '',
+		`page` int(11) NOT NULL default '0',
+		PRIMARY KEY  (`ip`) );";
 		dbDelta($sql);
 	}
 	
@@ -291,9 +276,9 @@ function createTables()
 	if ( sizeof($keys) == 1 )
 	{
 		$sql = "ALTER TABLE `".CPD_C_TABLE."`
-				ADD KEY `idx_ip` (`ip`(3)),
-				ADD KEY `idx_date` (`date`),
-				ADD KEY `idx_page` (`page`)";
+		ADD KEY `idx_ip` (`ip`(3)),
+		ADD KEY `idx_date` (`date`),
+		ADD KEY `idx_page` (`page`)";
 		$wpdb->query($sql);
 	}
 	
@@ -308,8 +293,6 @@ function createTables()
 	// update options to array
 	$this->UpdateOptions();
 }
-
-
 
 /**
  * creates dashboard summary metabox content
@@ -328,8 +311,6 @@ function dashboardReadsAtAll()
 	</ul>
 	<?php
 }
-
-
 
 /**
  * creates dashboard chart metabox content - page visits
@@ -352,8 +333,6 @@ function dashboardChart( $limit = 0 )
 	$this->dashboardChartDataRequest($sql, $limit);
 }
 
-
-
 /**
  * creates dashboard chart metabox content - visitors
  * @param integer limit days to show
@@ -365,19 +344,18 @@ function dashboardChartVisitors( $limit = 0 )
 	if ( $limit == 0 )
 		$limit = ( !empty($this->options['chart_days']) )? $this->options['chart_days'] : 30;
 	
-	$sql = "SELECT count(*) count, date
-			FROM (	SELECT	count(*) AS count, date, ip
-					FROM	".CPD_C_TABLE."
-					GROUP	BY ip, date
-					) AS temp
-			GROUP BY date
-			ORDER BY date DESC
-			LIMIT $limit";
+	$sql = "
+	SELECT count(*) count, date
+	FROM (	SELECT	count(*) AS count, date, ip
+			FROM	".CPD_C_TABLE."
+			GROUP	BY ip, date
+			) AS temp
+	GROUP BY date
+	ORDER BY date DESC
+	LIMIT $limit";
 			
 	$this->dashboardChartDataRequest($sql, $limit);
 }
-
-
 
 /**
  * creates dashboard chart metabox content
@@ -402,8 +380,8 @@ function dashboardChartDataRequest( $sql = '', $limit )
 	
 	$end_time = strtotime("20$end");
 	$start_time = max( array($end_time - ($limit - 1) * 86400, strtotime("20$start")) );
-	$days = ($end_time - $start_time) / 86400 + 1;
-	$bar_width = round( 100 / $days, 2); // as %
+	$days = max(1, ($end_time - $start_time) / 86400 + 1);
+	$bar_width = round(100 / $days, 2); // as %
 	
 	// find max count
 	$max = 1;
@@ -411,7 +389,7 @@ function dashboardChartDataRequest( $sql = '', $limit )
 	{
 		$date = strtotime('20'.$day->date);
 		if ( $date >= $start_time && $day->count > $max )
-			$max = $day->count;
+			$max = max(1, $day->count);
 	}
 
 	$height_factor = $max_height / $max;
@@ -461,12 +439,8 @@ function dashboardChartDataRequest( $sql = '', $limit )
 		</p>';
 }
 
-
-
 // The following statistic functions you can use in your template too.
 // use $count_per_day->getUserOnline()
-
-
 
 /**
  * shows current visitors
@@ -478,8 +452,6 @@ function getUserOnline()
 	echo $v;
 }
 
-
-
 /**
  * shows all visitors
  */
@@ -488,8 +460,6 @@ function getUserAll()
 	$res = mysql_query("SELECT 1 FROM ".CPD_C_TABLE." GROUP BY ip, date;", $this->dbcon);
 	echo mysql_num_rows($res);
 }
-
-
 
 /**
  * shows today visitors
@@ -501,31 +471,25 @@ function getUserToday()
 	echo mysql_num_rows($res);
 }
 
-
-
 /**
  * shows yesterday visitors
  */
 function getUserYesterday()
 {
-	$date = date('ymd',time()-86400);
+	$date = date('ymd', time()-86400);
 	$res = mysql_query("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip;", $this->dbcon);
 	echo mysql_num_rows($res);
 }
-
-
 
 /**
  * shows last week visitors (last 7 days)
  */
 function getUserLastWeek()
 {
-	$date = date('ymd',time()-86400*7);
+	$date = date('ymd', time()-86400*7);
 	$res = mysql_query("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$date' GROUP BY ip;", $this->dbcon);
 	echo mysql_num_rows($res);
 }
-
-
 
 /**
  * shows visitors per month
@@ -542,8 +506,6 @@ function getUserPerMonth()
 	}
 	echo '</ul>';
 }
-
-
 
 /**
  * shows visitors per post
@@ -577,8 +539,6 @@ function getUserPerPost( $limit = 0 )
 	$this->getUserPer_SQL( $sql );
 }
 
-
-
 /**
  * shows counter start, first day
  */
@@ -590,8 +550,6 @@ function getFirstCount()
 	$date = strtotime( '20'.substr($v,0,2).'-'.substr($v,2,2).'-'.substr($v,4,2) );
 	echo date('j. ', $date) . $wp_locale->get_month( substr($v,2,2) ) . date(' Y', $date);
 }
-
-
 
 /**
  * shows averaged visitors per day
@@ -624,8 +582,6 @@ function getUserPerDay( $days = 0 )
 		echo number_format($count, 0);
 	echo '</abbr>';
 }
-
-
 
 /**
  * shows most visited pages in last days
@@ -664,8 +620,6 @@ function getMostVisitedPosts( $days = 0, $limit = 0 )
 	$this->getUserPer_SQL( $sql );		
 }
 
-
-
 /**
  * shows little browser statistics
  */
@@ -674,7 +628,7 @@ function getClients()
 	global $wpdb;
 	$clients = array('Firefox', 'MSIE', 'Chrome', 'AppleWebKit', 'Opera');
 	
-	$all = $wpdb->get_var("SELECT COUNT(*) as count FROM ".CPD_C_TABLE);
+	$all = max(1, $wpdb->get_var("SELECT COUNT(*) as count FROM ".CPD_C_TABLE));
 	$rest = 100;
 	echo '<ul>';
 	foreach ($clients as $c)
@@ -689,9 +643,7 @@ function getClients()
 	echo '</ul>';
 }
 
-
 // end of statistic functions
-
 
 /**
  * creates counter lists
@@ -723,33 +675,30 @@ function getUserPer_SQL( $sql )
 	echo '</ul>';
 }
 
-
 /**
  * deletes spam in table, if you add new bot pattern you can clean the db
  */
 function cleanDB()
 {
 	global $wpdb;
-	
+
 	$bots = explode( "\n", $this->options['bots'] );
 	$rows = 0;
-	
+
 	// delete by ip
 	$ips = "'".implode( "','", $bots )."'";
 	$rows += $wpdb->get_var('SELECT count(*) FROM '.CPD_C_TABLE.' WHERE ip in ('.$ips.')');
-	$wpdb->query('DELETE FROM '.CPD_C_TABLE.' WHERE ip in ('.$ips.')');
-	
+	@mysql_query('DELETE FROM '.CPD_C_TABLE.' WHERE ip in ('.$ips.')', $this->dbcon);
+
 	// delete by client
 	$v = $wpdb->get_results('SELECT id, client FROM '.CPD_C_TABLE);
 	foreach ($v as $row)
-	{
 		if ( $this->IsBot($row->client, $bots) )
 		{
-			$wpdb->query('DELETE FROM '.CPD_C_TABLE.' WHERE id = '.$row->id);
+			@mysql_query('DELETE FROM '.CPD_C_TABLE.' WHERE id = '.$row->id, $this->dbcon);
 			$rows++;
 		}
-	}
-	
+																						// besser löschen
 	// delete if a previously countered page was deleted
 	$posts = $wpdb->get_results('SELECT id FROM '.$wpdb->posts);
 	
@@ -758,21 +707,20 @@ function cleanDB()
 		$pages[] = $post->id;
 	$pages = implode("','", $pages);
 	
-	$sql = "SELECT	count(*) as count, page
-			FROM	".CPD_C_TABLE."
-			WHERE	page NOT IN ('$pages')
-			GROUP	BY page";
+	$sql = "
+	SELECT	count(*) as count, page
+	FROM	".CPD_C_TABLE."
+	WHERE	page NOT IN ('$pages')
+	GROUP	BY page";
 	$counts = $wpdb->get_results($sql);
 
 	foreach ($counts as $count)
 		$rows += $count->count;
 	
-	$wpdb->query("DELETE FROM ".CPD_C_TABLE." WHERE page NOT IN ('$pages')");
+	@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE page NOT IN ('$pages')", $this->dbcon);
 	
 	return $rows;
 }
-
-
 
 /**
  * adds menu entry to backend
@@ -787,8 +735,6 @@ function menu($content)
 		add_options_page('CountPerDay', $menutitle, 'manage_options', dirname(plugin_basename(__FILE__)).'/counter-options.php') ;
 	}
 }
-
-
 	
 /**
  * adds an "settings" link to the plugins page
@@ -803,19 +749,17 @@ function pluginActions($links, $file)
 	return $links;
 }
 
-
-
 /**
- * loads automatic counter
- */
+ * loads automatic counter																gleich auf count?
 function autocount( )
 {
 //	if ( is_singular() ) // alle seiten?
 		$this->count();
 }
+ */
 
 
-	
+ 
 /**
  * creates the little widget on dashboard
  */
@@ -828,8 +772,6 @@ function dashboardWidget()
 	echo '</b> '.__('Visitors per day', 'cpd');
 }
 
-
-
 /**
  * adds widget to dashboard page
  */
@@ -837,8 +779,6 @@ function dashboardWidgetSetup()
 {
 	wp_add_dashboard_widget( 'cpdDashboardWidget', 'Count per Day', array(&$this,'dashboardWidget') );
 }
-
-
 
 /**
  * combines the options to one array, update from previous versions
@@ -854,19 +794,19 @@ function updateOptions()
 		$bots = get_option('cpd_bots', "bot\nspider\nsearch\ncrawler\nask.com\nvalidator\nsnoopy\nsuchen.de\nsuchbaer.de\nshelob\nsemager\nxenu\nsuch_de\nia_archiver\nMicrosoft URL Control\nnetluchs");
 		
 		$o = array(
-			'onlinetime' => $onlinetime,
-			'user' => $user,
-			'autocount' => $autocount,
-			'bots' => $bots,
-			'dashboard_posts' => 20,
-			'dashboard_last_posts' => 20,
-			'dashboard_last_days' => 14,
-			'widget_title' => 'Count per Day',
-			'widget_functions' => '',
-			'show_in_lists' => 1,
-			'chart_days' => 60,
-			'chart_height' => 100,
-			'countries' => 20);
+		'onlinetime' => $onlinetime,
+		'user' => $user,
+		'autocount' => $autocount,
+		'bots' => $bots,
+		'dashboard_posts' => 20,
+		'dashboard_last_posts' => 20,
+		'dashboard_last_days' => 14,
+		'widget_title' => 'Count per Day',
+		'widget_functions' => '',
+		'show_in_lists' => 1,
+		'chart_days' => 60,
+		'chart_height' => 100,
+		'countries' => 20);
 		
 		// add array
 		add_option('count_per_day', $o);
@@ -881,8 +821,6 @@ function updateOptions()
 	}
 }
 
-
-
 /**
  * add counter column to page/post lists
  */
@@ -893,23 +831,18 @@ function cpdColumn($defaults)
 	return $defaults;
 }
 
-
-
 /**
  * adds content to the counter column
  */
 function cpdColumnContent($column_name, $id = 0)
 {
 	global $wpdb;
-	
 	if( $column_name == 'cpd_reads' )
     {
     	$reads = $wpdb->get_var("SELECT count(*) FROM ".CPD_C_TABLE." WHERE page='$id';");
 		echo (int) $reads;
     }
 }
-
-
 
 /**
  * uninstall functions, deletes tables and options
@@ -922,8 +855,6 @@ function uninstall()
 	delete_option('count_per_day');
 }
 
-
-
 /**
  * defines base64 encoded image recources
  */
@@ -933,24 +864,13 @@ function setRecources()
 	{
 		# base64 encoding
 		$resources = array(
-			'cpd_menu.gif' =>
-			'R0lGODlhDAAMAJECAP8AAAAAAP///wAAACH5BAEAAAIALAAAAA'.
-			'AMAAwAAAIdjI4ppsqNngA0PYDwZDrjUEGLGJGHBKFNwLYuWwAA'.
-			'Ow==',
-			'cpd_rot.png' =>
-			'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACX'.
-			'BIWXMAAAsTAAALEwEAmpwYAAAADElEQVR42mP8z8AAAAMFAQHa'.
-			'4YgFAAAAAElFTkSuQmCC',
-			'cpd_trans.png' =>
-			'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACX'.
-			'BIWXMAAAsTAAALEwEAmpwYAAAAC0lEQVR42mNkAAIAAAoAAv/l'.
-			'xKUAAAAASUVORK5CYII='
-			);
+		'cpd_menu.gif' => 'R0lGODlhDAAMAJECAP8AAAAAAP///wAAACH5BAEAAAIALAAAAAAMAAwAAAIdjI4ppsqNngA0PYDwZDrjUEGLGJGHBKFNwLYuWwAAOw==',
+		'cpd_rot.png' => 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAADElEQVR42mP8z8AAAAMFAQHa4YgFAAAAAElFTkSuQmCC',
+		'cpd_trans.png' => 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAC0lEQVR42mNkAAIAAAoAAv/lxKUAAAAASUVORK5CYII=');
 			 
 		if ( array_key_exists($_GET['resource'], $resources) )
 		{
 			$content = base64_decode($resources[ $_GET['resource'] ]);
-	 
 			$lastMod = filemtime(__FILE__);
 			$client = ( isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : false );
 			if (isset($client) && (strtotime($client) == $lastMod))
@@ -970,16 +890,12 @@ function setRecources()
 	}
 }
 
-
-
 /**
  * gets image recource with given name
  */
 function getResource( $resourceID ) {
 	return trailingslashit( get_bloginfo('url') ).'?resource='.$resourceID;
 }
-
-
 
 /**
  * creates sidebar widget
@@ -992,13 +908,11 @@ function widgetCpdInit()
 	function widgetCpd($args)
 	{
 		global $count_per_day;
-
 		extract($args);
 		if ( !empty($count_per_day->options['widget_functions']) )
 		{
 			// show widget only if functions are defined
-			$title = (!empty($count_per_day->options['widget_title'])) ? $count_per_day->options['widget_title'] : 'Count per Day vvv';
-	
+			$title = (!empty($count_per_day->options['widget_title'])) ? $count_per_day->options['widget_title'] : 'Count per Day';
 			echo $before_widget;
 			echo $before_title.$title.$after_title;
 			echo '<ul class="cpd">';
@@ -1008,7 +922,6 @@ function widgetCpdInit()
 				if ( ($s[0] == 'show' && is_singular()) || $s[0] != 'show' )
 				{
 					$name = (!empty($count_per_day->options['name_'.$s[0]])) ? $count_per_day->options['name_'.$s[0]] : __($s[1], 'cpd');
-					
 					echo '<li><span style="float:right">';
 					eval('echo $count_per_day->'.$s[0].'("","",false,false);'); // params for 'show' only. don't count! ;)
 					echo '</span>'.$name.':</li>';
@@ -1029,15 +942,15 @@ function widgetCpdInit()
 
 		// show the possible functions
 		$funcs = array(
-			'show' => 'This post',
-			'getUserToday' => 'Visitors today',
-			'getUserYesterday' => 'Visitors yesterday',
-			'getUserLastWeek' => 'Visitors last week',
-			'getUserPerDay' => 'Visitors per day',
-			'getUserAll' => 'Total visitors',
-			'getUserOnline' => 'Visitors currently online',
-			'getFirstCount' => 'Counter starts on',
-			);
+		'show' => 'This post',
+		'getUserToday' => 'Visitors today',
+		'getUserYesterday' => 'Visitors yesterday',
+		'getUserLastWeek' => 'Visitors last week',
+		'getUserPerDay' => 'Visitors per day',
+		'getUserAll' => 'Total visitors',
+		'getUserOnline' => 'Visitors currently online',
+		'getFirstCount' => 'Counter starts on',
+		);
 
 		if ( !empty($_POST['widget_cpd_title']) )
 		{
@@ -1051,7 +964,6 @@ function widgetCpdInit()
 		
 		$title = (!empty($count_per_day->options['widget_title'])) ? $count_per_day->options['widget_title'] : 'Count per Day';
 		echo '<p><label for="widget_cpd_title">'.__('Title:').' <input style="width: 150px;" id="widget_cpd_title" name="widget_cpd_title" type="text" value="'.$title.'" /></label></p>'."\n";
-		
 
 		foreach ( $funcs as $k=>$v )
 		{
@@ -1064,12 +976,9 @@ function widgetCpdInit()
 			$name = (isset($count_per_day->options['name_'.$k])) ? $count_per_day->options['name_'.$k] : '';
 			echo '&nbsp; &nbsp; &nbsp;'.__('Label', 'cpd').': <input name="name_'.$k.'" value="'.$name.'" type="text" title="'.__('empty = name above', 'cpd').'" /></p>';
 		}
-		
 	}
 	register_widget_control('Count per Day', 'widgetCpdControl');
 }
-
-
 
 /**
  * sets columns on dashboard page
@@ -1080,8 +989,6 @@ function screenLayoutColumns($columns, $screen)
 		$columns[$this->pagehook] = 4;
 	return $columns;
 }
-
-
 
 /**
  * extends the admin menu 
@@ -1094,15 +1001,11 @@ function setAdminMenu()
 	add_action('load-'.$this->pagehook, array(&$this, 'onLoadPage'));
 }
 
-
-
 /**
  * function calls from metabox default parameters
  */
 function getMostVisitedPostsMeta() { $this->getMostVisitedPosts(); }
 function getUserPerPostMeta() { $this->getUserPerPost(); }
-
-
 
 /**
  * will be executed if wordpress core detects this page has to be rendered
@@ -1128,7 +1031,6 @@ function onLoadPage()
 		add_meta_box('countries', __('Reads per Country', 'cpd'), array(&$this, 'getCountries'), $this->pagehook, 'cpdrow2', 'core');
 }
 
-
 /**
  * creates dashboard page
  */
@@ -1147,20 +1049,11 @@ function onShowPage()
 		wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false );
 		$cpd_style = 'style="width:'.round(98 / $screen_layout_columns, 1).'%;"';
 		?>
-
 		<div id="dashboard-widgets" class="metabox-holder cpd-dashboard">
-			<div class="postbox-container" <?php echo $cpd_style; ?>>
-				<?php do_meta_boxes($this->pagehook, 'cpdrow1', $data); ?>
-			</div>
-			<div class="postbox-container" <?php echo $cpd_style; ?>>
-				<?php do_meta_boxes($this->pagehook, 'cpdrow2', $data); ?>
-			</div>
-			<div class="postbox-container" <?php echo $cpd_style; ?>>
-				<?php do_meta_boxes($this->pagehook, 'cpdrow3', $data); ?>
-			</div>
-			<div class="postbox-container" <?php echo $cpd_style; ?>>
-				<?php do_meta_boxes($this->pagehook, 'cpdrow4', $data); ?>
-			</div>
+			<div class="postbox-container" <?php echo $cpd_style; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow1', $data); ?></div>
+			<div class="postbox-container" <?php echo $cpd_style; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow2', $data); ?></div>
+			<div class="postbox-container" <?php echo $cpd_style; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow3', $data); ?></div>
+			<div class="postbox-container" <?php echo $cpd_style; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow4', $data); ?></div>
 			<br class="clear"/>
 		</div>	
 	</div>
@@ -1176,8 +1069,6 @@ function onShowPage()
 	</script>
 	<?php
 }
-
-
 
 /**
  * gets country flags and page views
@@ -1210,10 +1101,7 @@ function getCountries( $limit = 0 )
 	}
 }
 
-
-
 } // class end
-
 
 $count_per_day = new CountPerDay();
 ?>
