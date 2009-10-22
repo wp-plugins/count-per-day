@@ -166,7 +166,7 @@ function count()
 		// "index" pages only with autocount	
 		else if ( is_category() || is_tag() )
 			// category or tag => negativ ID in CpD DB
-			$page = 0 - $wp_query->get_queried_object()->term_id;
+			$page = 0 - $wp_query->get_queried_object_id();
 		else
 			// index, date, search and other "list" pages will count only once
 			$page = 0;
