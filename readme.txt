@@ -3,8 +3,8 @@ Contributors: Tom Braider
 Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
-Tested up to: 2.8.4
-Stable tag: 2.3.1
+Tested up to: 2.8.5
+Stable tag: 2.4
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -24,13 +24,13 @@ Languages: english, german, italian, portuguese, belorussian, uzbek
 
 1. unzip plugin directory into the '/wp-content/plugins/' directory
 1. activate the plugin through the 'Plugins' menu in WordPress
-1. install optional GeoIP addon to show countries of your visitors
 
 First activation will create the 2 tables wp _ cpd _ counter and wp _ cpd _ counter _ useronline.
 
 **Configuration**
 
 See the Options Page and check the default values. It's easy. :)
+Install optional GeoIP database to show countries of your visitors.
 
 If "Auto counter" is on reads on single-posts and pages will count without any changes on template.
 
@@ -116,15 +116,13 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 * clients are hardcoded in function but easy to change ;)
 
 
-**GeoIP addon**
+**GeoIP**
 
 * With the GeoIP addon you can associate your visitors to an country using the ip adress.
-* Download the addon on <a href="http://www.tomsdimension.de/wp-plugins/count-per-day">plugin page</a> and unzip into count-per-day directory. Directory 'geoip' will be create. 
-* In the database a new column 'country' will be insert.
+* In the database a new column 'country' will be insert on plugin activation.
 * On options page you can update you current visits. This take a while!
   The Script checks 100 IP adresses at once an reload itself until less then 100 adresses left.
   Click the update button to check the rest.
-* Click the button once at least to create the column in datebase! You can abort the update process.
 * If the rest remains greater than 0 the IP adress is not in GeoIP database (accuracy 99.5%).
 * You can update the GeoIP database from time to time to get new IP data.
   This necessitates write rights to geoip directory (e.g. chmod 777).
@@ -134,14 +132,20 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 == Changelog ==
 
+= 2.4 =
++ Bugfix: works with PHP 4.x again (error line 169)
++ Change: some functions now faster
++ New: GeoIP included. You have to load GeoIP.dat file on option page before you can use it.
++ Language updates: Italian (Gianni Diurno) and German
+
 = 2.3.1 =
-+ Bugfix: counter don't work without GeoIP Addon (nonexisting row 'country' in table)
++ Bugfix: counter do not work without GeoIP Addon (nonexisting row 'country' in table)
 
 = 2.3 =
 + New: chart "visitors per day"
 + New: counts index pages: homepage, categories, tags (if autocount is on)
 + New: visits per client/browser in percent
-+ added some parameters to functions to overwrite default values
++ New: added some parameters to functions to overwrite default values
 + New language: Usbek, thanks to Alisher
 
 = 2.2 =
