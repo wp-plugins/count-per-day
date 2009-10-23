@@ -358,12 +358,12 @@ msgstr "Aktualisiere alte Z&auml;hlerdaten"
 #: counter-options.php:200
 #@ cpd
 msgid "You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!"
-msgstr "Du kannst zu allen Z&auml;hlerdaten das Herkunftsland speichern. Dazu wird die IP mit der GeoIP Datenbank abgeglichen. Das kann je nach Anzahl das Daten eine ganze Weile dauern."
+msgstr "Du kannst zu allen Z&auml;hlerdaten das Herkunftsland speichern. Dazu wird die IP mit der GeoIP Datenbank abgeglichen. Das kann je nach Anzahl der Daten eine ganze Weile dauern."
 
 #: counter-options.php:206
 #@ cpd
 msgid "Update GeoIP database"
-msgstr "Aktualisiere GeoIP Datanbank"
+msgstr "Aktualisiere GeoIP Datenbank"
 
 #: counter-options.php:209
 #@ cpd

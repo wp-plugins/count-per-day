@@ -4,7 +4,6 @@
  * Count Per Day - Options and Administration
  */
 
-
 // check form 
 if(!empty($_POST['do']))
 {
@@ -57,8 +56,15 @@ if(!empty($_POST['do']))
 		case 'cpd_countrydb' :
 			if ( class_exists('CpdGeoIp') )
 			{
+				@mysql_query("SELECT country FROM `".CPD_C_TABLE."`", $count_per_day->dbcon);
+				if ((int) mysql_errno() == 1054)
+					// add row 'country' to counter db
+					mysql_query("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR(2) NOT NULL", $count_per_day->dbcon);
+						
 				$result = CpdGeoIp::updateGeoIpFile();
 				echo '<div id="message" class="updated fade"><p>'.$result.'</p></div>';
+				if ( file_exists($cpd_path.'/geoip/GeoIP.dat') )
+					$cpd_geoip = 1;
 			}
 			break;
 		
@@ -78,8 +84,8 @@ if(!empty($_POST['do']))
 		case __('UNINSTALL Count per Day', 'cpd') :
 			if(trim($_POST['uninstall_cpd_yes']) == 'yes')
 			{
-				$wpdb->query("DROP TABLE IF EXISTS ".CPD_C_TABLE.";");
-				$wpdb->query("DROP TABLE IF EXISTS ".CPD_CO_TABLE.";");
+				$wpdb->query("DROP TABLE IF EXISTS ".CPD_C_TABLE);
+				$wpdb->query("DROP TABLE IF EXISTS ".CPD_CO_TABLE);
 				delete_option('count_per_day');
 				echo '<div id="message" class="updated fade"><p>';
 				printf(__('Table %s deleted', 'cpd'), CPD_C_TABLE);
@@ -161,7 +167,7 @@ switch($mode) {
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Chart - Height', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_chart_height" size="3" value="<?php echo $o['chart_height']; ?>" /> px - <?php _e('Height of the biggest bar', 'cpd') ?></td>
 		</tr>
-		<?php if ( class_exists('CpdGeoIp') ) { ?>
+		<?php if ( $cpd_geoip ) { ?>
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Countries', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_countries" size="3" value="<?php echo $o['countries']; ?>" /> <?php _e('How many countries do you want to see on dashboard page?', 'cpd') ?></td>
@@ -183,13 +189,13 @@ switch($mode) {
 	</div>
 	</div>
 
-	<?php if ( class_exists('CpdGeoIp') ) { ?>
-		<!-- Countries -->
-		<div class="postbox">
-		<h3><?php _e('GeoIP - Countries', 'cpd') ?></h3>
-		<div class="inside">
-			
-			<table class="form-table">
+	<!-- Countries -->
+	<div class="postbox">
+	<h3><?php _e('GeoIP - Countries', 'cpd') ?></h3>
+	<div class="inside">
+
+		<table class="form-table">
+		<?php if ( $cpd_geoip ) { ?>
 			<tr>
 				<td>
 					<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -199,30 +205,33 @@ switch($mode) {
 				</td>
 				<td><?php _e('You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!', 'cpd') ?></td>
 			</tr>
-			<?php if ( ini_get('allow_url_fopen') && function_exists('gzopen') ) { ?>
-				<tr>
-					<td>
-						<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-						<input type="hidden" name="do" value="cpd_countrydb" />
-						<input type="submit" name="updcondb" value="<?php _e('Update GeoIP database', 'cpd') ?>" class="button" />
-						</form>
-					</td>
-					<td><?php _e('Download a new version of GeoIP.dat file.', 'cpd') ?></td>
-				</tr>
-			<?php } ?>
-			</table>
-			
-			<p style="text-align: right">
-				<?php _e('More informations about GeoIP', 'cpd') ?>: <a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a><br />
-				DEBUG: 
-				fopen=<?php echo (function_exists('fopen')) ? 'true' : 'false' ?>
-				gzopen=<?php echo (function_exists('gzopen')) ? 'true' : 'false' ?>
-				allow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
-			</p>
+		<?php } ?>
+		
+		<?php if ( class_exists('CpdGeoIp') && ini_get('allow_url_fopen') && function_exists('gzopen') ) {
+			// install or update database ?>
+			<tr>
+				<td width="10">
+					<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+					<input type="hidden" name="do" value="cpd_countrydb" />
+					<input type="submit" name="updcondb" value="<?php _e('Update GeoIP database', 'cpd') ?>" class="button" />
+					</form>
+				</td>
+				<td><?php _e('Download a new version of GeoIP.dat file.', 'cpd') ?></td>
+			</tr>
+		<?php }	?>
+		</table>
+	
+		<p style="text-align: right">
+			<?php _e('More informations about GeoIP', 'cpd') ?>: <a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a><br />
+			DEBUG: 
+			writable=<?php echo (is_writable($cpd_path.'/geoip/') && is_file($cpd_path.'/geoip/GeoIP.dat') ? is_writable($cpd_path.'/geoip/GeoIP.dat') : 1) ? 'true' : 'false' ?>
+			fopen=<?php echo (function_exists('fopen')) ? 'true' : 'false' ?>
+			gzopen=<?php echo (function_exists('gzopen')) ? 'true' : 'false' ?>
+			allow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
+		</p>
 
-		</div>
-		</div>
-	<?php } ?>
+	</div>
+	</div>
 
 	<!-- Cleaner -->
 	<div class="postbox">
