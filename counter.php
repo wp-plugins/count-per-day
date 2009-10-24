@@ -700,7 +700,7 @@ function cleanDB()
 
 	// delete by client
 	foreach ($bots as $bot)
-		@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%$bot%'", $this->dbcon);
+		@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%".trim($bot)."%'", $this->dbcon);
 	
 	// delete if a previously countered page was deleted
 	$posts = $wpdb->get_results('SELECT id FROM '.$wpdb->posts);
