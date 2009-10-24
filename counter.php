@@ -244,7 +244,7 @@ function createTables()
 	
 	global $wpdb;
 	
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '".CPD_C_TABLE."'" ) != CPD_C_TABLE )
+	if ( $wpdb->get_var( "SHOW TABLES LIKE `".CPD_C_TABLE."`" ) != CPD_C_TABLE )
 	{
 		// table "counter" is not exists
 		$sql = "CREATE TABLE IF NOT EXISTS `".CPD_C_TABLE."` (
@@ -260,7 +260,7 @@ function createTables()
 		dbDelta($sql);
 	}
 	
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '".CPD_CO_TABLE."'" ) != CPD_CO_TABLE )
+	if ( $wpdb->get_var( "SHOW TABLES LIKE `".CPD_CO_TABLE."`" ) != CPD_CO_TABLE )
 	{
 		// table "counter-online" is not exists
 		$sql = "CREATE TABLE IF NOT EXISTS `".CPD_CO_TABLE."` (
@@ -272,7 +272,7 @@ function createTables()
 	}
 	
 	// make new keys if needed
-	$keys = $wpdb->query( "SHOW KEYS FROM '".CPD_C_TABLE."'" );
+	$keys = $wpdb->query( "SHOW KEYS FROM `".CPD_C_TABLE."`" );
 	if ( sizeof($keys) == 1 )
 	{
 		$sql = "ALTER TABLE `".CPD_C_TABLE."`
@@ -641,6 +641,17 @@ function getClients()
 		echo '<li>'.__('Other', 'cpd').'<b>'.$rest.' %</b></li>';
 	echo '</ul>';
 }
+
+//
+//zuviele seiten pro tag angesehen
+//
+//SELECT ip, count( * ) AS x
+//FROM `td_cpd_counter`
+//GROUP BY ip, date
+//ORDER BY x DESC
+//LIMIT 0 , 30
+
+
 
 // end of statistic functions
 
