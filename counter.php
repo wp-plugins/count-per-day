@@ -135,6 +135,7 @@ function count()
 {
 	global $wpdb;
 	global $cpd_path;
+	global $cpd_geoip;
 	global $wp_query;
 	
 	// find PostID
@@ -244,7 +245,7 @@ function createTables()
 	
 	global $wpdb;
 	
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '".CPD_C_TABLE."'" ) != CPD_C_TABLE )
+	if ( $wpdb->get_var( "SHOW TABLES LIKE `".CPD_C_TABLE."`" ) != CPD_C_TABLE )
 	{
 		// table "counter" is not exists
 		$sql = "CREATE TABLE IF NOT EXISTS `".CPD_C_TABLE."` (
@@ -260,7 +261,7 @@ function createTables()
 		dbDelta($sql);
 	}
 	
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '".CPD_CO_TABLE."'" ) != CPD_CO_TABLE )
+	if ( $wpdb->get_var( "SHOW TABLES LIKE `".CPD_CO_TABLE."`" ) != CPD_CO_TABLE )
 	{
 		// table "counter-online" is not exists
 		$sql = "CREATE TABLE IF NOT EXISTS `".CPD_CO_TABLE."` (
@@ -272,7 +273,7 @@ function createTables()
 	}
 	
 	// make new keys if needed
-	$keys = $wpdb->query( "SHOW KEYS FROM '".CPD_C_TABLE."'" );
+	$keys = $wpdb->query( "SHOW KEYS FROM `".CPD_C_TABLE."`" );
 	if ( sizeof($keys) == 1 )
 	{
 		$sql = "ALTER TABLE `".CPD_C_TABLE."`
@@ -642,6 +643,17 @@ function getClients()
 	echo '</ul>';
 }
 
+//
+//zuviele seiten pro tag angesehen
+//
+//SELECT ip, count( * ) AS x
+//FROM `td_cpd_counter`
+//GROUP BY ip, date
+//ORDER BY x DESC
+//LIMIT 0 , 30
+
+
+
 // end of statistic functions
 
 /**
@@ -689,7 +701,7 @@ function cleanDB()
 
 	// delete by client
 	foreach ($bots as $bot)
-		@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%$bot%'", $this->dbcon);
+		@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%".trim($bot)."%'", $this->dbcon);
 	
 	// delete if a previously countered page was deleted
 	$posts = $wpdb->get_results('SELECT id FROM '.$wpdb->posts);
