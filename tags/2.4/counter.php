@@ -135,6 +135,7 @@ function count()
 {
 	global $wpdb;
 	global $cpd_path;
+	global $cpd_geoip;
 	global $wp_query;
 	
 	// find PostID
