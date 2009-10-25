@@ -132,6 +132,9 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 == Changelog ==
 
+= 2.5 =
++ New: "Mass Bot Detector" shows and deletes clients that view more than x pages per day
+
 = 2.4.1 =
 + Bugfix: mysql systax error
 + Bugfix: no country data was stored - use "Update old counter data" on options page
