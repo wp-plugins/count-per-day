@@ -700,7 +700,12 @@ function getUserPer_SQL( $sql )
 function cleanDB()
 {
 	global $wpdb;
+	
+	// get trimed bot array
+	function trim_value(&$value) { $value = trim($value); }
 	$bots = explode( "\n", $this->options['bots'] );
+	array_walk($bots, 'trim_value');
+	
 	$rows_before = $wpdb->get_var('SELECT COUNT(*) FROM '.CPD_C_TABLE);
 
 	// delete by ip
@@ -709,7 +714,7 @@ function cleanDB()
 
 	// delete by client
 	foreach ($bots as $bot)
-		@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%".trim($bot)."%'", $this->dbcon);
+		@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%".$bot."%'", $this->dbcon);
 	
 	// delete if a previously countered page was deleted
 	$posts = $wpdb->get_results('SELECT id FROM '.$wpdb->posts);
