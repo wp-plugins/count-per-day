@@ -134,6 +134,7 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 = Development Version =
 + New: "Mass Bot Detector" shows and deletes clients that view more than x pages per day
++ Bugfix: cleanDB by IP now works
 
 = 2.4.2 =
 + Bugfix: mysql systax error
