@@ -132,7 +132,7 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 == Changelog ==
 
-= 2.4.1 =
+= 2.4.2 =
 + Bugfix: mysql systax error
 + Bugfix: no country data was stored (GeoIP), use "Update old counter data" on options page
 
