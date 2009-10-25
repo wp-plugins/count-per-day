@@ -68,6 +68,22 @@ if(!empty($_POST['do']))
 			}
 			break;
 		
+		// delete massbots
+		case 'cpd_delete_massbots' :
+			if ( isset($_POST['limit']) )
+			{
+				$bots = $count_per_day->getMassBots($_POST['limit']);
+				$sum = 0;
+				foreach ( $bots as $row )
+				{
+					@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE ip LIKE '".$row->ip."' AND date LIKE '".$row->date."'", $count_per_day->dbcon);
+					$sum += $row->posts;
+				}
+				if ( $sum )
+					echo '<div id="message" class="updated fade"><p>'.sprintf(__('Mass Bots cleaned. %s counts deleted.', 'cpd'), $sum).'</p></div>';
+			}	
+			break;
+			
 		// clean database
 		case 'cpd_clean' :
 			$rows = $count_per_day->cleanDB();
@@ -230,6 +246,62 @@ switch($mode) {
 			allow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
 		</p>
 
+	</div>
+	</div>
+
+	<!-- Mass Bots -->
+	<div class="postbox">
+	<?php
+	$limit = (isset($_POST['limit'])) ? $_POST['limit'] : 25;
+	$limit_input = '<input type="text" size="3" name="limit" value="'.$limit.'" />';
+	$bots = $count_per_day->getMassBots($limit);
+	?>
+	<h3><?php _e('Mass Bots', 'cpd') ?></h3>
+	<div class="inside">
+		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+		<p>
+			<?php printf(__('Show all IPs with more than %s page views per day', 'cpd'), $limit_input) ?>
+			<input type="submit" name="showmassbots" value="<?php _e('show', 'cpd') ?>" class="button" />
+		</p>
+		</form>
+		
+		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+		<table class="widefat post">
+		<thead>
+		<tr>
+			<th><?php _e('IP', 'cpd') ?></th>
+			<th><?php _e('Date', 'cpd') ?></th>
+			<th><?php _e('Client', 'cpd') ?></th>
+			<th><?php _e('Views', 'cpd') ?></th>
+		</tr>
+		</thead>
+		<?php
+		$sum = 0;
+		foreach ( $bots as $row )
+		{
+			echo '<tr><td>';
+			if ( $cpd_geoip )
+			{
+				$c = CpdGeoIp::getCountry($row->ip);
+				echo $c[1].' ';
+			}
+			echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$row->ip.'">'.$row->ip.'</a></td>'
+				.'<td>'.mysql2date(get_option('date_format'), '20'.substr($row->date,0,2).'-'.substr($row->date,2,2).'-'.substr($row->date,4,2) ).'</td>'
+				.'<td>'.$row->client.'</td>'
+				.'<td>'.$row->posts.'</td>'
+				.'</tr>';
+			$sum += $row->posts;
+		}
+		?>	
+		</table>
+		<?php if ( $sum ) { ?>
+			<p class="submit">
+				<input type="hidden" name="do" value="cpd_delete_massbots" />
+				<input type="hidden" name="limit" value="<?php echo $limit ?>" />
+				<input type="submit" name="clean" value="<?php printf(__('Delete these %s counts', 'cpd'), $sum) ?>" class="button" />
+			</p>
+		<?php } ?>
+		</form>
 	</div>
 	</div>
 

@@ -135,6 +135,7 @@ function count()
 {
 	global $wpdb;
 	global $cpd_path;
+	global $cpd_geoip;
 	global $wp_query;
 	
 	// find PostID
@@ -642,18 +643,26 @@ function getClients()
 	echo '</ul>';
 }
 
-//
-//zuviele seiten pro tag angesehen
-//
-//SELECT ip, count( * ) AS x
-//FROM `td_cpd_counter`
-//GROUP BY ip, date
-//ORDER BY x DESC
-//LIMIT 0 , 30
-
-
-
 // end of statistic functions
+
+/**
+ * gets mass bots
+ * @param int $limit only show IP if more than x page views per day
+ */
+function getMassBots( $limit = 0 )
+{
+	if ( $limit == 0 )
+		return;
+	global $wpdb;
+	$sql = "
+	SELECT * FROM (
+		SELECT	ip, date, client, count( * ) AS posts
+		FROM	".CPD_C_TABLE."
+		GROUP	BY ip, date
+		ORDER	BY posts DESC ) AS x
+	WHERE posts > $limit";
+	return $wpdb->get_results($sql);
+}
 
 /**
  * creates counter lists
@@ -769,7 +778,7 @@ function updateOptions()
 	{
 		$onlinetime = get_option('cpd_onlinetime', 300);
 		$user = get_option('cpd_user', 0);
-		$autocount = get_option('cpd_autocount', 0);
+		$autocount = get_option('cpd_autocount', 1);
 		$bots = get_option('cpd_bots', "bot\nspider\nsearch\ncrawler\nask.com\nvalidator\nsnoopy\nsuchen.de\nsuchbaer.de\nshelob\nsemager\nxenu\nsuch_de\nia_archiver\nMicrosoft URL Control\nnetluchs");
 		
 		$o = array(
