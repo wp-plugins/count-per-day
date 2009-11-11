@@ -3,11 +3,13 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
-Version: 2.4.2
+Version: 2.5
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
+
+define('CPD_DEBUG', false);
 
 /**
  * include GeoIP addon
@@ -26,6 +28,7 @@ class CountPerDay
 var $options;	// options array
 var $dir;		// this plugin dir
 var $dbcon;		// database connection
+var $queries = array();	// queries times for debug
 
 /**
  * Constructor
@@ -40,6 +43,7 @@ function CountPerDay()
 	
 	$this->options = get_option('count_per_day');
 	$this->dir = get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__));
+	$this->queries[0] = 0;
 
 	// update online counter
 	add_action('wp', array(&$this, 'deleteOnlineCounter'));
@@ -76,9 +80,6 @@ function CountPerDay()
 	if (defined('WPLANG') && function_exists('load_plugin_textdomain'))
 		load_plugin_textdomain('cpd', '', dirname(plugin_basename(__FILE__)).'/locale');
 
-	// creates image recources
-	$this->setRecources();
-	
 	// adds stylesheet
 	wp_enqueue_style('cpd_css', $this->dir.'/counter.css');
 	
@@ -92,16 +93,47 @@ function CountPerDay()
 	if ( function_exists('register_uninstall_hook') )
 		register_uninstall_hook(__FILE__, array(&$this, 'uninstall'));
 	
-	$this->connect_db();
+	// query times debug
+	if ( CPD_DEBUG )
+	{
+		add_action('wp_footer', array(&$this, 'showQueries'));
+		add_action('admin_footer', array(&$this, 'showQueries'));
+	}
+	
+	$this->connectDB();
 }
 
 /**
  * direct database connection without wordpress functions saves memory
  */
-function connect_db()
+function connectDB()
 {
+	global $wpdb;
 	$this->dbcon = @mysql_connect(DB_HOST, DB_USER, DB_PASSWORD, true);
 	@mysql_select_db(DB_NAME, $this->dbcon);
+	$this->getQuery("SET NAMES '".$wpdb->charset."'", 'SET NAMES');
+}
+
+/**
+ * get results per own connection (shows time for debug)
+ * @param string $sql SQL statement
+ * @param string $func show this name before time
+ * @return MySql result
+ */
+function getQuery( $sql, $func = '' )
+{
+	if ( CPD_DEBUG )
+	{
+		$t = microtime(true);
+		$res = @mysql_query($sql, $this->dbcon);
+		$d = number_format( microtime(true) - $t , 5);
+	//	echo '<code>'.$func.' '.$d.'</code>';
+		$this->queries[] = $func.' : <b>'.$d.'</b><br/><code>'.$sql.'</code>';
+		$this->queries[0] += $d;
+	}
+	else
+		$res = @mysql_query($sql, $this->dbcon);
+	return $res;
 }
 
 /**
@@ -120,12 +152,12 @@ function show( $before='', $after=' reads', $show = true, $count = true )
 	if ( $count && !$this->options['autocount'] )
 		$this->count();
 	$page = get_the_ID();
-	$v = $wpdb->get_var("SELECT count(*) FROM ".CPD_C_TABLE." WHERE page='$page';");
-	
+	$res = $this->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE page='$page'", 'show');
+	$row = mysql_fetch_row($res);
 	if ( $show )
-		echo $before.$v.$after;
+		echo $before.$row[0].$after;
 	else
-		return $v;
+		return $row[0];
 }
 
 /**
@@ -133,10 +165,7 @@ function show( $before='', $after=' reads', $show = true, $count = true )
  */
 function count()
 {
-	global $wpdb;
-	global $cpd_path;
-	global $cpd_geoip;
-	global $wp_query;
+	global $wpdb, $wp_query, $cpd_path, $cpd_geoip;
 	
 	// find PostID
 	if ( !is_404() ) :
@@ -171,31 +200,32 @@ function count()
 	{
 		$userip = $_SERVER['REMOTE_ADDR'];
 		$client = $_SERVER['HTTP_USER_AGENT'];
-		$date = date('ymd');
+		$date = date('Y-m-d');
 		
-		// save count
-		$v = $wpdb->get_var("SELECT count(*) FROM ".CPD_C_TABLE." WHERE ip='$userip' AND date='$date' AND page='$page';");
-		if ( $v == 0 )
+		// new visitor on page?
+		$res = $this->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE ip=INET_ATON('$userip') AND date='$date' AND page='$page'", 'count check');
+		$row = mysql_fetch_row($res);
+		if ( $row[0] == 0 )
 		{
+			// save count
 			if ( $cpd_geoip )
 			{
 				// with GeoIP addon save country
 				$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
 				$country = strtolower(geoip_country_code_by_addr($gi, $userip));
-				$wpdb->query($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, country)
-				VALUES (%s, %s, %s, %s, %s)", $page, $userip, $client, $date, $country));
-
+				$this->getQuery($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, country)
+				VALUES (%s, INET_ATON(%s), %s, %s, %s)", $page, $userip, $client, $date, $country), 'count insert');
 			}
 			else
 				// without country
-				$wpdb->query($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date)
-				VALUES (%s, %s, %s, %s)", $page, $userip, $client, $date));
+				$this->getQuery($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date)
+				VALUES (%s, INET_ATON(%s), %s, %s)", $page, $userip, $client, $date), 'count insert');
 		}
 		
 		// online counter
 		$timestamp = time();
-		$wpdb->query($wpdb->prepare("REPLACE INTO ".CPD_CO_TABLE." (timestamp, ip, page)
-			VALUES ( %s, %s, %s)", $timestamp, $userip, $page));
+		$this->getQuery($wpdb->prepare("REPLACE INTO ".CPD_CO_TABLE." (timestamp, ip, page)
+			VALUES ( %s, INET_ATON(%s), %s)", $timestamp, $userip, $page), 'count online');
 	}
 }
 
@@ -205,7 +235,7 @@ function count()
 function deleteOnlineCounter()
 {
 	$timeout = time() - $this->options['onlinetime'];
-	@mysql_query("DELETE FROM ".CPD_CO_TABLE." WHERE timestamp < $timeout", $this->dbcon);
+	$this->getQuery("DELETE FROM ".CPD_CO_TABLE." WHERE timestamp < $timeout", 'deleteOnlineCounter');
 }
 
 /**
@@ -242,53 +272,65 @@ function createTables()
 {
 	// for plugin activation, creates $wpdb
 	require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-	
 	global $wpdb;
 	
-	if ( $wpdb->get_var( "SHOW TABLES LIKE `".CPD_C_TABLE."`" ) != CPD_C_TABLE )
+	// table "counter"
+	$sql = "CREATE TABLE IF NOT EXISTS `".CPD_C_TABLE."` (
+	`id` int(10) NOT NULL auto_increment,
+	`ip` int(10) unsigned NOT NULL,
+	`client` varchar(100) NOT NULL,
+	`date` date NOT NULL,
+	`page` mediumint(9) NOT NULL,
+	PRIMARY KEY (`id`),
+	KEY `idx_page` (`page`),
+	KEY `idx_dateip` (`date`,`ip`) );";
+	$this->getQuery($sql);
+
+	// table "counter-online"
+	$sql = "CREATE TABLE IF NOT EXISTS `".CPD_CO_TABLE."` (
+	`timestamp` int(15) NOT NULL,
+	`ip` int(10) UNSIGNED NOT NULL,
+	`page` int(11) NOT NULL,
+	PRIMARY KEY (`ip`) )";
+	$this->getQuery($sql);
+	
+	// update fields in old table
+	$field = $this->getQuery( "SHOW FIELDS FROM `".CPD_C_TABLE."` LIKE 'ip'" );
+	$row = mysql_fetch_array($field);
+	if ( strpos(strtolower($row['Type']), 'int') === false )
 	{
-		// table "counter" is not exists
-		$sql = "CREATE TABLE IF NOT EXISTS `".CPD_C_TABLE."` (
-		`id` int(10) NOT NULL auto_increment,
-		`ip` varchar(15) NOT NULL,
-		`client` varchar(100) NOT NULL,
-		`date` char(6) NOT NULL,
-		`page` int(11) NOT NULL,
-		PRIMARY KEY  (`id`),
-		KEY `idx_ip` (`ip`(3)),
-		KEY `idx_date` (`date`),
-		KEY `idx_page` (`page`)	);";
-		dbDelta($sql);
+		$queries = array (
+		"ALTER TABLE `".CPD_C_TABLE."` ADD `ip2` INT(10) UNSIGNED NOT NULL AFTER `ip`",
+		"UPDATE `".CPD_C_TABLE."` SET ip2 = INET_ATON(ip)",
+		"ALTER TABLE `".CPD_C_TABLE."` DROP `ip`",
+		"ALTER TABLE `".CPD_C_TABLE."` CHANGE `ip2` `ip` INT( 10 ) UNSIGNED NOT NULL",
+		"ALTER TABLE `".CPD_C_TABLE."` CHANGE `date` `date` date NOT NULL",
+		"ALTER TABLE `".CPD_C_TABLE."` CHANGE `page` `page` mediumint(9) NOT NULL");
+		
+		foreach ( $queries as $sql)
+			$this->getQuery($sql, 'update old fields');
 	}
 	
-	if ( $wpdb->get_var( "SHOW TABLES LIKE `".CPD_CO_TABLE."`" ) != CPD_CO_TABLE )
-	{
-		// table "counter-online" is not exists
-		$sql = "CREATE TABLE IF NOT EXISTS `".CPD_CO_TABLE."` (
-		`timestamp` int(15) NOT NULL default '0',
-		`ip` varchar(15) NOT NULL default '',
-		`page` int(11) NOT NULL default '0',
-		PRIMARY KEY  (`ip`) );";
-		dbDelta($sql);
-	}
-	
-	// make new keys if needed
-	$keys = $wpdb->query( "SHOW KEYS FROM `".CPD_C_TABLE."`" );
-	if ( sizeof($keys) == 1 )
-	{
-		$sql = "ALTER TABLE `".CPD_C_TABLE."`
-		ADD KEY `idx_ip` (`ip`(3)),
-		ADD KEY `idx_date` (`date`),
-		ADD KEY `idx_page` (`page`)";
-		$wpdb->query($sql);
-	}
+	// make new keys
+	$keys = $this->getQuery( "SHOW KEYS FROM `".CPD_C_TABLE."`" );
+	$s = array();
+	while ( $row = mysql_fetch_array($keys) )
+		if ( $row['Key_name'] != 'PRIMARY' )
+			$s[] = 'DROP INDEX `'.$row['Key_name'].'`';
+	$s = array_unique($s);
+		
+	$sql = 'ALTER TABLE `'.CPD_C_TABLE.'` ';
+	if ( sizeof($s) )
+		$sql .= implode(',', $s).', ';
+	$sql .= 'ADD KEY `idx_dateip` (`date`,`ip`), ADD KEY `idx_page` (`page`)';
+	$this->getQuery($sql);
 	
 	// if GeoIP installed we need row "country"
 	if ( class_exists('CpdGeoIp') )
 	{
-		@mysql_query("SELECT country FROM `".CPD_C_TABLE."`", $this->dbcon);
+		$this->getQuery("SELECT country FROM `".CPD_C_TABLE."`");
 		if ((int) mysql_errno() == 1054)
-			mysql_query("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR(2) NOT NULL", $this->dbcon);
+			$this->getQuery("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR(2) NOT NULL");
 	}
 	
 	// update options to array
@@ -320,12 +362,11 @@ function dashboardReadsAtAll()
  */
 function dashboardChart( $limit = 0 )
 {
-	// get options
 	if ( $limit == 0 )
 		$limit = ( !empty($this->options['chart_days']) )? $this->options['chart_days'] : 30;
 	
 	$sql = "
-	SELECT	count(*) as count,
+	SELECT	count(*) count,
 			date
 	FROM	".CPD_C_TABLE."
 	GROUP	BY date
@@ -341,16 +382,14 @@ function dashboardChart( $limit = 0 )
  */
 function dashboardChartVisitors( $limit = 0 )
 {
-	// get options
 	if ( $limit == 0 )
 		$limit = ( !empty($this->options['chart_days']) )? $this->options['chart_days'] : 30;
-	
 	$sql = "
 	SELECT count(*) count, date
-	FROM (	SELECT	count(*) AS count, date, ip
+	FROM (	SELECT	count(*) count, date
 			FROM	".CPD_C_TABLE."
-			GROUP	BY ip, date
-			) AS temp
+			GROUP	BY date, ip
+			) AS t
 	GROUP BY date
 	ORDER BY date DESC
 	LIMIT $limit";
@@ -363,49 +402,57 @@ function dashboardChartVisitors( $limit = 0 )
  */
 function dashboardChartDataRequest( $sql = '', $limit )
 {
-	global $wpdb, $wp_locale;
+	global $wp_locale;
 
 	// get options
 	$max_height = ( !empty($this->options['chart_height']) ) ? $this->options['chart_height'] : 200;
 	
-	$res = $wpdb->get_results($sql);
+	$res = $this->getQuery($sql, 'Chart');
+	
+	if ( mysql_num_rows($res) == 0)
+		return;
+		
+	$res_array = array();
 
 	// find date end points
-	foreach ( $res as $day )
+	while ( $day = mysql_fetch_assoc($res) )
 	{
+		$res_array[] = $day;
 		if ( empty($end) )
-			$end = $day->date;
-		$start = $day->date;
+			$end = $day['date'];
+		$start = $day['date'];
 	}
 	
-	$end_time = strtotime("20$end");
-	$start_time = max( array($end_time - ($limit - 1) * 86400, strtotime("20$start")) );
+	$end_time = strtotime($end);
+	$start_time = max( array($end_time - ($limit - 1) * 86400, strtotime($start)) );
 	$days = max(1, ($end_time - $start_time) / 86400 + 1);
 	$bar_width = round(100 / $days, 2); // per cent
 	
 	// find max count
 	$max = 1;
-	foreach ( $res as $day )
+	mysql_data_seek($res, 0);
+	while ( $day = mysql_fetch_array($res) )
 	{
-		$date = strtotime('20'.$day->date);
-		if ( $date >= $start_time && $day->count > $max )
-			$max = max(1, $day->count);
+		$date = strtotime($day['date']);
+		if ( $date >= $start_time && $day['count'] > $max )
+			$max = max(1, $day['count']);
 	}
-
+	
 	$height_factor = $max_height / $max;
 	
 	// headline with max count
-	echo '<small style="display:block;">Max: '.$max.'</small>
+	echo '
+		<small style="display:block; float:right;">'.$days.' '.__('days', 'cpd').'</small>
+		<small style="display:block;">Max: '.$max.'</small>
 		<p style="border-bottom:1px black solid; white-space:nowrap;">';
 	
 	$date_old = $start_time;
 	
 	// newest data will show right
-	$res = array_reverse($res);
-	
-	foreach ( $res as $day )
+	$res_array = array_reverse($res_array);
+	foreach ( $res_array as $day )
 	{
-		$date = strtotime('20'.$day->date);
+		$date = strtotime($day['date']);
 		
 		if ( $date >= $start_time )
 		{
@@ -419,9 +466,9 @@ function dashboardChartDataRequest( $sql = '', $limit )
 			}
 	
 			// show normal bar
-			$height = max( round($day->count * $height_factor, 0), 1 );
-			$date_str = date('j. ', $date).$wp_locale->get_month(date('m', $date)).date(' Y', $date);
-			echo '<img src="'.$this->getResource('cpd_rot.png').'" title="'.$date_str.' : '.$day->count.'"
+			$height = max( round($day['count'] * $height_factor, 0), 1 );
+			$date_str = mysql2date(get_option('date_format'), $day['date']);
+			echo '<img src="'.$this->getResource('cpd_rot.png').'" title="'.$date_str.' : '.$day['count'].'"
 				style="width:'.$bar_width.'%; height:'.$height.'px" />';
 			
 			$date_old = $date;
@@ -429,14 +476,13 @@ function dashboardChartDataRequest( $sql = '', $limit )
 	}
 	
 	// legend
-	$end_str = date('j. ', $end_time).$wp_locale->get_month(date('m', $end_time)).date(' Y', $end_time);
-	$start_str = date('j. ', $start_time).$wp_locale->get_month(date('m', $start_time)).date(' Y', $start_time);
+	$end_str = mysql2date(get_option('date_format'), $end);
+	$start_str = mysql2date(get_option('date_format'), $start);
 	echo '</p>
-		<p style="text-align:center">
-			<small>'.$days.' '.__('days', 'cpd').'</small>
+		<div style="height: 10px">
 			<small style="float:left">'.$start_str.'</small>
 			<small style="float:right">'.$end_str.'</small>
-		</p>';
+		</div>';
 }
 
 // The following statistic functions you can use in your template too.
@@ -447,9 +493,9 @@ function dashboardChartDataRequest( $sql = '', $limit )
  */
 function getUserOnline()
 {
-	global $wpdb;
-	$v = $wpdb->get_var("SELECT count(page) FROM ".CPD_CO_TABLE.";");
-	echo $v;
+	$res = $this->getQuery("SELECT count(*) FROM ".CPD_CO_TABLE, 'getUserOnline');
+	$row = mysql_fetch_row($res);
+	echo $row[0];
 }
 
 /**
@@ -457,7 +503,7 @@ function getUserOnline()
  */
 function getUserAll()
 {
-	$res = mysql_query("SELECT 1 FROM ".CPD_C_TABLE." GROUP BY ip, date;", $this->dbcon);
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." GROUP BY date, ip", 'getUserAll');
 	echo mysql_num_rows($res);
 }
 
@@ -466,8 +512,8 @@ function getUserAll()
  */
 function getUserToday()
 {
-	$date = date('ymd',time());
-	$res = mysql_query("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip;", $this->dbcon);
+	$date = date('Y-m-d');
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip", 'getUserToday');
 	echo mysql_num_rows($res);
 }
 
@@ -476,8 +522,8 @@ function getUserToday()
  */
 function getUserYesterday()
 {
-	$date = date('ymd', time()-86400);
-	$res = mysql_query("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip;", $this->dbcon);
+	$date = date('Y-m-d', time()-86400);
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip", 'getUserYesterday');
 	echo mysql_num_rows($res);
 }
 
@@ -486,8 +532,8 @@ function getUserYesterday()
  */
 function getUserLastWeek()
 {
-	$date = date('ymd', time()-86400*7);
-	$res = mysql_query("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$date' GROUP BY ip;", $this->dbcon);
+	$date = date('Y-m-d', time()-86400*7);
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$date' GROUP BY ip;", 'getUserLastWeek');
 	echo mysql_num_rows($res);
 }
 
@@ -496,13 +542,12 @@ function getUserLastWeek()
  */
 function getUserPerMonth()
 {
-	global $wpdb;
-	$m = $wpdb->get_results("SELECT left(date,4) as month FROM ".CPD_C_TABLE." GROUP BY left(date,4) ORDER BY date desc");
+	$m = $this->getQuery("SELECT LEFT(date,7) FROM ".CPD_C_TABLE." GROUP BY year(date), month(date) ORDER BY date DESC", 'getUserPerMonths');
 	echo '<ul>';
-	foreach ( $m as $row )
+	while ( $row = mysql_fetch_row($m) )
 	{
-		$res = mysql_query("SELECT page FROM ".CPD_C_TABLE." WHERE left(date,4) = ".$row->month." GROUP BY ip, date;", $this->dbcon);
-		echo '<li><b>'.mysql_num_rows($res).'</b> 20'.substr($row->month,0,2).'/'.substr($row->month,2,2).'</li>'."\n";
+		$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE LEFT(date,7) = '".$row[0]."' GROUP BY date, ip", 'getUserPerMonth');
+		echo '<li><b>'.mysql_num_rows($res).'</b> '.$row[0].'</li>'."\n";
 	}
 	echo '</ul>';
 }
@@ -518,12 +563,12 @@ function getUserPerPost( $limit = 0 )
 		$limit = $this->options['dashboard_posts'];
 
 	$sql = "
-	SELECT	count(c.id) as count,
-			p.post_title as post,
-			c.page as post_id,
-			t.name as tag_cat_name,
-			t.slug as tag_cat_slug,
-			x.taxonomy as tax
+	SELECT	count(c.id) count,
+			c.page post_id,
+			p.post_title post,
+			t.name tag_cat_name,
+			t.slug tag_cat_slug,
+			x.taxonomy tax
 	FROM 	".CPD_C_TABLE." c
 	LEFT	JOIN ".$wpdb->posts." p
 			ON p.id = c.page
@@ -536,7 +581,7 @@ function getUserPerPost( $limit = 0 )
 	ORDER	BY count DESC";
 	if ( $limit > 0 )
 		$sql .= " LIMIT ".$limit;
-	$this->getUserPer_SQL( $sql );
+	$this->getUserPer_SQL( $sql, 'getUserPerPost' );
 }
 
 /**
@@ -544,11 +589,10 @@ function getUserPerPost( $limit = 0 )
  */
 function getFirstCount()
 {
-	global $wpdb;
 	global $wp_locale;
-	$v = $wpdb->get_var("SELECT date FROM ".CPD_C_TABLE." ORDER BY date LIMIT 1;");
-	$date = strtotime( '20'.substr($v,0,2).'-'.substr($v,2,2).'-'.substr($v,4,2) );
-	echo date('j. ', $date) . $wp_locale->get_month( substr($v,2,2) ) . date(' Y', $date);
+	$res = $this->getQuery("SELECT date FROM ".CPD_C_TABLE." ORDER BY date LIMIT 1", 'getFirstCount');
+	$row = mysql_fetch_row($res);
+	echo mysql2date(get_option('date_format'), $row[0] );
 }
 
 /**
@@ -557,22 +601,23 @@ function getFirstCount()
 function getUserPerDay( $days = 0 )
 {
 	global $wpdb;
-	$datemax = date('ymd', time());
+	$datemax = date('Y-m-d');
 	if ( $days > 0 )
 		// last $days days without today
-		$datemin = date('ymd', time() - ($days + 1) * 86400);
+		$datemin = date('Y-m-d', time() - ($days + 1) * 86400);
 	else
 	{ 
-		$v = $wpdb->get_results('SELECT MIN(date) as min, MAX(date) as max FROM '.CPD_C_TABLE);
+		$v = $wpdb->get_results('SELECT MIN(date) min, MAX(date) max FROM '.CPD_C_TABLE);
 		foreach ($v as $row)
 		{
-			$min = strtotime('20'.substr($row->min,0,2).'-'.substr($row->min,2,2).'-'.substr($row->min,4,2) );
-			$max = strtotime('20'.substr($row->max,0,2).'-'.substr($row->max,2,2).'-'.substr($row->max,4,2) );
+			$min = strtotime($row->min);
+			$max = strtotime($row->max);
 			$days =  (($max - $min) / 86400 + 1);
 			$datemin = 0;
 		}
 	}
-	$res = @mysql_query('SELECT 1 FROM '.CPD_C_TABLE.' WHERE date > '.$datemin.' AND date < '.$datemax.' GROUP BY ip,date', $this->dbcon);
+
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date > '$datemin' AND date < '$datemax' GROUP BY ip, date", 'getUserPerDay');
 	$count = @mysql_num_rows($res) / $days;
 	
 	echo '<abbr title="last '.$days.' days without today">';
@@ -595,15 +640,15 @@ function getMostVisitedPosts( $days = 0, $limit = 0 )
 		$days = $this->options['dashboard_last_days'];
 	if ( $limit == 0 )
 		$limit = $this->options['dashboard_last_posts'];
-	$date = date('ymd', time() - 86400 * $days);
+	$date = date('Y-m-d', time() - 86400 * $days);
 
 	$sql = "
-	SELECT	count(c.id) as count,
-			p.post_title as post,
-			c.page as post_id,
-			t.name as tag_cat_name,
-			t.slug as tag_cat_slug,
-			x.taxonomy as tax
+	SELECT	count(c.id) count,
+			c.page post_id,
+			p.post_title post,
+			t.name tag_cat_name,
+			t.slug tag_cat_slug,
+			x.taxonomy tax
 	FROM	".CPD_C_TABLE." c
 	LEFT	JOIN ".$wpdb->posts." p
 			ON p.id = c.page
@@ -615,9 +660,8 @@ function getMostVisitedPosts( $days = 0, $limit = 0 )
 	GROUP	BY c.page
 	ORDER	BY count DESC
 	LIMIT	$limit";
-			
 	echo '<small>'.sprintf(__('The %s most visited posts in last %s days:', 'cpd'), $limit, $days).'<br/>&nbsp;</small>';
-	$this->getUserPer_SQL( $sql );		
+	$this->getUserPer_SQL( $sql, 'getMostVisitedPosts' );		
 }
 
 /**
@@ -628,13 +672,16 @@ function getClients()
 	global $wpdb;
 	$clients = array('Firefox', 'MSIE', 'Chrome', 'AppleWebKit', 'Opera');
 	
-	$all = max(1, $wpdb->get_var("SELECT COUNT(*) as count FROM ".CPD_C_TABLE));
+	$res = $this->getQuery("SELECT COUNT(*) count FROM ".CPD_C_TABLE, 'getClients_all');
+	$row = mysql_fetch_row($res);
+	$all = max(1, $row[0]);
 	$rest = 100;
 	echo '<ul>';
 	foreach ($clients as $c)
 	{
-		$count = $wpdb->get_var("SELECT COUNT(*) as count FROM ".CPD_C_TABLE." WHERE client like '%$c%'");
-		$percent = number_format(100 * $count / $all, 0);
+		$res = $this->getQuery("SELECT COUNT(*) count FROM ".CPD_C_TABLE." WHERE client like '%$c%'", 'getClients_'.$c);
+		$row = mysql_fetch_row($res);
+		$percent = number_format(100 * $row[0] / $all, 0);
 		$rest -= $percent;
 		echo '<li>'.$c.'<b>'.$percent.' %</b></li>';
 	}
@@ -653,42 +700,49 @@ function getMassBots( $limit = 0 )
 {
 	if ( $limit == 0 )
 		return;
-	global $wpdb;
 	$sql = "
-	SELECT * FROM (
-		SELECT	ip, date, client, count( * ) AS posts
-		FROM	".CPD_C_TABLE."
-		GROUP	BY ip, date
-		ORDER	BY posts DESC ) AS x
-	WHERE posts > $limit";
-	return $wpdb->get_results($sql);
+	SELECT	t.id, INET_NTOA(t.ip) ip, t.date, t.posts,
+			c.client
+	FROM (	SELECT	id, ip, date, count(*) posts
+			FROM	".CPD_C_TABLE."
+			GROUP	BY ip, date
+			ORDER	BY posts DESC ) AS t
+	LEFT	JOIN ".CPD_C_TABLE." c
+			ON c.id = t.id
+	WHERE	posts > $limit";
+	return $this->getQuery($sql, 'getMassBots');
 }
 
 /**
  * creates counter lists
  * @param string $sql SQL Statement
+ * @param string $name function name for debug
  */
-function getUserPer_SQL( $sql )
+function getUserPer_SQL( $sql, $name = '' )
 {
-	global $wpdb;
-	$m = $wpdb->get_results($sql);
+	$m = $this->getQuery($sql, $name);
 	echo '<ul>';
-	foreach ( $m as $row )
+	while ( $row = mysql_fetch_assoc($m) )
 	{
-		$postname = ( !empty($row->post) ) ? $row->post : '---';
-		echo '<li><b>'.$row->count.'</b> <a href="'.get_bloginfo('url');
-		if ( $row->post_id < 0 && $row->tax == 'category' )
+		echo '<li><b>'.$row['count'].'</b> <a href="'.get_bloginfo('url');
+		if ( $row['post_id'] < 0 && $row['tax'] == 'category' )
 			//category
-			echo '?cat='.(0 - $row->post_id).'">- '.$row->tag_cat_name.' -';
-		else if ( $row->post_id < 0 )
+			echo '?cat='.(0 - $row['post_id']).'">- '.$row['tag_cat_name'].' -';
+		else if ( $row['post_id'] < 0 )
 			// tag
-			echo '?tag='.$row->tag_cat_slug.'">- '.$row->tag_cat_name.' -';
-		else if ( $row->post_id == 0 )
+			echo '?tag='.$row['tag_cat_slug'].'">- '.$row['tag_cat_name'].' -';
+		else if ( $row['post_id'] == 0 )
 			// homepage
 			echo '">- '.__('Front page displays').' -';
 		else
+		{
 			// post/page
-			echo '?p='.$row->post_id.'">'.$postname;
+//			$postname = $wpdb->get_var('SELECT post_title FROM '.$wpdb->posts.' WHERE ID = '.$row->post_id);
+			$postname = $row['post'];
+			if ( empty($postname) ) 
+				$postname = '---';
+			echo '?p='.$row['post_id'].'">'.$postname;
+		}
 		echo "</a></li>\n";
 	}
 	echo '</ul>';
@@ -710,18 +764,19 @@ function cleanDB()
 
 	// delete by ip
 	$ips = "'".implode( "','", $bots )."'";
-	@mysql_query('DELETE FROM '.CPD_C_TABLE.' WHERE ip IN ('.$ips.')', $this->dbcon);
+	$this->getQuery('DELETE FROM '.CPD_C_TABLE.' WHERE ip IN ('.$ips.')', 'clenaDB_ip');
 
 	// delete by client
 	foreach ($bots as $bot)
-		@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%".$bot."%'", $this->dbcon);
+		$this->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%$bot%'", 'cleanDB_client');
 	
 	// delete if a previously countered page was deleted
-	$posts = $wpdb->get_results('SELECT id FROM '.$wpdb->posts);
-	$pages = '-1';
-	foreach ($posts as $post)
-		$pages .= ','.$post->id;
-	@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE page NOT IN ($pages)", $this->dbcon);
+//	$posts = $wpdb->get_results('SELECT id FROM '.$wpdb->posts);
+//	$pages = '-1';
+//	foreach ($posts as $post)
+//		$pages .= ','.$post->id;
+//	@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE page NOT IN ($pages)", $this->dbcon);
+	$this->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE page NOT IN ( SELECT id FROM ".$wpdb->posts.")", 'cleanDB_delPosts');
 	
 	$rows_after = $wpdb->get_var('SELECT COUNT(*) FROM '.CPD_C_TABLE);
 	return $rows_before - $rows_after;
@@ -832,8 +887,9 @@ function cpdColumnContent($column_name, $id = 0)
 	global $wpdb;
 	if( $column_name == 'cpd_reads' )
     {
-    	$reads = $wpdb->get_var("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE page='$id';");
-		echo (int) $reads;
+    	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE page='$id'", 'cpdColumn_'.$id);
+    	$row = mysql_fetch_row($res);
+		echo (int) $row[0];
     }
 }
 
@@ -849,45 +905,11 @@ function uninstall()
 }
 
 /**
- * defines base64 encoded image recources
- */
-function setRecources()
-{
-	if ( isset($_GET['resource']) && !empty($_GET['resource']) )
-	{
-		# base64 encoding
-		$resources = array(
-		'cpd_menu.gif' => 'R0lGODlhDAAMAJECAP8AAAAAAP///wAAACH5BAEAAAIALAAAAAAMAAwAAAIdjI4ppsqNngA0PYDwZDrjUEGLGJGHBKFNwLYuWwAAOw==',
-		'cpd_rot.png' => 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACXBIWXMAAAsTAAALEwEAmpwYAAAADElEQVR42mP8z8AAAAMFAQHa4YgFAAAAAElFTkSuQmCC',
-		'cpd_trans.png' => 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAC0lEQVR42mNkAAIAAAoAAv/lxKUAAAAASUVORK5CYII=');
-			 
-		if ( array_key_exists($_GET['resource'], $resources) )
-		{
-			$content = base64_decode($resources[ $_GET['resource'] ]);
-			$lastMod = filemtime(__FILE__);
-			$client = ( isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : false );
-			if (isset($client) && (strtotime($client) == $lastMod))
-			{
-				header('Last-Modified: '.gmdate('D, d M Y H:i:s', $lastMod).' GMT', true, 304);
-				exit;
-			}
-			else
-			{
-				header('Last-Modified: '.gmdate('D, d M Y H:i:s', $lastMod).' GMT', true, 200);
-				header('Content-Length: '.strlen($content));
-				header('Content-Type: image/' . substr(strrchr($_GET['resource'], '.'), 1) );
-				echo $content;
-				exit;
-			}
-		}
-	}
-}
-
-/**
  * gets image recource with given name
  */
-function getResource( $resourceID ) {
-	return trailingslashit( get_bloginfo('url') ).'?resource='.$resourceID;
+function getResource( $r )
+{
+	return trailingslashit( $this->dir ).$r;
 }
 
 /**
@@ -996,7 +1018,7 @@ function screenLayoutColumns($columns, $screen)
  */
 function setAdminMenu()
 {
-	$menutitle = '<img src="'.$this->GetResource('cpd_menu.gif').'" alt="" /> Count per Day';
+	$menutitle = '<img src="'.$this->getResource('cpd_menu.gif').'" alt="" /> Count per Day';
 	$this->pagehook = add_submenu_page('index.php', 'CountPerDay', $menutitle, 1, CPD_METABOX, array(&$this, 'onShowPage'));
 	add_action('load-'.$this->pagehook, array(&$this, 'onLoadPage'));
 }
@@ -1021,7 +1043,7 @@ function onLoadPage()
 	// add the metaboxes
 	add_meta_box('reads_at_all', __('Total visitors', 'cpd'), array(&$this, 'dashboardReadsAtAll'), $this->pagehook, 'cpdrow1', 'core');
 	add_meta_box('chart_visitors', __('Visitors per day', 'cpd'), array(&$this, 'dashboardChartVisitors'), $this->pagehook, 'cpdrow1', 'core');
-	add_meta_box('chart', __('Reads per day', 'cpd'), array(&$this, 'dashboardChart'), $this->pagehook, 'cpdrow1', 'core');
+	add_meta_box('chart_reads', __('Reads per day', 'cpd'), array(&$this, 'dashboardChart'), $this->pagehook, 'cpdrow1', 'core');
 	add_meta_box('reads_per_month', __('Visitors per month', 'cpd'), array(&$this, 'getUserPerMonth'), $this->pagehook, 'cpdrow2', 'core');
 	add_meta_box('browsers', __('Browsers', 'cpd'), array(&$this, 'getClients'), $this->pagehook, 'cpdrow2', 'core');
 	add_meta_box('reads_per_post', __('Visitors per post', 'cpd'), array(&$this, 'getUserPerPostMeta'), $this->pagehook, 'cpdrow3', 'core');
@@ -1048,22 +1070,20 @@ function onShowPage()
 		wp_nonce_field('cpd-metaboxes');
 		wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false );
 		wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false );
-		$cpd_style = 'style="width:'.round(98 / $screen_layout_columns, 1).'%;"';
+		$css = 'style="width:'.round(98 / $screen_layout_columns, 1).'%;"';
 		?>
 		<div id="dashboard-widgets" class="metabox-holder cpd-dashboard">
-			<div class="postbox-container" <?php echo $cpd_style; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow1', $data); ?></div>
-			<div class="postbox-container" <?php echo $cpd_style; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow2', $data); ?></div>
-			<div class="postbox-container" <?php echo $cpd_style; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow3', $data); ?></div>
-			<div class="postbox-container" <?php echo $cpd_style; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow4', $data); ?></div>
+			<div class="postbox-container" <?php echo $css; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow1', $data); ?></div>
+			<div class="postbox-container" <?php echo $css; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow2', $data); ?></div>
+			<div class="postbox-container" <?php echo $css; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow3', $data); ?></div>
+			<div class="postbox-container" <?php echo $css; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow4', $data); ?></div>
 			<br class="clear"/>
 		</div>	
 	</div>
 	<script type="text/javascript">
 		//<![CDATA[
 		jQuery(document).ready( function($) {
-			// close postboxes that should be closed
 			$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
-			// postboxes setup
 			postboxes.add_postbox_toggles('<?php echo $this->pagehook; ?>');
 		});
 		//]]>
@@ -1088,7 +1108,7 @@ function getCountries( $limit = 0 )
 		if ( $limit == 0 )
 			$limit = max( 0, $this->options['countries'] );
 
-		$res = mysql_query("SELECT country, COUNT(*) AS c FROM ".CPD_C_TABLE." WHERE IP > '' GROUP BY country ORDER BY COUNT(*) DESC LIMIT $limit;", $this->dbcon);
+		$res = $this->getQuery("SELECT country, COUNT(*) c FROM ".CPD_C_TABLE." WHERE ip > 0 GROUP BY country ORDER BY COUNT(*) DESC LIMIT $limit", 'getCountries');
 		
 		echo '<ul>';
 		while ( $r = mysql_fetch_array($res) )
@@ -1103,7 +1123,21 @@ function getCountries( $limit = 0 )
 	}
 }
 
+/**
+ * shows time of queries
+ */
+function showQueries()
+{
+	echo '<div style="margin:10px; padding-left:30px; border:1px red solid">
+		<b>Count per Day - Queries: '.$this->queries[0].' s</b><ol>';
+	foreach($this->queries as $q)
+		if ($q != $this->queries[0] )
+			echo '<li>'.$q.'</li>';
+	echo '</ol></div>';
+}
+
 } // class end
 
 $count_per_day = new CountPerDay();
+//$count_per_day->createTables()
 ?>

@@ -56,10 +56,10 @@ if(!empty($_POST['do']))
 		case 'cpd_countrydb' :
 			if ( class_exists('CpdGeoIp') )
 			{
-				@mysql_query("SELECT country FROM `".CPD_C_TABLE."`", $count_per_day->dbcon);
+				$count_per_day->getQuery("SELECT country FROM ".CPD_C_TABLE, 'geoip_select');
 				if ((int) mysql_errno() == 1054)
 					// add row 'country' to counter db
-					mysql_query("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR(2) NOT NULL", $count_per_day->dbcon);
+					$count_per_day->getQuery("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR(2) NOT NULL", 'geoip_alter');
 						
 				$result = CpdGeoIp::updateGeoIpFile();
 				echo '<div id="message" class="updated fade"><p>'.$result.'</p></div>';
@@ -74,10 +74,10 @@ if(!empty($_POST['do']))
 			{
 				$bots = $count_per_day->getMassBots($_POST['limit']);
 				$sum = 0;
-				foreach ( $bots as $row )
+				while ( $row = mysql_fetch_array($bots) )
 				{
-					@mysql_query("DELETE FROM ".CPD_C_TABLE." WHERE ip LIKE '".$row->ip."' AND date LIKE '".$row->date."'", $count_per_day->dbcon);
-					$sum += $row->posts;
+					$count_per_day->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE ip = INET_ATON('".$row['ip']."') AND date = '".$row['date']."'", 'deleteMassbots');
+					$sum += $row['posts'];
 				}
 				if ( $sum )
 					echo '<div id="message" class="updated fade"><p>'.sprintf(__('Mass Bots cleaned. %s counts deleted.', 'cpd'), $sum).'</p></div>';
@@ -100,8 +100,8 @@ if(!empty($_POST['do']))
 		case __('UNINSTALL Count per Day', 'cpd') :
 			if(trim($_POST['uninstall_cpd_yes']) == 'yes')
 			{
-				$wpdb->query("DROP TABLE IF EXISTS ".CPD_C_TABLE);
-				$wpdb->query("DROP TABLE IF EXISTS ".CPD_CO_TABLE);
+				$wpdb->query('DROP TABLE IF EXISTS '.CPD_C_TABLE);
+				$wpdb->query('DROP TABLE IF EXISTS '.CPD_CO_TABLE);
 				delete_option('count_per_day');
 				echo '<div id="message" class="updated fade"><p>';
 				printf(__('Table %s deleted', 'cpd'), CPD_C_TABLE);
@@ -277,20 +277,21 @@ switch($mode) {
 		</thead>
 		<?php
 		$sum = 0;
-		foreach ( $bots as $row )
+		while ( $row = mysql_fetch_assoc($bots) )
 		{
+			$ip = $row['ip'];
 			echo '<tr><td>';
 			if ( $cpd_geoip )
 			{
-				$c = CpdGeoIp::getCountry($row->ip);
+				$c = CpdGeoIp::getCountry($ip);
 				echo $c[1].' ';
 			}
-			echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$row->ip.'">'.$row->ip.'</a></td>'
-				.'<td>'.mysql2date(get_option('date_format'), '20'.substr($row->date,0,2).'-'.substr($row->date,2,2).'-'.substr($row->date,4,2) ).'</td>'
-				.'<td>'.$row->client.'</td>'
-				.'<td>'.$row->posts.'</td>'
+			echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$ip.'">'.$ip.'</a></td>'
+				.'<td>'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
+				.'<td>'.$row['client'].'</td>'
+				.'<td>'.$row['posts'].'</td>'
 				.'</tr>';
-			$sum += $row->posts;
+			$sum += $row['posts'];
 		}
 		?>	
 		</table>

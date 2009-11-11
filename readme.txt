@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
 Tested up to: 2.8.5
-Stable tag: 2.4.2
+Stable tag: 2.5
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -132,9 +132,12 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 == Changelog ==
 
-= Development Version =
+= 2.5 =
++ BACKUP YOUR COUNTER DATABASE BEFORE UPDATE!
++ Change: some big changes on database and functions to speed up mysql queries. This will take a while on activation! 
 + New: "Mass Bot Detector" shows and deletes clients that view more than x pages per day
 + Bugfix: cleanDB by IP now works
++ Language update: Portuguese (Brazil), thanks to Beto Ribeiro  http://www.sevenarts.com.br
 
 = 2.4.2 =
 + Bugfix: mysql systax error
