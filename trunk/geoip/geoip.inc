@@ -204,6 +204,7 @@ class GeoIP {
 "Aland Islands","Guernsey","Isle of Man","Jersey","Saint Barthelemy","Saint Martin"
 );
 }
+
 function geoip_load_shared_mem ($file) {
 
   $fp = fopen($file, "rb");

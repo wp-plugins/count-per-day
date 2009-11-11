@@ -6,7 +6,8 @@
 
 /**
  */
-include_once('geoip.inc');
+if (!class_exists('GeoIp'))
+	include_once('geoip.inc');
 
 class CpdGeoIp
 {
