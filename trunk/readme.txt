@@ -3,8 +3,8 @@ Contributors: Tom Braider
 Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
-Tested up to: 2.8.5
-Stable tag: 2.5
+Tested up to: 2.9
+Stable tag: 2.6
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -131,6 +131,10 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 
 == Changelog ==
+
+= 2.6 =
++ languages files now compatible with Wordpress 2.9
++ New: improved CSS support for RTL blogs (e.g. arabic)
 
 = 2.5 =
 + BACKUP YOUR COUNTER DATABASE BEFORE UPDATE!

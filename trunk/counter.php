@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
-Version: 2.5
+Version: 2.6
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -44,7 +44,7 @@ function CountPerDay()
 	$this->options = get_option('count_per_day');
 	$this->dir = get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__));
 	$this->queries[0] = 0;
-
+	
 	// update online counter
 	add_action('wp', array(&$this, 'deleteOnlineCounter'));
 	
@@ -78,10 +78,11 @@ function CountPerDay()
 	
 	// locale support
 	if (defined('WPLANG') && function_exists('load_plugin_textdomain'))
-		load_plugin_textdomain('cpd', '', dirname(plugin_basename(__FILE__)).'/locale');
-
+		load_plugin_textdomain('cpd', false, dirname(plugin_basename(__FILE__)).'/locale');
+		 
 	// adds stylesheet
-	wp_enqueue_style('cpd_css', $this->dir.'/counter.css');
+	add_action( 'admin_head', array(&$this, 'add_css') );
+//	wp_enqueue_style('cpd_css', $this->dir.'/counter.css');
 	
 	// widget setup
 	add_action('plugins_loaded', array(&$this, 'widgetCpdInit'));
@@ -344,13 +345,13 @@ function dashboardReadsAtAll()
 {
 	?>
 	<ul>
-		<li><b style="float:right"><span><?php $this->getUserAll(); ?></span></b><?php _e('Total visitors', 'cpd') ?>:</li>
-		<li><b style="float:right"><span><?php $this->getUserOnline(); ?></span></b><?php _e('Visitors currently online', 'cpd') ?>:</li>
-		<li><b style="float:right"><?php $this->getUserToday(); ?></b><?php _e('Visitors today', 'cpd') ?>:</li>
-		<li><b style="float:right"><?php $this->getUserYesterday(); ?></b><?php _e('Visitors yesterday', 'cpd') ?>:</li>
-		<li><b style="float:right"><?php $this->getUserLastWeek(); ?></b><?php _e('Visitors last week', 'cpd') ?>:</li>
-		<li><b style="float:right"><?php $this->getUserPerDay($this->options['dashboard_last_days']); ?></b>&Oslash; <?php _e('Visitors per day', 'cpd') ?>:</li>
-		<li><b style="float:right"><?php $this->getFirstCount(); ?></b><?php _e('Counter starts on', 'cpd') ?>:</li>
+		<li><b><span><?php $this->getUserAll(); ?></span></b><?php _e('Total visitors', 'cpd') ?>:</li>
+		<li><b><span><?php $this->getUserOnline(); ?></span></b><?php _e('Visitors currently online', 'cpd') ?>:</li>
+		<li><b><?php $this->getUserToday(); ?></b><?php _e('Visitors today', 'cpd') ?>:</li>
+		<li><b><?php $this->getUserYesterday(); ?></b><?php _e('Visitors yesterday', 'cpd') ?>:</li>
+		<li><b><?php $this->getUserLastWeek(); ?></b><?php _e('Visitors last week', 'cpd') ?>:</li>
+		<li><b><?php $this->getUserPerDay($this->options['dashboard_last_days']); ?></b>&Oslash; <?php _e('Visitors per day', 'cpd') ?>:</li>
+		<li><b><?php $this->getFirstCount(); ?></b><?php _e('Counter starts on', 'cpd') ?>:</li>
 	</ul>
 	<?php
 }
@@ -443,7 +444,7 @@ function dashboardChartDataRequest( $sql = '', $limit )
 	// headline with max count
 	echo '
 		<small style="display:block; float:right;">'.$days.' '.__('days', 'cpd').'</small>
-		<small style="display:block;">Max: '.$max.'</small>
+		<small style="display:block; float:left;">Max: '.$max.'</small>
 		<p style="border-bottom:1px black solid; white-space:nowrap;">';
 	
 	$date_old = $start_time;
@@ -479,9 +480,9 @@ function dashboardChartDataRequest( $sql = '', $limit )
 	$end_str = mysql2date(get_option('date_format'), $end);
 	$start_str = mysql2date(get_option('date_format'), $start);
 	echo '</p>
-		<div style="height: 10px">
-			<small style="float:left">'.$start_str.'</small>
-			<small style="float:right">'.$end_str.'</small>
+		<div style="height: 10px" class="cpd-l">
+			<small>'.$start_str.'</small>
+			<small class="cpd-r">'.$end_str.'</small>
 		</div>';
 }
 
@@ -815,7 +816,7 @@ function dashboardWidget()
 {
 	echo '<a href="?page=cpd_metaboxes"><b>';
 	$this->getUserAll();
-	echo '</b></a> '.__('Total visitors', 'cpd').' - <b>';
+	echo '</b></a> '.__('Total visitors', 'cpd').'<b> - ';
 	$this->getUserPerDay($this->options['dashboard_last_days']);
 	echo '</b> '.__('Visitors per day', 'cpd');
 }
@@ -937,7 +938,7 @@ function widgetCpdInit()
 				if ( ($s[0] == 'show' && is_singular()) || $s[0] != 'show' )
 				{
 					$name = (!empty($count_per_day->options['name_'.$s[0]])) ? $count_per_day->options['name_'.$s[0]] : __($s[1], 'cpd');
-					echo '<li><span style="float:right">';
+					echo '<li style="text-align:left;"><span style="float:right">';
 					
 					// parameters only for special functions
 					if ( $s[0] == 'getUserPerDay' )
@@ -1124,6 +1125,18 @@ function getCountries( $limit = 0 )
 }
 
 /**
+ * adds style sheet to admin header
+ */
+function add_css()
+{
+	global $text_direction;
+	if ( $text_direction == 'rtl' ) 
+		echo '<link rel="stylesheet" href="'.$this->dir.'/counter-rtl.css" type="text/css" />';
+	else
+		echo '<link rel="stylesheet" href="'.$this->dir.'/counter.css" type="text/css" />';
+}
+
+/**
  * shows time of queries
  */
 function showQueries()
@@ -1139,5 +1152,4 @@ function showQueries()
 } // class end
 
 $count_per_day = new CountPerDay();
-//$count_per_day->createTables()
 ?>

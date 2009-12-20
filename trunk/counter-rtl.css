@@ -4,10 +4,11 @@
 
 .cpd-dashboard li {
 	color: #777;
+	text-align: right;
 }
 
 .cpd-dashboard li b {
-	float: right;
+	float: left;
 	font-family: Georgia,"Times New Roman",Times,serif;
 	font-size: 18px;
 	color: #2583ad;
@@ -28,9 +29,9 @@
 }
 
 .cpd-l {
-	
+	text-align: right;
 }
 
 .cpd-r {
-	float: right;
+	float: left;;
 }
