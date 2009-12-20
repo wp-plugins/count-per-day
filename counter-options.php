@@ -349,7 +349,7 @@ switch($mode) {
 			<?php _e('If "Count per Day" only disabled the tables in the database will be preserved.', 'cpd') ?><br/>
 			<?php _e('Here you can delete the tables and disable "Count per Day".', 'cpd') ?>
 		</p>
-		<p style="text-align: left; color: red">
+		<p style="color: red">
 			<strong><?php _e('WARNING', 'cpd') ?>:</strong><br />
 			<?php _e('These tables (with ALL counter data) will be deleted.', 'cpd') ?><br />
 			<b><?php echo CPD_C_TABLE.', '.CPD_CO_TABLE; ?></b><br />
