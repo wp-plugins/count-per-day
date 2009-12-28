@@ -21,6 +21,8 @@ if(!empty($_POST['do']))
 			$count_per_day->options['show_in_lists'] = empty( $_POST['cpd_show_in_lists'] ) ? 0 : 1 ;
 			$count_per_day->options['chart_days'] = $_POST['cpd_chart_days'];
 			$count_per_day->options['chart_height'] = $_POST['cpd_chart_height'];
+			$count_per_day->options['startdate'] = $_POST['cpd_startdate'];
+			$count_per_day->options['startcount'] = $_POST['cpd_startcount'];
 			
 			if ( isset($_POST['cpd_countries']) )
 				$count_per_day->options['countries'] = $_POST['cpd_countries'];
@@ -196,6 +198,20 @@ switch($mode) {
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Show in lists', 'cpd') ?>:</th>
 			<td><label for="cpd_show_in_lists"><input type="checkbox" name="cpd_show_in_lists" id="cpd_show_in_lists" <?php if($o['show_in_lists']==1) echo 'checked="checked"'; ?> /> <?php _e('Show "Reads per Post" in a new column in post management views.', 'cpd') ?></label></td>
 		</tr>
+		<tr>
+			<th colspan="2">
+				<h3><?php _e('Start Values', 'cpd') ?></h3>
+				<p><?php _e('Here you can change the date of first count and add a start count.', 'cpd')?></p>
+			</th>
+		</tr>
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Start date', 'cpd') ?>:</th>
+			<td><input class="code" type="text" name="cpd_startdate" size="10" value="<?php echo $o['startdate']; ?>" /> <?php _e('Your old Counter starts at?', 'cpd') ?> [yyyy-mm-dd]</td>
+		</tr>
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Start count', 'cpd') ?>:</th>
+			<td><input class="code" type="text" name="cpd_startcount" size="10" value="<?php echo $o['startcount']; ?>" /> <?php _e('Add this value to "Total visitors".', 'cpd') ?></td>
+		</tr>
 		</table>
 		<p class="submit">
 			<input type="hidden" name="do" value="cpd_update" />
@@ -363,6 +379,18 @@ switch($mode) {
 	</div>
 	</div>
 	</form>
+	
+	<!-- Plugin page -->
+	<div class="postbox">
+	<h3><?php _e('Support', 'cpd') ?></h3>
+	<div class="inside">
+		<p>
+			<?php _e('Bug? Problem? Question? Hint? Praise?', 'cpd') ?>
+			<br/>
+			<?php printf(__('Write a comment on the <a href="%s">plugin page</a>.', 'cpd'), 'http://www.tomsdimension.de/wp-plugins/count-per-day') ?>
+		</p>
+	</div>
+	</div>
 	
 	</div><!-- wrap -->
 
