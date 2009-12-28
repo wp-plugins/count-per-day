@@ -1,10 +1,10 @@
 === Count per Day ===
 Contributors: Tom Braider
 Donate link: http://www.unicef.org
-Tags: counter, count, posts, visits, reads
+Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
-Tested up to: 2.8
-Stable tag: 2.1
+Tested up to: 2.9
+Stable tag: 2.7
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -18,7 +18,7 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 It counts 1 visit per IP per day. So any reload of the page don't increment the counter.
 
-Languages: english, german, italian, portuguese, belorussian
+Languages: english, german, italian, portuguese, belorussian, uzbek
 
 == Installation ==
 
@@ -30,6 +30,7 @@ First activation will create the 2 tables wp _ cpd _ counter and wp _ cpd _ coun
 **Configuration**
 
 See the Options Page and check the default values. It's easy. :)
+Install optional GeoIP database to show countries of your visitors.
 
 If "Auto counter" is on reads on single-posts and pages will count without any changes on template.
 
@@ -52,7 +53,7 @@ read and write comments on <a href="http://www.tomsdimension.de/wp-plugins/count
 
 You can place these functions in your template.<br/>
 Place functions within post-loop (e.g. in single.php)<br/>
-Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day->show(); ?&gt;' to check if plugin is aktivated.
+Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day->show(); ?&gt;' to check if plugin is activated.
 
 'show( $before, $after, $show, $count )'
 
@@ -70,9 +71,10 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 * shows date of first count
 
-'getUserPerDay()'
+'getUserPerDay( $days )'
 
-* shows average number of visitors per day
+* shows average number of visitors per day of the last _$days_ days
+* default on dashboard (see it with mouse over number) = "Latest Counts - Days" in options
 
 'getUserAll()'
  
@@ -100,47 +102,94 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 'getUserPerPost( $limit = 0 )'
 
-* lists _$limit_ posts with number of visits
+* lists _$limit_ number of posts, -1: all, 0: get option from DB, x: number
 
-'getUserPerPost( $limit = 0 )'
-
-* lists _$limit_ number of posts, -1: all, 0: get option from db, x: number
-
-'getMostVisitedPosts()'
+'getMostVisitedPosts( $days, $limits )'
 
 * shows a list with the most visited posts in the last days
+* $days = days to calc (last days), 0: get option from DB
+* $limit = count of posts (last posts), 0: get option from DB
 
-**Filelist**
+'getClients()'
 
-* counter.php
-* counter-options.php
-* counter.css
-* locale/de_DE.mo
-* locale/de_DE.po
-* locale/it_IT.mo
-* locale/it_IT.po
-* locale/pt_BR.mo
-* locale/pt_BR.po
-* locale/by_BY.mo
-* locale/by_BY.po
+* shows visits per client/browser in percent
+* clients are hardcoded in function but easy to change ;)
+
+
+**GeoIP**
+
+* With the GeoIP addon you can associate your visitors to an country using the ip adress.
+* In the database a new column 'country' will be insert on plugin activation.
+* On options page you can update you current visits. This take a while!
+  The Script checks 100 IP adresses at once an reload itself until less then 100 adresses left.
+  Click the update button to check the rest.
+* If the rest remains greater than 0 the IP adress is not in GeoIP database (accuracy 99.5%).
+* You can update the GeoIP database from time to time to get new IP data.
+  This necessitates write rights to geoip directory (e.g. chmod 777).
+* If the automaticaly update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz">GeoIP.dat.gz</a> and extract it to the "geoip" directory.
+* More information about GeoIP on http://www.maxmind.com/app/geoip_country
+
 
 == Changelog ==
 
+= 2.7 =
++ Bugfix: date/timezone problem
++ New: change start date and start count on option page
++ New: "edit post" links on lists
++ New: new list shows visitors per post on user defined date  
++ New: link to plugin page
+
+= 2.6 =
++ languages files now compatible with Wordpress 2.9
++ New: improved CSS support for RTL blogs (e.g. arabic)
+
+= 2.5 =
++ BACKUP YOUR COUNTER DATABASE BEFORE UPDATE!
++ Change: some big changes on database and functions to speed up mysql queries. This will take a while on activation! 
++ New: "Mass Bot Detector" shows and deletes clients that view more than x pages per day
++ New: see count and time of queries if CPD_DEBUG == true (on top of counter.php)
++ Bugfix: cleanDB by IP now works
++ Language update: Portuguese (Brazil), thanks to Beto Ribeiro  http://www.sevenarts.com.br
+
+= 2.4.2 =
++ Bugfix: mysql systax error
++ Bugfix: no country data was stored (GeoIP), use "Update old counter data" on options page
+
+= 2.4 =
++ Bugfix: works with PHP 4.x again (error line 169)
++ Change: some functions now faster
++ New: GeoIP included. You have to load GeoIP.dat file on option page before you can use it.
++ Language updates: Italian (Gianni Diurno) and German
+
+= 2.3.1 =
++ Bugfix: counter do not work without GeoIP Addon (nonexisting row 'country' in table)
+
+= 2.3 =
++ New: chart "visitors per day"
++ New: counts index pages: homepage, categories, tags (if autocount is on)
++ New: visits per client/browser in percent
++ New: added some parameters to functions to overwrite default values
++ New language: Usbek, thanks to Alisher
+
+= 2.2 =
++ Change: USER_AGENT must have > 20 chars, otherwise we call it "bot"
++ New: optional GeoIP addon to show page views per country - see Section "GeoIP addon"
+
 = 2.1 =
-+ NEW: custom names on widget
-+ NEW: function "first count" on widget
++ New: custom names on widget
++ New: function "first count" on widget
 + little changes on german translation
 
 = 2.0 =
-+ NEW: sidebar widget
-+ NEW: reset button to set all counter to 0
-+ NEW: custom number of "reads per post" on dashboard page
-+ NEW: little chart of "reads per day" on dashboard page
-+ NEW: reads in post and page lists (optional)
-+ NEW: most visited posts in last days on dashboard page
-+ NEW: recognize bots by IP address
-+ NEW: moveble metaboxes on dashboard page
-+ NEW: clean function now deletes counter of deleted pages too
++ New: sidebar widget
++ New: reset button to set all counter to 0
++ New: custom number of "reads per post" on dashboard page
++ New: little chart of "reads per day" on dashboard page
++ New: reads in post and page lists (optional)
++ New: most visited posts in last days on dashboard page
++ New: recognize bots by IP address
++ New: movable metaboxes on dashboard page
++ New: clean function now deletes counter of deleted pages too
 + Bugfix: updates online counter on every load
 + Bugfix: now empty user agents/clients will not be count
 + change options to array
@@ -150,11 +199,11 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 + New language: Belorussian, thanks to Marcis Gasuns http://www.fatcow.com
 
 = 1.5 =
-+ NEW: Dashboard Widget
++ New: Dashboard Widget
 + WP 2.7 optimized, for WP<2.7 please use CPD 1.4 
 
 = 1.4 =
-+ NEW: uninstall function of WP 2.7 implemented
++ New: uninstall function of WP 2.7 implemented
 + litle changes on layout to be suitable for WP 2.7
 
 = 1.3 =

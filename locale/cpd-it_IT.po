@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-02 12:13+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Gianni Diurno (aka gidibao) <gidibao@gmail.com>\n"
+"Last-Translator: Tom Braider <post@tomsdimension.de>\n"
 "Language-Team: Gianni Diurno | http://gidibao.net <gidibao@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -16,242 +16,402 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: counter-options.php:29
+#: counter-options.php:30
 msgid "Options updated"
 msgstr "Le opzioni sono state aggiornate"
 
-#: counter-options.php:35
+#: counter-options.php:90
 #, php-format
 msgid "Database cleaned. %s rows deleted."
 msgstr "Database svuotato. %s record cancellato."
 
-#: counter-options.php:45
-#: counter-options.php:200
+#: counter-options.php:100
+#: counter-options.php:360
 msgid "UNINSTALL Count per Day"
 msgstr "DISINSTALLA Count per Day"
 
-#: counter-options.php:52
-#: counter-options.php:54
+#: counter-options.php:107
+#: counter-options.php:109
 #, php-format
 msgid "Table %s deleted"
 msgstr "La tabella %s é stata cancellata"
 
-#: counter-options.php:56
+#: counter-options.php:111
 msgid "Options deleted"
 msgstr "Le opzioni sono state cancellate"
 
-#: counter-options.php:73
-#: counter-options.php:184
+#: counter-options.php:128
+#: counter-options.php:345
 msgid "Uninstall"
 msgstr "Disinstalla"
 
-#: counter-options.php:74
+#: counter-options.php:129
 msgid "Click here"
 msgstr "Clicca qui"
 
-#: counter-options.php:74
+#: counter-options.php:129
 msgid "to finish the uninstall and to deactivate \"Count per Day\"."
 msgstr "per completare la disinstallazione e disattivare \"Count per Day\"."
 
-#: counter-options.php:88
+#: counter-options.php:143
 msgid "Options"
 msgstr "Opzioni"
 
-#: counter-options.php:93
+#: counter-options.php:148
 msgid "Online time"
 msgstr "Durata del collegamento"
 
-#: counter-options.php:94
+#: counter-options.php:149
 msgid "Seconds for online counter. Used for \"Visitors online\" on dashboard page."
 msgstr "Secondi per il counter online. In uso per \"Visitors online\" nella Bacheca."
 
-#: counter-options.php:97
+#: counter-options.php:152
 msgid "Loged on Users"
 msgstr "Utenti accreditati"
 
-#: counter-options.php:98
+#: counter-options.php:153
 msgid "count too"
 msgstr "conteggia anche loro"
 
-#: counter-options.php:101
+#: counter-options.php:156
 msgid "Auto counter"
 msgstr "Contatore-automatico"
 
-#: counter-options.php:102
+#: counter-options.php:157
 msgid "Counts automatically single-posts and pages, no changes on template needed."
 msgstr "Conta in automatico i singoli articoli e le pagine. Non é necessaria alcuna modifica del template."
 
-#: counter-options.php:105
+#: counter-options.php:160
 msgid "Bots to ignore"
 msgstr "Bots da ignorare"
 
-#: counter-options.php:141
+#: counter-options.php:202
 msgid "Update options"
 msgstr "Aggiorna le opzioni"
 
-#: counter-options.php:149
-#: counter-options.php:158
+#: counter-options.php:310
+#: counter-options.php:319
 msgid "Clean the database"
 msgstr "Svuota il database"
 
-#: counter-options.php:152
+#: counter-options.php:313
 msgid "You can clean the counter table by delete the \"spam data\".<br />If you add new bots above the old \"spam data\" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots."
 msgstr "Puoi svuotare la tabella del contatore dai \"dati spam\".<br />Aggiungendo dei nuovi bots sopra ai vecchi \"dati spam\" conservati nel database.<br />Qui tu puoi avviare nuovamente il filtro per i bot e cancellare le visite dei bots."
 
-#: counter-options.php:187
-msgid "Since WP 2.7 you can delete the plugin directly after deactivation on the plugins page."
-msgstr "Dalla versione WP 2.7 sarà possibile cancellare direttamente il plugin una volta disattivato nella pagina dedicata."
-
-#: counter-options.php:188
+#: counter-options.php:348
 msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
 msgstr "La disattivazione in sé di \"Count per Day\" non cancellerà le tabelle del database."
 
-#: counter-options.php:189
+#: counter-options.php:349
 msgid "Here you can delete the tables and disable \"Count per Day\"."
 msgstr "Qui potrai cancellare le tabelle e disattivare \"Count per Day\"."
 
-#: counter-options.php:192
+#: counter-options.php:352
 msgid "WARNING"
 msgstr "ATTENZIONE"
 
-#: counter-options.php:193
+#: counter-options.php:353
 msgid "These tables (with ALL counter data) will be deleted."
 msgstr "Queste tabelle (compresi TUTTI i dati) saranno cancellate."
 
-#: counter-options.php:195
+#: counter-options.php:355
 msgid "If \"Count per Day\" re-installed, the counter starts at 0."
 msgstr "Qualora desiderassi re-installare \"Count per Day\", ricordati che il contatore ripartirà da 0."
 
-#: counter-options.php:199
+#: counter-options.php:359
 msgid "Yes"
 msgstr "Sì"
 
-#: counter-options.php:200
+#: counter-options.php:360
 msgid "You are sure to disable Count per Day and delete all data?"
 msgstr "Sei certo di volere disattivare Count per Day e cancellare tutti i dati?"
 
-#: counter.php:944
+#: counter.php:1040
 msgid "Statistics"
 msgstr "Satistiche"
 
-#: counter.php:257
-#: counter.php:652
-#: counter.php:925
+#: counter.php:304
+#: counter.php:757
+#: counter.php:1016
 msgid "Total visitors"
 msgstr "Totale visitatori"
 
-#: counter.php:258
+#: counter.php:305
 msgid "Visitors currently online"
 msgstr "Utenti attualmente in linea"
 
-#: counter.php:259
+#: counter.php:306
 msgid "Visitors today"
 msgstr "Oggi"
 
-#: counter.php:260
+#: counter.php:307
 msgid "Visitors yesterday"
 msgstr "Ieri"
 
-#: counter.php:261
+#: counter.php:308
 msgid "Visitors last week"
 msgstr "La scorsa settimana"
 
-#: counter.php:263
+#: counter.php:310
 msgid "Counter starts on"
 msgstr "Il contatore parte dal"
 
-#: counter.php:262
-#: counter.php:654
-#: counter.php:926
+#: counter.php:309
+#: counter.php:759
+#: counter.php:1017
 msgid "Visitors per day"
 msgstr "Visitatori per giorno"
 
-#: counter.php:927
+#: counter.php:1019
 msgid "Visitors per month"
 msgstr "Visitatori per mese"
 
-#: counter-options.php:112
-#: counter.php:928
+#: counter-options.php:167
+#: counter.php:1021
 msgid "Visitors per post"
 msgstr "Visitatori per articolo"
 
-#: counter-options.php:41
+#: counter-options.php:96
 msgid "Counter reseted."
 msgstr "Il contatore é stato azzerato."
 
-#: counter-options.php:113
-#: counter-options.php:117
+#: counter-options.php:168
+#: counter-options.php:172
 msgid "How many posts do you want to see on dashboard page?"
 msgstr "Quanti articoli desideri siano visibili nella bacheca?"
 
-#: counter-options.php:116
+#: counter-options.php:171
 msgid "Latest Counts - Posts"
 msgstr "Totale corrente - Articoli"
 
-#: counter-options.php:120
+#: counter-options.php:175
 msgid "Latest Counts - Days"
 msgstr "Totale corrente - pagine"
 
-#: counter-options.php:121
-#: counter-options.php:125
+#: counter-options.php:176
+#: counter-options.php:180
 msgid "How many days do you want look back?"
 msgstr "Quanti giorni desideri visionare a ritroso?"
 
-#: counter-options.php:135
+#: counter-options.php:196
 msgid "Show in lists"
 msgstr "Mostra nella lista"
 
-#: counter-options.php:136
+#: counter-options.php:197
 msgid "Show \"Reads per Post\" in a new column in post management views."
 msgstr "Mostra \"Reads per Post\" in una nuova colonna nella sezione gestione degli articoli."
 
-#: counter-options.php:166
-#: counter-options.php:175
+#: counter-options.php:327
+#: counter-options.php:336
 msgid "Reset the counter"
 msgstr "Azzera il contatore"
 
-#: counter-options.php:169
+#: counter-options.php:330
 msgid "You can reset the counter by empty the table. ALL TO 0!<br />Make a backup if you need the current data!"
 msgstr "Puoi azzerare il contatore svuotando la tabella. ALL TO 0!<br />Effettua il backup!"
 
-#: counter.php:536
+#: counter.php:618
 #, php-format
 msgid "The %s most visited posts in last %s days:"
 msgstr "I %s articoli più letti negli ultimi %s giorni:"
 
-#: counter.php:626
+#: counter.php:744
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: counter.php:718
+#: counter.php:817
 msgid "Reads"
 msgstr "Visitatori"
 
-#: counter.php:929
+#: counter.php:1022
 msgid "Latest Counts"
 msgstr "Totale corrente"
 
-#: counter-options.php:124
+#: counter-options.php:179
 msgid "Chart - Days"
 msgstr "Diagramma - Giorni"
 
-#: counter-options.php:128
+#: counter-options.php:183
 msgid "Chart - Height"
 msgstr "Diagramma - Altezza"
 
-#: counter-options.php:129
+#: counter-options.php:184
 msgid "Height of the biggest bar"
 msgstr "Altezza della categoria maggiore"
 
-#: counter.php:333
+#: counter.php:416
 msgid "no reads at this time"
 msgstr "nessun visitatore in questo momento"
 
-#: counter.php:352
+#: counter.php:435
 msgid "days"
 msgstr "giorni"
 
-#: counter.php:839
+#: counter.php:929
 msgid "This post"
 msgstr "Questo articolo"
+
+#: counter-options.php:164
+msgid "Dashboard"
+msgstr "Bacheca"
+
+#: counter-options.php:193
+msgid "Edit Posts"
+msgstr "Modifica articoli"
+
+#: counter-options.php:193
+msgid "Edit Pages"
+msgstr "Modifica pagine"
+
+# @ cpd
+#: counter.php:972
+msgid "Label"
+msgstr "Etichetta"
+
+# @ cpd
+#: counter.php:972
+msgid "empty = name above"
+msgstr "vuota = nome sopra"
+
+#: counter.php:1018
+msgid "Reads per day"
+msgstr "Visitatori/giorno"
+
+# @ cpd
+#: counter-options.php:40
+#, php-format
+msgid "Countries updated. <b>%s</b> entries in %s without country left"
+msgstr "Gli stati sono stati aggiornati. <b>%s</b> pubblicazioni in %s senza stato"
+
+# @ cpd
+#: counter-options.php:45
+msgid "update next"
+msgstr "aggiorna il prossimo"
+
+# @ cpd
+#: counter-options.php:210
+msgid "GeoIP - Countries"
+msgstr "GeoIP - Stati"
+
+# @ cpd
+#: counter-options.php:219
+msgid "Update old counter data"
+msgstr "Aggiorna i vecchi dati per gli stati"
+
+# @ cpd
+#: counter-options.php:222
+msgid "You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!"
+msgstr "Potrai ottenere i nuovi dati verificando nuovamente l'indirizzo IP nel database di GeoIP. L'operazione richiederà alcuni minuti!"
+
+#: counter-options.php:232
+msgid "Update GeoIP database"
+msgstr "Aggiorna database GeoIP"
+
+# @ cpd
+#: counter-options.php:235
+msgid "Download a new version of GeoIP.dat file."
+msgstr "Scarica la nuova versione del file GeoIP.dat."
+
+# @ cpd
+#: counter-options.php:241
+msgid "More informations about GeoIP"
+msgstr "Informazioni su GeoIP"
+
+#: counter.php:961
+msgid "Title:"
+msgstr "Titolo:"
+
+#: counter.php:1026
+msgid "Reads per Country"
+msgstr "Visitatori/Stato:"
+
+# @ cpd
+#: geoip/geoip.php:104
+msgid "New GeoIP database installed."
+msgstr "Il nuovo database GeoIP é stato installato."
+
+# @ cpd
+#: geoip/geoip.php:106
+msgid "Sorry, an error occurred. Try again or check the access rights of directory \"geoip\" is 777."
+msgstr "Si é verificato un errore. Riprova oppure verifica che i permessi della cartella \"geoip\" siano impostati a 777."
+
+# @ cpd
+#: geoip/geoip.php:83
+msgid "Sorry, necessary functions (zlib) not installed or enabled in php.ini."
+msgstr "La funzione (zlib) non é stata installata oppure non attiva in php.ini."
+
+#: counter-options.php:188
+msgid "Countries"
+msgstr "Stati"
+
+#: counter-options.php:189
+msgid "How many countries do you want to see on dashboard page?"
+msgstr "Quanti stati desideri siano visibili nella bacheca?"
+
+#: counter-options.php:83
+#, php-format
+msgid "Mass Bots cleaned. %s counts deleted."
+msgstr "Mass Bots svuotato. %s totali cancellati."
+
+# @ cpd
+#: counter-options.php:259
+msgid "Mass Bots"
+msgstr "Mass Bots"
+
+# @ cpd
+#: counter-options.php:263
+#, php-format
+msgid "Show all IPs with more than %s page views per day"
+msgstr "Mostra tutti gli IP con più di %s pagine visualizzate al giorno"
+
+# @ cpd
+#: counter-options.php:264
+msgid "show"
+msgstr "mostra"
+
+#: counter-options.php:301
+#, php-format
+msgid "Delete these %s counts"
+msgstr "Cancella questi %s totali"
+
+# @ cpd
+#: counter.php:641
+msgid "Other"
+msgstr "Altro"
+
+#: counter.php:687
+msgid "Front page displays"
+msgstr "Mostra nella front page"
+
+# @ cpd
+#: counter.php:1020
+msgid "Browsers"
+msgstr "Browser"
+
+# @ cpd
+#: counter-options.php:272
+msgid "IP"
+msgstr "IP"
+
+# @ cpd
+#: counter-options.php:273
+msgid "Date"
+msgstr "Data"
+
+# @ cpd
+#: counter-options.php:274
+msgid "Client"
+msgstr "Client"
+
+# @ cpd
+#: counter-options.php:275
+msgid "Views"
+msgstr "Visualizzazioni"
+
+#~ msgid ""
+#~ "Since WP 2.7 you can delete the plugin directly after deactivation on the "
+#~ "plugins page."
+#~ msgstr ""
+#~ "Dalla versione WP 2.7 sarà possibile cancellare direttamente il plugin "
+#~ "una volta disattivato nella pagina dedicata."
 

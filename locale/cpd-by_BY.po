@@ -13,8 +13,8 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: P:/xampp/htdocs/wp/wp-content/plugins/count-per-day\n"
+": \n"
 "X-Poedit-SearchPath-0: .\n"
-": "
 
 #: counter-options.php:29
 msgid "Options updated"
@@ -261,7 +261,6 @@ msgstr ""
 msgid "Reads per day"
 msgstr ""
 
-#: counter.php:714
 #: counter.php:714
 msgid "Reads"
 msgstr ""
