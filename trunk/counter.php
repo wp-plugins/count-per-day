@@ -3,12 +3,13 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
-Version: 2.6
+Version: 2.7
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
+// set "true" to see some debug data at the bottom of the page
 define('CPD_DEBUG', false);
 
 /**
@@ -40,6 +41,9 @@ function CountPerDay()
 	define('CPD_C_TABLE', $table_prefix.'cpd_counter');
 	define('CPD_CO_TABLE', $table_prefix.'cpd_counter_useronline');
 	define('CPD_METABOX', 'cpd_metaboxes');
+	
+	// use local time not UTC
+	get_option('gmt_offset');
 	
 	$this->options = get_option('count_per_day');
 	$this->dir = get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__));
@@ -505,7 +509,7 @@ function getUserOnline()
 function getUserAll()
 {
 	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." GROUP BY date, ip", 'getUserAll');
-	echo mysql_num_rows($res);
+	echo mysql_num_rows($res) + intval($this->options['startcount']);
 }
 
 /**
@@ -586,14 +590,19 @@ function getUserPerPost( $limit = 0 )
 }
 
 /**
- * shows counter start, first day
+ * shows counter start, first day or given value
  */
 function getFirstCount()
 {
 	global $wp_locale;
-	$res = $this->getQuery("SELECT date FROM ".CPD_C_TABLE." ORDER BY date LIMIT 1", 'getFirstCount');
-	$row = mysql_fetch_row($res);
-	echo mysql2date(get_option('date_format'), $row[0] );
+	if (!empty($this->options['startdate']))
+		echo mysql2date(get_option('date_format'), $this->options['startdate'] );
+	else
+	{
+		$res = $this->getQuery("SELECT date FROM ".CPD_C_TABLE." ORDER BY date LIMIT 1", 'getFirstCount');
+		$row = mysql_fetch_row($res);
+		echo mysql2date(get_option('date_format'), $row[0] );
+	}
 }
 
 /**
@@ -666,6 +675,46 @@ function getMostVisitedPosts( $days = 0, $limit = 0 )
 }
 
 /**
+ * shows visited pages at given day
+ * @param integer $date day in mySql date format yyyy-mm-dd
+ * @param integer $limit count of posts (last posts)
+ */
+function getVisitedPostsOnDay( $date = 0, $limit = 0 )
+{
+	global $wpdb;
+	if (!empty($_POST['daytoshow']))
+		$date = $_POST['daytoshow'];
+	else if ( $date == 0 )
+		$date = date('Y-m-d');
+	if ( $limit == 0 )
+		$limit = $this->options['dashboard_last_posts'];
+
+	$sql = "
+	SELECT	count(c.id) count,
+			c.page post_id,
+			p.post_title post,
+			t.name tag_cat_name,
+			t.slug tag_cat_slug,
+			x.taxonomy tax
+	FROM	".CPD_C_TABLE." c
+	LEFT	JOIN ".$wpdb->posts." p
+			ON p.id = c.page
+	LEFT	JOIN ".$wpdb->terms." t
+			ON t.term_id = 0 - c.page
+	LEFT	JOIN ".$wpdb->term_taxonomy." x
+			ON x.term_id = t.term_id
+	WHERE	c.date = '$date'
+	GROUP	BY c.page
+	ORDER	BY count DESC
+	LIMIT	$limit";
+	echo '<form action="" method="post">
+		  <input name="daytoshow" value="'.$date.'" size="10" />
+		  <input type="submit" name="showday" value="'.__('Show').'" />
+		  </form>';
+	$this->getUserPer_SQL( $sql, 'getVisitedPostsOnDay' );		
+}
+
+/**
  * shows little browser statistics
  */
 function getClients()
@@ -725,7 +774,8 @@ function getUserPer_SQL( $sql, $name = '' )
 	echo '<ul>';
 	while ( $row = mysql_fetch_assoc($m) )
 	{
-		echo '<li><b>'.$row['count'].'</b> <a href="'.get_bloginfo('url');
+		echo '<li><b>'.$row['count'].'</b>
+		<a href="'.get_bloginfo('url');
 		if ( $row['post_id'] < 0 && $row['tax'] == 'category' )
 			//category
 			echo '?cat='.(0 - $row['post_id']).'">- '.$row['tag_cat_name'].' -';
@@ -738,13 +788,15 @@ function getUserPer_SQL( $sql, $name = '' )
 		else
 		{
 			// post/page
-//			$postname = $wpdb->get_var('SELECT post_title FROM '.$wpdb->posts.' WHERE ID = '.$row->post_id);
 			$postname = $row['post'];
 			if ( empty($postname) ) 
 				$postname = '---';
 			echo '?p='.$row['post_id'].'">'.$postname;
 		}
-		echo "</a></li>\n";
+		echo '</a>';
+		if ( $row['post_id'] > 0 )
+			echo ' <a href="post.php?action=edit&post='.$row['post_id'].'"><img src="images/comment-grey-bubble.png" alt="[e]" title="'.__('Edit Post').'" /></a>';
+		echo '</li>'."\n";
 	}
 	echo '</ul>';
 }
@@ -855,7 +907,9 @@ function updateOptions()
 		'show_in_lists' => 1,
 		'chart_days' => 60,
 		'chart_height' => 100,
-		'countries' => 20);
+		'countries' => 20,
+		'startdate' => '',
+		'startcount' => '');
 		
 		// add array
 		add_option('count_per_day', $o);
@@ -1029,6 +1083,7 @@ function setAdminMenu()
  */
 function getMostVisitedPostsMeta() { $this->getMostVisitedPosts(); }
 function getUserPerPostMeta() { $this->getUserPerPost(); }
+function getVisitedPostsOnDayMeta() { $this->getVisitedPostsOnDay( 0, 100); }
 
 /**
  * will be executed if wordpress core detects this page has to be rendered
@@ -1049,6 +1104,7 @@ function onLoadPage()
 	add_meta_box('browsers', __('Browsers', 'cpd'), array(&$this, 'getClients'), $this->pagehook, 'cpdrow2', 'core');
 	add_meta_box('reads_per_post', __('Visitors per post', 'cpd'), array(&$this, 'getUserPerPostMeta'), $this->pagehook, 'cpdrow3', 'core');
 	add_meta_box('last_reads', __('Latest Counts', 'cpd'), array(&$this, 'getMostVisitedPostsMeta'), $this->pagehook, 'cpdrow4', 'core');
+	add_meta_box('day_reads', __('Visitors per day', 'cpd'), array(&$this, 'getVisitedPostsOnDayMeta'), $this->pagehook, 'cpdrow4', 'core');
 	
 	// countries with GeoIP addon only
 	if ( $cpd_geoip )
@@ -1146,7 +1202,11 @@ function showQueries()
 	foreach($this->queries as $q)
 		if ($q != $this->queries[0] )
 			echo '<li>'.$q.'</li>';
-	echo '</ol></div>';
+	echo '</ol><p>&nbsp;<br/>';
+	
+	$t = date('Y-m-d H:i');
+	printf(__('Time for Count per Day: <code>%s</code>.', 'cpd'), $t);
+	echo '</p></div>';
 }
 
 } // class end
