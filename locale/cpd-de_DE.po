@@ -500,7 +500,7 @@ msgstr "Startzählerstand"
 #@ cpd
 #: counter-options.php:213
 msgid "Add this value to \"Total visitors\"."
-msgstr "Addiere diesen Wert zu \"Besucher gesamt\\\"\\."
+msgstr "Addiere diesen Wert zu \"Besucher gesamt\"."
 
 #@ cpd
 #: counter-options.php:385
@@ -516,7 +516,7 @@ msgstr "Bug? Problem? Frage? Tipp? Lob?"
 #: counter-options.php:390
 #, php-format
 msgid "Write a comment on the <a href=\"%s\">plugin page</a>."
-msgstr "Schreib einen Kommentar auf der <a href=\"%s\">Plugin-Seite.</a>."
+msgstr "Schreib einen Kommentar auf der <a href=\"%s\">Plugin-Seite</a>."
 
 #: counter.php:711
 msgid "Show"
