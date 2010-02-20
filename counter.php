@@ -199,7 +199,6 @@ function count()
 	endif;
 	
 	// count visitor?
-	echo intval($userdata->user_level).'---------';
 	$countUser = 1;
 	if ( $this->options['user'] == 0 && is_user_logged_in() ) $countUser = 0; // don't count loged user
 	if ( $this->options['user'] == 1 && $this->options['user_level'] < intval($userdata->user_level) ) $countUser = 0; // loged user, but higher user level
