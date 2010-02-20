@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
 Tested up to: 2.9
-Stable tag: 2.7
+Stable tag: 2.8
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -53,7 +53,7 @@ read and write comments on <a href="http://www.tomsdimension.de/wp-plugins/count
 
 You can place these functions in your template.<br/>
 Place functions within post-loop (e.g. in single.php)<br/>
-Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day->show(); ?&gt;' to check if plugin is activated.
+Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day->show(); ?&gt;' to check if plugin is activated. Without spaces " " near _ .
 
 'show( $before, $after, $show, $count )'
 
@@ -131,6 +131,12 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 
 == Changelog ==
+
+= 2.8 =
++ New: set user level until CpD will count loged users
++ New: link to plugin page on Count per Day dashboard
++ New: click on a bar in the charts reload the page with given date for 'Visitors per day' metabox
++ New languages: Dansk and Swedish
 
 = 2.7 =
 + Bugfix: date/timezone problem

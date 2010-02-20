@@ -13,6 +13,7 @@ if(!empty($_POST['do']))
 		case 'cpd_update' :
 			$count_per_day->options['onlinetime'] = $_POST['cpd_onlinetime'];
 			$count_per_day->options['user'] = empty( $_POST['cpd_user'] ) ? 0 : 1 ;
+			$count_per_day->options['user_level'] = $_POST['cpd_user_level'];
 			$count_per_day->options['autocount'] = empty( $_POST['cpd_autocount'] ) ? 0 : 1 ;
 			$count_per_day->options['bots'] = $_POST['cpd_bots'];
 			$count_per_day->options['dashboard_posts'] = $_POST['cpd_dashboard_posts'];
@@ -152,7 +153,17 @@ switch($mode) {
 		</tr>
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Loged on Users', 'cpd') ?>:</th>
-			<td><label for="cpd_user"><input type="checkbox" name="cpd_user" id="cpd_user" <?php if($o['user']==1) echo 'checked="checked"'; ?> /> <?php _e('count too', 'cpd') ?></label></td>
+			<td>
+				<label for="cpd_user"><input type="checkbox" name="cpd_user" id="cpd_user" <?php if($o['user']==1) echo 'checked="checked"'; ?> /> <?php _e('count too', 'cpd') ?></label>
+				- <?php _e('until User Level', 'cpd') ?>
+				<select name="cpd_user_level">
+					<option value="10" <?php if ($o['user_level'] == 10) echo 'selected="selected"' ?>><?php echo translate_user_role('Administrator') ?> (10)</option>
+					<option value="7" <?php if ($o['user_level'] == 7) echo 'selected="selected"' ?>><?php echo translate_user_role('Editor') ?> (7)</option>
+					<option value="2" <?php if ($o['user_level'] == 2) echo 'selected="selected"' ?>><?php echo translate_user_role('Author') ?> (2)</option>
+					<option value="1" <?php if ($o['user_level'] == 1) echo 'selected="selected"' ?>><?php echo translate_user_role('Contributor') ?> (1)</option>
+					<option value="0" <?php if ($o['user_level'] == 0) echo 'selected="selected"' ?>><?php echo translate_user_role('Subscriber') ?> (0)</option>
+				</select>
+			</td>
 		</tr>
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Auto counter', 'cpd') ?>:</th>
