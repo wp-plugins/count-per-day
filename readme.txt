@@ -136,7 +136,8 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 + New: set user level until CpD will count loged users
 + New: link to plugin page on Count per Day dashboard
 + New: click on a bar in the charts reload the page with given date for 'Visitors per day' metabox
-+ New languages: Dansk and Swedish
++ New language: Swedish, thanks to Magnus Suther http://www.magnussuther.se
++ New language: Dansk, thanks to GeorgeWP http://wordpress.blogos.dk
 
 = 2.7 =
 + Bugfix: date/timezone problem
