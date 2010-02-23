@@ -3,7 +3,6 @@
  * Filename: counter-options.php
  * Count Per Day - Options and Administration
  */
-
 // check form 
 if(!empty($_POST['do']))
 {
@@ -143,6 +142,7 @@ switch($mode) {
 	<h2><img src="<?php echo $count_per_day->getResource('cpd_menu.gif') ?>" alt="" style="width:24px;height:24px" /> Count per Day</h2>
 
 	<div class="postbox">
+	
 	<h3><?php _e('Options', 'cpd') ?></h3>
 	<div class="inside">
 		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
