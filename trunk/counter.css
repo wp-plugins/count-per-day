@@ -34,3 +34,41 @@
 .cpd-r {
 	float: right;
 }
+
+/* notes thickbox */
+.cpd-notes {
+	width: 100%;
+	width: auto;
+	margin: 1px;
+	border-color: #000;
+	border-collapse: collapse;
+	}
+
+.cpd-notes td, .cpd-notes th {
+	vertical-align: top;
+	text-align: left;
+	white-space: nowrap;
+	padding: 2px;
+	font: 12px Verdana, Arial, Helvetica, sans-serif;
+	border-bottom: 1px #aaa solid;
+	}
+
+.cpd-notes th {
+	background-color: #8cbdd5;
+	font-weight: bold;
+	}
+
+.cpd-notes .red {
+	background-color: #f00;
+	color: #ff0;
+}
+
+.cpd-notes .green {
+	background-color: #0a0;
+	color: #ff0;
+}
+
+.cpd-notes input { 
+ 	width: 97%;
+	font: 12px Verdana, Arial, Helvetica, sans-serif;
+}
