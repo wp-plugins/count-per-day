@@ -280,7 +280,7 @@ function createTables()
 {
 	// for plugin activation, creates $wpdb
 	require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-	global $wpdb, $table_prefix;
+	global $wpdb, $table_prefix, $cpd_path;
 	
 	// table "counter"
 	$sql = "CREATE TABLE IF NOT EXISTS `".CPD_C_TABLE."` (
@@ -352,6 +352,9 @@ function createTables()
 	
 	// update options to array
 	$this->UpdateOptions();
+	
+	// set directory mode
+	chmod(ABSPATH.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__)).'/geoip', 0777);
 }
 
 /**
@@ -361,6 +364,9 @@ function dashboardReadsAtAll()
 {
 	?>
 	<ul>
+		<li><b><span><?php $this->getReadsAll(); ?></span></b><?php _e('Total reads', 'cpd') ?>:</li>
+		<li><b><?php $this->getReadsToday(); ?></b><?php _e('Reads today', 'cpd') ?>:</li>
+		<li><b><?php $this->getReadsYesterday(); ?></b><?php _e('Reads yesterday', 'cpd') ?>:</li>
 		<li><b><span><?php $this->getUserAll(); ?></span></b><?php _e('Total visitors', 'cpd') ?>:</li>
 		<li><b><span><?php $this->getUserOnline(); ?></span></b><?php _e('Visitors currently online', 'cpd') ?>:</li>
 		<li><b><?php $this->getUserToday(); ?></b><?php _e('Visitors today', 'cpd') ?>:</li>
@@ -467,8 +473,11 @@ function dashboardChartDataRequest( $sql = '', $limit )
 	
 	// headline with max count
 	echo '
+		<div style="text-align:center;">
 		<small style="display:block; float:right;">'.$days.' '.__('days', 'cpd').'</small>
 		<small style="display:block; float:left;">Max: '.$max.'</small>
+		<small><a href="'.$this->dir.'/notes.php?KeepThis=true&TB_iframe=true" title="Count per Day - '.__('Notes', 'cpd').'" class="thickbox">'.__('Notes', 'cpd').'</a></small>
+		</div>
 		<p style="border-bottom:1px black solid; white-space:nowrap;">';
 	
 	$date_old = $start_time;
@@ -495,9 +504,12 @@ function dashboardChartDataRequest( $sql = '', $limit )
 			// show normal bar
 			$height = max( round($day['count'] * $height_factor, 0), 1 );
 			$date_str = mysql2date(get_option('date_format'), $day['date']);
-			echo '<a href="?page=cpd_metaboxes&amp;daytoshow='.$day['date'].'">'
-				.'<img src="'.$this->getResource('cpd_rot.png').'" title="'.$date_str.' : '.$day['count'].$note.'" style="width:'.$bar_width.'%; height:'.$height.'px" />'
-				.'</a>';
+			echo '<a href="?page=cpd_metaboxes&amp;daytoshow='.$day['date'].'"><img src="';
+			if ($note)
+				echo $this->getResource('cpd_blau.png').'" title="'.$date_str.' : '.$day['count'].$note.'"';
+			else
+				echo $this->getResource('cpd_rot.png').'" title="'.$date_str.' : '.$day['count'].$note.'"';
+			echo ' style="width:'.$bar_width.'%; height:'.$height.'px" /></a>';
 			
 			$date_old = $date;
 		}
@@ -536,6 +548,16 @@ function getUserAll()
 }
 
 /**
+ * shows all reads
+ */
+function getReadsAll()
+{
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE, 'getReadsAll');
+	$row = mysql_fetch_row($res);
+	echo $row[0] + intval($this->options['startreads']);
+}
+
+/**
  * shows today visitors
  */
 function getUserToday()
@@ -546,6 +568,17 @@ function getUserToday()
 }
 
 /**
+ * shows today reads
+ */
+function getReadsToday()
+{
+	$date = date('Y-m-d');
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date = '$date'", 'getReadsToday');
+	$row = mysql_fetch_row($res);
+	echo $row[0];
+}
+
+/**
  * shows yesterday visitors
  */
 function getUserYesterday()
@@ -553,6 +586,17 @@ function getUserYesterday()
 	$date = date('Y-m-d', time()-86400);
 	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip", 'getUserYesterday');
 	echo mysql_num_rows($res);
+}
+
+/**
+ * shows yesterday reads
+ */
+function getReadsYesterday()
+{
+	$date = date('Y-m-d', time()-86400);
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date = '$date'", 'getReadsYesterday');
+	$row = mysql_fetch_row($res);
+	echo $row[0];
 }
 
 /**
@@ -740,12 +784,12 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0 )
 	
 	echo '<form action="" method="post">
 		  <input name="daytoshow" value="'.$date.'" size="10" />
-		  <input type="submit" name="showday" value="'.__('Show').'" />
-		  [<a href="'.$this->dir.'/notes.php?KeepThis=true&TB_iframe=true" title="Count per Day - '.__('Notes', 'cpd').'" class="thickbox">'.__('Notes', 'cpd').'</a>]
+		  <input type="submit" name="showday" value="'.__('Show').'" class="button" />
+		  <a href="'.$this->dir.'/notes.php?KeepThis=true&TB_iframe=true" title="Count per Day - '.__('Notes', 'cpd').'" class="button thickbox">'.__('Notes', 'cpd').'</a>
 		  </form>';
 
 	if ( isset($note) )
-		echo '<p style="background:#eee; padding:5px;">'.$note.'</p>';
+		echo '<p style="background:#eee; padding:2px;">'.$note.'</p>';
 
 	$this->getUserPer_SQL( $sql, 'getVisitedPostsOnDay' );		
 }
@@ -943,7 +987,8 @@ function updateOptions()
 		'chart_height' => 100,
 		'countries' => 20,
 		'startdate' => '',
-		'startcount' => '');
+		'startcount' => '',
+		'startreads' => '');
 		
 		// add array
 		add_option('count_per_day', $o);
@@ -1055,12 +1100,17 @@ function widgetCpdInit()
 		// show the possible functions
 		$funcs = array(
 		'show' => 'This post',
+		'getReadsAll' => 'Total reads',
+		'getReadsToday' => 'Reads today',
+		'getReadsYesterday' => 'Reads yesterday',
+		'getUserAll' => 'Total visitors',
 		'getUserToday' => 'Visitors today',
 		'getUserYesterday' => 'Visitors yesterday',
 		'getUserLastWeek' => 'Visitors last week',
 		'getUserPerDay' => 'Visitors per day',
 		'getUserAll' => 'Total visitors',
 		'getUserOnline' => 'Visitors currently online',
+		'getReadsAll' => 'Total reads',
 		'getFirstCount' => 'Counter starts on',
 		);
 

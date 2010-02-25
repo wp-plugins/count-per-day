@@ -47,7 +47,6 @@
 .cpd-notes td, .cpd-notes th {
 	vertical-align: top;
 	text-align: left;
-	white-space: nowrap;
 	padding: 2px;
 	font: 12px Verdana, Arial, Helvetica, sans-serif;
 	border-bottom: 1px #aaa solid;
@@ -56,6 +55,10 @@
 .cpd-notes th {
 	background-color: #8cbdd5;
 	font-weight: bold;
+	}
+
+.cpd-notes .nowrap {
+	white-space: nowrap;
 	}
 
 .cpd-notes .red {
