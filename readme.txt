@@ -147,7 +147,7 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 = 2.9 =
 + New: little note system to mark special days
 + New: functions to get reads/page views total, today and yesterday
-+ update translation: Italian
++ Language update: Italian, German
 
 = 2.8 =
 + New: set user level until CpD will count loged users
