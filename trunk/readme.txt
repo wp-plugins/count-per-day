@@ -76,6 +76,18 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 * shows average number of visitors per day of the last _$days_ days
 * default on dashboard (see it with mouse over number) = "Latest Counts - Days" in options
 
+'getReadsAll()'
+ 
+* shows number of total reads
+
+'getReadsToday()'
+
+* shows number of reads today
+
+'getReadsYesterday()'
+ 
+* shows number of reads yesterday
+
 'getUserAll()'
  
 * shows number of total visitors
@@ -131,6 +143,11 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 
 == Changelog ==
+
+= 2.9 =
++ New: little note system to mark special days
++ New: functions to get reads/page views total, today and yesterday
++ update translation: Italian
 
 = 2.8 =
 + New: set user level until CpD will count loged users
