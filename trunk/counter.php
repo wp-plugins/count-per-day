@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
-Version: 2.8
+Version: 2.9
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -503,12 +503,12 @@ function dashboardChartDataRequest( $sql = '', $limit )
 	
 			// show normal bar
 			$height = max( round($day['count'] * $height_factor, 0), 1 );
-			$date_str = mysql2date(get_option('date_format'), $day['date']);
+			$date_str = mysql2date('l', $day['date']).' '.mysql2date(get_option('date_format'), $day['date']);
 			echo '<a href="?page=cpd_metaboxes&amp;daytoshow='.$day['date'].'"><img src="';
 			if ($note)
 				echo $this->getResource('cpd_blau.png').'" title="'.$date_str.' : '.$day['count'].$note.'"';
 			else
-				echo $this->getResource('cpd_rot.png').'" title="'.$date_str.' : '.$day['count'].$note.'"';
+				echo $this->getResource('cpd_rot.png').'" title="'.$date_str.' : '.$day['count'].'"';
 			echo ' style="width:'.$bar_width.'%; height:'.$height.'px" /></a>';
 			
 			$date_old = $date;
