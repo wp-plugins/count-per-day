@@ -3,8 +3,8 @@ Contributors: Tom Braider
 Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
-Tested up to: 2.9
-Stable tag: 2.8
+Tested up to: 2.9.2
+Stable tag: 2.9
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -76,6 +76,18 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 * shows average number of visitors per day of the last _$days_ days
 * default on dashboard (see it with mouse over number) = "Latest Counts - Days" in options
 
+'getReadsAll()'
+ 
+* shows number of total reads
+
+'getReadsToday()'
+
+* shows number of reads today
+
+'getReadsYesterday()'
+ 
+* shows number of reads yesterday
+
 'getUserAll()'
  
 * shows number of total visitors
@@ -132,11 +144,21 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 == Changelog ==
 
+= 2.9 =
++ New: little note system to mark special days
++ New: functions to get reads/page views total, today and yesterday
++ Language update: Italian thanks to Gianni Diurno http://gidibao.net/index.php/portfolio
++ Language update: Portuguese (Brazil) thanks to Lucato http://www.ilucato.com.br
++ Language update: Swedish thanks to Magnus Suther http://www.magnussuther.se
++ Language update: Dansk thanks to Jonas Thomsen http://jonasthomsen.com
++ Language update: German
+
 = 2.8 =
 + New: set user level until CpD will count loged users
 + New: link to plugin page on Count per Day dashboard
 + New: click on a bar in the charts reload the page with given date for 'Visitors per day' metabox
-+ New languages: Dansk and Swedish
++ New language: Swedish, thanks to Magnus Suther http://www.magnussuther.se
++ New language: Dansk, thanks to GeorgeWP http://wordpress.blogos.dk
 
 = 2.7 =
 + Bugfix: date/timezone problem

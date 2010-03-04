@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
-Version: 2.8
+Version: 2.9
 License: GPL
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -199,7 +199,6 @@ function count()
 	endif;
 	
 	// count visitor?
-	echo intval($userdata->user_level).'---------';
 	$countUser = 1;
 	if ( $this->options['user'] == 0 && is_user_logged_in() ) $countUser = 0; // don't count loged user
 	if ( $this->options['user'] == 1 && $this->options['user_level'] < intval($userdata->user_level) ) $countUser = 0; // loged user, but higher user level
@@ -281,7 +280,7 @@ function createTables()
 {
 	// for plugin activation, creates $wpdb
 	require_once(ABSPATH.'wp-admin/includes/upgrade.php');
-	global $wpdb;
+	global $wpdb, $table_prefix, $cpd_path;
 	
 	// table "counter"
 	$sql = "CREATE TABLE IF NOT EXISTS `".CPD_C_TABLE."` (
@@ -342,8 +341,20 @@ function createTables()
 			$this->getQuery("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR(2) NOT NULL");
 	}
 	
+	// table "notes"
+	$sql = "CREATE TABLE IF NOT EXISTS `".$table_prefix."cpd_notes` (
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`date` date NOT NULL,
+	`note` varchar(255) NOT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE KEY `date` (`date`) )";
+	$this->getQuery($sql);
+	
 	// update options to array
 	$this->UpdateOptions();
+	
+	// set directory mode
+	chmod(ABSPATH.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__)).'/geoip', 0777);
 }
 
 /**
@@ -353,6 +364,9 @@ function dashboardReadsAtAll()
 {
 	?>
 	<ul>
+		<li><b><span><?php $this->getReadsAll(); ?></span></b><?php _e('Total reads', 'cpd') ?>:</li>
+		<li><b><?php $this->getReadsToday(); ?></b><?php _e('Reads today', 'cpd') ?>:</li>
+		<li><b><?php $this->getReadsYesterday(); ?></b><?php _e('Reads yesterday', 'cpd') ?>:</li>
 		<li><b><span><?php $this->getUserAll(); ?></span></b><?php _e('Total visitors', 'cpd') ?>:</li>
 		<li><b><span><?php $this->getUserOnline(); ?></span></b><?php _e('Visitors currently online', 'cpd') ?>:</li>
 		<li><b><?php $this->getUserToday(); ?></b><?php _e('Visitors today', 'cpd') ?>:</li>
@@ -371,18 +385,23 @@ function dashboardReadsAtAll()
  */
 function dashboardChart( $limit = 0 )
 {
+	global $table_prefix;
 	if ( $limit == 0 )
 		$limit = ( !empty($this->options['chart_days']) )? $this->options['chart_days'] : 30;
 	
 	$sql = "
 	SELECT	count(*) count,
-			date
-	FROM	".CPD_C_TABLE."
-	GROUP	BY date
-	ORDER	BY date DESC
+			c.date,
+			n.note
+	FROM	".CPD_C_TABLE." AS c
+	LEFT	JOIN ".$table_prefix."cpd_notes AS n
+			ON n.date = c.date
+	GROUP	BY c.date
+	ORDER	BY c.date DESC
 	LIMIT	$limit";
 	$this->dashboardChartDataRequest($sql, $limit);
 }
+
 
 /**
  * creates dashboard chart metabox content - visitors
@@ -391,16 +410,19 @@ function dashboardChart( $limit = 0 )
  */
 function dashboardChartVisitors( $limit = 0 )
 {
+	global $table_prefix;
 	if ( $limit == 0 )
 		$limit = ( !empty($this->options['chart_days']) )? $this->options['chart_days'] : 30;
 	$sql = "
-	SELECT count(*) count, date
+	SELECT count(*) count, t.date, n.note
 	FROM (	SELECT	count(*) count, date
 			FROM	".CPD_C_TABLE."
 			GROUP	BY date, ip
 			) AS t
-	GROUP BY date
-	ORDER BY date DESC
+	LEFT	JOIN ".$table_prefix."cpd_notes AS n
+			ON n.date = t.date
+	GROUP BY t.date
+	ORDER BY t.date DESC
 	LIMIT $limit";
 	$this->dashboardChartDataRequest($sql, $limit);
 }
@@ -451,8 +473,11 @@ function dashboardChartDataRequest( $sql = '', $limit )
 	
 	// headline with max count
 	echo '
+		<div style="text-align:center;">
 		<small style="display:block; float:right;">'.$days.' '.__('days', 'cpd').'</small>
 		<small style="display:block; float:left;">Max: '.$max.'</small>
+		<small><a href="'.$this->dir.'/notes.php?KeepThis=true&TB_iframe=true" title="Count per Day - '.__('Notes', 'cpd').'" class="thickbox">'.__('Notes', 'cpd').'</a></small>
+		</div>
 		<p style="border-bottom:1px black solid; white-space:nowrap;">';
 	
 	$date_old = $start_time;
@@ -462,7 +487,9 @@ function dashboardChartDataRequest( $sql = '', $limit )
 	foreach ( $res_array as $day )
 	{
 		$date = strtotime($day['date']);
-		
+		$note = ( $day['note'] != '' ) ? ' - '.$day['note'] : '';
+			
+
 		if ( $date >= $start_time )
 		{
 			// show the last $limit days only
@@ -470,16 +497,19 @@ function dashboardChartDataRequest( $sql = '', $limit )
 			{
 				// show space if no reads today
 				$width = (($date - $date_old) / 86400 - 1) * $bar_width;
-				echo '<img src="'.$this->getResource('cpd_trans.png').'" title="'.__('no reads at this time', 'cpd').'"
+				echo '<img src="'.$this->getResource('cpd_trans.png').'" title="'.__('no reads at this time', 'cpd').$note.'"
 					style="width:'.$width.'%; height:'.$max_height.'px" />';
 			}
 	
 			// show normal bar
 			$height = max( round($day['count'] * $height_factor, 0), 1 );
-			$date_str = mysql2date(get_option('date_format'), $day['date']);
-			echo '<a href="?page=cpd_metaboxes&amp;daytoshow='.$day['date'].'">'
-				.'<img src="'.$this->getResource('cpd_rot.png').'" title="'.$date_str.' : '.$day['count'].'" style="width:'.$bar_width.'%; height:'.$height.'px" />'
-				.'</a>';
+			$date_str = mysql2date('l', $day['date']).' '.mysql2date(get_option('date_format'), $day['date']);
+			echo '<a href="?page=cpd_metaboxes&amp;daytoshow='.$day['date'].'"><img src="';
+			if ($note)
+				echo $this->getResource('cpd_blau.png').'" title="'.$date_str.' : '.$day['count'].$note.'"';
+			else
+				echo $this->getResource('cpd_rot.png').'" title="'.$date_str.' : '.$day['count'].'"';
+			echo ' style="width:'.$bar_width.'%; height:'.$height.'px" /></a>';
 			
 			$date_old = $date;
 		}
@@ -518,6 +548,16 @@ function getUserAll()
 }
 
 /**
+ * shows all reads
+ */
+function getReadsAll()
+{
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE, 'getReadsAll');
+	$row = mysql_fetch_row($res);
+	echo $row[0] + intval($this->options['startreads']);
+}
+
+/**
  * shows today visitors
  */
 function getUserToday()
@@ -528,6 +568,17 @@ function getUserToday()
 }
 
 /**
+ * shows today reads
+ */
+function getReadsToday()
+{
+	$date = date('Y-m-d');
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date = '$date'", 'getReadsToday');
+	$row = mysql_fetch_row($res);
+	echo $row[0];
+}
+
+/**
  * shows yesterday visitors
  */
 function getUserYesterday()
@@ -535,6 +586,17 @@ function getUserYesterday()
 	$date = date('Y-m-d', time()-86400);
 	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip", 'getUserYesterday');
 	echo mysql_num_rows($res);
+}
+
+/**
+ * shows yesterday reads
+ */
+function getReadsYesterday()
+{
+	$date = date('Y-m-d', time()-86400);
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date = '$date'", 'getReadsYesterday');
+	$row = mysql_fetch_row($res);
+	echo $row[0];
 }
 
 /**
@@ -686,7 +748,7 @@ function getMostVisitedPosts( $days = 0, $limit = 0 )
  */
 function getVisitedPostsOnDay( $date = 0, $limit = 0 )
 {
-	global $wpdb;
+	global $wpdb, $cpd_path, $table_prefix;
 	if (!empty($_POST['daytoshow']))
 		$date = $_POST['daytoshow'];
 	else if (!empty($_GET['daytoshow']))
@@ -695,6 +757,11 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0 )
 		$date = date('Y-m-d');
 	if ( $limit == 0 )
 		$limit = $this->options['dashboard_last_posts'];
+
+	// get note
+	$notes = $wpdb->get_results("SELECT * FROM ".$table_prefix."cpd_notes WHERE date = '$date'", ARRAY_A);
+	if ( $notes )
+		$note = $notes[0]['note'];
 
 	$sql = "
 	SELECT	count(c.id) count,
@@ -714,10 +781,16 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0 )
 	GROUP	BY c.page
 	ORDER	BY count DESC
 	LIMIT	$limit";
+	
 	echo '<form action="" method="post">
 		  <input name="daytoshow" value="'.$date.'" size="10" />
-		  <input type="submit" name="showday" value="'.__('Show').'" />
+		  <input type="submit" name="showday" value="'.__('Show').'" class="button" />
+		  <a href="'.$this->dir.'/notes.php?KeepThis=true&TB_iframe=true" title="Count per Day - '.__('Notes', 'cpd').'" class="button thickbox">'.__('Notes', 'cpd').'</a>
 		  </form>';
+
+	if ( isset($note) )
+		echo '<p style="background:#eee; padding:2px;">'.$note.'</p>';
+
 	$this->getUserPer_SQL( $sql, 'getVisitedPostsOnDay' );		
 }
 
@@ -914,7 +987,8 @@ function updateOptions()
 		'chart_height' => 100,
 		'countries' => 20,
 		'startdate' => '',
-		'startcount' => '');
+		'startcount' => '',
+		'startreads' => '');
 		
 		// add array
 		add_option('count_per_day', $o);
@@ -1026,12 +1100,17 @@ function widgetCpdInit()
 		// show the possible functions
 		$funcs = array(
 		'show' => 'This post',
+		'getReadsAll' => 'Total reads',
+		'getReadsToday' => 'Reads today',
+		'getReadsYesterday' => 'Reads yesterday',
+		'getUserAll' => 'Total visitors',
 		'getUserToday' => 'Visitors today',
 		'getUserYesterday' => 'Visitors yesterday',
 		'getUserLastWeek' => 'Visitors last week',
 		'getUserPerDay' => 'Visitors per day',
 		'getUserAll' => 'Total visitors',
 		'getUserOnline' => 'Visitors currently online',
+		'getReadsAll' => 'Total reads',
 		'getFirstCount' => 'Counter starts on',
 		);
 
@@ -1111,6 +1190,7 @@ function onLoadPage()
 	wp_enqueue_script('common');
 	wp_enqueue_script('wp-lists');
 	wp_enqueue_script('postbox');
+	add_thickbox();
 
 	// add the metaboxes
 	add_meta_box('reads_at_all', __('Total visitors', 'cpd'), array(&$this, 'dashboardReadsAtAll'), $this->pagehook, 'cpdrow1', 'core');

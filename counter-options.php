@@ -3,7 +3,6 @@
  * Filename: counter-options.php
  * Count Per Day - Options and Administration
  */
-
 // check form 
 if(!empty($_POST['do']))
 {
@@ -24,6 +23,7 @@ if(!empty($_POST['do']))
 			$count_per_day->options['chart_height'] = $_POST['cpd_chart_height'];
 			$count_per_day->options['startdate'] = $_POST['cpd_startdate'];
 			$count_per_day->options['startcount'] = $_POST['cpd_startcount'];
+			$count_per_day->options['startreads'] = $_POST['cpd_startreads'];
 			
 			if ( isset($_POST['cpd_countries']) )
 				$count_per_day->options['countries'] = $_POST['cpd_countries'];
@@ -143,6 +143,7 @@ switch($mode) {
 	<h2><img src="<?php echo $count_per_day->getResource('cpd_menu.gif') ?>" alt="" style="width:24px;height:24px" /> Count per Day</h2>
 
 	<div class="postbox">
+	
 	<h3><?php _e('Options', 'cpd') ?></h3>
 	<div class="inside">
 		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -223,6 +224,10 @@ switch($mode) {
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Start count', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_startcount" size="10" value="<?php echo $o['startcount']; ?>" /> <?php _e('Add this value to "Total visitors".', 'cpd') ?></td>
 		</tr>
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Start count', 'cpd') ?>:</th>
+			<td><input class="code" type="text" name="cpd_startreads" size="10" value="<?php echo $o['startreads']; ?>" /> <?php _e('Add this value to "Total reads".', 'cpd') ?></td>
+		</tr>
 		</table>
 		<p class="submit">
 			<input type="hidden" name="do" value="cpd_update" />
@@ -267,7 +272,8 @@ switch($mode) {
 		<p style="text-align: right">
 			<?php _e('More informations about GeoIP', 'cpd') ?>: <a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a><br />
 			DEBUG: 
-			writable=<?php echo (is_writable($cpd_path.'/geoip/') && is_file($cpd_path.'/geoip/GeoIP.dat') ? is_writable($cpd_path.'/geoip/GeoIP.dat') : 1) ? 'true' : 'false' ?>
+			dir=<?php echo substr(decoct(fileperms($cpd_path.'/geoip/')), -3) ?>
+			file=<?php echo (is_file($cpd_path.'/geoip/GeoIP.dat')) ? substr(decoct(fileperms($cpd_path.'/geoip/GeoIP.dat')), -3) : '-'; ?>
 			fopen=<?php echo (function_exists('fopen')) ? 'true' : 'false' ?>
 			gzopen=<?php echo (function_exists('gzopen')) ? 'true' : 'false' ?>
 			allow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
