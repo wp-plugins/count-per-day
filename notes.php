@@ -63,7 +63,7 @@ $notes = $wpdb->get_results('SELECT * FROM '.$table_prefix.'cpd_notes WHERE 1 '.
 		<select name="year">
 			<option value="0">-</option>
 			<?php
-			for ( $y = 2010; $y <= 2020; $y++ )
+			for ( $y = 2010; $y <= date('Y'); $y++ )
 			{
 				echo '<option value="'.$y.'" ';
 				if ( $y == $year )
@@ -72,7 +72,7 @@ $notes = $wpdb->get_results('SELECT * FROM '.$table_prefix.'cpd_notes WHERE 1 '.
 			}
 			?>
 		</select>
-		<input type="submit" name="showmonth" value="<?php _e('show', 'cpd') ?>" style="width:auto;" />
+		<input type="button" name="showmonth" onclick="submit()" value="<?php _e('show', 'cpd') ?>" style="width:auto;" />
 	</td>
 </tr>
 <tr>
