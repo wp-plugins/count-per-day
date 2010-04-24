@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
 Tested up to: 2.9.2
-Stable tag: 2.9
+Stable tag: 2.10
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -130,16 +130,44 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 **GeoIP**
 
-* With the GeoIP addon you can associate your visitors to an country using the ip adress.
+* With the GeoIP addon you can associate your visitors to an country using the ip address.
 * In the database a new column 'country' will be insert on plugin activation.
-* On options page you can update you current visits. This take a while! The Script checks 100 IP adresses at once an reload itself until less then 100 adresses left. Click the update button to check the rest.
-* If the rest remains greater than 0 the IP adress is not in GeoIP database (accuracy 99.5%).
+* On options page you can update you current visits. This take a while! The Script checks 100 IP addresses at once an reload itself until less then 100 addresses left. Click the update button to check the rest.
+* If the rest remains greater than 0 the IP address is not in GeoIP database (accuracy 99.5%).
 * You can update the GeoIP database from time to time to get new IP data. This necessitates write rights to geoip directory (e.g. chmod 777).
-* If the automaticaly update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz">GeoIP.dat.gz</a> and extract it to the "geoip" directory.
+* If the automatically update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz">GeoIP.dat.gz</a> and extract it to the "geoip" directory.
 * More information about GeoIP on http://www.maxmind.com/app/geoip_country
 
 
 == Changelog ==
+
+= 2.10 =
++ New language: French thanks to Bjork http://www.habbzone.fr
++ New: Worldmap to visualize visitors per country
++ New: Shortcodes to add lists and charts to posts and pages, check counter.css too
+
+[CPD_READS_THIS]
+[CPD_READS_TOTAL]
+[CPD_READS_TODAY]
+[CPD_READS_YESTERDAY]
+[CPD_READS_CHART]
+[CPD_VISITORS_TOTAL]
+[CPD_VISITORS_ONLINE]
+[CPD_VISITORS_TODAY]
+[CPD_VISITORS_YESTERDAY]
+[CPD_VISITORS_LAST_WEEK]
+[CPD_VISITORS_PER_DAY]
+[CPD_VISITORS_PER_MONTH]
+[CPD_VISITORS_PER_POST]
+[CPD_VISITORS_CHART]
+[CPD_FIRST_COUNT]
+[CPD_MOST_VISITED_POSTS]
+[CPD_CLIENTS]
+[CPD_COUNTRIES]
+
++ Bugfix: mysql_fetch_assoc() error, non existing options
++ Post edit links in lists for editors only (user_level >= 7)
+
 
 = 2.9 =
 + New: little note system to mark special days

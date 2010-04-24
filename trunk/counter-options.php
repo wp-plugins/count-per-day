@@ -121,6 +121,9 @@ if(!empty($_POST['do']))
 	}
 }
 
+if ( empty($mode) )
+	$mode = '';
+	
 switch($mode) {
 	// deaktivation
 	case 'end-UNINSTALL':
@@ -310,22 +313,24 @@ switch($mode) {
 		</thead>
 		<?php
 		$sum = 0;
-		while ( $row = mysql_fetch_assoc($bots) )
-		{
-			$ip = $row['ip'];
-			echo '<tr><td>';
-			if ( $cpd_geoip )
+		if ( !mysql_errno() ) : 
+			while ( $row = mysql_fetch_assoc($bots) )
 			{
-				$c = CpdGeoIp::getCountry($ip);
-				echo $c[1].' ';
+				$ip = $row['ip'];
+				echo '<tr><td>';
+				if ( $cpd_geoip )
+				{
+					$c = CpdGeoIp::getCountry($ip);
+					echo $c[1].' ';
+				}
+				echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$ip.'">'.$ip.'</a></td>'
+					.'<td>'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
+					.'<td>'.$row['client'].'</td>'
+					.'<td>'.$row['posts'].'</td>'
+					.'</tr>';
+				$sum += $row['posts'];
 			}
-			echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$ip.'">'.$ip.'</a></td>'
-				.'<td>'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
-				.'<td>'.$row['client'].'</td>'
-				.'<td>'.$row['posts'].'</td>'
-				.'</tr>';
-			$sum += $row['posts'];
-		}
+		endif;
 		?>	
 		</table>
 		<?php if ( $sum ) { ?>
@@ -402,8 +407,13 @@ switch($mode) {
 	<h3><?php _e('Support', 'cpd') ?></h3>
 	<div class="inside">
 		<p>
+			<?php
+			$t = date('Y-m-d H:i');
+			printf(__('Time for Count per Day: <code>%s</code>.', 'cpd'), $t);
+			?>
+			<br />
 			<?php _e('Bug? Problem? Question? Hint? Praise?', 'cpd') ?>
-			<br/>
+			<br />
 			<?php printf(__('Write a comment on the <a href="%s">plugin page</a>.', 'cpd'), 'http://www.tomsdimension.de/wp-plugins/count-per-day') ?>
 		</p>
 	</div>
