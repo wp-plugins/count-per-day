@@ -1,3 +1,4 @@
+/* backend */
 .cpd-dashboard .inside {
 	padding: 5px;
 }
@@ -34,4 +35,14 @@
 
 .cpd-r {
 	float: left;;
+}
+
+/* frontend */
+
+.cpd_front_list li {
+	text-align: right;
+}
+
+.cpd_front_list li b{
+	float: left;
 }

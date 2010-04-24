@@ -76,6 +76,9 @@ function updateGeoIpFile()
 {
 	global $cpd_path;
 	
+	// set directory mode
+	@chmod($cpd_path.'/geoip', 0777);
+	
 	// function checks
 	if ( !ini_get('allow_url_fopen') )
 		return 'Sorry, <code>allow_url_open</code> is disabled!';
