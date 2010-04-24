@@ -1403,7 +1403,7 @@ function getCountries( $limit = 0, $frontend )
 
 		$res = $this->getQuery("SELECT country, COUNT(*) c FROM ".CPD_C_TABLE." WHERE ip > 0 GROUP BY country ORDER BY COUNT(*) DESC LIMIT $limit", 'getCountries');
 		
-		if (!$frontend)
+		if (!$frontend && file_exists($cpd_path.'/map/map.php') )
 			$c .= '<div style="margin: 5px 0 10px 0;"><a href="'.$this->dir.'/map/map.php?KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Map', 'cpd').'" class="thickbox button">'.__('Map', 'cpd').'</a></div>';
 		
 		$c .= '<ul class="cpd_front_list">';
