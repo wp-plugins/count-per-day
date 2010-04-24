@@ -3,7 +3,6 @@
  * Filename: counter-options.php
  * Count Per Day - Options and Administration
  */
-
 // check form 
 if(!empty($_POST['do']))
 {
@@ -24,6 +23,7 @@ if(!empty($_POST['do']))
 			$count_per_day->options['chart_height'] = $_POST['cpd_chart_height'];
 			$count_per_day->options['startdate'] = $_POST['cpd_startdate'];
 			$count_per_day->options['startcount'] = $_POST['cpd_startcount'];
+			$count_per_day->options['startreads'] = $_POST['cpd_startreads'];
 			
 			if ( isset($_POST['cpd_countries']) )
 				$count_per_day->options['countries'] = $_POST['cpd_countries'];
@@ -121,6 +121,9 @@ if(!empty($_POST['do']))
 	}
 }
 
+if ( empty($mode) )
+	$mode = '';
+	
 switch($mode) {
 	// deaktivation
 	case 'end-UNINSTALL':
@@ -143,6 +146,7 @@ switch($mode) {
 	<h2><img src="<?php echo $count_per_day->getResource('cpd_menu.gif') ?>" alt="" style="width:24px;height:24px" /> Count per Day</h2>
 
 	<div class="postbox">
+	
 	<h3><?php _e('Options', 'cpd') ?></h3>
 	<div class="inside">
 		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -223,6 +227,10 @@ switch($mode) {
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Start count', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_startcount" size="10" value="<?php echo $o['startcount']; ?>" /> <?php _e('Add this value to "Total visitors".', 'cpd') ?></td>
 		</tr>
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Start count', 'cpd') ?>:</th>
+			<td><input class="code" type="text" name="cpd_startreads" size="10" value="<?php echo $o['startreads']; ?>" /> <?php _e('Add this value to "Total reads".', 'cpd') ?></td>
+		</tr>
 		</table>
 		<p class="submit">
 			<input type="hidden" name="do" value="cpd_update" />
@@ -267,7 +275,8 @@ switch($mode) {
 		<p style="text-align: right">
 			<?php _e('More informations about GeoIP', 'cpd') ?>: <a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a><br />
 			DEBUG: 
-			writable=<?php echo (is_writable($cpd_path.'/geoip/') && is_file($cpd_path.'/geoip/GeoIP.dat') ? is_writable($cpd_path.'/geoip/GeoIP.dat') : 1) ? 'true' : 'false' ?>
+			dir=<?php echo substr(decoct(fileperms($cpd_path.'/geoip/')), -3) ?>
+			file=<?php echo (is_file($cpd_path.'/geoip/GeoIP.dat')) ? substr(decoct(fileperms($cpd_path.'/geoip/GeoIP.dat')), -3) : '-'; ?>
 			fopen=<?php echo (function_exists('fopen')) ? 'true' : 'false' ?>
 			gzopen=<?php echo (function_exists('gzopen')) ? 'true' : 'false' ?>
 			allow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
@@ -304,22 +313,24 @@ switch($mode) {
 		</thead>
 		<?php
 		$sum = 0;
-		while ( $row = mysql_fetch_assoc($bots) )
-		{
-			$ip = $row['ip'];
-			echo '<tr><td>';
-			if ( $cpd_geoip )
+		if ( !mysql_errno() ) : 
+			while ( $row = mysql_fetch_assoc($bots) )
 			{
-				$c = CpdGeoIp::getCountry($ip);
-				echo $c[1].' ';
+				$ip = $row['ip'];
+				echo '<tr><td>';
+				if ( $cpd_geoip )
+				{
+					$c = CpdGeoIp::getCountry($ip);
+					echo $c[1].' ';
+				}
+				echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$ip.'">'.$ip.'</a></td>'
+					.'<td>'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
+					.'<td>'.$row['client'].'</td>'
+					.'<td>'.$row['posts'].'</td>'
+					.'</tr>';
+				$sum += $row['posts'];
 			}
-			echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$ip.'">'.$ip.'</a></td>'
-				.'<td>'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
-				.'<td>'.$row['client'].'</td>'
-				.'<td>'.$row['posts'].'</td>'
-				.'</tr>';
-			$sum += $row['posts'];
-		}
+		endif;
 		?>	
 		</table>
 		<?php if ( $sum ) { ?>
@@ -396,8 +407,13 @@ switch($mode) {
 	<h3><?php _e('Support', 'cpd') ?></h3>
 	<div class="inside">
 		<p>
+			<?php
+			$t = date('Y-m-d H:i');
+			printf(__('Time for Count per Day: <code>%s</code>.', 'cpd'), $t);
+			?>
+			<br />
 			<?php _e('Bug? Problem? Question? Hint? Praise?', 'cpd') ?>
-			<br/>
+			<br />
 			<?php printf(__('Write a comment on the <a href="%s">plugin page</a>.', 'cpd'), 'http://www.tomsdimension.de/wp-plugins/count-per-day') ?>
 		</p>
 	</div>

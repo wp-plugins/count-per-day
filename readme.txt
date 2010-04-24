@@ -3,8 +3,8 @@ Contributors: Tom Braider
 Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
-Tested up to: 2.9
-Stable tag: 2.8
+Tested up to: 2.9.2
+Stable tag: 2.10
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -18,14 +18,14 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 It counts 1 visit per IP per day. So any reload of the page don't increment the counter.
 
-Languages: english, german, italian, portuguese, belorussian, uzbek
+Languages: english, german, italian, portuguese, belorussian, uzbek, swedish, dansk
 
 == Installation ==
 
 1. unzip plugin directory into the '/wp-content/plugins/' directory
 1. activate the plugin through the 'Plugins' menu in WordPress
 
-First activation will create the 2 tables wp _ cpd _ counter and wp _ cpd _ counter _ useronline.
+First activation will create the 3 tables wp_cpd_counter, wp_cpd_counter_useronline and wp_cpd_notes.
 
 **Configuration**
 
@@ -39,7 +39,7 @@ For more informations see "Other Notes".
 == Frequently Asked Questions ==
 
 = Need Help? Find Bug? =
-read and write comments on <a href="http://www.tomsdimension.de/wp-plugins/count-per-day">plugin page</a>
+read and write comments on http://www.tomsdimension.de/wp-plugins/count-per-day
 
 == Screenshots ==
 
@@ -53,14 +53,14 @@ read and write comments on <a href="http://www.tomsdimension.de/wp-plugins/count
 
 You can place these functions in your template.<br/>
 Place functions within post-loop (e.g. in single.php)<br/>
-Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day->show(); ?&gt;' to check if plugin is activated. Without spaces " " near _ .
+Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); ?&gt;' to check if plugin is activated.
 
 'show( $before, $after, $show, $count )'
 
-* $before = text before number e.g. '&lt;p&gt;' (standard "")
-* $after = text after number e.g. 'reads&lt;/p&gt;' (standard " reads")
-* $show = true/false, "echo" complete string or "return" number only (standard true)
-* $count = true/false, false will not count the reads (standard true)
+* $before = text before number e.g. '&lt;p&gt;' (default "")
+* $after = text after number e.g. 'reads&lt;/p&gt;' (default " reads")
+* $show = true/false, "echo" complete string or "return" number only (default true)
+* $count = true/false, false will not count the reads (default true)
 
 'count()'
 
@@ -75,6 +75,18 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 * shows average number of visitors per day of the last _$days_ days
 * default on dashboard (see it with mouse over number) = "Latest Counts - Days" in options
+
+'getReadsAll()'
+ 
+* shows number of total reads
+
+'getReadsToday()'
+
+* shows number of reads today
+
+'getReadsYesterday()'
+ 
+* shows number of reads yesterday
 
 'getUserAll()'
  
@@ -118,25 +130,60 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 **GeoIP**
 
-* With the GeoIP addon you can associate your visitors to an country using the ip adress.
+* With the GeoIP addon you can associate your visitors to an country using the ip address.
 * In the database a new column 'country' will be insert on plugin activation.
-* On options page you can update you current visits. This take a while!
-  The Script checks 100 IP adresses at once an reload itself until less then 100 adresses left.
-  Click the update button to check the rest.
-* If the rest remains greater than 0 the IP adress is not in GeoIP database (accuracy 99.5%).
-* You can update the GeoIP database from time to time to get new IP data.
-  This necessitates write rights to geoip directory (e.g. chmod 777).
-* If the automaticaly update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz">GeoIP.dat.gz</a> and extract it to the "geoip" directory.
+* On options page you can update you current visits. This take a while! The Script checks 100 IP addresses at once an reload itself until less then 100 addresses left. Click the update button to check the rest.
+* If the rest remains greater than 0 the IP address is not in GeoIP database (accuracy 99.5%).
+* You can update the GeoIP database from time to time to get new IP data. This necessitates write rights to geoip directory (e.g. chmod 777).
+* If the automatically update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz">GeoIP.dat.gz</a> and extract it to the "geoip" directory.
 * More information about GeoIP on http://www.maxmind.com/app/geoip_country
 
 
 == Changelog ==
 
+= 2.10 =
++ New language: French thanks to Bjork http://www.habbzone.fr
++ New: Worldmap to visualize visitors per country
++ New: Shortcodes to add lists and charts to posts and pages, check counter.css too
+
+[CPD_READS_THIS]
+[CPD_READS_TOTAL]
+[CPD_READS_TODAY]
+[CPD_READS_YESTERDAY]
+[CPD_READS_CHART]
+[CPD_VISITORS_TOTAL]
+[CPD_VISITORS_ONLINE]
+[CPD_VISITORS_TODAY]
+[CPD_VISITORS_YESTERDAY]
+[CPD_VISITORS_LAST_WEEK]
+[CPD_VISITORS_PER_DAY]
+[CPD_VISITORS_PER_MONTH]
+[CPD_VISITORS_PER_POST]
+[CPD_VISITORS_CHART]
+[CPD_FIRST_COUNT]
+[CPD_MOST_VISITED_POSTS]
+[CPD_CLIENTS]
+[CPD_COUNTRIES]
+
++ Bugfix: mysql_fetch_assoc() error, non existing options
++ Post edit links in lists for editors only (user_level >= 7)
+
+
+= 2.9 =
++ New: little note system to mark special days
++ New: functions to get reads/page views total, today and yesterday
++ Language update: Italian thanks to Gianni Diurno http://gidibao.net/index.php/portfolio
++ Language update: Portuguese (Brazil) thanks to Lucato http://www.ilucato.com.br
++ Language update: Swedish thanks to Magnus Suther http://www.magnussuther.se
++ Language update: Dansk thanks to Jonas Thomsen http://jonasthomsen.com
++ Language update: German
+
 = 2.8 =
 + New: set user level until CpD will count loged users
 + New: link to plugin page on Count per Day dashboard
 + New: click on a bar in the charts reload the page with given date for 'Visitors per day' metabox
-+ New languages: Dansk and Swedish
++ New language: Swedish, thanks to Magnus Suther http://www.magnussuther.se
++ New language: Dansk, thanks to GeorgeWP http://wordpress.blogos.dk
 
 = 2.7 =
 + Bugfix: date/timezone problem
@@ -153,7 +200,7 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 + BACKUP YOUR COUNTER DATABASE BEFORE UPDATE!
 + Change: some big changes on database and functions to speed up mysql queries. This will take a while on activation! 
 + New: "Mass Bot Detector" shows and deletes clients that view more than x pages per day
-+ New: see count and time of queries if CPD_DEBUG == true (on top of counter.php)
++ New: see count and time of queries if CPD_DEBUG is true (on top of counter.php)
 + Bugfix: cleanDB by IP now works
 + Language update: Portuguese (Brazil), thanks to Beto Ribeiro  http://www.sevenarts.com.br
 
@@ -232,7 +279,7 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 
 = 1.1 =
 + Languages: english, german 
-+ HTTP _ USER _ AGENT will be saved, identification of new search bots
++ HTTP_USER_AGENT will be saved, identification of new search bots
 + Stylesheet in file counter.css
 
 = 1.0 =
