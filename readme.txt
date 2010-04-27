@@ -4,7 +4,7 @@ Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
 Tested up to: 2.9.2
-Stable tag: 2.10
+Stable tag: 2.10.1
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -141,8 +141,11 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
+= 2.10.1 =
++ New language: Dutch, thanks to Rene http://wpwebshop.com
+
 = 2.10 =
-+ New language: French thanks to Bjork http://www.habbzone.fr
++ New language: French, thanks to Bjork http://www.habbzone.fr
 + New: Worldmap to visualize visitors per country
 + New: Shortcodes to add lists and charts to posts and pages, check counter.css too
 
@@ -168,14 +171,13 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + Bugfix: mysql_fetch_assoc() error, non existing options
 + Post edit links in lists for editors only (user_level >= 7)
 
-
 = 2.9 =
 + New: little note system to mark special days
 + New: functions to get reads/page views total, today and yesterday
-+ Language update: Italian thanks to Gianni Diurno http://gidibao.net/index.php/portfolio
-+ Language update: Portuguese (Brazil) thanks to Lucato http://www.ilucato.com.br
-+ Language update: Swedish thanks to Magnus Suther http://www.magnussuther.se
-+ Language update: Dansk thanks to Jonas Thomsen http://jonasthomsen.com
++ Language update: Italian, thanks to Gianni Diurno http://gidibao.net/index.php/portfolio
++ Language update: Portuguese (Brazil), thanks to Lucato http://www.ilucato.com.br
++ Language update: Swedish, thanks to Magnus Suther http://www.magnussuther.se
++ Language update: Dansk, thanks to Jonas Thomsen http://jonasthomsen.com
 + Language update: German
 
 = 2.8 =

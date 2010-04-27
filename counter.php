@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
-Version: 2.10
+Version: 2.10.1
 License: free
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -181,7 +181,7 @@ function count()
 			// single page with autocount on
 			// make loop before regular loop is defined
 			if (have_posts()) :
-				while ( have_posts() && $page == 0 ) :
+				while ( have_posts() && empty($page) ) :
 					the_post();
 					$page = get_the_ID();
 				endwhile;
@@ -207,7 +207,7 @@ function count()
 	if ( $this->options['user'] == 1 && $this->options['user_level'] < intval($userdata->user_level) ) $countUser = 0; // loged user, but higher user level
 	
 	// only count if: non bot, Logon is ok
-	if ( !$this->isBot() && $countUser )
+	if ( !$this->isBot() && $countUser && isset($page) )
 	{
 		$userip = $_SERVER['REMOTE_ADDR'];
 		$client = $_SERVER['HTTP_USER_AGENT'];
