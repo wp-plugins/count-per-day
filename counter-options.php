@@ -24,6 +24,7 @@ if(!empty($_POST['do']))
 			$count_per_day->options['startdate'] = $_POST['cpd_startdate'];
 			$count_per_day->options['startcount'] = $_POST['cpd_startcount'];
 			$count_per_day->options['startreads'] = $_POST['cpd_startreads'];
+			$count_per_day->options['anoip'] = empty( $_POST['cpd_anoip'] ) ? 0 : 1 ;
 			
 			if ( isset($_POST['cpd_countries']) )
 				$count_per_day->options['countries'] = $_POST['cpd_countries'];
@@ -142,7 +143,6 @@ switch($mode) {
 	$o = $count_per_day->options;
 	?>
 	<div id="poststuff" class="wrap">
-	
 	<h2><img src="<?php echo $count_per_day->getResource('cpd_menu.gif') ?>" alt="" style="width:24px;height:24px" /> Count per Day</h2>
 
 	<div class="postbox">
@@ -176,6 +176,10 @@ switch($mode) {
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Bots to ignore', 'cpd') ?>:</th>
 			<td><textarea name="cpd_bots" cols="50" rows="10"><?php echo $o['bots']; ?></textarea></td>
+		</tr>
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Anonymous IP', 'cpd') ?>:</th>
+			<td><label for="cpd_anoip"><input type="checkbox" name="cpd_anoip" id="cpd_anoip" <?php if($o['anoip']==1) echo 'checked="checked"'; ?> /> a.b.c.d &gt; a.b.c.x</label></td>
 		</tr>
 		<tr>
 			<th colspan="2"><h3><?php _e('Dashboard') ?></h3></th>
@@ -408,7 +412,7 @@ switch($mode) {
 	<div class="inside">
 		<p>
 			<?php
-			$t = date('Y-m-d H:i');
+			$t = date_i18n('Y-m-d H:i');
 			printf(__('Time for Count per Day: <code>%s</code>.', 'cpd'), $t);
 			?>
 			<br />
