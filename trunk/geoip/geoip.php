@@ -50,11 +50,12 @@ function updateDB()
 		mysql_query("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR( 2 ) NOT NULL", $count_per_day->dbcon);
 	
 	$limit = 100;
-	$res = @mysql_query("SELECT ip FROM ".CPD_C_TABLE." WHERE country like '' GROUP BY ip ORDER BY count(*) desc LIMIT $limit;", $count_per_day->dbcon);
+	$res = @mysql_query("SELECT ip, INET_NTOA(ip) as realip FROM ".CPD_C_TABLE." WHERE country like '' GROUP BY ip ORDER BY count(*) desc LIMIT $limit;", $count_per_day->dbcon);
 	$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
 	while ( $r = mysql_fetch_array($res) )
 	{
-		$c = strtolower(geoip_country_code_by_addr($gi, $r['ip']));
+		//$c = strtolower(geoip_country_code_by_addr($gi, long2ip($r['ip'])));
+		$c = strtolower(geoip_country_code_by_addr($gi, $r['realip']));
 		mysql_query("UPDATE ".CPD_C_TABLE." SET country = '".$c."' WHERE ip = '".$r['ip']."'", $count_per_day->dbcon);
 	}
 	geoip_close($gi);
@@ -97,6 +98,9 @@ function updateGeoIpFile()
 	// delete local file
 	if (is_file($file))
 		unlink($file);
+		
+	// file deleted?
+	$del = (is_file($file)) ? 0 : 1;
 
 	// write new locale file
 	$h = fopen($file, 'wb');
@@ -104,7 +108,7 @@ function updateGeoIpFile()
 	fclose($h);
 	
 	@chmod($file, 0777);
-	if (is_file($file))
+	if (is_file($file) && $del)
 		return __('New GeoIP database installed.', 'cpd');
 	else
 		return __('Sorry, an error occurred. Try again or check the access rights of directory "geoip" is 777.', 'cpd');

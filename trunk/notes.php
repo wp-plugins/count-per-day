@@ -7,14 +7,14 @@ if ( isset($_POST['month']) )
 else if ( isset($_GET['month']) )
 	$month = $_GET['month'];
 else	
-	$month = date('m');
+	$month = date_i18n('m');
 
 if ( isset($_POST['month']) )
 	$year = $_POST['year'];
 else if ( isset($_GET['year']) )
 	$year = $_GET['year'];
 else	
-	$year = date('Y');
+	$year = date_i18n('Y');
 	
 // save changes
 if ( isset($_POST['new']) )
@@ -63,7 +63,7 @@ $notes = $wpdb->get_results('SELECT * FROM '.$table_prefix.'cpd_notes WHERE 1 '.
 		<select name="year">
 			<option value="0">-</option>
 			<?php
-			for ( $y = 2010; $y <= date('Y'); $y++ )
+			for ( $y = 2010; $y <= date_i18n('Y'); $y++ )
 			{
 				echo '<option value="'.$y.'" ';
 				if ( $y == $year )
@@ -81,7 +81,7 @@ $notes = $wpdb->get_results('SELECT * FROM '.$table_prefix.'cpd_notes WHERE 1 '.
 	<th style="width:10%"><?php _e('Action') ?></th>
 </tr>
 <tr>
-	<td><input name="date" value="<?php echo date('Y-m-d') ?>" /></td>
+	<td><input name="date" value="<?php echo date_i18n('Y-m-d') ?>" /></td>
 	<td><input name="note" maxlength="250" /></td>
 	<td><input type="submit" name="new" value="+" title="<?php _e('add', 'cpd') ?>" class="green" /></td>
 </tr>

@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
-Version: 2.10.1
+Version: 2.11
 License: free
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -40,6 +40,7 @@ function CountPerDay()
 	global $table_prefix;
 	define('CPD_C_TABLE', $table_prefix.'cpd_counter');
 	define('CPD_CO_TABLE', $table_prefix.'cpd_counter_useronline');
+	define('CPD_N_TABLE', $table_prefix.'cpd_notes');
 	define('CPD_METABOX', 'cpd_metaboxes');
 	
 	// use local time not UTC
@@ -168,6 +169,25 @@ function show( $before='', $after=' reads', $show = true, $count = true )
 }
 
 /**
+ * anonymize IP address (last bit) if option is set
+ * @param $ip real IP address
+ * @return new IP address
+ */
+function anonymize_ip( $ip )
+{
+	if ($this->options['anoip'] == 1)
+	{
+		$i = explode('.', $ip);
+		$i[3] += round( array_sum($i) / 4 + date_i18n('d') );
+		if ( $i[3] > 255 )
+			$i[3] -= 255;
+		return implode('.', $i);	
+	}
+	else
+		return $ip;
+}
+
+/**
  * counts visits (without show)
  */
 function count()
@@ -209,9 +229,10 @@ function count()
 	// only count if: non bot, Logon is ok
 	if ( !$this->isBot() && $countUser && isset($page) )
 	{
-		$userip = $_SERVER['REMOTE_ADDR'];
+		$userip = $this->anonymize_ip($_SERVER['REMOTE_ADDR']);
 		$client = $_SERVER['HTTP_USER_AGENT'];
-		$date = date('Y-m-d');
+		$referer = $_SERVER['HTTP_REFERER'];
+		$date = date_i18n('Y-m-d');
 		
 		// new visitor on page?
 		$res = $this->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE ip=INET_ATON('$userip') AND date='$date' AND page='$page'", 'count check');
@@ -357,7 +378,7 @@ function createTables()
 	$this->UpdateOptions();
 	
 	// set directory mode
-	chmod(ABSPATH.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__)).'/geoip', 0777);
+	@chmod(ABSPATH.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__)).'/geoip', 0777);
 }
 
 /**
@@ -392,7 +413,8 @@ function dashboardChart( $limit = 0, $frontend = false )
 	global $table_prefix;
 	if ( $limit == 0 )
 		$limit = ( !empty($this->options['chart_days']) )? $this->options['chart_days'] : 30;
-	
+	$start = ( isset($_GET['cpd_chart_start']) ) ? $_GET['cpd_chart_start'] : date_i18n('Y-m-d');
+		
 	$sql = "
 	SELECT	count(*) count,
 			c.date,
@@ -400,6 +422,7 @@ function dashboardChart( $limit = 0, $frontend = false )
 	FROM	".CPD_C_TABLE." AS c
 	LEFT	JOIN ".$table_prefix."cpd_notes AS n
 			ON n.date = c.date
+	WHERE	c.date <= '".$start."'
 	GROUP	BY c.date
 	ORDER	BY c.date DESC
 	LIMIT	$limit";
@@ -422,6 +445,7 @@ function dashboardChartVisitors( $limit = 0, $frontend = false )
 	global $table_prefix;
 	if ( $limit == 0 )
 		$limit = ( !empty($this->options['chart_days']) )? $this->options['chart_days'] : 30;
+	$start = ( isset($_GET['cpd_chart_start']) ) ? $_GET['cpd_chart_start'] : date_i18n('Y-m-d');
 	$sql = "
 	SELECT count(*) count, t.date, n.note
 	FROM (	SELECT	count(*) count, date
@@ -430,6 +454,7 @@ function dashboardChartVisitors( $limit = 0, $frontend = false )
 			) AS t
 	LEFT	JOIN ".$table_prefix."cpd_notes AS n
 			ON n.date = t.date
+	WHERE	t.date <= '".$start."'
 	GROUP BY t.date
 	ORDER BY t.date DESC
 	LIMIT $limit";
@@ -491,8 +516,9 @@ function dashboardChartDataRequest( $sql = '', $limit, $frontend = false )
 		<small style="display:block; float:left;">Max: '.$max.'</small>';
 	if ( !$frontend )
 		$r .= '<small><a href="'.$this->dir.'/notes.php?KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Notes', 'cpd').'" class="thickbox">'.__('Notes', 'cpd').'</a></small>';
-	$r .= '<small>&nbsp;</small></div>
-		<p style="border-bottom:1px black solid; white-space:nowrap;">';
+	$r .= '<small>&nbsp;</small></div>';
+	
+	$r .= '<p style="border-bottom:1px black solid; white-space:nowrap;">';
 	
 	$date_old = $start_time;
 	
@@ -519,7 +545,7 @@ function dashboardChartDataRequest( $sql = '', $limit, $frontend = false )
 	
 			// show normal bar
 			$height = max( round($day['count'] * $height_factor, 0), 1 );
-			$date_str = mysql2date('l', $day['date']).' '.mysql2date(get_option('date_format'), $day['date']);
+			$date_str = mysql2date(get_option('date_format'), $day['date']);
 			if ( !$frontend )
 				$r .= '<a href="?page=cpd_metaboxes&amp;daytoshow='.$day['date'].'">';
 			$r .= '<img src="';
@@ -543,6 +569,14 @@ function dashboardChartDataRequest( $sql = '', $limit, $frontend = false )
 			<small>'.$start_str.'</small>
 			<small class="cpd-r">'.$end_str.'</small>
 		</div>';
+
+	// buttons
+	$date_back = date('Y-m-d', strtotime($start) - 86400);
+	$date_forward = date('Y-m-d', strtotime($end) + 86400 * $limit);
+	$r .= '<p style="text-align:center;">
+		<a href="index.php?page=cpd_metaboxes&amp;cpd_chart_start='.$date_back.'" class="button" />&lt;</a>
+		<a href="index.php?page=cpd_metaboxes&amp;cpd_chart_start='.$date_forward.'" class="button" />&gt;</a>
+		</p>';
 	
 	return $r;
 }
@@ -592,7 +626,7 @@ function getReadsAll( $frontend = false )
  */
 function getUserToday( $frontend = false )
 {
-	$date = date('Y-m-d');
+	$date = date_i18n('Y-m-d');
 	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip", 'getUserToday');
 	$c = mysql_num_rows($res);
 	if ($frontend)
@@ -606,7 +640,7 @@ function getUserToday( $frontend = false )
  */
 function getReadsToday( $frontend = false )
 {
-	$date = date('Y-m-d');
+	$date = date_i18n('Y-m-d');
 	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date = '$date'", 'getReadsToday');
 	$row = mysql_fetch_row($res);
 	if ($frontend)
@@ -620,7 +654,7 @@ function getReadsToday( $frontend = false )
  */
 function getUserYesterday( $frontend = false )
 {
-	$date = date('Y-m-d', time()-86400);
+	$date = date_i18n('Y-m-d', time()-86400);
 	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip", 'getUserYesterday');
 	$c = mysql_num_rows($res);
 	if ($frontend)
@@ -634,7 +668,7 @@ function getUserYesterday( $frontend = false )
  */
 function getReadsYesterday( $frontend = false )
 {
-	$date = date('Y-m-d', time()-86400);
+	$date = date_i18n('Y-m-d', time()-86400);
 	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date = '$date'", 'getReadsYesterday');
 	$row = mysql_fetch_row($res);
 	if ($frontend)
@@ -648,7 +682,7 @@ function getReadsYesterday( $frontend = false )
  */
 function getUserLastWeek( $frontend = false )
 {
-	$date = date('Y-m-d', time()-86400*7);
+	$date = date_i18n('Y-m-d', time()-86400*7);
 	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$date' GROUP BY ip;", 'getUserLastWeek');
 	$c = mysql_num_rows($res);
 	if ($frontend)
@@ -740,10 +774,10 @@ function getFirstCount( $frontend = false )
 function getUserPerDay( $days = 0, $frontend = false )
 {
 	global $wpdb;
-	$datemax = date('Y-m-d');
+	$datemax = date_i18n('Y-m-d');
 	if ( $days > 0 )
 		// last $days days without today
-		$datemin = date('Y-m-d', time() - ($days + 1) * 86400);
+		$datemin = date_i18n('Y-m-d', time() - ($days + 1) * 86400);
 	else
 	{ 
 		$v = $wpdb->get_results('SELECT MIN(date) min, MAX(date) max FROM '.CPD_C_TABLE);
@@ -784,7 +818,7 @@ function getMostVisitedPosts( $days = 0, $limit = 0, $frontend = false )
 		$days = $this->options['dashboard_last_days'];
 	if ( $limit == 0 )
 		$limit = $this->options['dashboard_last_posts'];
-	$date = date('Y-m-d', time() - 86400 * $days);
+	$date = date_i18n('Y-m-d', time() - 86400 * $days);
 
 	$sql = "
 	SELECT	count(c.id) count,
@@ -825,7 +859,7 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0 )
 	else if (!empty($_GET['daytoshow']))
 		$date = $_GET['daytoshow'];
 	else if ( $date == 0 )
-		$date = date('Y-m-d');
+		$date = date_i18n('Y-m-d');
 	if ( $limit == 0 )
 		$limit = $this->options['dashboard_last_posts'];
 
@@ -1014,7 +1048,7 @@ function cleanDB()
 		$this->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%$bot%'", 'cleanDB_client');
 	
 	// delete if a previously countered page was deleted
-	$this->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE page NOT IN ( SELECT id FROM ".$wpdb->posts.")", 'cleanDB_delPosts');
+	$this->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE page NOT IN ( SELECT id FROM ".$wpdb->posts.") AND page > 0", 'cleanDB_delPosts');
 	
 	$rows_after = $wpdb->get_var('SELECT COUNT(*) FROM '.CPD_C_TABLE);
 	return $rows_before - $rows_after;
@@ -1096,7 +1130,8 @@ function updateOptions()
 		'countries' => 20,
 		'startdate' => '',
 		'startcount' => '',
-		'startreads' => '');
+		'startreads' => '',
+		'anoip' => 0);
 		
 		// add array
 		add_option('count_per_day', $o);
@@ -1129,9 +1164,9 @@ function updateOptions()
 	if (!isset($onew['startdate']))				$onew['startdate'] = '';
 	if (!isset($onew['startcount']))			$onew['startcount'] = '';
 	if (!isset($onew['startreads']))			$onew['startreads'] = '';
+	if (!isset($onew['anoip']))					$onew['anoip'] = 0;
 
 	update_option('count_per_day', $onew);
-
 }
 
 /**
@@ -1166,6 +1201,7 @@ function uninstall()
 	global $wpdb;
 	$wpdb->query('DROP TABLE IF EXISTS '.CPD_C_TABLE);
 	$wpdb->query('DROP TABLE IF EXISTS '.CPD_CO_TABLE);
+	$wpdb->query('DROP TABLE IF EXISTS '.CPD_N_TABLE);
 	delete_option('count_per_day');
 }
 
@@ -1218,7 +1254,7 @@ function widgetCpdInit()
 			echo '</ul>';
 			echo $after_widget;
 			
-			// to find this text for translation
+			// for find this text for translation
 			__('This post', 'cpd');
 		}
 	}
@@ -1299,7 +1335,7 @@ function setAdminMenu()
  */
 function cpdInfo()
 {
-	$t = date('Y-m-d H:i');
+	$t = date_i18n('Y-m-d H:i');
 	echo '<p>';
 	printf(__('Time for Count per Day: <code>%s</code>.', 'cpd'), $t);
 	echo '<br />'.__('Bug? Problem? Question? Hint? Praise?', 'cpd').'<br/>';
@@ -1389,8 +1425,7 @@ function onShowPage()
  */
 function getCountries( $limit = 0, $frontend )
 {
-	global $cpd_path;
-	global $cpd_geoip;
+	global $cpd_path, $cpd_geoip;
 	$c = '';
 
 	// with GeoIP addon only
@@ -1495,7 +1530,7 @@ function showQueries()
 			echo '<li>'.$q.'</li>';
 	echo '</ol><p>&nbsp;<br/>';
 	
-	$t = date('Y-m-d H:i');
+	$t = date_i18n('Y-m-d H:i');
 	printf(__('Time for Count per Day: <code>%s</code>.', 'cpd'), $t);
 	echo '</p></div>';
 }

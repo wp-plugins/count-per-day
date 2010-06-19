@@ -3,8 +3,8 @@ Contributors: Tom Braider
 Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
-Tested up to: 2.9.2
-Stable tag: 2.10.1
+Tested up to: 3.0
+Stable tag: 2.11
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -13,6 +13,7 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 * count reads and visitors
 * shows reads per page
 * shows visitors today, yesterday, last week, last months and other statistics on dashboard
+* shows country of your visitors
 * you can show these statistics on frontend (e.g. on sidebar) too
 * if you use Wordpress < 2.7 please use Count-per-Day v1.4
 
@@ -140,6 +141,14 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 
 == Changelog ==
+
+= 2.11 =
++ Bugfix: GeoIP, update old data used wrong IP format
++ Bugfix: CleanDB deletes to many entries (index, categories, tags)
++ Bugfix: date/timezone problem
++ New: anonymous IP addresses (last bit, optional)
++ New: simple scroll function in charts
++ New language: Polish, thanks to LeXuS http://www.intrakardial.de
 
 = 2.10.1 =
 + New language: Dutch, thanks to Rene http://wpwebshop.com
