@@ -1,3 +1,5 @@
+<?php $what = (empty($_GET['map'])) ? 'reads' : $_GET['map']; ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  dir="ltr" lang="de-DE">
 <head>
@@ -14,8 +16,8 @@
 		// <![CDATA[
 		var so = new SWFObject("ammap.swf", "ammap", "630", "412", "8", "#4499FF");
 		so.addVariable("path", "");
-		so.addVariable("settings_file", escape("settings.xml"));
-		so.addVariable("data_file", escape("data.xml.php"));
+		so.addVariable("settings_file", escape("settings.xml.php?map=<?php echo $what ?>"));
+		so.addVariable("data_file", escape("data.xml.php?map=<?php echo $what ?>"));
 		so.write("flashcontent");
 		// ]]>
 	</script>

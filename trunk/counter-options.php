@@ -3,6 +3,7 @@
  * Filename: counter-options.php
  * Count Per Day - Options and Administration
  */
+
 // check form 
 if(!empty($_POST['do']))
 {
@@ -25,6 +26,11 @@ if(!empty($_POST['do']))
 			$count_per_day->options['startcount'] = $_POST['cpd_startcount'];
 			$count_per_day->options['startreads'] = $_POST['cpd_startreads'];
 			$count_per_day->options['anoip'] = empty( $_POST['cpd_anoip'] ) ? 0 : 1 ;
+			$count_per_day->options['clients'] = $_POST['cpd_clients'];
+			$count_per_day->options['ajax'] = empty( $_POST['cpd_ajax'] ) ? 0 : 1 ;
+			
+			if (empty($count_per_day->options['clients']))
+				$count_per_day->options['clients'] = 'Firefox, MSIE, Chrome, AppleWebKit, Opera';
 			
 			if ( isset($_POST['cpd_countries']) )
 				$count_per_day->options['countries'] = $_POST['cpd_countries'];
@@ -122,6 +128,10 @@ if(!empty($_POST['do']))
 	}
 }
 
+// delete one massbots per click on X
+if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
+	$count_per_day->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE ip = '".$_GET['dmbip']."' AND date = '".$_GET['dmbdate']."'", 'deleteMassbot');
+
 if ( empty($mode) )
 	$mode = '';
 	
@@ -141,6 +151,13 @@ switch($mode) {
 	// show options page
 
 	$o = $count_per_day->options;
+	
+	// save massbot limit
+	if(isset($_POST['limit']))
+	{
+		$o['massbotlimit'] = $_POST['limit'];
+		update_option('count_per_day', $o);
+	}
 	?>
 	<div id="poststuff" class="wrap">
 	<h2><img src="<?php echo $count_per_day->getResource('cpd_menu.gif') ?>" alt="" style="width:24px;height:24px" /> Count per Day</h2>
@@ -182,6 +199,15 @@ switch($mode) {
 			<td><label for="cpd_anoip"><input type="checkbox" name="cpd_anoip" id="cpd_anoip" <?php if($o['anoip']==1) echo 'checked="checked"'; ?> /> a.b.c.d &gt; a.b.c.x</label></td>
 		</tr>
 		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Cache', 'cpd') ?> (beta):</th>
+			<td><label for="cpd_ajax"><input type="checkbox" name="cpd_ajax" id="cpd_ajax" <?php if($o['ajax']==1) echo 'checked="checked"'; ?> />  <?php _e('I use a cache plugin. Count these visits with ajax.', 'cpd') ?></label></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="submit">
+				<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
+			</td>
+		</tr>
+		<tr>
 			<th colspan="2"><h3><?php _e('Dashboard') ?></h3></th>
 		</tr>
 		<tr>
@@ -210,6 +236,15 @@ switch($mode) {
 			<td><input class="code" type="text" name="cpd_countries" size="3" value="<?php echo $o['countries']; ?>" /> <?php _e('How many countries do you want to see on dashboard page?', 'cpd') ?></td>
 		</tr>
 		<?php } ?>
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Browsers', 'cpd') ?>:</th>
+			<td><input class="code" type="text" name="cpd_clients" size="50" value="<?php echo $o['clients']; ?>" /> <?php _e('Substring of the user agent, separated by comma', 'cpd') ?></td>
+		</tr>		
+		<tr>
+			<td colspan="2" class="submit">
+				<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
+			</td>
+		</tr>
 		<tr>
 			<th colspan="2"><h3><?php _e('Edit Posts') ?> / <?php _e('Edit Pages') ?></h3></th>
 		</tr>
@@ -292,7 +327,8 @@ switch($mode) {
 	<!-- Mass Bots -->
 	<div class="postbox">
 	<?php
-	$limit = (isset($_POST['limit'])) ? $_POST['limit'] : 25;
+	$limit = (isset($o['massbotlimit'])) ? $o['massbotlimit'] : 25;
+	$limit = (isset($_POST['limit'])) ? $_POST['limit'] : $limit;
 	$limit_input = '<input type="text" size="3" name="limit" value="'.$limit.'" />';
 	$bots = $count_per_day->getMassBots($limit);
 	?>
@@ -322,6 +358,9 @@ switch($mode) {
 			{
 				$ip = $row['ip'];
 				echo '<tr><td>';
+				echo '<a href="?page=count-per-day/counter-options.php&amp;dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'"
+					title="'.sprintf(__('Delete these %s counts', 'cpd'), $row['posts']).'"
+					style="color:red; font-weight: bold;">X</a> &nbsp;';
 				if ( $cpd_geoip )
 				{
 					$c = CpdGeoIp::getCountry($ip);
@@ -330,7 +369,8 @@ switch($mode) {
 				echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$ip.'">'.$ip.'</a></td>'
 					.'<td>'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
 					.'<td>'.$row['client'].'</td>'
-					.'<td>'.$row['posts'].'</td>'
+					.'<td><a href="'.$count_per_day->dir.'/massbots.php?dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Massbots', 'cpd').'" class="thickbox">'
+						.$row['posts'].'</a></td>'
 					.'</tr>';
 				$sum += $row['posts'];
 			}

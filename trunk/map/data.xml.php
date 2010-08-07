@@ -3,7 +3,19 @@ require('../../../../wp-load.php');
 include_once($cpd_path.'/geoip/geoip.php');
 $geoip = new GeoIP();
 
-$res = $count_per_day->getQuery("SELECT country, COUNT(*) c FROM ".CPD_C_TABLE." WHERE country > '' GROUP BY country", 'getCountriesMap');
+$what = (empty($_GET['map'])) ? 'reads' : $_GET['map'];
+
+if ( $what == 'visitors' )
+	$res = $count_per_day->getQuery("
+		SELECT country, COUNT(*) c
+		FROM (	SELECT country, ip, COUNT(*) c
+				FROM ".CPD_C_TABLE."
+				WHERE ip > 0
+				GROUP BY country, ip ) as t
+		GROUP BY country", 'getCountriesMap');
+else
+	$res = $count_per_day->getQuery("SELECT country, COUNT(*) c FROM ".CPD_C_TABLE." WHERE country > '' GROUP BY country", 'getCountriesMap');
+
 $data = array();
 while ( $r = mysql_fetch_array($res) )
 {
