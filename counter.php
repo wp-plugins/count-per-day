@@ -10,7 +10,7 @@ Author URI: http://www.tomsdimension.de
 */
 
 // set "true" to see some debug data at the bottom of the page
-define('CPD_DEBUG', false);
+define('CPD_DEBUG', 0);
 
 /**
  * include GeoIP addon (just if no other plugin include it)
@@ -30,6 +30,7 @@ var $options;	// options array
 var $dir;		// this plugin dir
 var $dbcon;		// database connection
 var $queries = array();	// queries times for debug
+var $page;		// Post/Page-ID
 
 /**
  * Constructor
@@ -86,8 +87,13 @@ function CountPerDay()
 		load_plugin_textdomain('cpd', false, dirname(plugin_basename(__FILE__)).'/locale');
 		 
 	// adds stylesheet
-	add_action( 'admin_head', array(&$this, 'add_css') );
-	add_action( 'wp_head', array(&$this, 'add_css') );
+	add_action( 'admin_head', array(&$this, 'addCss') );
+	add_action( 'wp_head', array(&$this, 'addCss') );
+	
+	// javascript to count cached posts
+	if ( $this->options['ajax'] )
+		add_action('wp_footer', array(&$this,'addAjaxScript'));
+//	add_action('wp_enqueue_scripts', array(&$this,'enqueueScript'));
 	
 	// widget setup
 	add_action('plugins_loaded', array(&$this, 'widgetCpdInit'));
@@ -110,6 +116,8 @@ function CountPerDay()
 	$this->addShortcodes();
 	
 	$this->connectDB();
+	
+	add_thickbox();
 }
 
 /**
@@ -153,13 +161,14 @@ function getQuery( $sql, $func = '' )
  * @param boolean $count count visits (true, standard) or only show vistis
  * @return string counter string
  */
-function show( $before='', $after=' reads', $show = true, $count = true )
+function show( $before='', $after=' reads', $show = true, $count = true, $page = 'x' )
 {
 	global $wpdb;
 	// count once only
 	if ( $count && !$this->options['autocount'] )
 		$this->count();
-	$page = get_the_ID();
+	if ( $page == 'x' )
+		$page = get_the_ID();
 	$res = $this->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE page='$page'", 'show');
 	$row = mysql_fetch_row($res);
 	if ( $show )
@@ -187,12 +196,11 @@ function anonymize_ip( $ip )
 		return $ip;
 }
 
-/**
- * counts visits (without show)
- */
-function count()
+
+
+function getPostID()
 {
-	global $wpdb, $wp_query, $cpd_path, $cpd_geoip, $userdata;
+	global $wp_query;
 	
 	// find PostID
 	if ( !is_404() ) :
@@ -219,12 +227,42 @@ function count()
 		else
 			// index, date, search and other "list" pages will count only once
 			$page = 0;
+			
+		$this->page = $page;
+		return $page;
 	endif;
+	
+	return false;
+}
+
+
+/**
+ * counts visits (without show)
+ */
+function count( $x, $page = 'x' )
+{
+	global $wpdb, $wp_query, $cpd_path, $cpd_geoip, $userdata;
+	
+	if ( $page == 'x' )
+		// normal counter
+		$page = $this->getPostID();
+	else
+		// ajax counter on cached pages
+		$page = intval($page);
+	
+	// get userlevel
+	$role = $userdata->td_capabilities;
+	if ($role['administrator'])		$userlevel = 10;
+	else if ($role['editor'])		$userlevel = 7;
+	else if ($role['author'])		$userlevel = 2;
+	else if ($role['contributor'])	$userlevel = 1;
+	else if ($role['subscriber'])	$userlevel = 0;
+	else							$userlevel = -1;
 	
 	// count visitor?
 	$countUser = 1;
 	if ( $this->options['user'] == 0 && is_user_logged_in() ) $countUser = 0; // don't count loged user
-	if ( $this->options['user'] == 1 && $this->options['user_level'] < intval($userdata->user_level) ) $countUser = 0; // loged user, but higher user level
+	if ( $this->options['user'] == 1 && isset($userdata) && $this->options['user_level'] < $userlevel ) $countUser = 0; // loged user, but higher user level
 	
 	// only count if: non bot, Logon is ok
 	if ( !$this->isBot() && $countUser && isset($page) )
@@ -274,12 +312,15 @@ function deleteOnlineCounter()
  * bot or human?
  * @param string $client USER_AGENT
  * @param array $bots strings to check
+ * @param string $ip IP adress
  */
-function isBot( $client = '', $bots = '' )
+function isBot( $client = '', $bots = '', $ip = '' )
 {
 	if ( empty($client) )
 		$client = $_SERVER['HTTP_USER_AGENT'];
-
+	if ( empty($ip) )
+		$ip = $_SERVER['REMOTE_ADDR'];
+		
 	// empty/short client -> not normal browser -> bot
 	if ( empty($client) || strlen($client) < 20 )
 		return true;
@@ -291,7 +332,7 @@ function isBot( $client = '', $bots = '' )
 	foreach ( $bots as $bot )
 	{
 		$b = trim($bot);
-		if ( !empty($b) && ( $_SERVER['REMOTE_ADDR'] == $b || strpos( strtolower($client), strtolower($b) ) !== false ) )
+		if ( !empty($b) && ( $ip == $b || strpos( strtolower($client), strtolower($b) ) !== false ) )
 			$isBot = true;
 	}
 	return $isBot;
@@ -574,8 +615,8 @@ function dashboardChartDataRequest( $sql = '', $limit, $frontend = false )
 	$date_back = date('Y-m-d', strtotime($start) - 86400);
 	$date_forward = date('Y-m-d', strtotime($end) + 86400 * $limit);
 	$r .= '<p style="text-align:center;">
-		<a href="index.php?page=cpd_metaboxes&amp;cpd_chart_start='.$date_back.'" class="button" />&lt;</a>
-		<a href="index.php?page=cpd_metaboxes&amp;cpd_chart_start='.$date_forward.'" class="button" />&gt;</a>
+		<a href="index.php?page=cpd_metaboxes&amp;cpd_chart_start='.$date_back.'" class="button">&lt;</a>
+		<a href="index.php?page=cpd_metaboxes&amp;cpd_chart_start='.$date_forward.'" class="button">&gt;</a>
 		</p>';
 	
 	return $r;
@@ -905,7 +946,9 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0 )
 function getClients( $frontend = false )
 {
 	global $wpdb;
-	$clients = array('Firefox', 'MSIE', 'Chrome', 'AppleWebKit', 'Opera');
+//	$clients = array('Firefox', 'MSIE', 'Chrome', 'AppleWebKit', 'Opera');
+	$c_string = $this->options['clients'];
+	$clients = explode(',', $c_string);
 	
 	$res = $this->getQuery("SELECT COUNT(*) count FROM ".CPD_C_TABLE, 'getClients_all');
 	$row = mysql_fetch_row($res);
@@ -914,7 +957,7 @@ function getClients( $frontend = false )
 	$r = '<ul id="cpd_clients" class="cpd_front_list">';
 	foreach ($clients as $c)
 	{
-		$res = $this->getQuery("SELECT COUNT(*) count FROM ".CPD_C_TABLE." WHERE client like '%$c%'", 'getClients_'.$c);
+		$res = $this->getQuery("SELECT COUNT(*) count FROM ".CPD_C_TABLE." WHERE client like '%".trim($c)."%'", 'getClients_'.$c);
 		$row = mysql_fetch_row($res);
 		$percent = number_format(100 * $row[0] / $all, 0);
 		$rest -= $percent;
@@ -941,7 +984,7 @@ function getMassBots( $limit = 0 )
 		$limit = 50;
 
 	$sql = "
-	SELECT	t.id, INET_NTOA(t.ip) ip, t.date, t.posts,
+	SELECT	t.id, t.ip AS longip, INET_NTOA(t.ip) AS ip, t.date, t.posts,
 			c.client
 	FROM (	SELECT	id, ip, date, count(*) posts
 			FROM	".CPD_C_TABLE."
@@ -971,9 +1014,9 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false )
 		if ( isset($userdata->user_level) && intval($userdata->user_level) >= 7 && !$frontend)
 		{
 			if ( $row['post_id'] > 0 )
-				$r .= '<a href="post.php?action=edit&amp;post='.$row['post_id'].'"><img src="'.$this->getResource('cpd_pen.png').'" alt="[e]" title="'.__('Edit Post').'" /></a> ';
+				$r .= '<a href="post.php?action=edit&amp;post='.$row['post_id'].'"><img src="'.$this->getResource('cpd_pen.png').'" alt="[e]" title="'.__('Edit Post').'" style="width:9px;height:12px;" /></a> ';
 			else
-				$r .= '<img src="'.$this->getResource('cpd_trans.png').'" alt="" style="width:9px" /> ';
+				$r .= '<img src="'.$this->getResource('cpd_trans.png').'" alt="" style="width:9px;height:12px;" /> ';
 		}
 		
 		if ( $frontend ) // no links and only posts in frontend
@@ -1040,9 +1083,15 @@ function cleanDB()
 	$rows_before = $wpdb->get_var('SELECT COUNT(*) FROM '.CPD_C_TABLE);
 
 	// delete by ip
-	$ips = "'".implode( "','", $bots )."'";
-	$this->getQuery('DELETE FROM '.CPD_C_TABLE.' WHERE ip IN ('.$ips.')', 'clenaDB_ip');
-
+//	$ips = "'".implode( "','", $bots )."'";
+//	$this->getQuery('DELETE FROM '.CPD_C_TABLE.' WHERE ip IN ('.$ips.')', 'clenaDB_ip');
+	$ips[] = array();
+	foreach( $bots as $ip )
+		if ( ip2long($ip) !== false )
+//			$ips[] = $b; 
+//	foreach( $ips as $ip )
+			$this->getQuery('DELETE FROM '.CPD_C_TABLE.' WHERE INET_NTOA(ip) LIKE \''.$ip.'%\'', 'clenaDB_ip');
+	
 	// delete by client
 	foreach ($bots as $bot)
 		$this->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%$bot%'", 'cleanDB_client');
@@ -1062,7 +1111,7 @@ function menu($content)
 {
 	if (function_exists('add_options_page'))
 	{
-		$menutitle = '<img src="'.$this->getResource('cpd_menu.gif').'" alt="" /> Count per Day';
+		$menutitle = '<img src="'.$this->getResource('cpd_menu.gif').'" alt="" style="width:9px;height:12px;" /> Count per Day';
 		add_options_page('CountPerDay', $menutitle, 'manage_options', dirname(plugin_basename(__FILE__)).'/counter-options.php') ;
 	}
 }
@@ -1131,7 +1180,10 @@ function updateOptions()
 		'startdate' => '',
 		'startcount' => '',
 		'startreads' => '',
-		'anoip' => 0);
+		'anoip' => 0,
+		'ajax' => 0,
+		'massbotlimit' => 25,
+		'clients' => 'Firefox, MSIE, Chrome, AppleWebKit, Opera');
 		
 		// add array
 		add_option('count_per_day', $o);
@@ -1165,6 +1217,9 @@ function updateOptions()
 	if (!isset($onew['startcount']))			$onew['startcount'] = '';
 	if (!isset($onew['startreads']))			$onew['startreads'] = '';
 	if (!isset($onew['anoip']))					$onew['anoip'] = 0;
+	if (!isset($onew['massbotlimit']))			$onew['massbotlimit'] = 25;
+	if (!isset($onew['clients']))				$onew['clients'] = 'Firefox, MSIE, Chrome, AppleWebKit, Opera';
+	if (!isset($onew['ajax']))					$onew['ajax'] = 0;
 
 	update_option('count_per_day', $onew);
 }
@@ -1175,7 +1230,7 @@ function updateOptions()
 function cpdColumn($defaults)
 {
 	if ( $this->options['show_in_lists']  )
-		$defaults['cpd_reads'] = '<img src="'.$this->GetResource('cpd_menu.gif').'" alt="'.__('Reads', 'cpd').'" title="'.__('Reads', 'cpd').'" />';
+		$defaults['cpd_reads'] = '<img src="'.$this->GetResource('cpd_menu.gif').'" alt="'.__('Reads', 'cpd').'" title="'.__('Reads', 'cpd').'" style="width:9px;height:12px;" />';
 	return $defaults;
 }
 
@@ -1210,7 +1265,7 @@ function uninstall()
  */
 function getResource( $r )
 {
-	return trailingslashit( $this->dir ).$r;
+	return trailingslashit( $this->dir ).'img/'.$r;
 }
 
 /**
@@ -1238,7 +1293,7 @@ function widgetCpdInit()
 				if ( ($s[0] == 'show' && is_singular()) || $s[0] != 'show' )
 				{
 					$name = (!empty($count_per_day->options['name_'.$s[0]])) ? $count_per_day->options['name_'.$s[0]] : __($s[1], 'cpd');
-					echo '<li style="text-align:left;"><span style="float:right">';
+					echo '<li style="text-align:left;"><span id="cpd_number_'.$s[0].'" style="float:right">';
 					
 					// parameters only for special functions
 					if ( $s[0] == 'getUserPerDay' )
@@ -1258,7 +1313,7 @@ function widgetCpdInit()
 			__('This post', 'cpd');
 		}
 	}
-	register_sidebar_widget('Count per Day', 'widgetCpd');
+	wp_register_sidebar_widget('widgetCpd', 'Count per Day', 'widgetCpd');
 	
 	function widgetCpdControl()
 	{
@@ -1306,7 +1361,8 @@ function widgetCpdInit()
 			echo '&nbsp; &nbsp; &nbsp;'.__('Label', 'cpd').': <input name="name_'.$k.'" value="'.$name.'" type="text" title="'.__('empty = name above', 'cpd').'" /></p>';
 		}
 	}
-	register_widget_control('Count per Day', 'widgetCpdControl');
+//	register_widget_control('Count per Day', 'widgetCpdControl');
+	wp_register_widget_control('widgetCpd', 'Count per Day', 'widgetCpdControl');
 }
 
 /**
@@ -1324,7 +1380,7 @@ function screenLayoutColumns($columns, $screen)
  */
 function setAdminMenu()
 {
-	$menutitle = '<img src="'.$this->getResource('cpd_menu.gif').'" alt="" /> Count per Day';
+	$menutitle = '<img src="'.$this->getResource('cpd_menu.gif').'" alt="" style="width:12px;height:12px;" /> Count per Day';
 	$this->pagehook = add_submenu_page('index.php', 'CountPerDay', $menutitle, 1, CPD_METABOX, array(&$this, 'onShowPage'));
 	add_action('load-'.$this->pagehook, array(&$this, 'onLoadPage'));
 }
@@ -1352,6 +1408,7 @@ function getVisitedPostsOnDayMeta() { $this->getVisitedPostsOnDay( 0, 100); }
 function dashboardChartMeta() { $this->dashboardChart( 0, false); }
 function dashboardChartVisitorsMeta() { $this->dashboardChartVisitors( 0, false); }
 function getCountriesMeta()	{ $this->getCountries(0, false); }
+function getCountriesVisitorsMeta()	{ $this->getCountries(0, false, true); }
 
 /**
  * will be executed if wordpress core detects this page has to be rendered
@@ -1363,7 +1420,6 @@ function onLoadPage()
 	wp_enqueue_script('common');
 	wp_enqueue_script('wp-lists');
 	wp_enqueue_script('postbox');
-	add_thickbox();
 
 	// add the metaboxes
 	add_meta_box('reads_at_all', __('Total visitors', 'cpd'), array(&$this, 'dashboardReadsAtAll'), $this->pagehook, 'cpdrow1', 'core');
@@ -1378,7 +1434,10 @@ function onLoadPage()
 	
 	// countries with GeoIP addon only
 	if ( $cpd_geoip )
-		add_meta_box('countries', __('Reads per Country', 'cpd'), array(&$this, 'getCountriesMeta'), $this->pagehook, 'cpdrow2', 'core');
+	{
+		add_meta_box('countries', __('Reads per Country', 'cpd'), array(&$this, 'getCountriesMeta'), $this->pagehook, 'cpdrow2', 'default');
+		add_meta_box('countries2', __('Visitors per Country', 'cpd'), array(&$this, 'getCountriesVisitorsMeta'), $this->pagehook, 'cpdrow2', 'default');
+	}
 }
 
 /**
@@ -1422,8 +1481,9 @@ function onShowPage()
  * gets country flags and page views
  * @param integer $limit count of countries
  * @param boolean $frontend limit function on frontend
+ * @param boolean $visitors show visitors insteed of reads
  */
-function getCountries( $limit = 0, $frontend )
+function getCountries( $limit = 0, $frontend, $visitors = false )
 {
 	global $cpd_path, $cpd_geoip;
 	$c = '';
@@ -1436,24 +1496,46 @@ function getCountries( $limit = 0, $frontend )
 		if ( $limit == 0 )
 			$limit = max( 0, $this->options['countries'] );
 
-		$res = $this->getQuery("SELECT country, COUNT(*) c FROM ".CPD_C_TABLE." WHERE ip > 0 GROUP BY country ORDER BY COUNT(*) DESC LIMIT $limit", 'getCountries');
+		if ( $visitors )
+			// visitors
+			$res = $this->getQuery("
+				SELECT country, COUNT(*) c
+				FROM (	SELECT country, ip, COUNT(*) c
+						FROM ".CPD_C_TABLE."
+						WHERE ip > 0
+						GROUP BY country, ip ) as t
+				GROUP BY country
+				ORDER BY COUNT(*) desc
+				LIMIT $limit", 'getCountries');
+		else
+			// reads
+			$res = $this->getQuery("SELECT country, COUNT(*) c FROM ".CPD_C_TABLE." WHERE ip > 0 GROUP BY country ORDER BY COUNT(*) DESC LIMIT $limit", 'getCountries');
 		
+		// map link
 		if (!$frontend && file_exists($cpd_path.'/map/map.php') )
-			$c .= '<div style="margin: 5px 0 10px 0;"><a href="'.$this->dir.'/map/map.php?KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Map', 'cpd').'" class="thickbox button">'.__('Map', 'cpd').'</a></div>';
+		{
+			$c .= '<div style="margin: 5px 0 10px 0;"><a href="'.$this->dir.'/map/map.php?map=';
+			if ( $visitors )
+				$c .= 'visitors';
+			else
+				$c .= 'reads';
+			$c .= '&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Map', 'cpd').'" class="thickbox button">'.__('Map', 'cpd').'</a></div>';
+		}
 		
 		$c .= '<ul class="cpd_front_list">';
 		while ( $r = mysql_fetch_array($res) )
 		{
 			$id = $geoip->GEOIP_COUNTRY_CODE_TO_NUMBER[strtoupper($r['country'])];
-			if ( $id != '' )
+			if ( empty($id) )
 			{
-				$name = $geoip->GEOIP_COUNTRY_NAMES[$id];
-				$c .= '<li><b>'.$r['c'].'</b>
-				<img src="http://www.easywhois.com/images/flags/'.$r['country'].'.gif" alt="'.$r['country'].'" /> '
-				.$name.'&nbsp;</li>'."\n";
+				$name = '???';
+				$r['country'] = 'unknown';
 			}
 			else
-				$c .= '<li><b>'.$r['c'].'</b>???</li>'."\n";
+				$name = $geoip->GEOIP_COUNTRY_NAMES[$id];
+			$c .= '<li><b>'.$r['c'].'</b>
+				<div class="cpd-flag cpd-flag-'.$r['country'].'"></div> '
+				.$name.'&nbsp;</li>'."\n";
 		}
 		$c .= '</ul>';
 	}
@@ -1509,14 +1591,56 @@ function shortMostVisitedPosts(){ return $this->getMostVisitedPosts(0, 0, true);
 /**
  * adds style sheet to admin header
  */
-function add_css()
+function addCss()
 {
 	global $text_direction;
 	if ( $text_direction == 'rtl' ) 
-		echo '<link rel="stylesheet" href="'.$this->dir.'/counter-rtl.css" type="text/css" />';
+		echo "\n".'<link rel="stylesheet" href="'.$this->dir.'/counter-rtl.css" type="text/css" />'."\n";
 	else
-		echo '<link rel="stylesheet" href="'.$this->dir.'/counter.css" type="text/css" />';
+		echo "\n".'<link rel="stylesheet" href="'.$this->dir.'/counter.css" type="text/css" />'."\n";
 }
+
+/**
+ * adds ajax script to count cached posts
+ */
+function addAjaxScript()
+{
+	$this->getPostID();
+	echo <<< JSEND
+<script type="text/javascript">
+<!-- Count per Day -->
+//<![CDATA[
+jQuery(document).ready( function($)
+{
+	jQuery.get('{$this->dir}/ajax.php?f=count&page={$this->page}', function(text)
+	{
+		var d = text.split('|');
+		for(var i = 0; i < d.length; i++)
+		{
+			var v = d[i].split('===');
+			document.getElementById('cpd_number_'+v[1]).innerHTML = v[0]; 
+		}
+	});
+} );
+// ]]>
+</script>
+JSEND;
+}
+
+
+//jQuery(document).ready( function($) {cpd_count($this->page);} );
+//function cpd_count( page )
+//{
+//	jQuery.get('{$this->dir}/ajax.php?f=count&page=' + page, function(text)
+//	{
+//		var d = text.split('|');
+//		for(var i = 0; i < d.length; i++)
+//		{
+//			var v = d[i].split('===');
+//			document.getElementById( 'cpd_number_' + v[1] ).innerHTML = v[0]; 
+//		}
+//	});
+//}
 
 /**
  * shows time of queries
@@ -1534,6 +1658,19 @@ function showQueries()
 	printf(__('Time for Count per Day: <code>%s</code>.', 'cpd'), $t);
 	echo '</p></div>';
 }
+
+//function marker()
+//{
+//	global $cpdlinemarker;
+//	if ( empty($cpdlinemarker) )
+//		$cpdlinemarker = 1;
+//	else
+//	{
+//		$cpdlinemarker = 0;
+//		return 'class="cpd-marker"';
+//	}
+//}
+
 
 } // class end
 

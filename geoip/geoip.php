@@ -23,10 +23,14 @@ function getCountry( $ip )
 	
 	$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
 	$c = strtolower(geoip_country_code_by_addr($gi, $ip));
+	
+	if ( empty($c) )
+		$c = 'unknown';
+	$cname = geoip_country_name_by_addr($gi, $ip);
 	$country = array(
 		$c,
-		'<img src="http://www.easywhois.com/images/flags/'.$c.'.gif" alt="'.$c.'" />',
-		geoip_country_name_by_addr($gi, $ip)
+		'<div class="cpd-flag cpd-flag-'.$c.'" title="'.$cname.'"></div>',
+		$cname
 		);
 	geoip_close($gi);
 	
@@ -54,7 +58,6 @@ function updateDB()
 	$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
 	while ( $r = mysql_fetch_array($res) )
 	{
-		//$c = strtolower(geoip_country_code_by_addr($gi, long2ip($r['ip'])));
 		$c = strtolower(geoip_country_code_by_addr($gi, $r['realip']));
 		mysql_query("UPDATE ".CPD_C_TABLE." SET country = '".$c."' WHERE ip = '".$r['ip']."'", $count_per_day->dbcon);
 	}

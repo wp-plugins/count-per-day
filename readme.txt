@@ -19,7 +19,14 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 It counts 1 visit per IP per day. So any reload of the page don't increment the counter.
 
-Languages: english, german, italian, portuguese, belorussian, uzbek, swedish, dansk
+Languages: english, german, italian, portuguese, belorussian, uzbek, swedish, dansk, russian, french, dutch, polish
+
+
+
+------- übersetzer hier rein
+
+
+
 
 == Installation ==
 
@@ -141,6 +148,20 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 
 == Changelog ==
+
+= 2.12 =
++ New: Flags images as sprite included
++ New: improved "Browsers" management, set your own favorites
++ New: improved "Mass Bots" management, more infos
++ New: "Visitors per country" list
++ New: works now in cached pages too (optional, BETA)
++ Language update: Italian, thanks to Gianni Diurno http://gidibao.net/index.php/portfolio/
++ Bugfix: CleanDB delete by IP function changed
++ Code updated (deprecated functions)
+
+
+?????+ New language: Russia, thanks to Ilya Pshenichny http://iluhis.com
+
 
 = 2.11 =
 + Bugfix: GeoIP, update old data used wrong IP format
