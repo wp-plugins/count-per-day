@@ -149,18 +149,20 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
-= 2.12 =
+= Development Version =
 + New: Flags images as sprite included
 + New: improved "Browsers" management, set your own favorites
 + New: improved "Mass Bots" management, more infos
 + New: "Visitors per country" list
++ New: "Visitors per day" list/chart
 + New: works now in cached pages too (optional, BETA)
++ New: easier switch to debug mode on settings
 + Language update: Italian, thanks to Gianni Diurno http://gidibao.net/index.php/portfolio/
 + Bugfix: CleanDB delete by IP function changed
++ Bugfix: because windows symlink problem plugin dir is hardcoded as 'count-per-day' now
 + Code updated (deprecated functions)
 
-
-?????+ New language: Russia, thanks to Ilya Pshenichny http://iluhis.com
++ New language: Russia, thanks to Ilya Pshenichny http://iluhis.com ?????
 
 
 = 2.11 =
