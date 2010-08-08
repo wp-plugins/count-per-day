@@ -124,11 +124,12 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 * lists _$limit_ number of posts, -1: all, 0: get option from DB, x: number
 
-'getMostVisitedPosts( $days, $limits )'
+'getMostVisitedPosts( $days, $limits, $frontend )'
 
 * shows a list with the most visited posts in the last days
 * $days = days to calc (last days), 0: get option from DB
 * $limit = count of posts (last posts), 0: get option from DB
+* $frontend = 1 = echo, 0 = return output
 
 'getClients()'
 
