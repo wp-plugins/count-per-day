@@ -28,6 +28,7 @@ if(!empty($_POST['do']))
 			$count_per_day->options['anoip'] = empty( $_POST['cpd_anoip'] ) ? 0 : 1 ;
 			$count_per_day->options['clients'] = $_POST['cpd_clients'];
 			$count_per_day->options['ajax'] = empty( $_POST['cpd_ajax'] ) ? 0 : 1 ;
+			$count_per_day->options['debug'] = empty( $_POST['cpd_debug'] ) ? 0 : 1 ;
 			
 			if (empty($count_per_day->options['clients']))
 				$count_per_day->options['clients'] = 'Firefox, MSIE, Chrome, AppleWebKit, Opera';
@@ -270,11 +271,27 @@ switch($mode) {
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Start count', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_startreads" size="10" value="<?php echo $o['startreads']; ?>" /> <?php _e('Add this value to "Total reads".', 'cpd') ?></td>
 		</tr>
+		<tr>
+			<td colspan="2" class="submit">
+				<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
+			</td>
+		</tr>
+		<tr>
+			<th colspan="2">
+				<h3><?php _e('Debug mode', 'cpd') ?></h3>
+			</th>
+		</tr>
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;color:red;"><?php _e('Debug mode', 'cpd') ?>:</th>
+			<td><label for="cpd_debug"><input type="checkbox" name="cpd_debug" id="cpd_debug" <?php if($o['debug']==1) echo 'checked="checked"'; ?> /> <?php _e('Show debug informations at the bottom of all pages.', 'cpd') ?></label></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="submit">
+				<input type="hidden" name="do" value="cpd_update" />
+				<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
+			</td>
+		</tr>		
 		</table>
-		<p class="submit">
-			<input type="hidden" name="do" value="cpd_update" />
-			<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
-		</p>
 		</form>
 	</div>
 	</div>
@@ -369,7 +386,7 @@ switch($mode) {
 				echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$ip.'">'.$ip.'</a></td>'
 					.'<td>'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
 					.'<td>'.$row['client'].'</td>'
-					.'<td><a href="'.$count_per_day->dir.'/massbots.php?dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Massbots', 'cpd').'" class="thickbox">'
+					.'<td><a href="'.$count_per_day->dir.'/massbots.php?dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day" class="thickbox">'
 						.$row['posts'].'</a></td>'
 					.'</tr>';
 				$sum += $row['posts'];

@@ -9,13 +9,13 @@ Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
-// set "true" to see some debug data at the bottom of the page
-define('CPD_DEBUG', 0);
+$cpd_dir_name = 'count-per-day';
 
 /**
  * include GeoIP addon (just if no other plugin include it)
  */
-$cpd_path = ABSPATH.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__));
+//$cpd_path = ABSPATH.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__));
+$cpd_path = ABSPATH.PLUGINDIR.'/'.$cpd_dir_name;
 if ( !function_exists('geoip_country_code_by_name') && file_exists($cpd_path.'/geoip/geoip.php') )
 	include_once($cpd_path.'/geoip/geoip.php');
 $cpd_geoip = ( class_exists('CpdGeoIp') && file_exists($cpd_path.'/geoip/GeoIP.dat') ) ? 1 : 0;
@@ -38,7 +38,7 @@ var $page;		// Post/Page-ID
 function CountPerDay()
 {
 	// variables
-	global $table_prefix;
+	global $table_prefix, $cpd_path, $cpd_dir_name;
 	define('CPD_C_TABLE', $table_prefix.'cpd_counter');
 	define('CPD_CO_TABLE', $table_prefix.'cpd_counter_useronline');
 	define('CPD_N_TABLE', $table_prefix.'cpd_notes');
@@ -48,7 +48,8 @@ function CountPerDay()
 	get_option('gmt_offset');
 	
 	$this->options = get_option('count_per_day');
-	$this->dir = get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__));
+//	$this->dir = get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__));
+	$this->dir = get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.$cpd_dir_name;
 	$this->queries[0] = 0;
 	
 	// update online counter
@@ -64,6 +65,10 @@ function CountPerDay()
 	// auto counter
 	if ( $this->options['autocount'] == 1 )	
 		add_action('wp', array(&$this,'count'));
+
+	// javascript to count cached posts
+	if ( $this->options['ajax'] == 1 )
+		add_action('wp_footer', array(&$this,'addAjaxScript'));
 
 	// widget on dashboard page
 	add_action('wp_dashboard_setup', array(&$this, 'dashboardWidgetSetup'));
@@ -84,29 +89,28 @@ function CountPerDay()
 	
 	// locale support
 	if (defined('WPLANG') && function_exists('load_plugin_textdomain'))
-		load_plugin_textdomain('cpd', false, dirname(plugin_basename(__FILE__)).'/locale');
+		load_plugin_textdomain('cpd', false, $cpd_dir_name.'/locale');
 		 
 	// adds stylesheet
 	add_action( 'admin_head', array(&$this, 'addCss') );
 	add_action( 'wp_head', array(&$this, 'addCss') );
 	
-	// javascript to count cached posts
-	if ( $this->options['ajax'] )
-		add_action('wp_footer', array(&$this,'addAjaxScript'));
 //	add_action('wp_enqueue_scripts', array(&$this,'enqueueScript'));
 	
 	// widget setup
 	add_action('plugins_loaded', array(&$this, 'widgetCpdInit'));
 
+	
+//	 war zweimal __FILE__
 	// activation hook
-	register_activation_hook(__FILE__, array(&$this, 'createTables'));
+	register_activation_hook($cpd_path.'/counter.php', array(&$this, 'createTables'));
 	
 	// uninstall hook
 	if ( function_exists('register_uninstall_hook') )
-		register_uninstall_hook(__FILE__, array(&$this, 'uninstall'));
+		register_uninstall_hook($cpd_path.'/counter.php', array(&$this, 'uninstall'));
 	
 	// query times debug
-	if ( CPD_DEBUG )
+	if ( $this->options['debug'] )
 	{
 		add_action('wp_footer', array(&$this, 'showQueries'));
 		add_action('admin_footer', array(&$this, 'showQueries'));
@@ -139,10 +143,10 @@ function connectDB()
  */
 function getQuery( $sql, $func = '' )
 {
-	if ( CPD_DEBUG )
+	if ( $this->options['debug'] )
 	{
 		$t = microtime(true);
-		$res = @mysql_query($sql, $this->dbcon);
+		$res = mysql_query($sql, $this->dbcon);
 		$d = number_format( microtime(true) - $t , 5);
 		$this->queries[] = $func.' : <b>'.$d.'</b><br/><code>'.$sql.'</code>';
 		$this->queries[0] += $d;
@@ -419,7 +423,7 @@ function createTables()
 	$this->UpdateOptions();
 	
 	// set directory mode
-	@chmod(ABSPATH.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__)).'/geoip', 0777);
+	@chmod($cpd_path.'/geoip', 0777);
 }
 
 /**
@@ -556,7 +560,7 @@ function dashboardChartDataRequest( $sql = '', $limit, $frontend = false )
 		<small style="display:block; float:right;">'.$days.' '.__('days', 'cpd').'</small>
 		<small style="display:block; float:left;">Max: '.$max.'</small>';
 	if ( !$frontend )
-		$r .= '<small><a href="'.$this->dir.'/notes.php?KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Notes', 'cpd').'" class="thickbox">'.__('Notes', 'cpd').'</a></small>';
+		$r .= '<small><a href="'.$this->dir.'/notes.php?KeepThis=true&amp;TB_iframe=true" title="Count per Day" class="thickbox">'.__('Notes', 'cpd').'</a></small>';
 	$r .= '<small>&nbsp;</small></div>';
 	
 	$r .= '<p style="border-bottom:1px black solid; white-space:nowrap;">';
@@ -1014,9 +1018,10 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false )
 		if ( isset($userdata->user_level) && intval($userdata->user_level) >= 7 && !$frontend)
 		{
 			if ( $row['post_id'] > 0 )
-				$r .= '<a href="post.php?action=edit&amp;post='.$row['post_id'].'"><img src="'.$this->getResource('cpd_pen.png').'" alt="[e]" title="'.__('Edit Post').'" style="width:9px;height:12px;" /></a> ';
+				$r .= '<a href="post.php?action=edit&amp;post='.$row['post_id'].'"><img src="'.$this->getResource('cpd_pen.png').'" alt="[e]" title="'.__('Edit Post').'" style="width:9px;height:12px;" /></a> '
+					.'<a href='.$this->dir.'/userperspan.php?page='.$row['post_id'].'&amp;KeepThis=true&amp;TB_iframe=true" class="thickbox" title="Count per Day"><img src="'.$this->getResource('cpd_calendar.png').'" alt="[v]" style="width:12px;height:12px;" /></a> ';
 			else
-				$r .= '<img src="'.$this->getResource('cpd_trans.png').'" alt="" style="width:9px;height:12px;" /> ';
+				$r .= '<img src="'.$this->getResource('cpd_trans.png').'" alt="" style="width:25px;height:12px;" /> ';
 		}
 		
 		if ( $frontend ) // no links and only posts in frontend
@@ -1109,10 +1114,12 @@ function cleanDB()
  */
 function menu($content)
 {
+	global $cpd_dir_name;
 	if (function_exists('add_options_page'))
 	{
 		$menutitle = '<img src="'.$this->getResource('cpd_menu.gif').'" alt="" style="width:9px;height:12px;" /> Count per Day';
-		add_options_page('CountPerDay', $menutitle, 'manage_options', dirname(plugin_basename(__FILE__)).'/counter-options.php') ;
+//		add_options_page('CountPerDay', $menutitle, 'manage_options', dirname(plugin_basename(__FILE__)).'/counter-options.php') ;
+		add_options_page('CountPerDay', $menutitle, 'manage_options', $cpd_dir_name.'/counter-options.php') ;
 	}
 }
 	
@@ -1121,9 +1128,12 @@ function menu($content)
  */
 function pluginActions($links, $file)
 {
-	if( $file == plugin_basename(__FILE__) )
+	global $cpd_dir_name;
+//	if( $file == plugin_basename(__FILE__) )
+	if( $file == $cpd_dir_name.'/counter.php' )
 	{
-		$link = '<a href="options-general.php?page='.dirname(plugin_basename(__FILE__)).'/counter-options.php">'.__('Settings').'</a>';
+//		$link = '<a href="options-general.php?page='.dirname(plugin_basename(__FILE__)).'/counter-options.php">'.__('Settings').'</a>';
+		$link = '<a href="options-general.php?page='.$cpd_dir_name.'/counter-options.php">'.__('Settings').'</a>';
 		array_unshift( $links, $link );
 	}
 	return $links;
@@ -1183,6 +1193,7 @@ function updateOptions()
 		'anoip' => 0,
 		'ajax' => 0,
 		'massbotlimit' => 25,
+		'debug' => 0,
 		'clients' => 'Firefox, MSIE, Chrome, AppleWebKit, Opera');
 		
 		// add array
@@ -1220,6 +1231,7 @@ function updateOptions()
 	if (!isset($onew['massbotlimit']))			$onew['massbotlimit'] = 25;
 	if (!isset($onew['clients']))				$onew['clients'] = 'Firefox, MSIE, Chrome, AppleWebKit, Opera';
 	if (!isset($onew['ajax']))					$onew['ajax'] = 0;
+	if (!isset($onew['debug']))					$onew['debug'] = 0;
 
 	update_option('count_per_day', $onew);
 }
@@ -1627,26 +1639,12 @@ jQuery(document).ready( function($)
 JSEND;
 }
 
-
-//jQuery(document).ready( function($) {cpd_count($this->page);} );
-//function cpd_count( page )
-//{
-//	jQuery.get('{$this->dir}/ajax.php?f=count&page=' + page, function(text)
-//	{
-//		var d = text.split('|');
-//		for(var i = 0; i < d.length; i++)
-//		{
-//			var v = d[i].split('===');
-//			document.getElementById( 'cpd_number_' + v[1] ).innerHTML = v[0]; 
-//		}
-//	});
-//}
-
 /**
  * shows time of queries
  */
 function showQueries()
 {
+	global $cpd_path;
 	echo '<div style="margin:10px; padding-left:30px; border:1px red solid">
 		<b>Count per Day - Queries: '.$this->queries[0].' s</b><ol>';
 	foreach($this->queries as $q)
@@ -1656,7 +1654,17 @@ function showQueries()
 	
 	$t = date_i18n('Y-m-d H:i');
 	printf(__('Time for Count per Day: <code>%s</code>.', 'cpd'), $t);
-	echo '</p></div>';
+	echo '</p>';
+	?>
+	<p>GeoIP: 
+		dir=<?php echo substr(decoct(fileperms($cpd_path.'/geoip/')), -3) ?>
+		file=<?php echo (is_file($cpd_path.'/geoip/GeoIP.dat')) ? substr(decoct(fileperms($cpd_path.'/geoip/GeoIP.dat')), -3) : '-'; ?>
+		fopen=<?php echo (function_exists('fopen')) ? 'true' : 'false' ?>
+		gzopen=<?php echo (function_exists('gzopen')) ? 'true' : 'false' ?>
+		allow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
+	</p>
+	<?php
+	echo '</div>';
 }
 
 //function marker()
