@@ -1,10 +1,8 @@
 <?php
 // windows junction patch
 $dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
-$dir = dirname($dir.'x');
-$dir = dirname($dir.'x');
-$dir = dirname($dir.'x');
-$dir = dirname($dir.'x');
+for ( $x = 1; $x <= 4; $x++)
+	$dir = dirname($dir.'x');
 
 require_once($dir.'/wp-load.php');
 
