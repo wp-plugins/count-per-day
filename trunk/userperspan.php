@@ -1,9 +1,8 @@
 <?php 
 // windows junction patch
 $dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
-$dir = dirname($dir.'x');
-$dir = dirname($dir.'x');
-$dir = dirname($dir.'x');
+for ( $x = 1; $x <= 3; $x++)
+	$dir = dirname($dir.'x');
 
 require_once($dir.'/wp-load.php');
 
@@ -52,7 +51,7 @@ $visits = $count_per_day->getQuery($sql, 'getUserPerPostSpan');
 <?php
 
 if ( mysql_num_rows($visits) == 0 )
-	_e('keine passenden Daten gefunden', 'cpd');
+	_e('no data found', 'cpd');
 else
 {
 	$maxcount = 0;

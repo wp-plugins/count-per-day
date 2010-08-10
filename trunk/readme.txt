@@ -21,13 +21,6 @@ It counts 1 visit per IP per day. So any reload of the page don't increment the 
 
 Languages: english, german, italian, portuguese, belorussian, uzbek, swedish, dansk, russian, french, dutch, polish
 
-
-
-------- übersetzer hier rein
-
-
-
-
 == Installation ==
 
 1. unzip plugin directory into the '/wp-content/plugins/' directory
@@ -129,7 +122,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * shows a list with the most visited posts in the last days
 * $days = days to calc (last days), 0: get option from DB
 * $limit = count of posts (last posts), 0: get option from DB
-* $frontend = 1 = echo, 0 = return output
+* $frontend = output, 1 = echo, 0 = return output
 
 'getClients()'
 
@@ -147,7 +140,6 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * If the automatically update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz">GeoIP.dat.gz</a> and extract it to the "geoip" directory.
 * More information about GeoIP on http://www.maxmind.com/app/geoip_country
 
-
 == Changelog ==
 
 = Development Version =
@@ -162,8 +154,6 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + Bugfix: CleanDB delete by IP function changed
 + Bugfix: because windows symlink problem plugin dir is hardcoded as 'count-per-day' now
 + Code updated (deprecated functions)
-
-+ New language: Russia, thanks to Ilya Pshenichny http://iluhis.com ?????
 
 
 = 2.11 =

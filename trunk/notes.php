@@ -1,11 +1,10 @@
 <?php
 // windows junction patch
 $dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
-$dir = dirname($dir.'x');
-$dir = dirname($dir.'x');
-$dir = dirname($dir.'x');
+for ( $x = 1; $x <= 3; $x++)
+	$dir = dirname($dir.'x');
 
-require($dir.'/wp-load.php');
+require_once($dir.'/wp-load.php');
 
 // set default values
 if ( isset($_POST['month']) )
