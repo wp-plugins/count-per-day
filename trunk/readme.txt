@@ -192,7 +192,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
-= Development Version =
+= 2.12 =
 + New: Flags images as sprite included
 + New: improved "Browsers" management, set your own favorites
 + New: improved "Mass Bots" management, more infos
@@ -204,7 +204,6 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + Bugfix: CleanDB delete by IP function changed
 + Bugfix: because windows symlink problem plugin dir is hardcoded as 'count-per-day' now
 + Code updated (deprecated functions)
-
 
 = 2.11 =
 + Bugfix: GeoIP, update old data used wrong IP format
