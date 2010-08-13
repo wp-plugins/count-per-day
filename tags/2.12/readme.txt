@@ -192,7 +192,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
-= Development Version =
+= 2.12 =
 + New: Flags images as sprite included
 + New: improved "Browsers" management, set your own favorites
 + New: improved "Mass Bots" management, more infos
