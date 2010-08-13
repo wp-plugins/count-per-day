@@ -333,110 +333,100 @@ msgstr "Ярлык"
 #: counter.php:1373
 #@ cpd
 msgid "empty = name above"
-msgstr ""
+msgstr "пусто = имя сверху"
 
 #: counter-options.php:51
 #, php-format
 #@ cpd
 msgid "Countries updated. <b>%s</b> entries in %s without country left"
-msgstr ""
+msgstr "Страны обновлены. <b>%s</b> записей в %s осталось без стран "
 
 #: counter-options.php:56
 #@ cpd
 msgid "update next"
-msgstr ""
+msgstr "обновить следующий"
 
 #: counter-options.php:94
 #, php-format
 #@ cpd
 msgid "Mass Bots cleaned. %s counts deleted."
-msgstr ""
+msgstr "Таблица ботов очищена. %s записей удалено"
 
 #: counter-options.php:180
 #@ cpd
 msgid "until User Level"
-msgstr ""
+msgstr "до уровня пользователя"
 
 #: counter-options.php:199
 #@ cpd
 msgid "Anonymous IP"
-msgstr ""
+msgstr "Анонимный IP"
 
 #: counter-options.php:236
 #@ cpd
 msgid "Countries"
-msgstr ""
+msgstr "Страны"
 
 #: counter-options.php:237
 #@ cpd
 msgid "How many countries do you want to see on dashboard page?"
-msgstr ""
+msgstr "Сколько стран вы хотите видеть в списке?"
 
 #: counter-options.php:258
 #@ cpd
 msgid "Start Values"
-msgstr ""
+msgstr "Начальные данные"
 
 #: counter-options.php:259
 #@ cpd
 msgid "Here you can change the date of first count and add a start count."
-msgstr ""
+msgstr "Здесь вы можете поменять дату начала отсчета и добавить начальный счетчик"
 
 #: counter-options.php:263
 #@ cpd
 msgid "Start date"
-msgstr ""
+msgstr "Дата начала"
 
 #: counter-options.php:264
 #@ cpd
 msgid "Your old Counter starts at?"
-msgstr ""
+msgstr "Ваш старый Счетчик начинался с"
 
 #: counter-options.php:267
 #: counter-options.php:271
 #@ cpd
 msgid "Start count"
-msgstr ""
+msgstr "Начало отсчета"
 
 #: counter-options.php:268
 #@ cpd
 msgid "Add this value to \"Total visitors\"."
-msgstr ""
-
-#: counter-options.php:272
-#@ cpd
-msgid "Add this value to \"Total reads\"."
-msgstr ""
+msgstr "Добавить значение к \"Всего посетителей\"."
 
 #: counter-options.php:301
 #@ cpd
 msgid "GeoIP - Countries"
-msgstr ""
+msgstr "GeoIP - Страны"
 
 #: counter-options.php:310
 #@ cpd
 msgid "Update old counter data"
-msgstr ""
-
-#: counter-options.php:313
-#@ cpd
-msgid "You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!"
-msgstr ""
+msgstr "Обновить данные старого счетчика"
 
 #: counter-options.php:323
 #@ cpd
 msgid "Update GeoIP database"
-msgstr ""
+msgstr "Обновить базу данных GeoIP"
 
 #: counter-options.php:326
 #@ cpd
 msgid "Download a new version of GeoIP.dat file."
-msgstr ""
+msgstr "Скачать новую версию файла GeoIP.dat."
 
 #: counter-options.php:332
 #@ cpd
 msgid "More informations about GeoIP"
-msgstr ""
+msgstr "Больше информации про GeoIP"
 
 #: counter-options.php:352
 #: massbots.php:37
@@ -448,47 +438,47 @@ msgstr ""
 #, php-format
 #@ cpd
 msgid "Show all IPs with more than %s page views per day"
-msgstr ""
+msgstr "Показать все IP с более чем %s просмотров в сутки"
 
 #: counter-options.php:357
 #: notes.php:80
 #: userperspan.php:47
 #@ cpd
 msgid "show"
-msgstr ""
+msgstr "показать"
 
 #: counter-options.php:365
 #@ cpd
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: counter-options.php:366
 #: notes.php:84
 #@ cpd
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: counter-options.php:367
 #@ cpd
 msgid "Client"
-msgstr ""
+msgstr "Клиент"
 
 #: counter-options.php:368
 #@ cpd
 msgid "Views"
-msgstr ""
+msgstr "Просмотров"
 
 #: counter-options.php:379
 #: counter-options.php:401
 #, php-format
 #@ cpd
 msgid "Delete these %s counts"
-msgstr ""
+msgstr "Удалить эти %s счетчиков"
 
 #: counter-options.php:468
 #@ cpd
 msgid "Support"
-msgstr ""
+msgstr "Поддержка"
 
 #: counter-options.php:473
 #: counter.php:1408
@@ -496,35 +486,35 @@ msgstr ""
 #, php-format
 #@ cpd
 msgid "Time for Count per Day: <code>%s</code>."
-msgstr ""
+msgstr "Время для Count per Day: <code>%s</code>"
 
 #: counter-options.php:476
 #: counter.php:1409
 #@ cpd
 msgid "Bug? Problem? Question? Hint? Praise?"
-msgstr ""
+msgstr "Ошибка? Проблема? Вопрос? Совет? Хвала?"
 
 #: counter-options.php:478
 #: counter.php:1410
 #, php-format
 #@ cpd
 msgid "Write a comment on the <a href=\"%s\">plugin page</a>."
-msgstr ""
+msgstr "Напишите комментарий на <a href=\"%s\">странице плагина</a>"
 
 #: counter.php:436
 #@ cpd
 msgid "Total reads"
-msgstr ""
+msgstr "Всего прочтений"
 
 #: counter.php:437
 #@ cpd
 msgid "Reads today"
-msgstr ""
+msgstr "Прочтений сегодня"
 
 #: counter.php:438
 #@ cpd
 msgid "Reads yesterday"
-msgstr ""
+msgstr "Прочтений вчера"
 
 #: counter.php:563
 #: counter.php:938
@@ -532,149 +522,159 @@ msgstr ""
 #: notes.php:85
 #@ cpd
 msgid "Notes"
-msgstr ""
+msgstr "Заметки"
 
 #: counter.php:937
 msgid "Show"
-msgstr ""
+msgstr "Показать"
 
 #: counter.php:971
 #@ cpd
 msgid "Other"
-msgstr ""
+msgstr "Другие"
 
 #: counter.php:1021
 msgid "Edit Post"
-msgstr ""
+msgstr "Редактировать запись"
 
 #: counter.php:1037
 #: counter.php:1058
 #: massbots.php:47
 #: userperspan.php:68
 msgid "Front page displays"
-msgstr ""
+msgstr "Отображений главной страницы"
 
 #: counter.php:1362
 msgid "Title:"
-msgstr ""
+msgstr "Заголовок:"
 
 #: counter-options.php:241
 #: counter.php:1441
 #@ cpd
 msgid "Browsers"
-msgstr ""
+msgstr "Браузеры"
 
 #: counter.php:1443
 #@ cpd
 msgid "Latest Counts"
-msgstr ""
+msgstr "Недавние подсчеты"
 
 #: counter.php:1445
 msgid "Plugin"
-msgstr ""
+msgstr "Плагин"
 
 #: counter.php:1450
 #@ cpd
 msgid "Reads per Country"
-msgstr ""
+msgstr "Прочтений по странам"
 
 #: counter.php:1534
 #@ cpd
 msgid "Map"
-msgstr ""
+msgstr "Карта"
 
 #: geoip/geoip.php:91
 #@ cpd
 msgid "Sorry, necessary functions (zlib) not installed or enabled in php.ini."
-msgstr ""
+msgstr "Приносим извинения, необходимые функции (zlib) не установлена или не включена в php.ini."
 
 #: geoip/geoip.php:115
 #@ cpd
 msgid "New GeoIP database installed."
-msgstr ""
+msgstr "Новая база данных GeoIP установлена."
 
 #: geoip/geoip.php:117
 #@ cpd
 msgid "Sorry, an error occurred. Try again or check the access rights of directory \"geoip\" is 777."
-msgstr ""
+msgstr "Приносим извинения, произошла ошибка. Попробуйте снова или проверьте что права доступа к папке \"geoip\" - 777"
 
 #: notes.php:85
 #@ cpd
 msgid "(1 per day)"
-msgstr ""
+msgstr "1 на сутки"
 
 #: notes.php:86
 msgid "Action"
-msgstr ""
+msgstr "Действие"
 
 #: notes.php:91
 #@ cpd
 msgid "add"
-msgstr ""
+msgstr "добавить"
 
 #: notes.php:106
 #@ cpd
 msgid "save"
-msgstr ""
+msgstr "сохранить"
 
 #: notes.php:107
 #@ cpd
 msgid "delete"
-msgstr ""
+msgstr "удалить"
 
 #: notes.php:118
 #@ cpd
 msgid "edit"
-msgstr ""
+msgstr "редактировать"
 
 #: counter-options.php:203
 #@ cpd
 msgid "Cache"
-msgstr ""
+msgstr "Кеш"
 
 #: counter-options.php:204
 #@ cpd
 msgid "I use a cache plugin. Count these visits with ajax."
-msgstr ""
+msgstr "Я использую кешированый плагин. Считать эти посещения при помощи ajax"
 
 #: counter-options.php:242
 #@ cpd
 msgid "Substring of the user agent, separated by comma"
-msgstr ""
+msgstr "Подстрока агента пользователя разделенный запятой"
 
 #: counter-options.php:281
 #: counter-options.php:285
 #@ cpd
 msgid "Debug mode"
-msgstr ""
+msgstr "Режим отладки"
 
 #: counter-options.php:286
 #@ cpd
 msgid "Show debug informations at the bottom of all pages."
-msgstr ""
+msgstr "Добавить отладочную информацию внизу каждой страницы."
 
 #: counter.php:1451
 #@ cpd
 msgid "Visitors per Country"
-msgstr ""
+msgstr "Посетителей по странам"
 
 #: userperspan.php:41
 #@ cpd
 msgid "Start"
-msgstr ""
+msgstr "Начало"
 
 #: userperspan.php:43
 #@ cpd
 msgid "End"
-msgstr ""
+msgstr "Конец"
 
 #: userperspan.php:45
 #@ cpd
 msgid "PostID"
-msgstr ""
+msgstr "ID сообщения"
+
+#: counter-options.php:272
+#@ cpd
+msgid "Add this value to \"Total reads\"."
+msgstr "Добавить значение к \"Всего прочтений\"."
+
+#: counter-options.php:313
+#@ cpd
+msgid "You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!"
+msgstr "Вы можете получить данные стран для всех записей проверив IP адреса заново. Может занять некоторое время!"
 
 #: userperspan.php:54
 #@ cpd
 msgid "no data found"
-msgstr ""
+msgstr "ничего не найдено"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Count per Day på svenska\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-26 15:27+0100\n"
+"POT-Creation-Date: 2010-08-10 20:31+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Magnus Suther <magnus.suther@gmail.com>\n"
 "Language-Team: http://www.magnussuther.se <magnus.suther@gmail.com>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
 "X-Poedit-Basepath: ../\n"
-"X-Poedit-Bookmarks: 18,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
+"X-Poedit-Bookmarks: \n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
@@ -147,6 +147,14 @@ msgstr "Etikett"
 msgid "empty = name above"
 msgstr "tom = namn ovan"
 
+#: counter-options.php:473
+#: counter.php:1408
+#: counter.php:1656
+#, php-format
+#@ cpd
+msgid "Time for Count per Day: <code>%s</code>."
+msgstr "Tid för Count per Day: <code>%s</code>."
+
 #: counter-options.php:476
 #: counter.php:1409
 #@ cpd
@@ -196,18 +204,20 @@ msgstr "Plugin"
 msgid "Reads per Country"
 msgstr "Visningar per land"
 
+#: counter.php:1451
+#@ cpd
+msgid "Visitors per Country"
+msgstr "Besökare per land"
+
 #: counter.php:1466
 #@ cpd
 msgid "Statistics"
 msgstr "Statistik"
 
-#: counter-options.php:473
-#: counter.php:1408
-#: counter.php:1656
-#, php-format
+#: counter.php:1534
 #@ cpd
-msgid "Time for Count per Day: <code>%s</code>."
-msgstr "Tid för Count per Day: <code>%s</code>."
+msgid "Map"
+msgstr "Karta"
 
 #: counter-options.php:357
 #: notes.php:80
@@ -250,6 +260,32 @@ msgstr "ta bort"
 #@ cpd
 msgid "edit"
 msgstr "redigera"
+
+#: counter-options.php:352
+#: massbots.php:37
+#@ cpd
+msgid "Mass Bots"
+msgstr "Massbotar"
+
+#: userperspan.php:41
+#@ cpd
+msgid "Start"
+msgstr "Start"
+
+#: userperspan.php:43
+#@ cpd
+msgid "End"
+msgstr "Slut"
+
+#: userperspan.php:45
+#@ cpd
+msgid "PostID"
+msgstr "PostID"
+
+#: userperspan.php:54
+#@ cpd
+msgid "no data found"
+msgstr "ingen information hittades"
 
 #: counter-options.php:41
 #@ cpd
@@ -363,6 +399,29 @@ msgstr "Räknar automatiskt enstaka inlägg och sidor, inga ändringar i mall be
 msgid "Bots to ignore"
 msgstr "Bots att ignorera"
 
+#: counter-options.php:199
+#@ cpd
+msgid "Anonymous IP"
+msgstr "Anonym IP-adress"
+
+#: counter-options.php:203
+#@ cpd
+msgid "Cache"
+msgstr "Cache"
+
+#: counter-options.php:204
+#@ cpd
+msgid "I use a cache plugin. Count these visits with ajax."
+msgstr "Jag använder ett plugin för cache. Räkna dessa besök med hjälp av ajax."
+
+#: counter-options.php:208
+#: counter-options.php:246
+#: counter-options.php:276
+#: counter-options.php:291
+#@ cpd
+msgid "Update options"
+msgstr "Uppdatera inställningarna"
+
 #: counter-options.php:212
 msgid "Dashboard"
 msgstr "Panel"
@@ -413,6 +472,11 @@ msgstr "Länder"
 #@ cpd
 msgid "How many countries do you want to see on dashboard page?"
 msgstr "Hur många länder vill du visa på Panelen?"
+
+#: counter-options.php:242
+#@ cpd
+msgid "Substring of the user agent, separated by comma"
+msgstr "Delsträng av \"user agent\", separerad med kommatecken"
 
 #: counter-options.php:250
 msgid "Edit Posts"
@@ -468,13 +532,16 @@ msgstr "Lägg till det här värdet till \"Besökare totalt\"."
 msgid "Add this value to \"Total reads\"."
 msgstr "Lägg till det här värdet till \"Läsningar totalt\"."
 
-#: counter-options.php:208
-#: counter-options.php:246
-#: counter-options.php:276
-#: counter-options.php:291
+#: counter-options.php:281
+#: counter-options.php:285
 #@ cpd
-msgid "Update options"
-msgstr "Uppdatera inställningarna"
+msgid "Debug mode"
+msgstr "Felsökningsläge"
+
+#: counter-options.php:286
+#@ cpd
+msgid "Show debug informations at the bottom of all pages."
+msgstr "Visa felsökningsinformation längst ner på alla sidor."
 
 #: counter-options.php:301
 #@ cpd
@@ -485,11 +552,6 @@ msgstr "GeoIP - Länder"
 #@ cpd
 msgid "Update old counter data"
 msgstr "Uppdatera gammal räknardata"
-
-#: counter-options.php:313
-#@ cpd
-msgid "You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!"
-msgstr "Du kan få information om land för alla poster i databasen genom att kolla IP-adresserna mot GeoIP-databasen. Räkna med att det kan ta ett tag!"
 
 #: counter-options.php:323
 #@ cpd
@@ -505,12 +567,6 @@ msgstr "Ladda ner en ny version av filen GeoIP.dat."
 #@ cpd
 msgid "More informations about GeoIP"
 msgstr "Mer information om GeoIP"
-
-#: counter-options.php:352
-#: massbots.php:37
-#@ cpd
-msgid "Mass Bots"
-msgstr "Massbotar"
 
 #: counter-options.php:356
 #, php-format
@@ -617,64 +673,8 @@ msgstr "Ny GeoIP-databas installerades."
 msgid "Sorry, an error occurred. Try again or check the access rights of directory \"geoip\" is 777."
 msgstr "Ett fel uppstod. Prova igen eller kolla så att rättigheterna på mappen \"geoip\" är 777."
 
-#: counter-options.php:199
+#: counter-options.php:313
 #@ cpd
-msgid "Anonymous IP"
-msgstr ""
-
-#: counter-options.php:203
-#@ cpd
-msgid "Cache"
-msgstr ""
-
-#: counter-options.php:204
-#@ cpd
-msgid "I use a cache plugin. Count these visits with ajax."
-msgstr ""
-
-#: counter-options.php:242
-#@ cpd
-msgid "Substring of the user agent, separated by comma"
-msgstr ""
-
-#: counter-options.php:281
-#: counter-options.php:285
-#@ cpd
-msgid "Debug mode"
-msgstr ""
-
-#: counter-options.php:286
-#@ cpd
-msgid "Show debug informations at the bottom of all pages."
-msgstr ""
-
-#: counter.php:1451
-#@ cpd
-msgid "Visitors per Country"
-msgstr ""
-
-#: counter.php:1534
-#@ cpd
-msgid "Map"
-msgstr ""
-
-#: userperspan.php:41
-#@ cpd
-msgid "Start"
-msgstr ""
-
-#: userperspan.php:43
-#@ cpd
-msgid "End"
-msgstr ""
-
-#: userperspan.php:45
-#@ cpd
-msgid "PostID"
-msgstr ""
-
-#: userperspan.php:54
-#@ cpd
-msgid "no data found"
-msgstr ""
+msgid "You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!"
+msgstr "Du kan få information om land för alla poster i databasen genom att kolla IP-adresserna mot GeoIP-databasen. Räkna med att det kan ta ett tag!"
 

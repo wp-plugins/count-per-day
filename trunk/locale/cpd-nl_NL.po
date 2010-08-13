@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Count per Day v2.9\n"
+"Project-Id-Version: Count per Day v2.11\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-02 12:13+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: WordPressPluginGuide.com <info@wppg.me>\n"
-"Language-Team: WPPG.me <info@wppg.me>\n"
+"Last-Translator: Rene <info@wpwebshop.com>\n"
+"Language-Team: WPwebshop.com <info@wppg.me>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -361,11 +361,6 @@ msgstr "GeoIP - Landen"
 msgid "Update old counter data"
 msgstr "Aktualiseren data van oude tellingen"
 
-#: counter-options.php:313
-#@ cpd
-msgid "You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!"
-msgstr "Je kunt de land gegevens voor alle items in de database verkrijgen door het IP adres te controleren t.o.v. de GeoIP database. Dit kan even duren!"
-
 #: counter-options.php:323
 #@ cpd
 msgid "Update GeoIP database"
@@ -620,61 +615,66 @@ msgstr "Hits gisteren"
 #: counter-options.php:199
 #@ cpd
 msgid "Anonymous IP"
-msgstr ""
+msgstr "Anonieme IP"
 
 #: counter-options.php:203
 #@ cpd
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 #: counter-options.php:204
 #@ cpd
 msgid "I use a cache plugin. Count these visits with ajax."
-msgstr ""
+msgstr "Ik gebruik een cache plugin. Tel deze bezoeken met ajax."
 
 #: counter-options.php:242
 #@ cpd
 msgid "Substring of the user agent, separated by comma"
-msgstr ""
+msgstr "Substring van de user agent, gescheiden door een comma"
 
 #: counter-options.php:281
 #: counter-options.php:285
 #@ cpd
 msgid "Debug mode"
-msgstr ""
+msgstr "Debugmodus"
 
 #: counter-options.php:286
 #@ cpd
 msgid "Show debug informations at the bottom of all pages."
-msgstr ""
+msgstr "Geef debug informatie weer op de bodem van elke pagina."
 
 #: counter.php:1451
 #@ cpd
 msgid "Visitors per Country"
-msgstr ""
+msgstr "Bezoekers per Land"
 
 #: counter.php:1534
 #@ cpd
 msgid "Map"
-msgstr ""
+msgstr "Kaart"
 
 #: userperspan.php:41
 #@ cpd
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: userperspan.php:43
 #@ cpd
 msgid "End"
-msgstr ""
+msgstr "Einde"
 
 #: userperspan.php:45
 #@ cpd
 msgid "PostID"
-msgstr ""
+msgstr "PostID"
 
 #: userperspan.php:54
 #@ cpd
 msgid "no data found"
-msgstr ""
+msgstr "geen data gevonden"
+
+#: counter-options.php:313
+#@ cpd
+msgid "You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!"
+msgstr "Je kunt de land gegevens voor alle items in de database verkrijgen door het IP adres te controleren t.o.v. de GeoIP database. Dit kan even duren!"
 

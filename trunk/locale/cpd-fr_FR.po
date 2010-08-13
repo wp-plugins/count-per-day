@@ -361,11 +361,6 @@ msgstr "GeoIP - Pays"
 msgid "Update old counter data"
 msgstr "Mettre à jour les données du vieux compteur"
 
-#: counter-options.php:313
-#@ cpd
-msgid "You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!"
-msgstr "Vous pouvez obtenir les données par pays pour toutes les entrées dans la base de données bei vérifier l'adresse IP à nouveau GeoIP base de données. Ceci peut prendre un certain temps!"
-
 #: counter-options.php:323
 #@ cpd
 msgid "Update GeoIP database"
@@ -620,61 +615,66 @@ msgstr "Lectures hier"
 #: counter-options.php:199
 #@ cpd
 msgid "Anonymous IP"
-msgstr ""
+msgstr "Adresse IP Anonyme"
 
 #: counter-options.php:203
 #@ cpd
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 #: counter-options.php:204
 #@ cpd
 msgid "I use a cache plugin. Count these visits with ajax."
-msgstr ""
+msgstr "J'utilise un plugin de cache. Comptez ces visites avec ajax."
 
 #: counter-options.php:242
 #@ cpd
 msgid "Substring of the user agent, separated by comma"
-msgstr ""
+msgstr "Sous-Chaine des \"user agent\", séparé par des virgules"
 
 #: counter-options.php:281
 #: counter-options.php:285
 #@ cpd
 msgid "Debug mode"
-msgstr ""
+msgstr "Mode Debug"
 
 #: counter-options.php:286
 #@ cpd
 msgid "Show debug informations at the bottom of all pages."
-msgstr ""
+msgstr "Afficher les informations de débogage au bas de toutes les pages."
 
 #: counter.php:1451
 #@ cpd
 msgid "Visitors per Country"
-msgstr ""
+msgstr "Visiteurs par Pays"
 
 #: counter.php:1534
 #@ cpd
 msgid "Map"
-msgstr ""
+msgstr "Carte"
 
 #: userperspan.php:41
 #@ cpd
 msgid "Start"
-msgstr ""
+msgstr "Début"
 
 #: userperspan.php:43
 #@ cpd
 msgid "End"
-msgstr ""
+msgstr "Fin"
 
 #: userperspan.php:45
 #@ cpd
 msgid "PostID"
-msgstr ""
+msgstr "PostID"
 
 #: userperspan.php:54
 #@ cpd
 msgid "no data found"
-msgstr ""
+msgstr "aucune donnée trouvée"
+
+#: counter-options.php:313
+#@ cpd
+msgid "You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!"
+msgstr "Vous pouvez obtenir les données par pays pour toutes les entrées dans la base de données bei vérifier l'adresse IP à nouveau GeoIP base de données. Ceci peut prendre un certain temps!"
 

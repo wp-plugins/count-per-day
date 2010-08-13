@@ -361,11 +361,6 @@ msgstr "GeoIP - Stati"
 msgid "Update old counter data"
 msgstr "Aggiorna i vecchi dati per gli stati"
 
-#: counter-options.php:313
-#@ cpd
-msgid "You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!"
-msgstr "Potrai ottenere i nuovi dati verificando nuovamente l'indirizzo IP nel database di GeoIP. L'operazione richiederà alcuni minuti!"
-
 #: counter-options.php:323
 #@ cpd
 msgid "Update GeoIP database"
@@ -630,51 +625,56 @@ msgstr "IP anonimo"
 #: counter-options.php:203
 #@ cpd
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 #: counter-options.php:204
 #@ cpd
 msgid "I use a cache plugin. Count these visits with ajax."
-msgstr ""
+msgstr "Uso un plugin per la cache. Conteggia le visite via ajax."
 
 #: counter-options.php:242
 #@ cpd
 msgid "Substring of the user agent, separated by comma"
-msgstr ""
+msgstr "Stringhe user agent, separa con una virgola"
 
 #: counter-options.php:281
 #: counter-options.php:285
 #@ cpd
 msgid "Debug mode"
-msgstr ""
+msgstr "Modalità debug"
 
 #: counter-options.php:286
 #@ cpd
 msgid "Show debug informations at the bottom of all pages."
-msgstr ""
+msgstr "Mostra info debug al fondo di tutte le pagine."
 
 #: counter.php:1451
 #@ cpd
 msgid "Visitors per Country"
-msgstr ""
+msgstr "Visitatori per paese"
 
 #: userperspan.php:41
 #@ cpd
 msgid "Start"
-msgstr ""
+msgstr "Inizio"
 
 #: userperspan.php:43
 #@ cpd
 msgid "End"
-msgstr ""
+msgstr "Termine"
 
 #: userperspan.php:45
 #@ cpd
 msgid "PostID"
-msgstr ""
+msgstr "ID articolo"
 
 #: userperspan.php:54
 #@ cpd
 msgid "no data found"
-msgstr ""
+msgstr "nessun dato trovato"
+
+#: counter-options.php:313
+#@ cpd
+msgid "You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!"
+msgstr "Potrai ottenere i nuovi dati verificando nuovamente l'indirizzo IP nel database di GeoIP. L'operazione richiederà alcuni minuti!"
 
