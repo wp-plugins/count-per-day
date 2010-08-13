@@ -1,5 +1,10 @@
-<?php 
-require('../../../wp-load.php');
+<?php
+// windows junction patch
+$dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
+for ( $x = 1; $x <= 3; $x++)
+	$dir = dirname($dir.'x');
+
+require_once($dir.'/wp-load.php');
 
 // set default values
 if ( isset($_POST['month']) )
@@ -42,12 +47,12 @@ $notes = $wpdb->get_results('SELECT * FROM '.$table_prefix.'cpd_notes WHERE 1 '.
 <title>CountPerDay</title>
 <link rel="stylesheet" type="text/css" href="counter.css" />
 </head>
-<body>
-
+<body class="cpd-thickbox">
+<h2><?php _e('Notes', 'cpd') ?></h2>
 <form name="cpd_notes_form1" action="" method="post">
 <table class="cpd-notes">
 <tr>
-	<td colspan="3" style="background:#eee; padding:3px;">
+	<td colspan="3" style="background:#ddd; padding:3px;">
 		<select name="month">
 			<option value="0">-</option>
 			<?php

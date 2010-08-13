@@ -29,8 +29,8 @@
 
 .cpd-dashboard li {
 	color: #777;
-	padding-top: 2px;
-	border-top: 1px #ddd dotted;
+	padding-bottom: 2px;
+	border-bottom: 1px #ddd dotted;
 }
 
 .cpd-dashboard li b {
@@ -59,6 +59,26 @@
 .cpd-r {
 	float: right;
 }
+
+/* thickbox */
+
+.cpd-thickbox {
+	background-color: #F7F6F1;
+	font-size: 13px;
+	}
+
+.cpd-thickbox h2 {
+	font: italic 1.5em Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+	margin: 0;
+	padding: 0;
+	color: #093E56;
+}
+
+.cpd-thickbox li {
+	padding-bottom: 5px;
+	border-top: none;
+}
+
 
 /* notes thickbox */
 .cpd-notes {
@@ -229,4 +249,3 @@
 .cpd-flag-vn {background-position:0 -1495px;}
 .cpd-flag-ye {background-position:0 -1508px;}
 .cpd-flag-za {background-position:0 -1521px;}
-
