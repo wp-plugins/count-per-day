@@ -51,7 +51,6 @@ if(!empty($_POST['do']))
 					<p>'.sprintf(__('Countries updated. <b>%s</b> entries in %s without country left', 'cpd'), $rest, CPD_C_TABLE);
 				if ( $rest > 100 )
 					// reload page per javascript until less than 100 entries without country
-					// is not optimal...
 					echo '<input type="hidden" name="do" value="cpd_countries" />
 						<input type="submit" name="updcon" value="'.__('update next', 'cpd').'" class="button" />
 						<script type="text/javascript">document.cpdcountries.submit();</script>';
@@ -74,7 +73,7 @@ if(!empty($_POST['do']))
 						
 				$result = CpdGeoIp::updateGeoIpFile();
 				echo '<div id="message" class="updated fade"><p>'.$result.'</p></div>';
-				if ( file_exists($cpd_path.'/geoip/GeoIP.dat') )
+				if ( file_exists($cpd_path.'geoip/GeoIP.dat') )
 					$cpd_geoip = 1;
 			}
 			break;
@@ -111,13 +110,13 @@ if(!empty($_POST['do']))
 		case __('UNINSTALL Count per Day', 'cpd') :
 			if(trim($_POST['uninstall_cpd_yes']) == 'yes')
 			{
-				$wpdb->query('DROP TABLE IF EXISTS '.CPD_C_TABLE);
-				$wpdb->query('DROP TABLE IF EXISTS '.CPD_CO_TABLE);
-				delete_option('count_per_day');
+				$count_per_day->uninstall();
 				echo '<div id="message" class="updated fade"><p>';
 				printf(__('Table %s deleted', 'cpd'), CPD_C_TABLE);
 				echo '<br/>';
 				printf(__('Table %s deleted', 'cpd'), CPD_CO_TABLE);
+				echo '<br/>';
+				printf(__('Table %s deleted', 'cpd'), CPD_N_TABLE);
 				echo '<br/>';
 				echo __('Options deleted', 'cpd').'</p></div>';
 				$mode = 'end-UNINSTALL';
@@ -139,9 +138,9 @@ if ( empty($mode) )
 switch($mode) {
 	// deaktivation
 	case 'end-UNINSTALL':
-		$deactivate_url = 'plugins.php?action=deactivate&amp;plugin='.dirname(plugin_basename(__FILE__)).'/counter.php';
+		$deactivate_url = 'plugins.php?action=deactivate&amp;plugin='.$cpd_dir_name.'/counter.php';
 		if ( function_exists('wp_nonce_url') ) 
-			$deactivate_url = wp_nonce_url($deactivate_url, 'deactivate-plugin_'.dirname(plugin_basename(__FILE__)).'/counter.php');
+			$deactivate_url = wp_nonce_url($deactivate_url, 'deactivate-plugin_'.$cpd_dir_name.'/counter.php');
 		echo '<div class="wrap">';
 		echo '<h2>'.__('Uninstall', 'cpd').' "Count per Day"</h2>';
 		echo '<p><strong><a href="'.$deactivate_url.'">'.__('Click here', 'cpd').'</a> '.__('to finish the uninstall and to deactivate "Count per Day".', 'cpd').'</strong></p>';
@@ -310,7 +309,7 @@ switch($mode) {
 					<input type="submit" name="updcon" value="<?php _e('Update old counter data', 'cpd') ?>" class="button" />
 					</form>
 				</td>
-				<td><?php _e('You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!', 'cpd') ?></td>
+				<td><?php _e('You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!', 'cpd') ?></td>
 			</tr>
 		<?php } ?>
 		
@@ -328,14 +327,9 @@ switch($mode) {
 		<?php }	?>
 		</table>
 	
-		<p style="text-align: right">
-			<?php _e('More informations about GeoIP', 'cpd') ?>: <a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a><br />
-			DEBUG: 
-			dir=<?php echo substr(decoct(fileperms($cpd_path.'/geoip/')), -3) ?>
-			file=<?php echo (is_file($cpd_path.'/geoip/GeoIP.dat')) ? substr(decoct(fileperms($cpd_path.'/geoip/GeoIP.dat')), -3) : '-'; ?>
-			fopen=<?php echo (function_exists('fopen')) ? 'true' : 'false' ?>
-			gzopen=<?php echo (function_exists('gzopen')) ? 'true' : 'false' ?>
-			allow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
+		<p>
+			<span class="cpd-r"><?php _e('More informations about GeoIP', 'cpd') ?>:
+			<a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a></span>&nbsp;
 		</p>
 
 	</div>
@@ -451,7 +445,7 @@ switch($mode) {
 		<p style="color: red">
 			<strong><?php _e('WARNING', 'cpd') ?>:</strong><br />
 			<?php _e('These tables (with ALL counter data) will be deleted.', 'cpd') ?><br />
-			<b><?php echo CPD_C_TABLE.', '.CPD_CO_TABLE; ?></b><br />
+			<b><?php echo CPD_C_TABLE.', '.CPD_CO_TABLE.', '.CPD_N_TABLE; ?></b><br />
 			<?php _e('If "Count per Day" re-installed, the counter starts at 0.', 'cpd') ?>
 		</p>
 		<p>&nbsp;</p>
@@ -467,16 +461,7 @@ switch($mode) {
 	<div class="postbox">
 	<h3><?php _e('Support', 'cpd') ?></h3>
 	<div class="inside">
-		<p>
-			<?php
-			$t = date_i18n('Y-m-d H:i');
-			printf(__('Time for Count per Day: <code>%s</code>.', 'cpd'), $t);
-			?>
-			<br />
-			<?php _e('Bug? Problem? Question? Hint? Praise?', 'cpd') ?>
-			<br />
-			<?php printf(__('Write a comment on the <a href="%s">plugin page</a>.', 'cpd'), 'http://www.tomsdimension.de/wp-plugins/count-per-day') ?>
-		</p>
+		<?php $count_per_day->cpdInfo() ?>
 	</div>
 	</div>
 	

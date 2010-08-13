@@ -317,11 +317,6 @@ msgstr "GeoIP - Pa&iacute;ses"
 msgid "Update old counter data"
 msgstr "Atualizar dados de contadores antigos"
 
-#: counter-options.php:313
-#@ cpd
-msgid "You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!"
-msgstr "Voc&ecirc; pode obter dados de pa&iacute;ses para todos os lan&ccedil;amentos existentes em sua base de dados atrav&eacute;s da checagem de endereços IP na base de dados GeoIP. Isso pode demorar um pouco!"
-
 #: counter-options.php:323
 #@ cpd
 msgid "Update GeoIP database"
@@ -677,5 +672,10 @@ msgstr ""
 #: userperspan.php:54
 #@ cpd
 msgid "no data found"
+msgstr ""
+
+#: counter-options.php:313
+#@ cpd
+msgid "You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!"
 msgstr ""
 
