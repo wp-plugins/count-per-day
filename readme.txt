@@ -192,6 +192,10 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
+= Development Version =
++ Bugfix: Thickbox only in backend needed, RTL on he_IL was broken
++ Bugfix: startpage was not counted everywhere
+
 = 2.12 =
 + New: Flags images as sprite included
 + New: improved "Browsers" management, set your own favorites

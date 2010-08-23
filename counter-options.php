@@ -204,7 +204,7 @@ switch($mode) {
 		</tr>
 		<tr>
 			<td colspan="2" class="submit">
-				<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
+				<input type="submit" name="update1" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
 			</td>
 		</tr>
 		<tr>
@@ -242,7 +242,7 @@ switch($mode) {
 		</tr>		
 		<tr>
 			<td colspan="2" class="submit">
-				<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
+				<input type="submit" name="update2" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
 			</td>
 		</tr>
 		<tr>
@@ -272,7 +272,7 @@ switch($mode) {
 		</tr>
 		<tr>
 			<td colspan="2" class="submit">
-				<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
+				<input type="submit" name="update3" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
 			</td>
 		</tr>
 		<tr>
@@ -287,7 +287,7 @@ switch($mode) {
 		<tr>
 			<td colspan="2" class="submit">
 				<input type="hidden" name="do" value="cpd_update" />
-				<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
+				<input type="submit" name="update4" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
 			</td>
 		</tr>		
 		</table>
