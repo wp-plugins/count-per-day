@@ -115,9 +115,11 @@ function CountPerDay()
 	// add shorcode support
 	$this->addShortcodes();
 	
+	// thickbox in backend only
+	if ( strpos($_SERVER['SCRIPT_NAME'], '/wp-admin/') !== false )
+		wp_enqueue_script( 'thickbox' );
+		
 	$this->connectDB();
-	
-	add_thickbox();
 }
 
 /**
@@ -228,7 +230,7 @@ function getPostID()
 			$p = 0 - $wp_query->get_queried_object_id();
 		else
 			// index, date, search and other "list" pages will count only once
-			$page = 0;
+			$p = 0;
 			
 		$this->page = $p;
 		return $p;
@@ -1599,7 +1601,10 @@ function addCss()
 	global $text_direction;
 	echo "\n".'<link rel="stylesheet" href="'.$this->dir.'/counter.css" type="text/css" />'."\n";
 	if ( $text_direction == 'rtl' ) 
-		echo "\n".'<link rel="stylesheet" href="'.$this->dir.'/counter-rtl.css" type="text/css" />'."\n";
+		echo '<link rel="stylesheet" href="'.$this->dir.'/counter-rtl.css" type="text/css" />'."\n";
+	// thickbox style here becorse add_thickbox() breaks RTL in he_IL
+	if ( strpos($_SERVER['SCRIPT_NAME'], '/wp-admin/') !== false )
+		echo '<link rel="stylesheet" href="'.get_bloginfo('wpurl').'/wp-includes/js/thickbox/thickbox.css" type="text/css" />'."\n";
 }
 
 /**
