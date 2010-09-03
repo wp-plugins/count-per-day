@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
 Tested up to: 3.0.1
-Stable tag: 2.12
+Stable tag: 2.13
 License: Postcardware
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -17,6 +17,8 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 * shows country of your visitors
 * you can show these statistics on frontend (e.g. on sidebar) too
 * if you use Wordpress < 2.7 please use Count-per-Day v1.4
+* Plugin: http://www.tomsdimension.de/wp-plugins/count-per-day
+* Donate: http://www.tomsdimension.de/postcards
 
 It counts 1 visit per IP per day. So any reload of the page don't increment the counter.
 
@@ -28,11 +30,11 @@ It counts 1 visit per IP per day. So any reload of the page don't increment the 
 - France		- 100% - Bjork -				http://www.habbzone.fr
 - German		- 100% - Tom Braider, me ;) -
 - Italian		- 100% - Gianni Diurno -		http://gidibao.net
-- Russian		- 100% - Ilya -					http://iluhis.com/
+- Russian		- 100% - Ilya -					http://iluhis.com
 - Swedish		- 100% - Magnus Suther -		http://www.magnussuther.se
+- Portuguese BR	- 100% - Beto Ribeiro -			http://www.sevenarts.com.br
 
 - Polish 		-  90% - LeXuS -				http://intrakardial.de
-- Portuguese BR	-  90% - Lucato -				http://www.ilucato.com.br
 - Uzbek			-  60% - Alisher -
 - Belarus		-  40% - Marcis Gasuns -		http://www.fatcow.com
 
@@ -87,6 +89,7 @@ These shortcodes you can use in the content while writing you posts.
 [CPD_MOST_VISITED_POSTS]
 [CPD_CLIENTS]
 [CPD_COUNTRIES]
+[CPD_REFERERS]
 
 **Functions**
 
@@ -180,6 +183,11 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * clients are hardcoded in function but easy to change ;)
 * $frontend: 1 echo, 0 return output
 
+'getReferers( $limit = 0, $frontend )'
+
+* lists top _$limit_ referers, 0: get option from DB, x: number
+* $frontend: 1 echo, 0 return output
+
 **GeoIP**
 
 * With the GeoIP addon you can associate your visitors to an country using the ip address.
@@ -192,9 +200,11 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
-= Development Version =
+= 2.13 =
++ New: Top referers
 + Bugfix: Thickbox only in backend needed, RTL on he_IL was broken
 + Bugfix: startpage was not counted everywhere
++ Language update: Portuguese (Brazil)
 
 = 2.12 =
 + New: Flags images as sprite included

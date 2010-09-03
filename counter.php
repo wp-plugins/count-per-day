@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
-Version: 2.12
+Version: 2.13
 License: Postcardware :)
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -187,6 +187,9 @@ function show( $before='', $after=' reads', $show = true, $count = true, $page =
  */
 function anonymize_ip( $ip )
 {
+	if ( $this->options['debug'] )
+		$this->queries[] = 'called Function: <b style="color:blue">anonymize_ip</b> IP: <code>'.$ip.'</code>';
+		
 	if ($this->options['anoip'] == 1)
 	{
 		$i = explode('.', $ip);
@@ -233,6 +236,10 @@ function getPostID()
 			$p = 0;
 			
 		$this->page = $p;
+		
+		if ( $this->options['debug'] )
+			$this->queries[] = 'called Function: <b style="color:blue">getPostID</b> page ID: <code>'.$p.'</code>';
+		
 		return $p;
 	endif;
 	
@@ -247,6 +254,9 @@ function getPostID()
 function count( $x, $page = 'x' )
 {
 	global $wpdb, $wp_query, $cpd_path, $cpd_geoip, $userdata;
+	
+	if ( $this->options['debug'] )
+		$this->queries[] = 'called Function: <b style="color:blue">count</b> page: <code>'.$page.'</code>';
 	
 	if ( $page == 'x' )
 		// normal counter
@@ -268,9 +278,18 @@ function count( $x, $page = 'x' )
 	$countUser = 1;
 	if ( $this->options['user'] == 0 && is_user_logged_in() ) $countUser = 0; // don't count loged user
 	if ( $this->options['user'] == 1 && isset($userdata) && $this->options['user_level'] < $userlevel ) $countUser = 0; // loged user, but higher user level
+
+	$isBot = $this->isBot();
+	
+	if ( $this->options['debug'] )
+		$this->queries[] = 'called Function: <b style="color:blue">count (variables)</b> '
+			.'isBot: <code>'.intval($isBot).'</code> '
+			.'countUser: <code>'.$countUser.'</code> '
+			.'page: <code>'.$page.'</code> '
+			.'userlevel: <code>'.$userlevel.'</code>';
 	
 	// only count if: non bot, Logon is ok
-	if ( !$this->isBot() && $countUser && isset($page) )
+	if ( !$isBot && $countUser && isset($page) )
 	{
 		$userip = $this->anonymize_ip($_SERVER['REMOTE_ADDR']);
 		$client = $_SERVER['HTTP_USER_AGENT'];
@@ -288,13 +307,13 @@ function count( $x, $page = 'x' )
 				// with GeoIP addon save country
 				$gi = geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
 				$country = strtolower(geoip_country_code_by_addr($gi, $userip));
-				$this->getQuery($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, country)
-				VALUES (%s, INET_ATON(%s), %s, %s, %s)", $page, $userip, $client, $date, $country), 'count insert');
+				$this->getQuery($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, country, referer)
+				VALUES (%s, INET_ATON(%s), %s, %s, %s, %s)", $page, $userip, $client, $date, $country, $referer), 'count insert');
 			}
 			else
 				// without country
-				$this->getQuery($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date)
-				VALUES (%s, INET_ATON(%s), %s, %s)", $page, $userip, $client, $date), 'count insert');
+				$this->getQuery($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, referer)
+				VALUES (%s, INET_ATON(%s), %s, %s, %s)", $page, $userip, $client, $date, $referer), 'count insert');
 		}
 		
 		// online counter
@@ -414,6 +433,11 @@ function createTables()
 		if ((int) mysql_errno() == 1054)
 			$this->getQuery("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR(2) NOT NULL");
 	}
+	
+	// referer
+	$this->getQuery("SELECT referer FROM `".CPD_C_TABLE."`");
+		if ((int) mysql_errno() == 1054)
+			$this->getQuery("ALTER TABLE `".CPD_C_TABLE."` ADD `referer` VARCHAR(100) NOT NULL");
 	
 	// table "notes"
 	$sql = "CREATE TABLE IF NOT EXISTS `".$table_prefix."cpd_notes` (
@@ -978,6 +1002,32 @@ function getClients( $frontend = false )
 		echo $r;
 }
 
+
+/**
+ * shows top referers
+ */
+function getReferers( $limit = 0, $frontend = false )
+{
+	global $wpdb;
+	if ( $limit == 0 )
+		$limit = $this->options['dashboard_last_posts'];
+	
+	$res = $this->getQuery("SELECT COUNT(*) count, referer FROM ".CPD_C_TABLE." WHERE referer > '' GROUP BY referer ORDER BY COUNT(*) DESC LIMIT $limit", 'getReferers');
+
+	$r = '<ul id="cpd_referers" class="cpd_front_list">';
+	while ( $row = mysql_fetch_array($res) )
+	{
+		$ref2 = str_replace('http://', '', $row['referer']);
+		$r .= '<li><a href="'.$row['referer'].'">'.$ref2.'</a><b>'.$row['count'].'</b></li>';
+	}
+	$r .= '</ul>';
+	
+	if ($frontend)
+		return $r;
+	else
+		echo $r;
+}
+
 // end of statistic functions
 
 /**
@@ -1414,6 +1464,7 @@ function dashboardChartMeta() { $this->dashboardChart( 0, false); }
 function dashboardChartVisitorsMeta() { $this->dashboardChartVisitors( 0, false); }
 function getCountriesMeta()	{ $this->getCountries(0, false); }
 function getCountriesVisitorsMeta()	{ $this->getCountries(0, false, true); }
+function getReferersMeta() { $this->getReferers(0, false); }
 
 /**
  * will be executed if wordpress core detects this page has to be rendered
@@ -1436,6 +1487,7 @@ function onLoadPage()
 	add_meta_box('last_reads', __('Latest Counts', 'cpd'), array(&$this, 'getMostVisitedPostsMeta'), $this->pagehook, 'cpdrow4', 'default');
 	add_meta_box('day_reads', __('Visitors per day', 'cpd'), array(&$this, 'getVisitedPostsOnDayMeta'), $this->pagehook, 'cpdrow4', 'default');
 	add_meta_box('cpd_info', __('Plugin'), array(&$this, 'cpdInfo'), $this->pagehook, 'cpdrow1', 'low');
+	add_meta_box('referers', __('Referer', 'cpd'), array(&$this, 'getReferersMeta'), $this->pagehook, 'cpdrow3', 'default');
 	
 	// countries with GeoIP addon only
 	if ( $cpd_geoip )
@@ -1573,6 +1625,7 @@ function addShortcodes()
 	add_shortcode('CPD_VISITORS_PER_POST', array( &$this, 'shortUserPerPost'));
 	add_shortcode('CPD_COUNTRIES', array( &$this, 'shortCountries'));
 	add_shortcode('CPD_MOST_VISITED_POSTS', array( &$this, 'shortMostVisitedPosts'));
+	add_shortcode('CPD_REFERERS', array( &$this, 'shortReferers'));
 }
 function shortShow()			{ return $this->show('', '', false, false); }
 function shortReadsTotal()		{ return $this->getReadsAll(true); }
@@ -1592,6 +1645,7 @@ function shortUserPerMonth()	{ return $this->getUserPerMonth(true); }
 function shortUserPerPost()		{ return $this->getUserPerPost(0, true); }
 function shortCountries()		{ return $this->getCountries(0, true); }
 function shortMostVisitedPosts(){ return $this->getMostVisitedPosts(0, 0, true); }
+function shortReferers()		{ return $this->getReferers(0, true); }
 
 /**
  * adds style sheet to admin header
