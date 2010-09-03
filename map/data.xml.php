@@ -1,5 +1,11 @@
 <?php
-require('../../../../wp-load.php');
+// windows junction patch
+$dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
+for ( $x = 1; $x <= 4; $x++)
+	$dir = dirname($dir.'x');
+
+require_once($dir.'/wp-load.php');
+
 include_once($cpd_path.'/geoip/geoip.php');
 $geoip = new GeoIP();
 

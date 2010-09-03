@@ -1,10 +1,11 @@
 === Count per Day ===
 Contributors: Tom Braider
-Donate link: http://www.unicef.org
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
-Tested up to: 3.0
-Stable tag: 2.11
+Tested up to: 3.0.1
+Stable tag: 2.13
+License: Postcardware
+Donate link: http://www.tomsdimension.de/postcards
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
 
@@ -16,17 +17,28 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 * shows country of your visitors
 * you can show these statistics on frontend (e.g. on sidebar) too
 * if you use Wordpress < 2.7 please use Count-per-Day v1.4
+* Plugin: http://www.tomsdimension.de/wp-plugins/count-per-day
+* Donate: http://www.tomsdimension.de/postcards
 
 It counts 1 visit per IP per day. So any reload of the page don't increment the counter.
 
-Languages: english, german, italian, portuguese, belorussian, uzbek, swedish, dansk, russian, french, dutch, polish
+= Languages, Translators =
 
+- Dansk			- 100% - Jonas Thomsen -		http://jonasthomsen.com
+- Dansk 2*		- 100% - Georg S. Adamsen -		http://www.blogos.dk
+- Dutch NL		- 100% - Rene -					http://wpwebshop.com
+- France		- 100% - Bjork -				http://www.habbzone.fr
+- German		- 100% - Tom Braider, me ;) -
+- Italian		- 100% - Gianni Diurno -		http://gidibao.net
+- Russian		- 100% - Ilya -					http://iluhis.com
+- Swedish		- 100% - Magnus Suther -		http://www.magnussuther.se
+- Portuguese BR	- 100% - Beto Ribeiro -			http://www.sevenarts.com.br
 
+- Polish 		-  90% - LeXuS -				http://intrakardial.de
+- Uzbek			-  60% - Alisher -
+- Belarus		-  40% - Marcis Gasuns -		http://www.fatcow.com
 
-------- übersetzer hier rein
-
-
-
+*) Rename cpd-da_DK-2.mo to cpd-da_DK.mo in "locale" dir to use the second dansk translation.
 
 == Installation ==
 
@@ -42,8 +54,6 @@ Install optional GeoIP database to show countries of your visitors.
 
 If "Auto counter" is on reads on single-posts and pages will count without any changes on template.
 
-For more informations see "Other Notes".
-
 == Frequently Asked Questions ==
 
 = Need Help? Find Bug? =
@@ -57,127 +67,9 @@ read and write comments on http://www.tomsdimension.de/wp-plugins/count-per-day
 
 == Arbitrary section ==
 
-**Functions**
+**Shortcodes**
 
-You can place these functions in your template.<br/>
-Place functions within post-loop (e.g. in single.php)<br/>
-Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); ?&gt;' to check if plugin is activated.
-
-'show( $before, $after, $show, $count )'
-
-* $before = text before number e.g. '&lt;p&gt;' (default "")
-* $after = text after number e.g. 'reads&lt;/p&gt;' (default " reads")
-* $show = true/false, "echo" complete string or "return" number only (default true)
-* $count = true/false, false will not count the reads (default true)
-
-'count()'
-
-* only count reads, without any output
-* cpdShow call it
-
-'getFirstCount()'
-
-* shows date of first count
-
-'getUserPerDay( $days )'
-
-* shows average number of visitors per day of the last _$days_ days
-* default on dashboard (see it with mouse over number) = "Latest Counts - Days" in options
-
-'getReadsAll()'
- 
-* shows number of total reads
-
-'getReadsToday()'
-
-* shows number of reads today
-
-'getReadsYesterday()'
- 
-* shows number of reads yesterday
-
-'getUserAll()'
- 
-* shows number of total visitors
-
-'getUserOnline()'
-
-* shows number of visitors just online
-
-'getUserToday()'
-
-* shows number of visitors today
-
-'getUserYesterday()'
- 
-* shows number of visitors yesterday
-
-'getUserLastWeek()'
-
-* shows number of visitors last week (7 days)
-
-'getUserPerMonth()'
- 
-* lists number of visitors per month
-
-'getUserPerPost( $limit = 0 )'
-
-* lists _$limit_ number of posts, -1: all, 0: get option from DB, x: number
-
-'getMostVisitedPosts( $days, $limits )'
-
-* shows a list with the most visited posts in the last days
-* $days = days to calc (last days), 0: get option from DB
-* $limit = count of posts (last posts), 0: get option from DB
-
-'getClients()'
-
-* shows visits per client/browser in percent
-* clients are hardcoded in function but easy to change ;)
-
-
-**GeoIP**
-
-* With the GeoIP addon you can associate your visitors to an country using the ip address.
-* In the database a new column 'country' will be insert on plugin activation.
-* On options page you can update you current visits. This take a while! The Script checks 100 IP addresses at once an reload itself until less then 100 addresses left. Click the update button to check the rest.
-* If the rest remains greater than 0 the IP address is not in GeoIP database (accuracy 99.5%).
-* You can update the GeoIP database from time to time to get new IP data. This necessitates write rights to geoip directory (e.g. chmod 777).
-* If the automatically update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz">GeoIP.dat.gz</a> and extract it to the "geoip" directory.
-* More information about GeoIP on http://www.maxmind.com/app/geoip_country
-
-
-== Changelog ==
-
-= 2.12 =
-+ New: Flags images as sprite included
-+ New: improved "Browsers" management, set your own favorites
-+ New: improved "Mass Bots" management, more infos
-+ New: "Visitors per country" list
-+ New: works now in cached pages too (optional, BETA)
-+ Language update: Italian, thanks to Gianni Diurno http://gidibao.net/index.php/portfolio/
-+ Bugfix: CleanDB delete by IP function changed
-+ Code updated (deprecated functions)
-
-
-?????+ New language: Russia, thanks to Ilya Pshenichny http://iluhis.com
-
-
-= 2.11 =
-+ Bugfix: GeoIP, update old data used wrong IP format
-+ Bugfix: CleanDB deletes to many entries (index, categories, tags)
-+ Bugfix: date/timezone problem
-+ New: anonymous IP addresses (last bit, optional)
-+ New: simple scroll function in charts
-+ New language: Polish, thanks to LeXuS http://www.intrakardial.de
-
-= 2.10.1 =
-+ New language: Dutch, thanks to Rene http://wpwebshop.com
-
-= 2.10 =
-+ New language: French, thanks to Bjork http://www.habbzone.fr
-+ New: Worldmap to visualize visitors per country
-+ New: Shortcodes to add lists and charts to posts and pages, check counter.css too
+These shortcodes you can use in the content while writing you posts.
 
 [CPD_READS_THIS]
 [CPD_READS_TOTAL]
@@ -197,25 +89,169 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 [CPD_MOST_VISITED_POSTS]
 [CPD_CLIENTS]
 [CPD_COUNTRIES]
+[CPD_REFERERS]
 
+**Functions**
+
+You can place these functions in your template.<br/>
+Place functions within post-loop (e.g. in single.php)<br/>
+Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); ?&gt;' to check if plugin is activated.
+
+'show( $before, $after, $show, $count )'
+
+* $before = text before number e.g. '&lt;p&gt;' (default "")
+* $after = text after number e.g. 'reads&lt;/p&gt;' (default " reads")
+* $show = true/false, "echo" complete string or "return" number only (default true)
+* $count = true/false, false will not count the reads (default true)
+
+'count()'
+
+* only count reads, without any output
+* cpdShow call it
+
+'getFirstCount( $frontend )'
+
+* shows date of first count
+* $frontend: 1 echo, 0 return output
+
+'getUserPerDay( $days, $frontend )'
+
+* shows average number of visitors per day of the last _$days_ days
+* default on dashboard (see it with mouse over number) = "Latest Counts - Days" in options
+* $frontend: 1 echo, 0 return output
+
+'getReadsAll( $frontend )'
+ 
+* shows number of total reads
+* $frontend: 1 echo, 0 return output
+
+'getReadsToday( $frontend )'
+
+* shows number of reads today
+* $frontend: 1 echo, 0 return output
+
+'getReadsYesterday( $frontend )'
+ 
+* shows number of reads yesterday
+* $frontend: 1 echo, 0 return output
+
+'getUserAll( $frontend )'
+
+* shows number of total visitors
+* $frontend: 1 echo, 0 return output
+
+'getUserOnline( $frontend )'
+
+* shows number of visitors just online
+* $frontend: 1 echo, 0 return output
+
+'getUserToday( $frontend )'
+
+* shows number of visitors today
+* $frontend: 1 echo, 0 return output
+
+'getUserYesterday( $frontend )'
+ 
+* shows number of visitors yesterday
+* $frontend: 1 echo, 0 return output
+
+'getUserLastWeek( $frontend )'
+
+* shows number of visitors last week (7 days)
+* $frontend: 1 echo, 0 return output
+
+'getUserPerMonth( $frontend )'
+
+* lists number of visitors per month
+* $frontend: 1 echo, 0 return output
+
+'getUserPerPost( $limit = 0, $frontend )'
+
+* lists _$limit_ number of posts, -1: all, 0: get option from DB, x: number
+* $frontend: 1 echo, 0 return output
+
+'getMostVisitedPosts( $days, $limits, $frontend )'
+
+* shows a list with the most visited posts in the last days
+* $days = days to calc (last days), 0: get option from DB
+* $limit = count of posts (last posts), 0: get option from DB
+* $frontend: 1 echo, 0 return output
+
+'getClients( $frontend )'
+
+* shows visits per client/browser in percent
+* clients are hardcoded in function but easy to change ;)
+* $frontend: 1 echo, 0 return output
+
+'getReferers( $limit = 0, $frontend )'
+
+* lists top _$limit_ referers, 0: get option from DB, x: number
+* $frontend: 1 echo, 0 return output
+
+**GeoIP**
+
+* With the GeoIP addon you can associate your visitors to an country using the ip address.
+* In the database a new column 'country' will be insert on plugin activation.
+* On options page you can update you current visits. This take a while! The Script checks 100 IP addresses at once an reload itself until less then 100 addresses left. Click the update button to check the rest.
+* If the rest remains greater than 0 the IP address is not in GeoIP database (accuracy 99.5%).
+* You can update the GeoIP database from time to time to get new IP data. This necessitates write rights to geoip directory (e.g. chmod 777).
+* If the automatically update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz">GeoIP.dat.gz</a> and extract it to the "geoip" directory.
+* More information about GeoIP on http://www.maxmind.com/app/geoip_country
+
+== Changelog ==
+
+= 2.13 =
++ New: Top referers
++ Bugfix: Thickbox only in backend needed, RTL on he_IL was broken
++ Bugfix: startpage was not counted everywhere
++ Language update: Portuguese (Brazil)
+
+= 2.12 =
++ New: Flags images as sprite included
++ New: improved "Browsers" management, set your own favorites
++ New: improved "Mass Bots" management, more infos
++ New: "Visitors per country" list
++ New: "Visitors per day" list/chart
++ New: works now in cached pages too (optional, BETA)
++ New: easier switch to debug mode on settings
++ Language update: Dansk, Dutch, France, German, Italian, Russian, Swedish 
++ Bugfix: CleanDB delete by IP function changed
++ Bugfix: because windows symlink problem plugin dir is hardcoded as 'count-per-day' now
++ Code updated (deprecated functions)
+
+= 2.11 =
++ Bugfix: GeoIP, update old data used wrong IP format
++ Bugfix: CleanDB deletes to many entries (index, categories, tags)
++ Bugfix: date/timezone problem
++ New: anonymous IP addresses (last bit, optional)
++ New: simple scroll function in charts
++ New language: Polish, thanks to LeXuS
+
+= 2.10.1 =
++ New language: Dutch, thanks to Rene http://wpwebshop.com
+
+= 2.10 =
++ New language: French, thanks to Bjork http://www.habbzone.fr
++ New: Worldmap to visualize visitors per country
++ New: Shortcodes to add lists and charts to posts and pages, check counter.css too
 + Bugfix: mysql_fetch_assoc() error, non existing options
 + Post edit links in lists for editors only (user_level >= 7)
 
 = 2.9 =
 + New: little note system to mark special days
 + New: functions to get reads/page views total, today and yesterday
-+ Language update: Italian, thanks to Gianni Diurno http://gidibao.net/index.php/portfolio
-+ Language update: Portuguese (Brazil), thanks to Lucato http://www.ilucato.com.br
-+ Language update: Swedish, thanks to Magnus Suther http://www.magnussuther.se
-+ Language update: Dansk, thanks to Jonas Thomsen http://jonasthomsen.com
++ Language update: Italian, thanks to Gianni Diurno
++ Language update: Portuguese (Brazil), thanks to Lucato
++ Language update: Swedish, thanks to Magnus Suther
++ Language update: Dansk, thanks to Jonas Thomsen
 + Language update: German
 
 = 2.8 =
 + New: set user level until CpD will count loged users
 + New: link to plugin page on Count per Day dashboard
 + New: click on a bar in the charts reload the page with given date for 'Visitors per day' metabox
-+ New language: Swedish, thanks to Magnus Suther http://www.magnussuther.se
-+ New language: Dansk, thanks to GeorgeWP http://wordpress.blogos.dk
++ New language: Swedish, thanks to Magnus
++ New language: Dansk, thanks to GeorgeWP
 
 = 2.7 =
 + Bugfix: date/timezone problem
@@ -234,7 +270,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + New: "Mass Bot Detector" shows and deletes clients that view more than x pages per day
 + New: see count and time of queries if CPD_DEBUG is true (on top of counter.php)
 + Bugfix: cleanDB by IP now works
-+ Language update: Portuguese (Brazil), thanks to Beto Ribeiro  http://www.sevenarts.com.br
++ Language update: Portuguese (Brazil), thanks to Beto Ribeiro
 
 = 2.4.2 =
 + Bugfix: mysql systax error
@@ -281,7 +317,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + create class, update/clean up/rename functions
 
 = 1.5.1 =
-+ New language: Belorussian, thanks to Marcis Gasuns http://www.fatcow.com
++ New language: Belorussian, thanks to Marcis Gasuns
 
 = 1.5 =
 + New: Dashboard Widget
@@ -300,7 +336,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + Bugfix: autocount endless looping
 
 = 1.2.2 =
-+ New language: Italian, thanks to Gianni Diurno http://gidibao.net/index.php/portfolio/
++ New language: Italian, thanks to Gianni Diurno
 
 = 1.2.1 =
 + Bugfix: Error 404 "Page not found" with "auto count"
