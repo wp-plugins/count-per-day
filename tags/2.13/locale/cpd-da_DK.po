@@ -1,0 +1,681 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Count per Day 2.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-01 19:13+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Jonas Thomsen <mail@jonasthomsen.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Danish\n"
+"X-Poedit-Country: DENMARK\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: d:/wordpress/plugins/count-per-day\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: d:/wordpress/plugins/count-per-day\n"
+"X-Textdomain-Support: yes"
+
+#: counter-options.php:41
+#@ cpd
+msgid "Options updated"
+msgstr "Indstillingerne er blevet gemt"
+
+#: counter-options.php:51
+#, php-format
+#@ cpd
+msgid "Countries updated. <b>%s</b> entries in %s without country left"
+msgstr "Lande opdateret <b>%s</b> poster i %s har stadig ingen angivelse af land."
+
+#: counter-options.php:56
+#@ cpd
+msgid "update next"
+msgstr "opdatér næste"
+
+#: counter-options.php:94
+#, php-format
+#@ cpd
+msgid "Mass Bots cleaned. %s counts deleted."
+msgstr "Massebots renset. %s rækker slettet."
+
+#: counter-options.php:101
+#, php-format
+#@ cpd
+msgid "Database cleaned. %s rows deleted."
+msgstr "Databasen renset. %s rækker slettet."
+
+#: counter-options.php:107
+#@ cpd
+msgid "Counter reseted."
+msgstr "Tæller nulstillet."
+
+#: counter-options.php:111
+#: counter-options.php:460
+#@ cpd
+msgid "UNINSTALL Count per Day"
+msgstr "AFINSTALLÉR Count per Day"
+
+#: counter-options.php:118
+#: counter-options.php:120
+#, php-format
+#@ cpd
+msgid "Table %s deleted"
+msgstr "Tabellen %s blev slettet"
+
+#: counter-options.php:122
+#@ cpd
+msgid "Options deleted"
+msgstr "Indstillinger slettet"
+
+#: counter-options.php:146
+#: counter-options.php:445
+#@ cpd
+msgid "Uninstall"
+msgstr "Afinstallér"
+
+#: counter-options.php:147
+#@ cpd
+msgid "Click here"
+msgstr "Klik her"
+
+#: counter-options.php:147
+#@ cpd
+msgid "to finish the uninstall and to deactivate \"Count per Day\"."
+msgstr "for at færdiggøre afinstalleringen og deaktivere \"Count per Day\"."
+
+#: counter-options.php:168
+#@ cpd
+msgid "Options"
+msgstr "Indstillinger"
+
+#: counter-options.php:173
+#@ cpd
+msgid "Online time"
+msgstr "Tid online"
+
+#: counter-options.php:174
+#@ cpd
+msgid "Seconds for online counter. Used for \"Visitors online\" on dashboard page."
+msgstr "Sekunder for online-tæller. Bruges om \"Besøgende online\" i kontrolpanelet."
+
+#: counter-options.php:177
+#@ cpd
+msgid "Loged on Users"
+msgstr "Indloggede brugere"
+
+#: counter-options.php:179
+#@ cpd
+msgid "count too"
+msgstr "tæl også"
+
+#: counter-options.php:180
+#@ cpd
+msgid "until User Level"
+msgstr "indtil rolle"
+
+#: counter-options.php:191
+#@ cpd
+msgid "Auto counter"
+msgstr "Auto-tæller"
+
+#: counter-options.php:192
+#@ cpd
+msgid "Counts automatically single-posts and pages, no changes on template needed."
+msgstr "Tæller automatisk enkelt-indlæg og -sider; kræver ingen ændringer i skabeloner."
+
+#: counter-options.php:195
+#@ cpd
+msgid "Bots to ignore"
+msgstr "Ignorér følgende bots"
+
+#: counter-options.php:212
+msgid "Dashboard"
+msgstr "Kontrolpanel"
+
+#: counter-options.php:215
+#: counter.php:1442
+#@ cpd
+msgid "Visitors per post"
+msgstr "Besøgende per indlæg"
+
+#: counter-options.php:216
+#: counter-options.php:220
+#@ cpd
+msgid "How many posts do you want to see on dashboard page?"
+msgstr "Hvor mange indlæg vil du se på kontrolpanel"
+
+#: counter-options.php:219
+#@ cpd
+msgid "Latest Counts - Posts"
+msgstr "Seneste læste - Indlæg"
+
+#: counter-options.php:223
+#@ cpd
+msgid "Latest Counts - Days"
+msgstr "Seneste læste - Dage"
+
+#: counter-options.php:224
+#: counter-options.php:228
+#@ cpd
+msgid "How many days do you want look back?"
+msgstr "Hvor mange dage vil du se tilbage?"
+
+#: counter-options.php:227
+#@ cpd
+msgid "Chart - Days"
+msgstr "Diagram - Dage"
+
+#: counter-options.php:231
+#@ cpd
+msgid "Chart - Height"
+msgstr "Diagram - Højde"
+
+#: counter-options.php:232
+#@ cpd
+msgid "Height of the biggest bar"
+msgstr "Højde på den største søjle"
+
+#: counter-options.php:236
+#@ cpd
+msgid "Countries"
+msgstr "Lande"
+
+#: counter-options.php:237
+#@ cpd
+msgid "How many countries do you want to see on dashboard page?"
+msgstr "Hvor mange lande vil du se på pluginnets side i kontrolpanelet"
+
+#: counter-options.php:250
+msgid "Edit Posts"
+msgstr "Redigér indlæg"
+
+#: counter-options.php:250
+msgid "Edit Pages"
+msgstr "Redigér sider"
+
+#: counter-options.php:253
+#@ cpd
+msgid "Show in lists"
+msgstr "Vis som liste"
+
+#: counter-options.php:254
+#@ cpd
+msgid "Show \"Reads per Post\" in a new column in post management views."
+msgstr "Vis \"Læst gange\" i en ny kolonne på Redigér indlæg-siden."
+
+#: counter-options.php:258
+#@ cpd
+msgid "Start Values"
+msgstr "Start værdier"
+
+#: counter-options.php:259
+#@ cpd
+msgid "Here you can change the date of first count and add a start count."
+msgstr "Her kan du ændre tællerens startdato, og sætte en start værdi."
+
+#: counter-options.php:263
+#@ cpd
+msgid "Start date"
+msgstr "Start dato"
+
+#: counter-options.php:264
+#@ cpd
+msgid "Your old Counter starts at?"
+msgstr "Din gamle tæller startede D.?"
+
+#: counter-options.php:267
+#: counter-options.php:271
+#@ cpd
+msgid "Start count"
+msgstr "Start værdi"
+
+#: counter-options.php:268
+#@ cpd
+msgid "Add this value to \"Total visitors\"."
+msgstr "Tilføj denne værdi til \"Antal besøgende i alt\""
+
+#: counter-options.php:272
+#@ cpd
+msgid "Add this value to \"Total reads\"."
+msgstr "Tilføj denne værdi til \"Læst gange ialt\""
+
+#: counter-options.php:208
+#: counter-options.php:246
+#: counter-options.php:276
+#: counter-options.php:291
+#@ cpd
+msgid "Update options"
+msgstr "Opdatér indstillinger"
+
+#: counter-options.php:301
+#@ cpd
+msgid "GeoIP - Countries"
+msgstr "GeoIP - Lande"
+
+#: counter-options.php:310
+#@ cpd
+msgid "Update old counter data"
+msgstr "Opdatér gamle tællerdata"
+
+#: counter-options.php:323
+#@ cpd
+msgid "Update GeoIP database"
+msgstr "Opdatér GeoIP-database"
+
+#: counter-options.php:326
+#@ cpd
+msgid "Download a new version of GeoIP.dat file."
+msgstr "Download en ny version af GeoIP.dat-filen."
+
+#: counter-options.php:332
+#@ cpd
+msgid "More informations about GeoIP"
+msgstr "Flere oplysninger om GeoIP"
+
+#: counter-options.php:352
+#: massbots.php:37
+#@ cpd
+msgid "Mass Bots"
+msgstr "Massebots"
+
+#: counter-options.php:356
+#, php-format
+#@ cpd
+msgid "Show all IPs with more than %s page views per day"
+msgstr "Vis alle IP&#39;er med mere end %s sidevisninger per dag"
+
+#: counter-options.php:357
+#: notes.php:80
+#: userperspan.php:47
+#@ cpd
+msgid "show"
+msgstr "vis"
+
+#: counter-options.php:365
+#@ cpd
+msgid "IP"
+msgstr "IP"
+
+#: counter-options.php:366
+#: notes.php:84
+#@ cpd
+msgid "Date"
+msgstr "Dato"
+
+#: counter-options.php:367
+#@ cpd
+msgid "Client"
+msgstr "Klient"
+
+#: counter-options.php:368
+#@ cpd
+msgid "Views"
+msgstr "Visninger"
+
+#: counter-options.php:379
+#: counter-options.php:401
+#, php-format
+#@ cpd
+msgid "Delete these %s counts"
+msgstr "Slet disse %s hits"
+
+#: counter-options.php:410
+#: counter-options.php:419
+#@ cpd
+msgid "Clean the database"
+msgstr "Rens databasen"
+
+#: counter-options.php:413
+#@ cpd
+msgid "You can clean the counter table by delete the \"spam data\".<br />If you add new bots above the old \"spam data\" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots."
+msgstr "Du kan rense tællertabellen for \"spam-data\".<br />Når du tilføjer nye bots ovenfor, forbliver de gamle \"spam-data\" i databasen.<br />Her kan du køre bot-filteret igen og slette bot-besøgene."
+
+#: counter-options.php:427
+#: counter-options.php:436
+#@ cpd
+msgid "Reset the counter"
+msgstr "Nulstil tælleren"
+
+#: counter-options.php:430
+#@ cpd
+msgid "You can reset the counter by empty the table. ALL TO 0!<br />Make a backup if you need the current data!"
+msgstr "Du kan nulstille tælleren ved at tømme tabellen. Alt bliver nulstillet.<br />Tag en sikkerhedskopi, hvis du har brug for de aktuelle data."
+
+#: counter-options.php:448
+#@ cpd
+msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
+msgstr "Hvis \"Count per Day\" kun deaktiveres, bliver tabellerne i databasen bevaret."
+
+#: counter-options.php:449
+#@ cpd
+msgid "Here you can delete the tables and disable \"Count per Day\"."
+msgstr "Her kan du slette tabellerne og deaktivere \"Count per Day\"."
+
+#: counter-options.php:452
+#@ cpd
+msgid "WARNING"
+msgstr "ADVARSEL"
+
+#: counter-options.php:453
+#@ cpd
+msgid "These tables (with ALL counter data) will be deleted."
+msgstr "Disse tabeller (med ALLE tæller-data) vil blive slettet."
+
+#: counter-options.php:455
+#@ cpd
+msgid "If \"Count per Day\" re-installed, the counter starts at 0."
+msgstr "Hvis \"Count per Day\" reinstalleres, begynder tælleren forfra ved 0."
+
+#: counter-options.php:459
+#@ cpd
+msgid "Yes"
+msgstr "Ja"
+
+#: counter-options.php:460
+#@ cpd
+msgid "You are sure to disable Count per Day and delete all data?"
+msgstr "Er du sikker på, du vil deaktivere \"Count per Day\" og slette alle data?"
+
+#: counter-options.php:468
+#@ cpd
+msgid "Support"
+msgstr "Support"
+
+#: counter-options.php:476
+#: counter.php:1409
+#@ cpd
+msgid "Bug? Problem? Question? Hint? Praise?"
+msgstr "Ris, ros, forslag og kommentarer"
+
+#: counter-options.php:478
+#: counter.php:1410
+#, php-format
+#@ cpd
+msgid "Write a comment on the <a href=\"%s\">plugin page</a>."
+msgstr "Skriv en kommentar på  <a href=\"%s\">plugin siden</a>."
+
+#: counter.php:436
+#@ cpd
+msgid "Total reads"
+msgstr "Læst gange ialt"
+
+#: counter.php:437
+#@ cpd
+msgid "Reads today"
+msgstr "Læst gange i dag"
+
+#: counter.php:438
+#@ cpd
+msgid "Reads yesterday"
+msgstr "Læst gange igår"
+
+#: counter.php:439
+#: counter.php:1149
+#: counter.php:1437
+#@ cpd
+msgid "Total visitors"
+msgstr "Antal besøgende i alt"
+
+#: counter.php:440
+#@ cpd
+msgid "Visitors currently online"
+msgstr "Besøgende online lige nu"
+
+#: counter.php:441
+#@ cpd
+msgid "Visitors today"
+msgstr "Besøgende i dag"
+
+#: counter.php:442
+#@ cpd
+msgid "Visitors yesterday"
+msgstr "Besøgende i går"
+
+#: counter.php:443
+#@ cpd
+msgid "Visitors last week"
+msgstr "Besøgende sidste weekend"
+
+#: counter.php:444
+#: counter.php:1151
+#: counter.php:1438
+#: counter.php:1444
+#: userperspan.php:37
+#@ cpd
+msgid "Visitors per day"
+msgstr "Besøgende per dag"
+
+#: counter.php:445
+#@ cpd
+msgid "Counter starts on"
+msgstr "Tæller starter på"
+
+#: counter.php:560
+#@ cpd
+msgid "days"
+msgstr "dage"
+
+#: counter.php:563
+#: counter.php:938
+#: notes.php:51
+#: notes.php:85
+#@ cpd
+msgid "Notes"
+msgstr "Noter"
+
+#: counter.php:587
+#@ cpd
+msgid "no reads at this time"
+msgstr "Ikke læst pt."
+
+#: counter.php:886
+#, php-format
+#@ cpd
+msgid "The %s most visited posts in last %s days:"
+msgstr "De %s mest sete indlæg i de sidste %s dage:"
+
+#: counter.php:937
+msgid "Show"
+msgstr "Vis"
+
+#: counter.php:971
+#@ cpd
+msgid "Other"
+msgstr "Andre"
+
+#: counter.php:1021
+msgid "Edit Post"
+msgstr "Redigér indlæg"
+
+#: counter.php:1037
+#: counter.php:1058
+#: massbots.php:47
+#: userperspan.php:68
+msgid "Front page displays"
+msgstr "Visninger af forsiden"
+
+#: counter.php:1136
+msgid "Settings"
+msgstr "Indstillinger"
+
+#  tjekkes
+#: counter.php:1245
+#@ cpd
+msgid "Reads"
+msgstr "Læst gange"
+
+#: counter.php:1325
+#@ cpd
+msgid "This post"
+msgstr "Dette indlæg"
+
+#: counter.php:1362
+msgid "Title:"
+msgstr "Titel:"
+
+#: counter.php:1373
+#@ cpd
+msgid "Label"
+msgstr "Etiket"
+
+#: counter.php:1373
+#@ cpd
+msgid "empty = name above"
+msgstr "tom = navn ovenfor"
+
+#: counter.php:1439
+#@ cpd
+msgid "Reads per day"
+msgstr "Læst gange per dag"
+
+#: counter.php:1440
+#@ cpd
+msgid "Visitors per month"
+msgstr "Besøgende per måned"
+
+#: counter-options.php:241
+#: counter.php:1441
+#@ cpd
+msgid "Browsers"
+msgstr "Browsere"
+
+#: counter.php:1443
+#@ cpd
+msgid "Latest Counts"
+msgstr "Seneste læste"
+
+#: counter.php:1445
+msgid "Plugin"
+msgstr "Plugin"
+
+#: counter.php:1450
+#@ cpd
+msgid "Reads per Country"
+msgstr "Læste per land"
+
+#: counter.php:1466
+#@ cpd
+msgid "Statistics"
+msgstr "Statistik"
+
+#: counter-options.php:473
+#: counter.php:1408
+#: counter.php:1656
+#, php-format
+#@ cpd
+msgid "Time for Count per Day: <code>%s</code>."
+msgstr "Tid for Count per Day: <code>%s</code>."
+
+#: notes.php:85
+#@ cpd
+msgid "(1 per day)"
+msgstr "(1 per dag)"
+
+#: notes.php:86
+msgid "Action"
+msgstr "Handling"
+
+#: notes.php:91
+#@ cpd
+msgid "add"
+msgstr "Tilføj"
+
+#: notes.php:106
+#@ cpd
+msgid "save"
+msgstr "Gem"
+
+#: notes.php:107
+#@ cpd
+msgid "delete"
+msgstr "Slet"
+
+#: notes.php:118
+#@ cpd
+msgid "edit"
+msgstr "Redigér"
+
+#: geoip/geoip.php:91
+#@ cpd
+msgid "Sorry, necessary functions (zlib) not installed or enabled in php.ini."
+msgstr "Beklager. Nødvendige funktioner (zlib) er ikke installeret eller ikke aktiveret i php.ini."
+
+#: geoip/geoip.php:115
+#@ cpd
+msgid "New GeoIP database installed."
+msgstr "Ny GeoIP-database installeret."
+
+#: geoip/geoip.php:117
+#@ cpd
+msgid "Sorry, an error occurred. Try again or check the access rights of directory \"geoip\" is 777."
+msgstr "Beklager. Der opstod en fejl. Prøv igen eller tjek, at adgangsrettigheder til mappen \"geoip\" er 777"
+
+#: counter-options.php:199
+#@ cpd
+msgid "Anonymous IP"
+msgstr "Anonym IP"
+
+#: counter-options.php:203
+#@ cpd
+msgid "Cache"
+msgstr "Cache"
+
+#: counter-options.php:204
+#@ cpd
+msgid "I use a cache plugin. Count these visits with ajax."
+msgstr "Jeg bruger et cache plugin. tæl disse sider med ajax"
+
+#: counter-options.php:242
+#@ cpd
+msgid "Substring of the user agent, separated by comma"
+msgstr "Del streng af user agent, separeret med komma"
+
+#: counter-options.php:281
+#: counter-options.php:285
+#@ cpd
+msgid "Debug mode"
+msgstr "Debug mode"
+
+#: counter-options.php:286
+#@ cpd
+msgid "Show debug informations at the bottom of all pages."
+msgstr "Vis Debug informationer i bunden af alle sider"
+
+#: counter.php:1451
+#@ cpd
+msgid "Visitors per Country"
+msgstr "Besøgende per land"
+
+#: counter.php:1534
+#@ cpd
+msgid "Map"
+msgstr "Kort"
+
+#: userperspan.php:41
+#@ cpd
+msgid "Start"
+msgstr "Start"
+
+#: userperspan.php:43
+#@ cpd
+msgid "End"
+msgstr "Slut"
+
+#: userperspan.php:45
+#@ cpd
+msgid "PostID"
+msgstr "Post ID"
+
+#: userperspan.php:54
+#@ cpd
+msgid "no data found"
+msgstr "Ingen data fundet"
+
+#: counter-options.php:313
+#@ cpd
+msgid "You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!"
+msgstr "Du kan få landedata for alle indlæg i databasen, hvis du tjekker IP-adresserne i GeoIP-databasen. Det tager lidt tid!"
+
