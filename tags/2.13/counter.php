@@ -1015,11 +1015,12 @@ function getReferers( $limit = 0, $frontend = false )
 	$res = $this->getQuery("SELECT COUNT(*) count, referer FROM ".CPD_C_TABLE." WHERE referer > '' GROUP BY referer ORDER BY COUNT(*) DESC LIMIT $limit", 'getReferers');
 
 	$r = '<ul id="cpd_referers" class="cpd_front_list">';
-	while ( $row = mysql_fetch_array($res) )
-	{
-		$ref2 = str_replace('http://', '', $row['referer']);
-		$r .= '<li><a href="'.$row['referer'].'">'.$ref2.'</a><b>'.$row['count'].'</b></li>';
-	}
+	if ( @mysql_num_rows($res) )
+		while ( $row = mysql_fetch_array($res) )
+		{
+			$ref2 = str_replace('http://', '', $row['referer']);
+			$r .= '<li><a href="'.$row['referer'].'">'.$ref2.'</a><b>'.$row['count'].'</b></li>';
+		}
 	$r .= '</ul>';
 	
 	if ($frontend)
