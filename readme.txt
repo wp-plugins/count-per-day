@@ -24,9 +24,10 @@ It counts 1 visit per IP per day. So any reload of the page don't increment the 
 
 = Languages, Translators =
 
-- Dansk			- 100% - Jonas Thomsen -		http://jonasthomsen.com
-- Dansk 2*		- 100% - Georg S. Adamsen -		http://www.blogos.dk
+- Dansk			- 100% - Georg S. Adamsen -		http://www.blogos.dk
+- Dansk 2*		- 100% - Jonas Thomsen -		http://jonasthomsen.com
 - Dutch NL		- 100% - Rene -					http://wpwebshop.com
+- Espanol		- 100% - Juan Carlos del Río -
 - France		- 100% - Bjork -				http://www.habbzone.fr
 - German		- 100% - Tom Braider, me ;) -
 - Italian		- 100% - Gianni Diurno -		http://gidibao.net
@@ -199,6 +200,10 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * More information about GeoIP on http://www.maxmind.com/app/geoip_country
 
 == Changelog ==
+
+= Development Version =
++ New Language: Espanol, thanks to Juan Carlos del Río
++ more DEBUG informations
 
 = 2.13 =
 + New: Top referers

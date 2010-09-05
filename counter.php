@@ -1725,7 +1725,10 @@ function showQueries()
 	while ( $col = mysql_fetch_array($res) )
 		echo '<span style="color:blue">'.$col['Field'].'</span> = '.$col['Type'].' &nbsp; ';
 	echo '</li>';
-	
+	echo '<li><b>Options:</b><br /> ';
+	foreach ( $this->options as $k=>$v )
+		echo $k.' = '.$v.'<br />';
+	echo '</li>';
 	foreach($this->queries as $q)
 		if ($q != $this->queries[0] )
 			echo '<li>'.$q.'</li>';

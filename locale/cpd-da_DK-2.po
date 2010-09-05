@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Count per Day Development version\n"
+"Project-Id-Version: Count per Day 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-10 20:10+0100\n"
+"POT-Creation-Date: 2010-03-01 19:13+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Team Blogos <wordpress@blogos.dk>\n"
-"Language-Team: Team Blogos <wordpress@blogos.dk>\n"
+"Last-Translator: Jonas Thomsen <mail@jonasthomsen.com>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -114,7 +114,7 @@ msgstr "tæl også"
 #: counter-options.php:180
 #@ cpd
 msgid "until User Level"
-msgstr "til og med brugerniveau"
+msgstr "indtil rolle"
 
 #: counter-options.php:191
 #@ cpd
@@ -130,29 +130,6 @@ msgstr "Tæller automatisk enkelt-indlæg og -sider; kræver ingen ændringer i 
 #@ cpd
 msgid "Bots to ignore"
 msgstr "Ignorér følgende bots"
-
-#: counter-options.php:199
-#@ cpd
-msgid "Anonymous IP"
-msgstr "Anonymt IP-nummer"
-
-#: counter-options.php:203
-#@ cpd
-msgid "Cache"
-msgstr "Cache"
-
-#: counter-options.php:204
-#@ cpd
-msgid "I use a cache plugin. Count these visits with ajax."
-msgstr "Jeg bruger et cache-plugin. Tæl disse besøg med Ajax."
-
-#: counter-options.php:208
-#: counter-options.php:246
-#: counter-options.php:276
-#: counter-options.php:291
-#@ cpd
-msgid "Update options"
-msgstr "Opdatér indstillinger"
 
 #: counter-options.php:212
 msgid "Dashboard"
@@ -211,17 +188,6 @@ msgstr "Lande"
 msgid "How many countries do you want to see on dashboard page?"
 msgstr "Hvor mange lande vil du se på pluginnets side i kontrolpanelet"
 
-#: counter-options.php:241
-#: counter.php:1441
-#@ cpd
-msgid "Browsers"
-msgstr "Browsere"
-
-#: counter-options.php:242
-#@ cpd
-msgid "Substring of the user agent, separated by comma"
-msgstr "Delstrenge, der identificerer en browser, kommasepareret"
-
 #: counter-options.php:250
 msgid "Edit Posts"
 msgstr "Redigér indlæg"
@@ -238,54 +204,51 @@ msgstr "Vis som liste"
 #: counter-options.php:254
 #@ cpd
 msgid "Show \"Reads per Post\" in a new column in post management views."
-msgstr "Vis \"Læst pr. indlæg\" i en ny kolonne på Redigér indlæg-siden."
+msgstr "Vis \"Læst gange\" i en ny kolonne på Redigér indlæg-siden."
 
 #: counter-options.php:258
 #@ cpd
 msgid "Start Values"
-msgstr "Startværdier"
+msgstr "Start værdier"
 
 #: counter-options.php:259
 #@ cpd
 msgid "Here you can change the date of first count and add a start count."
-msgstr "Her kan du ændre datoen på første tæller og tilføje en starttæller."
+msgstr "Her kan du ændre tællerens startdato, og sætte en start værdi."
 
 #: counter-options.php:263
 #@ cpd
 msgid "Start date"
-msgstr "Startdato"
+msgstr "Start dato"
 
 #: counter-options.php:264
 #@ cpd
 msgid "Your old Counter starts at?"
-msgstr "Hvornår starter din gamle tæller?"
+msgstr "Din gamle tæller startede D.?"
 
 #: counter-options.php:267
 #: counter-options.php:271
 #@ cpd
 msgid "Start count"
-msgstr "Start-tæller"
+msgstr "Start værdi"
 
 #: counter-options.php:268
 #@ cpd
 msgid "Add this value to \"Total visitors\"."
-msgstr "Tilføj denne værdi til \"Besøgende i alt\"."
+msgstr "Tilføj denne værdi til \"Antal besøgende i alt\""
 
 #: counter-options.php:272
 #@ cpd
 msgid "Add this value to \"Total reads\"."
-msgstr "Tilføj denne værdi til \"Læst i alt\"."
+msgstr "Tilføj denne værdi til \"Læst gange ialt\""
 
-#: counter-options.php:281
-#: counter-options.php:285
+#: counter-options.php:208
+#: counter-options.php:246
+#: counter-options.php:276
+#: counter-options.php:291
 #@ cpd
-msgid "Debug mode"
-msgstr "Debug-modus"
-
-#: counter-options.php:286
-#@ cpd
-msgid "Show debug informations at the bottom of all pages."
-msgstr "Vis debug-information i bunden af alle sider."
+msgid "Update options"
+msgstr "Opdatér indstillinger"
 
 #: counter-options.php:301
 #@ cpd
@@ -421,41 +384,33 @@ msgstr "Er du sikker på, du vil deaktivere \"Count per Day\" og slette alle dat
 msgid "Support"
 msgstr "Support"
 
-#: counter-options.php:473
-#: counter.php:1408
-#: counter.php:1656
-#, php-format
-#@ cpd
-msgid "Time for Count per Day: <code>%s</code>."
-msgstr "Tidspunkt for Count per Day: <code>%s</code>."
-
 #: counter-options.php:476
 #: counter.php:1409
 #@ cpd
 msgid "Bug? Problem? Question? Hint? Praise?"
-msgstr "Bugs? Problemer? Spørgsmål? Tips? Ros?"
+msgstr "Ris, ros, forslag og kommentarer"
 
 #: counter-options.php:478
 #: counter.php:1410
 #, php-format
 #@ cpd
 msgid "Write a comment on the <a href=\"%s\">plugin page</a>."
-msgstr "Skriv en kommentar på <a href=\"%s\">pluginsiden</a>."
+msgstr "Skriv en kommentar på  <a href=\"%s\">plugin siden</a>."
 
 #: counter.php:436
 #@ cpd
 msgid "Total reads"
-msgstr "Læst i alt"
+msgstr "Læst gange ialt"
 
 #: counter.php:437
 #@ cpd
 msgid "Reads today"
-msgstr "Læst i dag"
+msgstr "Læst gange i dag"
 
 #: counter.php:438
 #@ cpd
 msgid "Reads yesterday"
-msgstr "Læst i går"
+msgstr "Læst gange igår"
 
 #: counter.php:439
 #: counter.php:1149
@@ -550,7 +505,7 @@ msgstr "Indstillinger"
 #: counter.php:1245
 #@ cpd
 msgid "Reads"
-msgstr "Læst"
+msgstr "Læst gange"
 
 #: counter.php:1325
 #@ cpd
@@ -574,12 +529,18 @@ msgstr "tom = navn ovenfor"
 #: counter.php:1439
 #@ cpd
 msgid "Reads per day"
-msgstr "Læst per dag"
+msgstr "Læst gange per dag"
 
 #: counter.php:1440
 #@ cpd
 msgid "Visitors per month"
 msgstr "Besøgende per måned"
+
+#: counter-options.php:241
+#: counter.php:1441
+#@ cpd
+msgid "Browsers"
+msgstr "Browsere"
 
 #: counter.php:1443
 #@ cpd
@@ -593,27 +554,25 @@ msgstr "Plugin"
 #: counter.php:1450
 #@ cpd
 msgid "Reads per Country"
-msgstr "Læst per land"
-
-#: counter.php:1451
-#@ cpd
-msgid "Visitors per Country"
-msgstr "Besøgende per land"
+msgstr "Læste per land"
 
 #: counter.php:1466
 #@ cpd
 msgid "Statistics"
 msgstr "Statistik"
 
-#: counter.php:1534
+#: counter-options.php:473
+#: counter.php:1408
+#: counter.php:1656
+#, php-format
 #@ cpd
-msgid "Map"
-msgstr "Kort"
+msgid "Time for Count per Day: <code>%s</code>."
+msgstr "Tid for Count per Day: <code>%s</code>."
 
 #: notes.php:85
 #@ cpd
 msgid "(1 per day)"
-msgstr "(1 gang per dag)"
+msgstr "(1 per dag)"
 
 #: notes.php:86
 msgid "Action"
@@ -622,42 +581,22 @@ msgstr "Handling"
 #: notes.php:91
 #@ cpd
 msgid "add"
-msgstr "tilføj"
+msgstr "Tilføj"
 
 #: notes.php:106
 #@ cpd
 msgid "save"
-msgstr "gem"
+msgstr "Gem"
 
 #: notes.php:107
 #@ cpd
 msgid "delete"
-msgstr "slet"
+msgstr "Slet"
 
 #: notes.php:118
 #@ cpd
 msgid "edit"
-msgstr "redigér"
-
-#: userperspan.php:41
-#@ cpd
-msgid "Start"
-msgstr "Start"
-
-#: userperspan.php:43
-#@ cpd
-msgid "End"
-msgstr "Slut"
-
-#: userperspan.php:45
-#@ cpd
-msgid "PostID"
-msgstr "Indlægs-id"
-
-#: userperspan.php:54
-#@ cpd
-msgid "no data found"
-msgstr "ingen data fundet"
+msgstr "Redigér"
 
 #: geoip/geoip.php:91
 #@ cpd
@@ -673,6 +612,67 @@ msgstr "Ny GeoIP-database installeret."
 #@ cpd
 msgid "Sorry, an error occurred. Try again or check the access rights of directory \"geoip\" is 777."
 msgstr "Beklager. Der opstod en fejl. Prøv igen eller tjek, at adgangsrettigheder til mappen \"geoip\" er 777"
+
+#: counter-options.php:199
+#@ cpd
+msgid "Anonymous IP"
+msgstr "Anonym IP"
+
+#: counter-options.php:203
+#@ cpd
+msgid "Cache"
+msgstr "Cache"
+
+#: counter-options.php:204
+#@ cpd
+msgid "I use a cache plugin. Count these visits with ajax."
+msgstr "Jeg bruger et cache plugin. tæl disse sider med ajax"
+
+#: counter-options.php:242
+#@ cpd
+msgid "Substring of the user agent, separated by comma"
+msgstr "Del streng af user agent, separeret med komma"
+
+#: counter-options.php:281
+#: counter-options.php:285
+#@ cpd
+msgid "Debug mode"
+msgstr "Debug mode"
+
+#: counter-options.php:286
+#@ cpd
+msgid "Show debug informations at the bottom of all pages."
+msgstr "Vis Debug informationer i bunden af alle sider"
+
+#: counter.php:1451
+#@ cpd
+msgid "Visitors per Country"
+msgstr "Besøgende per land"
+
+#: counter.php:1534
+#@ cpd
+msgid "Map"
+msgstr "Kort"
+
+#: userperspan.php:41
+#@ cpd
+msgid "Start"
+msgstr "Start"
+
+#: userperspan.php:43
+#@ cpd
+msgid "End"
+msgstr "Slut"
+
+#: userperspan.php:45
+#@ cpd
+msgid "PostID"
+msgstr "Post ID"
+
+#: userperspan.php:54
+#@ cpd
+msgid "no data found"
+msgstr "Ingen data fundet"
 
 #: counter-options.php:313
 #@ cpd
