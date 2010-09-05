@@ -1727,7 +1727,8 @@ function showQueries()
 	echo '</li>';
 	echo '<li><b>Options:</b><br /> ';
 	foreach ( $this->options as $k=>$v )
-		echo $k.' = '.$v.'<br />';
+		if ( $k != 'bots') // hoster restrictions
+			echo $k.' = '.$v.'<br />';
 	echo '</li>';
 	foreach($this->queries as $q)
 		if ($q != $this->queries[0] )
@@ -1735,11 +1736,11 @@ function showQueries()
 	echo '</ol>';
 	?>
 	<p>GeoIP: 
-		dir=<?php echo substr(decoct(fileperms($cpd_path.'geoip/')), -3) ?>
-		file=<?php echo (is_file($cpd_path.'geoip/GeoIP.dat')) ? substr(decoct(fileperms($cpd_path.'geoip/GeoIP.dat')), -3) : '-'; ?>
-		fopen=<?php echo (function_exists('fopen')) ? 'true' : 'false' ?>
-		gzopen=<?php echo (function_exists('gzopen')) ? 'true' : 'false' ?>
-		allow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
+		d_ir=<?php echo substr(decoct(fileperms($cpd_path.'geoip/')), -3) ?>
+		f_ile=<?php echo (is_file($cpd_path.'geoip/GeoIP.dat')) ? substr(decoct(fileperms($cpd_path.'geoip/GeoIP.dat')), -3) : '-'; ?>
+		f_open=<?php echo (function_exists('fopen')) ? 'true' : 'false' ?>
+		g_zopen=<?php echo (function_exists('gzopen')) ? 'true' : 'false' ?>
+		a_llow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
 	</p>
 	<?php
 	$this->cpdInfo();
