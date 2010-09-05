@@ -146,7 +146,8 @@ function getQuery( $sql, $func = '' )
 		$t = microtime(true);
 		$res = mysql_query($sql, $this->dbcon);
 		$d = number_format( microtime(true) - $t , 5);
-		$this->queries[] = $func.' : <b>'.$d.'</b><br/><code>'.$sql.'</code>';
+		$error = ($res) ? '' : '<b style="color:red">ERROR:</b> '.mysql_errno($this->dbcon).' - '.mysql_error($this->dbcon);
+		$this->queries[] = $func.' : <b>'.$d.'</b><br/><code>'.$sql.'</code><br/>'.$error;
 		$this->queries[0] += $d;
 	}
 	else
@@ -266,13 +267,17 @@ function count( $x, $page = 'x' )
 		$page = intval($page);
 	
 	// get userlevel from role
-	$role = $userdata->td_capabilities;
-	if ($role['administrator'])		$userlevel = 10;
-	else if ($role['editor'])		$userlevel = 7;
-	else if ($role['author'])		$userlevel = 2;
-	else if ($role['contributor'])	$userlevel = 1;
-	else if ($role['subscriber'])	$userlevel = 0;
-	else							$userlevel = -1;
+	if ( isset($userdata->td_capabilities) )
+	{
+		$role = $userdata->td_capabilities;
+		if ($role['administrator'])		$userlevel = 10;
+		else if ($role['editor'])		$userlevel = 7;
+		else if ($role['author'])		$userlevel = 2;
+		else if ($role['contributor'])	$userlevel = 1;
+		else if ($role['subscriber'])	$userlevel = 0;
+		else							$userlevel = -1;
+	}
+		else $userlevel = -1;
 	
 	// count visitor?
 	$countUser = 1;
@@ -293,7 +298,7 @@ function count( $x, $page = 'x' )
 	{
 		$userip = $this->anonymize_ip($_SERVER['REMOTE_ADDR']);
 		$client = $_SERVER['HTTP_USER_AGENT'];
-		$referer = $_SERVER['HTTP_REFERER'];
+		$referer = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
 		$date = date_i18n('Y-m-d');
 		
 		// new visitor on page?
@@ -1580,22 +1585,25 @@ function getCountries( $limit = 0, $frontend, $visitors = false )
 			$c .= '&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Map', 'cpd').'" class="thickbox button">'.__('Map', 'cpd').'</a></div>';
 		}
 		
-		$c .= '<ul class="cpd_front_list">';
-		while ( $r = mysql_fetch_array($res) )
+		if ( @mysql_num_rows($res) )
 		{
-			$id = $geoip->GEOIP_COUNTRY_CODE_TO_NUMBER[strtoupper($r['country'])];
-			if ( empty($id) )
+			$c .= '<ul class="cpd_front_list">';
+			while ( $r = mysql_fetch_array($res) )
 			{
-				$name = '???';
-				$r['country'] = 'unknown';
+				$id = $geoip->GEOIP_COUNTRY_CODE_TO_NUMBER[strtoupper($r['country'])];
+				if ( empty($id) )
+				{
+					$name = '???';
+					$r['country'] = 'unknown';
+				}
+				else
+					$name = $geoip->GEOIP_COUNTRY_NAMES[$id];
+				$c .= '<li><b>'.$r['c'].'</b>
+					<div class="cpd-flag cpd-flag-'.$r['country'].'"></div> '
+					.$name.'&nbsp;</li>'."\n";
 			}
-			else
-				$name = $geoip->GEOIP_COUNTRY_NAMES[$id];
-			$c .= '<li><b>'.$r['c'].'</b>
-				<div class="cpd-flag cpd-flag-'.$r['country'].'"></div> '
-				.$name.'&nbsp;</li>'."\n";
+			$c .= '</ul>';
 		}
-		$c .= '</ul>';
 	}
 	if ($frontend)
 		return $c;
@@ -1696,7 +1704,28 @@ function showQueries()
 {
 	global $cpd_path;
 	echo '<div style="margin:10px; padding-left:30px; border:1px red solid">
-		<b>Count per Day - Queries: '.$this->queries[0].' s</b><ol>';
+		<b>Count per Day - DEBUG: '.$this->queries[0].' s</b><ol>';
+	echo '<li>'
+		.'<b>Server:</b> '.$_SERVER['SERVER_SOFTWARE'].'<br/>'
+		.'<b>PHP:</b> '.phpversion().'<br/>'
+		.'<b>mySQL Server:</b> '.mysql_get_server_info().'<br/>'
+		.'<b>mySQL Client:</b> '.mysql_get_client_info().'<br/>'
+		.'<b>WordPress:</b> '.get_bloginfo('version')
+		.'</li>';
+	echo '<li><b>Tables:</b><br><b>'.CPD_C_TABLE.'</b>: ';
+	$res = $this->getQuery( "SHOW FIELDS FROM `".CPD_C_TABLE."`", 'showFields' );
+	while ( $col = mysql_fetch_array($res) )
+		echo '<span style="color:blue">'.$col['Field'].'</span> = '.$col['Type'].' &nbsp; ';
+	echo '<br/><b>'.CPD_CO_TABLE.'</b>: ';
+	$res = $this->getQuery( "SHOW FIELDS FROM `".CPD_CO_TABLE."`", 'showFields' );
+	while ( $col = mysql_fetch_array($res) )
+		echo '<span style="color:blue">'.$col['Field'].'</span> = '.$col['Type'].' &nbsp; ';
+	echo '<br/><b>'.CPD_N_TABLE.'</b>: ';
+	$res = $this->getQuery( "SHOW FIELDS FROM `".CPD_N_TABLE."`", 'showFields' );
+	while ( $col = mysql_fetch_array($res) )
+		echo '<span style="color:blue">'.$col['Field'].'</span> = '.$col['Type'].' &nbsp; ';
+	echo '</li>';
+	
 	foreach($this->queries as $q)
 		if ($q != $this->queries[0] )
 			echo '<li>'.$q.'</li>';
