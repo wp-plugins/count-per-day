@@ -1,5 +1,10 @@
 <?php 
-require('../../../wp-load.php');
+// windows junction patch
+$dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
+for ( $x = 1; $x <= 3; $x++)
+	$dir = dirname($dir.'x');
+
+require($dir.'/wp-load.php');
 
 if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 {
@@ -26,8 +31,10 @@ if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Count per Day</title>
+<link rel="stylesheet" type="text/css" href="counter.css" />
 </head>
-<body style="font-size: 13px;">
+<body class="cpd-thickbox">
+<h2><?php _e('Mass Bots', 'cpd') ?></h2>
 <ol>
 <?php
 while ( $row = mysql_fetch_array($massbots) )
