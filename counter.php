@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
-Version: 2.13
+Version: 2.13.1
 License: Postcardware :)
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -1017,7 +1017,7 @@ function getReferers( $limit = 0, $frontend = false )
 	if ( $limit == 0 )
 		$limit = $this->options['dashboard_last_posts'];
 	
-	$res = $this->getQuery("SELECT COUNT(*) count, referer FROM ".CPD_C_TABLE." WHERE referer > '' GROUP BY referer ORDER BY COUNT(*) DESC LIMIT $limit", 'getReferers');
+	$res = $this->getQuery("SELECT COUNT(*) count, referer FROM ".CPD_C_TABLE." WHERE referer > '' GROUP BY referer ORDER BY count DESC LIMIT $limit", 'getReferers');
 
 	$r = '<ul id="cpd_referers" class="cpd_front_list">';
 	if ( @mysql_num_rows($res) )
@@ -1568,11 +1568,11 @@ function getCountries( $limit = 0, $frontend, $visitors = false )
 						WHERE ip > 0
 						GROUP BY country, ip ) as t
 				GROUP BY country
-				ORDER BY COUNT(*) desc
+				ORDER BY c desc
 				LIMIT $limit", 'getCountries');
 		else
 			// reads
-			$res = $this->getQuery("SELECT country, COUNT(*) c FROM ".CPD_C_TABLE." WHERE ip > 0 GROUP BY country ORDER BY COUNT(*) DESC LIMIT $limit", 'getCountries');
+			$res = $this->getQuery("SELECT country, COUNT(*) c FROM ".CPD_C_TABLE." WHERE ip > 0 GROUP BY country ORDER BY c DESC LIMIT $limit", 'getCountries');
 		
 		// map link
 		if (!$frontend && file_exists($cpd_path.'map/map.php') )
@@ -1665,7 +1665,7 @@ function addCss()
 	echo "\n".'<link rel="stylesheet" href="'.$this->dir.'/counter.css" type="text/css" />'."\n";
 	if ( $text_direction == 'rtl' ) 
 		echo '<link rel="stylesheet" href="'.$this->dir.'/counter-rtl.css" type="text/css" />'."\n";
-	// thickbox style here becorse add_thickbox() breaks RTL in he_IL
+	// thickbox style here because add_thickbox() breaks RTL in he_IL
 	if ( strpos($_SERVER['SCRIPT_NAME'], '/wp-admin/') !== false )
 		echo '<link rel="stylesheet" href="'.get_bloginfo('wpurl').'/wp-includes/js/thickbox/thickbox.css" type="text/css" />'."\n";
 }

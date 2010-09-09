@@ -48,24 +48,31 @@ function updateDB()
 	global $cpd_path;
 	global $wpdb;
 	
-	@mysql_query("SELECT country FROM `".CPD_C_TABLE."`", $count_per_day->dbcon);
+	$count_per_day->getQuery("SELECT country FROM `".CPD_C_TABLE."`", 'GeoIP updateDB Table');
 	if ((int) mysql_errno() == 1054)
 		// add row "country" to table
-		mysql_query("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR( 2 ) NOT NULL", $count_per_day->dbcon);
+		$count_per_day->getQuery("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR( 2 ) NOT NULL", 'GeoIP updateDB create column');
 	
 	$limit = 100;
-	$res = @mysql_query("SELECT ip, INET_NTOA(ip) as realip FROM ".CPD_C_TABLE." WHERE country like '' GROUP BY ip ORDER BY count(*) desc LIMIT $limit;", $count_per_day->dbcon);
+	$res = $count_per_day->getQuery("SELECT ip, INET_NTOA(ip) as realip FROM ".CPD_C_TABLE." WHERE country like '' GROUP BY ip ORDER BY COUNT(*) DESC LIMIT $limit;", 'GeoIP updateDB');
 	$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
-	while ( $r = mysql_fetch_array($res) )
-	{
-		$c = strtolower(geoip_country_code_by_addr($gi, $r['realip']));
-		mysql_query("UPDATE ".CPD_C_TABLE." SET country = '".$c."' WHERE ip = '".$r['ip']."'", $count_per_day->dbcon);
-	}
+	if ( @mysql_num_rows($res) )
+		while ( $r = mysql_fetch_array($res) )
+		{
+			$c = strtolower(geoip_country_code_by_addr($gi, $r['realip']));
+//			if (empty($c)) $c = '-';
+			$count_per_day->getQuery("UPDATE ".CPD_C_TABLE." SET country = '".$c."' WHERE ip = '".$r['ip']."'", 'GeoIP updateDB');
+		}
 	geoip_close($gi);
 	
-	$res = mysql_query("SELECT count(*) FROM ".CPD_C_TABLE." WHERE country like ''", $count_per_day->dbcon);
-	$row = mysql_fetch_array($res);
-	$rest = (!empty($row[0])) ? $row[0] : 0;
+	$res = $count_per_day->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE country like ''", 'GeoIP updateDB');
+	if ( @mysql_num_rows($res) )
+	{
+		$row = mysql_fetch_array($res);
+		$rest = (!empty($row[0])) ? $row[0] : 0;
+	}
+	else
+		$rest = 0;
 
 	return $rest;
 }
