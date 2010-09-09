@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget
 Requires at least: 2.7
 Tested up to: 3.0.1
-Stable tag: 2.13
+Stable tag: 2.13.1
 License: Postcardware
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -27,7 +27,7 @@ It counts 1 visit per IP per day. So any reload of the page don't increment the 
 - Dansk			- 100% - Georg S. Adamsen -		http://www.blogos.dk
 - Dansk 2*		- 100% - Jonas Thomsen -		http://jonasthomsen.com
 - Dutch NL		- 100% - Rene -					http://wpwebshop.com
-- Espanol		- 100% - Juan Carlos del Río -
+- Espanol		- 100% - Juan Carlos del R&iacute;o -
 - France		- 100% - Bjork -				http://www.habbzone.fr
 - German		- 100% - Tom Braider, me ;) -
 - Italian		- 100% - Gianni Diurno -		http://gidibao.net
@@ -45,6 +45,7 @@ It counts 1 visit per IP per day. So any reload of the page don't increment the 
 
 1. unzip plugin directory into the '/wp-content/plugins/' directory
 1. activate the plugin through the 'Plugins' menu in WordPress
+1. on every update you have to deactivate/reactivate the plugin
 
 First activation will create the 3 tables wp_cpd_counter, wp_cpd_counter_useronline and wp_cpd_notes.
 
@@ -201,9 +202,10 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
-= Development Version =
-+ New Language: Espanol, thanks to Juan Carlos del Río
-+ more DEBUG informations
+= 2.13.1 =
++ New Language: Espanol, thanks to Juan Carlos del R&iacute;o
++ Bugfix: problems with MySQL 4.x
++ Bugfix: changed error handling
 
 = 2.13 =
 + New: Top referers
