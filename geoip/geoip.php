@@ -27,11 +27,7 @@ function getCountry( $ip )
 	if ( empty($c) )
 		$c = 'unknown';
 	$cname = geoip_country_name_by_addr($gi, $ip);
-	$country = array(
-		$c,
-		'<div class="cpd-flag cpd-flag-'.$c.'" title="'.$cname.'"></div>',
-		$cname
-		);
+	$country = array( $c, '<div class="cpd-flag cpd-flag-'.$c.'" title="'.$cname.'"></div>', $cname );
 	geoip_close($gi);
 	
 	return $country;
@@ -53,16 +49,30 @@ function updateDB()
 		// add row "country" to table
 		$count_per_day->getQuery("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR( 2 ) NOT NULL", 'GeoIP updateDB create column');
 	
-	$limit = 100;
-	$res = $count_per_day->getQuery("SELECT ip, INET_NTOA(ip) as realip FROM ".CPD_C_TABLE." WHERE country like '' GROUP BY ip ORDER BY COUNT(*) DESC LIMIT $limit;", 'GeoIP updateDB');
+	$limit = 10;
+	$res = $count_per_day->getQuery("SELECT ip, INET_NTOA(ip) AS realip FROM ".CPD_C_TABLE." WHERE country LIKE '' GROUP BY ip LIMIT $limit;", 'GeoIP updateDB');
 	$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
+	
 	if ( @mysql_num_rows($res) )
 		while ( $r = mysql_fetch_array($res) )
 		{
-			$c = strtolower(geoip_country_code_by_addr($gi, $r['realip']));
-//			if (empty($c)) $c = '-';
-			$count_per_day->getQuery("UPDATE ".CPD_C_TABLE." SET country = '".$c."' WHERE ip = '".$r['ip']."'", 'GeoIP updateDB');
+			$c = '';
+			$ip = explode('.', $r['realip']);
+			if ( $ip[0] == 10
+				|| $ip[0] == 127
+				|| ($ip[0] == 169 && $ip[1] == 254)
+				|| ($ip[0] == 172 && $ip[1] >= 16 && $ip[1] <= 31)
+				|| ($ip[0] == 192 && $ip[1] == 168) )
+				// set local IPs to '-'
+				$c = '-';
+			else
+				// get country
+				$c = strtolower(geoip_country_code_by_addr($gi, $r['realip']));
+			
+			if ( !empty($c) )
+				$count_per_day->getQuery("UPDATE ".CPD_C_TABLE." SET country = '".$c."' WHERE ip = '".$r['ip']."'", 'GeoIP updateDB');
 		}
+
 	geoip_close($gi);
 	
 	$res = $count_per_day->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE country like ''", 'GeoIP updateDB');
@@ -92,7 +102,7 @@ function updateGeoIpFile()
 	
 	// function checks
 	if ( !ini_get('allow_url_fopen') )
-		return 'Sorry, <code>allow_url_open</code> is disabled!';
+		return 'Sorry, <code>allow_url_fopen</code> is disabled!';
 		
 	if ( !function_exists('gzopen') )
 		return __('Sorry, necessary functions (zlib) not installed or enabled in php.ini.', 'cpd');

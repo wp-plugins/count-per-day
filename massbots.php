@@ -8,7 +8,7 @@ require($dir.'/wp-load.php');
 
 if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 {
-	$sql = 'SELECT	p.ID post_id, p.post_title post,
+	$sql = 'SELECT	c.page post_id, p.post_title post,
 					t.name tag_cat_name,
 					t.slug tag_cat_slug,
 					x.taxonomy tax
@@ -40,21 +40,32 @@ if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 while ( $row = mysql_fetch_array($massbots) )
 {
 	if ( $row['post_id'] < 0 && $row['tax'] == 'category' )
+	{
 		$name = '- '.$row['tag_cat_name'].' -';
+		$link = get_bloginfo('url').'?cat='.abs($row['post_id']);
+	}
 	else if ( $row['post_id'] < 0 )
+	{
 		$name = '- '.$row['tag_cat_name'].' -';
+		$link = get_bloginfo('url').'?tag='.$row['tag_cat_slug'];
+	}
 	else if ( $row['post_id'] == 0 )
+	{
 		$name = '- '.__('Front page displays').' -';
+		$link =	get_bloginfo('url');
+	}
 	else
 	{
 		$postname = $row['post'];
 		if ( empty($postname) ) 
 			$postname = '---';
 		$name = $postname;
+		$link =	get_permalink($row['post_id']);
 	}
-	echo '<li><a href="'.get_permalink($row['post_id']).'" target="_blank">'.$name.'</a></li>';
+	echo '<li><a href="'.$link.'" target="_blank">'.$name.'</a></li>';
 }
 ?>
 </ol>
+<?php if ($count_per_day->options['debug']) $count_per_day->showQueries(); ?>
 </body>
 </html>
