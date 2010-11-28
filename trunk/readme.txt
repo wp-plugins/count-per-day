@@ -24,18 +24,18 @@ It counts 1 visit per IP per day. So any reload of the page don't increment the 
 
 = Languages, Translators =
 
-- Dansk			- 100% - Georg S. Adamsen -		http://www.blogos.dk
-- Dansk 2*		- 100% - Jonas Thomsen -		http://jonasthomsen.com
-- Dutch NL		- 100% - Rene -					http://wpwebshop.com
-- Espanol		- 100% - Juan Carlos del R&iacute;o -
-- France		- 100% - Bjork -				http://www.habbzone.fr
 - German		- 100% - Tom Braider, me ;) -
-- Italian		- 100% - Gianni Diurno -		http://gidibao.net
-- Russian		- 100% - Ilya -					http://iluhis.com
-- Swedish		- 100% - Magnus Suther -		http://www.magnussuther.se
-- Portuguese BR	- 100% - Beto Ribeiro -			http://www.sevenarts.com.br
+- Dansk			- 95% - Georg S. Adamsen -		http://www.blogos.dk
+- Dansk 2*		- 95% - Jonas Thomsen -		http://jonasthomsen.com
+- Dutch NL		- 95% - Rene -					http://wpwebshop.com
+- Espanol		- 95% - Juan Carlos del R&iacute;o -
+- France		- 95% - Bjork -				http://www.habbzone.fr
+- Italian		- 95% - Gianni Diurno -		http://gidibao.net
+- Russian		- 95% - Ilya -					http://iluhis.com
+- Swedish		- 95% - Magnus Suther -		http://www.magnussuther.se
+- Portuguese BR	- 95% - Beto Ribeiro -			http://www.sevenarts.com.br
 
-- Polish 		-  90% - LeXuS -				http://intrakardial.de
+- Polish 		-  85% - LeXuS -				http://intrakardial.de
 - Uzbek			-  60% - Alisher -
 - Belarus		-  40% - Marcis Gasuns -		http://www.fatcow.com
 
@@ -71,27 +71,33 @@ read and write comments on http://www.tomsdimension.de/wp-plugins/count-per-day
 
 **Shortcodes**
 
-These shortcodes you can use in the content while writing you posts.
+You can use these shortcodes in the content while writing you posts.
 
 [CPD_READS_THIS]
 [CPD_READS_TOTAL]
 [CPD_READS_TODAY]
 [CPD_READS_YESTERDAY]
+[CPD_READS_LAST_WEEK]
+[CPD_READS_PER_MONTH]
 [CPD_READS_CHART]
 [CPD_VISITORS_TOTAL]
 [CPD_VISITORS_ONLINE]
 [CPD_VISITORS_TODAY]
 [CPD_VISITORS_YESTERDAY]
 [CPD_VISITORS_LAST_WEEK]
-[CPD_VISITORS_PER_DAY]
 [CPD_VISITORS_PER_MONTH]
+[CPD_VISITORS_PER_DAY]
 [CPD_VISITORS_PER_POST]
 [CPD_VISITORS_CHART]
 [CPD_FIRST_COUNT]
 [CPD_MOST_VISITED_POSTS]
+[CPD_POSTS_ON_DAY]
 [CPD_CLIENTS]
 [CPD_COUNTRIES]
 [CPD_REFERERS]
+[CPD_POSTS_ON_DAY date="2010-10-06" limit="3"]
+date (optional), format: year-month-day, default = today
+limit (optional) = max records to show, default = all 
 
 **Functions**
 
@@ -114,81 +120,99 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 'getFirstCount( $frontend )'
 
 * shows date of first count
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getUserPerDay( $days, $frontend )'
 
 * shows average number of visitors per day of the last _$days_ days
 * default on dashboard (see it with mouse over number) = "Latest Counts - Days" in options
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getReadsAll( $frontend )'
  
 * shows number of total reads
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getReadsToday( $frontend )'
 
 * shows number of reads today
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getReadsYesterday( $frontend )'
  
 * shows number of reads yesterday
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
+
+'getReadsLastWeek( $frontend )'
+
+* shows number of reads last week (7 days)
+* $frontend: 0 echo, 1 return output
+
+'getReadsPerMonth( $frontend )'
+
+* lists number of reads per month
+* $frontend: 0 echo, 1 return output
 
 'getUserAll( $frontend )'
 
 * shows number of total visitors
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getUserOnline( $frontend )'
 
 * shows number of visitors just online
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getUserToday( $frontend )'
 
 * shows number of visitors today
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getUserYesterday( $frontend )'
  
 * shows number of visitors yesterday
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getUserLastWeek( $frontend )'
 
 * shows number of visitors last week (7 days)
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getUserPerMonth( $frontend )'
 
 * lists number of visitors per month
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getUserPerPost( $limit = 0, $frontend )'
 
 * lists _$limit_ number of posts, -1: all, 0: get option from DB, x: number
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getMostVisitedPosts( $days, $limits, $frontend )'
 
 * shows a list with the most visited posts in the last days
 * $days = days to calc (last days), 0: get option from DB
 * $limit = count of posts (last posts), 0: get option from DB
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
+
+'getVisitedPostsOnDay( $date = 0, $limit = 0, $show_form, $show_notes )'
+
+ * shows visited pages at given day
+ * $date day in MySQL date format yyyy-mm-dd, 0 today
+ * $limit count of posts
+ * $show_form show form for date selection, default on, in frontend set it to 0
+ * $show_notes show button to add notes in form, default on, in frontend set it to 0
 
 'getClients( $frontend )'
 
 * shows visits per client/browser in percent
 * clients are hardcoded in function but easy to change ;)
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 'getReferers( $limit = 0, $frontend )'
 
 * lists top _$limit_ referers, 0: get option from DB, x: number
-* $frontend: 1 echo, 0 return output
+* $frontend: 0 echo, 1 return output
 
 **GeoIP**
 
@@ -201,6 +225,19 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * More information about GeoIP on http://www.maxmind.com/app/geoip_country
 
 == Changelog ==
+
+= Development Version =
++ New: multi widget compatible, place the widget several times with individual settings
++ New: WordPress Multisite compatible, networkwide activation creates tables in all blogs
++ New: list reads per month  
++ New: functions and shortcodes [CPD_POSTS_ON_DAY] [CPD_READS_PER_MONTH] [CPD_READS_LAST_WEEK]
++ New: show/hide local referers
++ New: optional deactivation of saving clients and referers to save space in the database
++ New: debug mode per URL parameter (?debug=1)
++ Bugfix: GeoIP database update, problem with local IP adresses
++ Bugfix: Userlevel/Capabilities
++ Bugfix: yesterday reads and visitors (timezone)
++ Bugfix: links on mass bots page
 
 = 2.13.1 =
 + New Language: Espanol, thanks to Juan Carlos del R&iacute;o

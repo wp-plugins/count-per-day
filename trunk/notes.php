@@ -124,5 +124,6 @@ if ( $notes )
 ?>
 </table>
 </form>
+<?php if ($count_per_day->options['debug']) $count_per_day->showQueries(); ?>
 </body>
 </html>

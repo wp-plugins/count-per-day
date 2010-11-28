@@ -1,14 +1,13 @@
 <?php 
 // windows junction patch
-$dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
+$cpd_wp_dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
 for ( $x = 1; $x <= 3; $x++)
-	$dir = dirname($dir.'x');
+	$cpd_wp_dir = dirname($cpd_wp_dir.'x');
+require_once($cpd_wp_dir.'/wp-load.php');
 
-require_once($dir.'/wp-load.php');
-
-$datemin = ( !empty($_REQUEST['datemin']) ) ? $_REQUEST['datemin'] : date_i18n('Y-m-d', time() - 86400 * 14); // 14 days
-$datemax = ( !empty($_REQUEST['datemax']) ) ? $_REQUEST['datemax'] : date_i18n('Y-m-d');
-$page = ( isset($_REQUEST['page']) ) ? $_REQUEST['page'] : 0;
+$cpd_datemin = ( !empty($_REQUEST['datemin']) ) ? $_REQUEST['datemin'] : date_i18n('Y-m-d', time() - 86400 * 14); // 14 days
+$cpd_datemax = ( !empty($_REQUEST['datemax']) ) ? $_REQUEST['datemax'] : date_i18n('Y-m-d');
+$cpd_page = ( isset($_REQUEST['page']) ) ? $_REQUEST['page'] : 0;
 
 $sql = "SELECT	p.post_title,
 				COUNT(*) as count,
@@ -17,12 +16,12 @@ $sql = "SELECT	p.post_title,
 		FROM	".CPD_C_TABLE." c
 		LEFT	JOIN ".$wpdb->posts." p
 				ON p.ID = c.page
-		WHERE	c.page = '$page'
-		AND		c.date >= '$datemin'
-		AND		c.date <= '$datemax'
+		WHERE	c.page = '$cpd_page'
+		AND		c.date >= '$cpd_datemin'
+		AND		c.date <= '$cpd_datemax'
 		GROUP	BY c.date
 		ORDER	BY c.date desc";
-$visits = $count_per_day->getQuery($sql, 'getUserPerPostSpan');
+$cpd_visits = $count_per_day->getQuery($sql, 'getUserPerPostSpan');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -39,32 +38,31 @@ $visits = $count_per_day->getQuery($sql, 'getUserPerPostSpan');
 <form action="" method="post">
 <p style="background:#ddd; padding:3px;">
 	<?php _e('Start', 'cpd'); ?>:
-	<input type="text" name="datemin" value="<?php echo $datemin; ?>" size="10" />
+	<input type="text" name="datemin" value="<?php echo $cpd_datemin; ?>" size="10" />
 	<?php _e('End', 'cpd'); ?>:
-	<input type="text" name="datemax" value="<?php echo $datemax; ?>" size="10" />
+	<input type="text" name="datemax" value="<?php echo $cpd_datemax; ?>" size="10" />
 	<?php _e('PostID', 'cpd'); ?>:
-	<input type="text" name="page" value="<?php echo $page; ?>" size="5" />
+	<input type="text" name="page" value="<?php echo $cpd_page; ?>" size="5" />
 	<input type="submit" value="<?php _e('show', 'cpd') ?>" />  
 </p>
 </form>
 
 <?php
-
-if ( mysql_num_rows($visits) == 0 )
+if ( @mysql_num_rows($cpd_visits) == 0 )
 	_e('no data found', 'cpd');
 else
 {
-	$maxcount = 0;
-	while ( $r = mysql_fetch_array($visits) )
-		$maxcount = max(array($maxcount, $r['count']));
-	mysql_data_seek($visits, 0);
-	$faktor = 300 / $maxcount; 
+	$cpd_maxcount = 1;
+	while ( $r = mysql_fetch_array($cpd_visits) )
+		$cpd_maxcount = max( array( $cpd_maxcount, intval($r['count']) ) );
+	mysql_data_seek($cpd_visits, 0);
+	$cpd_faktor = 300 / $cpd_maxcount; 
 	
-	while ( $r = mysql_fetch_array($visits) )
+	while ( $r = mysql_fetch_array($cpd_visits) )
 	{
-		if ( !isset($new) )
+		if ( !isset($cpd_new) )
 		{
-			if ( $page == 0 )
+			if ( $cpd_page == 0 )
 				echo  '<h2>'.__('Front page displays').'</h2';
 			else
 				echo '<h2>'.$r['post_title'].'</h2>';
@@ -72,38 +70,39 @@ else
 		}
 		else
 		{
-			if ( $new < $r['count'] )
-				$style = 'style="color:#b00;"';
-			else if ( $new > $r['count'] )
-				$style = 'style="color:#0a0;"';
+			if ( $cpd_new < $r['count'] )
+				$cpd_style = 'style="color:#b00;"';
+			else if ( $cpd_new > $r['count'] )
+				$cpd_style = 'style="color:#0a0;"';
 			else
-				$style = '';
+				$cpd_style = '';
 		
-			$bar = $new * $faktor;
-			$trans = 300 - $bar;
-			$imgbar = '<img src="'.$count_per_day->getResource('cpd_rot.png').'" alt="" style="width:'.$bar.'px;height:23px;padding-left:10px;" />';
-			$imgtrans = '<img src="'.$count_per_day->getResource('cpd_trans.png').'" alt="" style="width:'.$trans.'px;height:10px;padding-right:10px;" />';
+			$cpd_bar = $cpd_new * $cpd_faktor;
+			$cpd_trans = 300 - $cpd_bar;
+			$cpd_imgbar = '<img src="'.$count_per_day->getResource('cpd_rot.png').'" alt="" style="width:'.$cpd_bar.'px;height:23px;padding-left:10px;" />';
+			$cpd_imgtrans = '<img src="'.$count_per_day->getResource('cpd_trans.png').'" alt="" style="width:'.$cpd_trans.'px;height:10px;padding-right:10px;" />';
 			
 			echo '<li>';
-			echo '<b>'.$imgbar.$imgtrans.'</b>';
-			echo '<b '.$style.'>'.$new.'</b>';
-			echo $date_str.'</li>';
+			echo '<b>'.$cpd_imgbar.$cpd_imgtrans.'</b>';
+			echo '<b '.$cpd_style.'>'.$cpd_new.'</b>';
+			echo $cpd_date_str.'</li>';
 		}
-		$date_str = mysql2date(get_option('date_format'), $r['date']);
-		$new = $r['count'];
+		$cpd_date_str = mysql2date(get_option('date_format'), $r['date']);
+		$cpd_new = intval($r['count']);
 	}
 
-	$bar = $new * $faktor;
-	$trans = 300 - $bar;
-	$imgbar = '<img src="'.$count_per_day->getResource('cpd_rot.png').'" alt="" style="width:'.$bar.'px;height:23px;padding-left:10px;" />';
-	$imgtrans = '<img src="'.$count_per_day->getResource('cpd_trans.png').'" alt="" style="width:'.$trans.'px;height:10px;padding-right:10px;" />';
+	$cpd_bar = $cpd_new * $cpd_faktor;
+	$cpd_trans = 300 - $cpd_bar;
+	$cpd_imgbar = '<img src="'.$count_per_day->getResource('cpd_rot.png').'" alt="" style="width:'.$cpd_bar.'px;height:23px;padding-left:10px;" />';
+	$cpd_imgtrans = '<img src="'.$count_per_day->getResource('cpd_trans.png').'" alt="" style="width:'.$cpd_trans.'px;height:10px;padding-right:10px;" />';
 
 	echo '<li>';
-	echo '<b>'.$imgbar.$imgtrans.'</b>';
-	echo '<b>'.$new.'</b>';
-	echo $date_str.'</li>';
+	echo '<b>'.$cpd_imgbar.$cpd_imgtrans.'</b>';
+	echo '<b>'.$cpd_new.'</b>';
+	echo $cpd_date_str.'</li>';
 }
+echo '</ol>';
+if ($count_per_day->options['debug']) $count_per_day->showQueries();
 ?>
-</ol>
 </body>
 </html>
