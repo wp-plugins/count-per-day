@@ -1,12 +1,14 @@
 <?php
 // windows junction patch
 $dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
-for ( $x = 1; $x <= 4; $x++)
+for ( $x = 1; $x <= 5; $x++ )
+{
 	$dir = dirname($dir.'x');
+	if ( is_file($dir.'/wp-load.php') )
+		require_once($dir.'/wp-load.php');
+}
 
-require_once($dir.'/wp-load.php');
-
-include_once($cpd_path.'/geoip/geoip.php');
+require_once($cpd_path.'/geoip/geoip.php');
 $geoip = new GeoIP();
 
 $what = (empty($_GET['map'])) ? 'reads' : $_GET['map'];

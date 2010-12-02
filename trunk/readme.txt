@@ -1,9 +1,9 @@
 === Count per Day ===
 Contributors: Tom Braider
-Tags: counter, count, posts, visits, reads, dashboard, widget
+Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 2.7
 Tested up to: 3.0.1
-Stable tag: 2.13.1
+Stable tag: 2.14
 License: Postcardware
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -20,19 +20,19 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 * Plugin: http://www.tomsdimension.de/wp-plugins/count-per-day
 * Donate: http://www.tomsdimension.de/postcards
 
-It counts 1 visit per IP per day. So any reload of the page don't increment the counter.
+"Count per Day" counts 1 visit per IP per day. So any reload of the page don't increment the counter.
 
 = Languages, Translators =
 
 - German		- 100% - Tom Braider, me ;) -
 - Dansk			- 95% - Georg S. Adamsen -		http://www.blogos.dk
-- Dansk 2*		- 95% - Jonas Thomsen -		http://jonasthomsen.com
+- Dansk 2*		- 95% - Jonas Thomsen -			http://jonasthomsen.com
 - Dutch NL		- 95% - Rene -					http://wpwebshop.com
 - Espanol		- 95% - Juan Carlos del R&iacute;o -
-- France		- 95% - Bjork -				http://www.habbzone.fr
-- Italian		- 95% - Gianni Diurno -		http://gidibao.net
+- France		- 95% - Bjork -					http://www.habbzone.fr
+- Italian		- 95% - Gianni Diurno -			http://gidibao.net
 - Russian		- 95% - Ilya -					http://iluhis.com
-- Swedish		- 95% - Magnus Suther -		http://www.magnussuther.se
+- Swedish		- 95% - Magnus Suther -			http://www.magnussuther.se
 - Portuguese BR	- 95% - Beto Ribeiro -			http://www.sevenarts.com.br
 
 - Polish 		-  85% - LeXuS -				http://intrakardial.de
@@ -226,7 +226,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
-= Development Version =
+= 2.14 =
 + New: multi widget compatible, place the widget several times with individual settings
 + New: WordPress Multisite compatible, networkwide activation creates tables in all blogs
 + New: list reads per month  
@@ -238,6 +238,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + Bugfix: Userlevel/Capabilities
 + Bugfix: yesterday reads and visitors (timezone)
 + Bugfix: links on mass bots page
++ little cosmetics
 
 = 2.13.1 =
 + New Language: Espanol, thanks to Juan Carlos del R&iacute;o

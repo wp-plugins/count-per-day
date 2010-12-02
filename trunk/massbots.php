@@ -1,10 +1,12 @@
 <?php 
 // windows junction patch
 $dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
-for ( $x = 1; $x <= 3; $x++)
+for ( $x = 1; $x <= 5; $x++ )
+{
 	$dir = dirname($dir.'x');
-
-require($dir.'/wp-load.php');
+	if ( is_file($dir.'/wp-load.php') )
+		require_once($dir.'/wp-load.php');
+}
 
 if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 {
