@@ -28,6 +28,9 @@ if(!empty($_POST['do']))
 			$count_per_day->options['anoip'] = empty( $_POST['cpd_anoip'] ) ? 0 : 1 ;
 			$count_per_day->options['clients'] = $_POST['cpd_clients'];
 			$count_per_day->options['ajax'] = empty( $_POST['cpd_ajax'] ) ? 0 : 1 ;
+			$count_per_day->options['debug'] = empty( $_POST['cpd_debug'] ) ? 0 : 1 ;
+			$count_per_day->options['localref'] = empty( $_POST['cpd_localref'] ) ? 0 : 1 ;
+			$count_per_day->options['referers'] = empty( $_POST['cpd_referers'] ) ? 0 : 1 ;
 			
 			if (empty($count_per_day->options['clients']))
 				$count_per_day->options['clients'] = 'Firefox, MSIE, Chrome, AppleWebKit, Opera';
@@ -44,22 +47,27 @@ if(!empty($_POST['do']))
 		case 'cpd_countries' :
 			if ( class_exists('CpdGeoIp') )
 			{
+				$count_per_day->queries[] = 'cpd_countries - class "CpdGeoIp" exists'; 
 				$rest = CpdGeoIp::updateDB();
 				echo '<div id="message" class="updated fade">
 					<form name="cpdcountries" method="post" action="'.$_SERVER['REQUEST_URI'].'">
 					<p>'.sprintf(__('Countries updated. <b>%s</b> entries in %s without country left', 'cpd'), $rest, CPD_C_TABLE);
 				if ( $rest > 100 )
+				{
 					// reload page per javascript until less than 100 entries without country
-					// is not optimal...
 					echo '<input type="hidden" name="do" value="cpd_countries" />
-						<input type="submit" name="updcon" value="'.__('update next', 'cpd').'" class="button" />
-						<script type="text/javascript">document.cpdcountries.submit();</script>';
+						<input type="submit" name="updcon" value="'.__('update next', 'cpd').'" class="button" />';
+					if ( !$count_per_day->options['debug'] )
+						echo '<script type="text/javascript">document.cpdcountries.submit();</script>';
+				}
 				echo '</p>
 					</form>
 					</div>';
 				if ( $rest > 100 )
 					while (@ob_end_flush());
 			}
+			else
+				$count_per_day->queries[] = '<span style="color:red">cpd_countries - class "CpdGeoIp" NOT exists</span>';
 			break;
 			
 		// download new GeoIP database
@@ -73,7 +81,7 @@ if(!empty($_POST['do']))
 						
 				$result = CpdGeoIp::updateGeoIpFile();
 				echo '<div id="message" class="updated fade"><p>'.$result.'</p></div>';
-				if ( file_exists($cpd_path.'/geoip/GeoIP.dat') )
+				if ( file_exists($cpd_path.'geoip/GeoIP.dat') )
 					$cpd_geoip = 1;
 			}
 			break;
@@ -99,7 +107,7 @@ if(!empty($_POST['do']))
 			$rows = $count_per_day->cleanDB();
 			echo '<div id="message" class="updated fade"><p>'.sprintf(__('Database cleaned. %s rows deleted.', 'cpd'), $rows).'</p></div>';
 			break;
-			
+
 		// reset counter
 		case 'cpd_reset' :
 			$wpdb->query('TRUNCATE TABLE '.CPD_C_TABLE);
@@ -110,13 +118,13 @@ if(!empty($_POST['do']))
 		case __('UNINSTALL Count per Day', 'cpd') :
 			if(trim($_POST['uninstall_cpd_yes']) == 'yes')
 			{
-				$wpdb->query('DROP TABLE IF EXISTS '.CPD_C_TABLE);
-				$wpdb->query('DROP TABLE IF EXISTS '.CPD_CO_TABLE);
-				delete_option('count_per_day');
+				count_per_day_uninstall();
 				echo '<div id="message" class="updated fade"><p>';
 				printf(__('Table %s deleted', 'cpd'), CPD_C_TABLE);
 				echo '<br/>';
 				printf(__('Table %s deleted', 'cpd'), CPD_CO_TABLE);
+				echo '<br/>';
+				printf(__('Table %s deleted', 'cpd'), CPD_N_TABLE);
 				echo '<br/>';
 				echo __('Options deleted', 'cpd').'</p></div>';
 				$mode = 'end-UNINSTALL';
@@ -136,11 +144,11 @@ if ( empty($mode) )
 	$mode = '';
 	
 switch($mode) {
-	// deaktivation
+	// deactivation
 	case 'end-UNINSTALL':
-		$deactivate_url = 'plugins.php?action=deactivate&amp;plugin='.dirname(plugin_basename(__FILE__)).'/counter.php';
+		$deactivate_url = 'plugins.php?action=deactivate&amp;plugin='.$cpd_dir_name.'/counter.php';
 		if ( function_exists('wp_nonce_url') ) 
-			$deactivate_url = wp_nonce_url($deactivate_url, 'deactivate-plugin_'.dirname(plugin_basename(__FILE__)).'/counter.php');
+			$deactivate_url = wp_nonce_url($deactivate_url, 'deactivate-plugin_'.$cpd_dir_name.'/counter.php');
 		echo '<div class="wrap">';
 		echo '<h2>'.__('Uninstall', 'cpd').' "Count per Day"</h2>';
 		echo '<p><strong><a href="'.$deactivate_url.'">'.__('Click here', 'cpd').'</a> '.__('to finish the uninstall and to deactivate "Count per Day".', 'cpd').'</strong></p>';
@@ -159,14 +167,21 @@ switch($mode) {
 		update_option('count_per_day', $o);
 	}
 	?>
-	<div id="poststuff" class="wrap">
+	<div class="wrap">
 	<h2><img src="<?php echo $count_per_day->getResource('cpd_menu.gif') ?>" alt="" style="width:24px;height:24px" /> Count per Day</h2>
-
-	<div class="postbox">
-	
+ 	
+ 	<div id="poststuff">
+ 	
+	<div class="postbox cpd_settings">
 	<h3><?php _e('Options', 'cpd') ?></h3>
 	<div class="inside">
 		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+			
+		<!-- counter -->
+		
+		<fieldset>
+		<legend><?php _e('Counter', 'cpd') ?></legend>
+		
 		<table class="form-table">
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Online time', 'cpd') ?>:</th>
@@ -200,16 +215,20 @@ switch($mode) {
 		</tr>
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Cache', 'cpd') ?> (beta):</th>
-			<td><label for="cpd_ajax"><input type="checkbox" name="cpd_ajax" id="cpd_ajax" <?php if($o['ajax']==1) echo 'checked="checked"'; ?> />  <?php _e('I use a cache plugin. Count these visits with ajax.', 'cpd') ?></label></td>
+			<td><label for="cpd_ajax"><input type="checkbox" name="cpd_ajax" id="cpd_ajax" <?php if($o['ajax']==1) echo 'checked="checked"'; ?> /> <?php _e('I use a cache plugin. Count these visits with ajax.', 'cpd') ?></label></td>
 		</tr>
 		<tr>
-			<td colspan="2" class="submit">
-				<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
-			</td>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Clients and referers', 'cpd') ?>:</th>
+			<td><label for="cpd_referers"><input type="checkbox" name="cpd_referers" id="cpd_referers" <?php if($o['referers']==1) echo 'checked="checked"'; ?> /> <?php _e('Save and show clients and referers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors.', 'cpd') ?></label></td>
 		</tr>
-		<tr>
-			<th colspan="2"><h3><?php _e('Dashboard') ?></h3></th>
-		</tr>
+		</table>
+		</fieldset>
+		
+		<!-- dashboard -->
+		
+		<fieldset>
+		<legend><?php _e('Dashboard') ?></legend>
+		<table class="form-table">
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Visitors per post', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_dashboard_posts" size="3" value="<?php echo $o['dashboard_posts']; ?>" /> <?php _e('How many posts do you want to see on dashboard page?', 'cpd') ?></td>
@@ -241,21 +260,32 @@ switch($mode) {
 			<td><input class="code" type="text" name="cpd_clients" size="50" value="<?php echo $o['clients']; ?>" /> <?php _e('Substring of the user agent, separated by comma', 'cpd') ?></td>
 		</tr>		
 		<tr>
-			<td colspan="2" class="submit">
-				<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
-			</td>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Local URLs', 'cpd') ?>:</th>
+			<td><label for="cpd_localref"><input type="checkbox" name="cpd_localref" id="cpd_localref" <?php if($o['localref']==1) echo 'checked="checked"'; ?> />  <?php _e('Show local referers too.', 'cpd') ?> (<?php echo bloginfo('url') ?>/...)</label></td>
 		</tr>
-		<tr>
-			<th colspan="2"><h3><?php _e('Edit Posts') ?> / <?php _e('Edit Pages') ?></h3></th>
-		</tr>
+		</table>
+		</fieldset>
+		
+		<!-- lists -->
+		
+		<fieldset>
+		<legend><?php _e('Posts') ?> / <?php _e('Pages') ?></legend>
+		<table class="form-table">
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Show in lists', 'cpd') ?>:</th>
 			<td><label for="cpd_show_in_lists"><input type="checkbox" name="cpd_show_in_lists" id="cpd_show_in_lists" <?php if($o['show_in_lists']==1) echo 'checked="checked"'; ?> /> <?php _e('Show "Reads per Post" in a new column in post management views.', 'cpd') ?></label></td>
 		</tr>
+		</table>
+		</fieldset>
+		
+		<!-- start values -->
+		
+		<fieldset>
+		<legend><?php _e('Start Values', 'cpd') ?></legend>
+		<table class="form-table">
 		<tr>
 			<th colspan="2">
-				<h3><?php _e('Start Values', 'cpd') ?></h3>
-				<p><?php _e('Here you can change the date of first count and add a start count.', 'cpd')?></p>
+				<?php _e('Here you can change the date of first count and add a start count.', 'cpd')?>
 			</th>
 		</tr>
 		<tr>
@@ -271,11 +301,22 @@ switch($mode) {
 			<td><input class="code" type="text" name="cpd_startreads" size="10" value="<?php echo $o['startreads']; ?>" /> <?php _e('Add this value to "Total reads".', 'cpd') ?></td>
 		</tr>
 		</table>
-		<p class="submit">
-			<input type="hidden" name="do" value="cpd_update" />
-			<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
-		</p>
+		</fieldset>
+		
+		<!-- debug -->
+		
+		<fieldset>
+			<legend style="color:red"><?php _e('Debug mode', 'cpd') ?></legend>
+			<p style="margin-top:15px;">
+				<label for="cpd_debug"><input type="checkbox" name="cpd_debug" id="cpd_debug" <?php if($o['debug']==1) echo 'checked="checked"'; ?> /> <?php _e('Show debug informations at the bottom of all pages.', 'cpd') ?></label>
+			</p>
+		</fieldset>
+		
+		<input type="hidden" name="do" value="cpd_update" />
+		<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" style="margin-left: 5px;" />
+		
 		</form>
+
 	</div>
 	</div>
 
@@ -293,7 +334,7 @@ switch($mode) {
 					<input type="submit" name="updcon" value="<?php _e('Update old counter data', 'cpd') ?>" class="button" />
 					</form>
 				</td>
-				<td><?php _e('You can get the country data for all entries in database bei check the IP adress again GeoIP database. This take a while!', 'cpd') ?></td>
+				<td><?php _e('You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!', 'cpd') ?></td>
 			</tr>
 		<?php } ?>
 		
@@ -311,14 +352,9 @@ switch($mode) {
 		<?php }	?>
 		</table>
 	
-		<p style="text-align: right">
-			<?php _e('More informations about GeoIP', 'cpd') ?>: <a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a><br />
-			DEBUG: 
-			dir=<?php echo substr(decoct(fileperms($cpd_path.'/geoip/')), -3) ?>
-			file=<?php echo (is_file($cpd_path.'/geoip/GeoIP.dat')) ? substr(decoct(fileperms($cpd_path.'/geoip/GeoIP.dat')), -3) : '-'; ?>
-			fopen=<?php echo (function_exists('fopen')) ? 'true' : 'false' ?>
-			gzopen=<?php echo (function_exists('gzopen')) ? 'true' : 'false' ?>
-			allow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
+		<p>
+			<span class="cpd-r"><?php _e('More informations about GeoIP', 'cpd') ?>:
+			<a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a></span>&nbsp;
 		</p>
 
 	</div>
@@ -357,7 +393,7 @@ switch($mode) {
 			while ( $row = mysql_fetch_assoc($bots) )
 			{
 				$ip = $row['ip'];
-				echo '<tr><td>';
+				echo '<tr><td style="white-space:nowrap;">';
 				echo '<a href="?page=count-per-day/counter-options.php&amp;dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'"
 					title="'.sprintf(__('Delete these %s counts', 'cpd'), $row['posts']).'"
 					style="color:red; font-weight: bold;">X</a> &nbsp;';
@@ -367,9 +403,9 @@ switch($mode) {
 					echo $c[1].' ';
 				}
 				echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$ip.'">'.$ip.'</a></td>'
-					.'<td>'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
+					.'<td style="white-space:nowrap;">'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
 					.'<td>'.$row['client'].'</td>'
-					.'<td><a href="'.$count_per_day->dir.'/massbots.php?dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Massbots', 'cpd').'" class="thickbox">'
+					.'<td style="text-align:right;"><a href="'.$count_per_day->dir.'/massbots.php?dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day" class="thickbox">'
 						.$row['posts'].'</a></td>'
 					.'</tr>';
 				$sum += $row['posts'];
@@ -389,21 +425,23 @@ switch($mode) {
 	</div>
 
 	<!-- Cleaner -->
-	<div class="postbox">
-	<h3><?php _e('Clean the database', 'cpd') ?></h3>
-	<div class="inside">
-		<p>
-			<?php _e('You can clean the counter table by delete the "spam data".<br />If you add new bots above the old "spam data" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots.', 'cpd') ?>
-		</p>
-		
-		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
-		<p class="submit">
-			<input type="hidden" name="do" value="cpd_clean" />
-			<input type="submit" name="clean" value="<?php _e('Clean the database', 'cpd') ?>" class="button" />
-		</p>
-		</form>
-	</div>
-	</div>
+	<?php if ( $count_per_day->options['referers'] ) : ?>
+		<div class="postbox">
+		<h3><?php _e('Clean the database', 'cpd') ?></h3>
+		<div class="inside">
+			<p>
+				<?php _e('You can clean the counter table by delete the "spam data".<br />If you add new bots above the old "spam data" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots.', 'cpd') ?>
+			</p>
+			
+			<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+			<p class="submit">
+				<input type="hidden" name="do" value="cpd_clean" />
+				<input type="submit" name="clean" value="<?php _e('Clean the database', 'cpd') ?>" class="button" />
+			</p>
+			</form>
+		</div>
+		</div>
+	<?php endif; ?>
 
 	<!-- Reset DBs -->
 	<div class="postbox">
@@ -434,7 +472,7 @@ switch($mode) {
 		<p style="color: red">
 			<strong><?php _e('WARNING', 'cpd') ?>:</strong><br />
 			<?php _e('These tables (with ALL counter data) will be deleted.', 'cpd') ?><br />
-			<b><?php echo CPD_C_TABLE.', '.CPD_CO_TABLE; ?></b><br />
+			<b><?php echo CPD_C_TABLE.', '.CPD_CO_TABLE.', '.CPD_N_TABLE; ?></b><br />
 			<?php _e('If "Count per Day" re-installed, the counter starts at 0.', 'cpd') ?>
 		</p>
 		<p>&nbsp;</p>
@@ -450,19 +488,12 @@ switch($mode) {
 	<div class="postbox">
 	<h3><?php _e('Support', 'cpd') ?></h3>
 	<div class="inside">
-		<p>
-			<?php
-			$t = date_i18n('Y-m-d H:i');
-			printf(__('Time for Count per Day: <code>%s</code>.', 'cpd'), $t);
-			?>
-			<br />
-			<?php _e('Bug? Problem? Question? Hint? Praise?', 'cpd') ?>
-			<br />
-			<?php printf(__('Write a comment on the <a href="%s">plugin page</a>.', 'cpd'), 'http://www.tomsdimension.de/wp-plugins/count-per-day') ?>
-		</p>
+		<?php $count_per_day->cpdInfo() ?>
 	</div>
 	</div>
 	
+	
+	</div><!-- poststuff -->
 	</div><!-- wrap -->
 
 <?php } // End switch($mode) ?>

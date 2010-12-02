@@ -27,11 +27,7 @@ function getCountry( $ip )
 	if ( empty($c) )
 		$c = 'unknown';
 	$cname = geoip_country_name_by_addr($gi, $ip);
-	$country = array(
-		$c,
-		'<div class="cpd-flag cpd-flag-'.$c.'" title="'.$cname.'"></div>',
-		$cname
-		);
+	$country = array( $c, '<div class="cpd-flag cpd-flag-'.$c.'" title="'.$cname.'"></div>', $cname );
 	geoip_close($gi);
 	
 	return $country;
@@ -48,24 +44,45 @@ function updateDB()
 	global $cpd_path;
 	global $wpdb;
 	
-	@mysql_query("SELECT country FROM `".CPD_C_TABLE."`", $count_per_day->dbcon);
+	$count_per_day->getQuery("SELECT country FROM `".CPD_C_TABLE."`", 'GeoIP updateDB Table');
 	if ((int) mysql_errno() == 1054)
 		// add row "country" to table
-		mysql_query("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR( 2 ) NOT NULL", $count_per_day->dbcon);
+		$count_per_day->getQuery("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR( 2 ) NOT NULL", 'GeoIP updateDB create column');
 	
-	$limit = 100;
-	$res = @mysql_query("SELECT ip, INET_NTOA(ip) as realip FROM ".CPD_C_TABLE." WHERE country like '' GROUP BY ip ORDER BY count(*) desc LIMIT $limit;", $count_per_day->dbcon);
+	$limit = 10;
+	$res = $count_per_day->getQuery("SELECT ip, INET_NTOA(ip) AS realip FROM ".CPD_C_TABLE." WHERE country LIKE '' GROUP BY ip LIMIT $limit;", 'GeoIP updateDB');
 	$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
-	while ( $r = mysql_fetch_array($res) )
-	{
-		$c = strtolower(geoip_country_code_by_addr($gi, $r['realip']));
-		mysql_query("UPDATE ".CPD_C_TABLE." SET country = '".$c."' WHERE ip = '".$r['ip']."'", $count_per_day->dbcon);
-	}
+	
+	if ( @mysql_num_rows($res) )
+		while ( $r = mysql_fetch_array($res) )
+		{
+			$c = '';
+			$ip = explode('.', $r['realip']);
+			if ( $ip[0] == 10
+				|| $ip[0] == 127
+				|| ($ip[0] == 169 && $ip[1] == 254)
+				|| ($ip[0] == 172 && $ip[1] >= 16 && $ip[1] <= 31)
+				|| ($ip[0] == 192 && $ip[1] == 168) )
+				// set local IPs to '-'
+				$c = '-';
+			else
+				// get country
+				$c = strtolower(geoip_country_code_by_addr($gi, $r['realip']));
+			
+			if ( !empty($c) )
+				$count_per_day->getQuery("UPDATE ".CPD_C_TABLE." SET country = '".$c."' WHERE ip = '".$r['ip']."'", 'GeoIP updateDB');
+		}
+
 	geoip_close($gi);
 	
-	$res = mysql_query("SELECT count(*) FROM ".CPD_C_TABLE." WHERE country like ''", $count_per_day->dbcon);
-	$row = mysql_fetch_array($res);
-	$rest = (!empty($row[0])) ? $row[0] : 0;
+	$res = $count_per_day->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE country like ''", 'GeoIP updateDB');
+	if ( @mysql_num_rows($res) )
+	{
+		$row = mysql_fetch_array($res);
+		$rest = (!empty($row[0])) ? $row[0] : 0;
+	}
+	else
+		$rest = 0;
 
 	return $rest;
 }
@@ -85,7 +102,7 @@ function updateGeoIpFile()
 	
 	// function checks
 	if ( !ini_get('allow_url_fopen') )
-		return 'Sorry, <code>allow_url_open</code> is disabled!';
+		return 'Sorry, <code>allow_url_fopen</code> is disabled!';
 		
 	if ( !function_exists('gzopen') )
 		return __('Sorry, necessary functions (zlib) not installed or enabled in php.ini.', 'cpd');
