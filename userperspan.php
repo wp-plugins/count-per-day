@@ -1,9 +1,12 @@
 <?php 
 // windows junction patch
-$cpd_wp_dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
-for ( $x = 1; $x <= 3; $x++)
-	$cpd_wp_dir = dirname($cpd_wp_dir.'x');
-require_once($cpd_wp_dir.'/wp-load.php');
+$dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
+for ( $x = 1; $x <= 5; $x++ )
+{
+	$dir = dirname($dir.'x');
+	if ( is_file($dir.'/wp-load.php') )
+		require_once($dir.'/wp-load.php');
+}
 
 $cpd_datemin = ( !empty($_REQUEST['datemin']) ) ? $_REQUEST['datemin'] : date_i18n('Y-m-d', time() - 86400 * 14); // 14 days
 $cpd_datemax = ( !empty($_REQUEST['datemax']) ) ? $_REQUEST['datemax'] : date_i18n('Y-m-d');

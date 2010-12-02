@@ -169,9 +169,10 @@ switch($mode) {
 	?>
 	<div class="wrap">
 	<h2><img src="<?php echo $count_per_day->getResource('cpd_menu.gif') ?>" alt="" style="width:24px;height:24px" /> Count per Day</h2>
- 	<div id="poststuff"> 
  	
-	<div class="postbox">
+ 	<div id="poststuff">
+ 	
+	<div class="postbox cpd_settings">
 	<h3><?php _e('Options', 'cpd') ?></h3>
 	<div class="inside">
 		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -312,7 +313,7 @@ switch($mode) {
 		</fieldset>
 		
 		<input type="hidden" name="do" value="cpd_update" />
-		<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" />
+		<input type="submit" name="update" value="<?php _e('Update options', 'cpd') ?>" class="button-primary" style="margin-left: 5px;" />
 		
 		</form>
 
@@ -392,7 +393,7 @@ switch($mode) {
 			while ( $row = mysql_fetch_assoc($bots) )
 			{
 				$ip = $row['ip'];
-				echo '<tr><td>';
+				echo '<tr><td style="white-space:nowrap;">';
 				echo '<a href="?page=count-per-day/counter-options.php&amp;dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'"
 					title="'.sprintf(__('Delete these %s counts', 'cpd'), $row['posts']).'"
 					style="color:red; font-weight: bold;">X</a> &nbsp;';
@@ -402,9 +403,9 @@ switch($mode) {
 					echo $c[1].' ';
 				}
 				echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$ip.'">'.$ip.'</a></td>'
-					.'<td>'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
+					.'<td style="white-space:nowrap;">'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
 					.'<td>'.$row['client'].'</td>'
-					.'<td><a href="'.$count_per_day->dir.'/massbots.php?dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day" class="thickbox">'
+					.'<td style="text-align:right;"><a href="'.$count_per_day->dir.'/massbots.php?dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day" class="thickbox">'
 						.$row['posts'].'</a></td>'
 					.'</tr>';
 				$sum += $row['posts'];
@@ -490,6 +491,7 @@ switch($mode) {
 		<?php $count_per_day->cpdInfo() ?>
 	</div>
 	</div>
+	
 	
 	</div><!-- poststuff -->
 	</div><!-- wrap -->

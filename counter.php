@@ -2,7 +2,7 @@
 /*
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
-Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard and widget.
+Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
 Version: 2.14
 License: Postcardware :)
 Author: Tom Braider
@@ -84,7 +84,7 @@ function CountPerDay()
 	add_filter('screen_layout_columns', array(&$this, 'screenLayoutColumns'), 10, 2);
 	
 	// register callback for admin menu  setup
-	add_action('admin_menu', array(&$this, 'setAdminMenu')); 	
+	add_action('admin_menu', array(&$this, 'setAdminMenu'));
 	
 	// column page list
 	add_action('manage_pages_custom_column', array(&$this, 'cpdColumnContent'), 10, 2);
@@ -138,39 +138,10 @@ function CountPerDay()
 function connectDB()
 {
 	global $wpdb;
-//	if ( $this->options['connection'] == 1 )
-//	{
-//		$this->dbcon = @mysql_connect(DB_HOST, DB_USER, DB_PASSWORD, true);
-//		@mysql_select_db(DB_NAME, $this->dbcon);
-//		$this->getQuery("SET NAMES '".$wpdb->charset."'", 'SET NAMES');
-//	}
-//	if ( $this->options['connection'] == 0 )
-//	{
 
-	$user = DB_USER;
-	$pass = DB_PASSWORD;
-	$name = DB_NAME;
-	$host = DB_HOST;
-	
-	if( defined( 'WP_USE_MULTIPLE_DB' ) && WP_USE_MULTIPLE_DB )
-	{
-		$wpdata = new wpdb(DB_USER, DB_PASSWORD, DB_NAME, DB_HOST);
-//		var_dump($wpdata);
-		if ( isset($wpdata->dbhname) && is_resource($wpdata->dbhname) )
-		{
-			$details = $wpdata->db_read;
-			$user = $details['db_user'];
-			$pass = $details['db_password'];
-			$name = $details['db_name'];
-			$host = $details['db_host'];
-		}
-		unset($wpdata);
-	}
-
-	$this->dbcon = @mysql_connect($host, $user, $pass, true);
-	@mysql_select_db($name, $this->dbcon);
+	$this->dbcon = @mysql_connect(DB_HOST, DB_USER, DB_PASSWORD, true);
+	@mysql_select_db(DB_NAME, $this->dbcon);
 	$this->getQuery("SET NAMES '".$wpdb->charset."'", 'SET NAMES');
-		
 }
 
 /**
@@ -183,54 +154,18 @@ function getQuery( $sql, $func = '' )
 {
 	global $wpdb;
 	
-//	if ( $this->options['connection'] == 1 )
-//	{
-		// CpD connection
-		if ( $this->options['debug'] )
-		{
-			$t = microtime(true);
-			$res = mysql_query($sql, $this->dbcon);
-			$d = number_format( microtime(true) - $t , 5);
-			$error = ($res) ? '' : '<b style="color:red">ERROR:</b> '.mysql_errno($this->dbcon).' - '.mysql_error($this->dbcon);
-			$this->queries[] = $func.' : <b>'.$d.'</b><br/><code>'.$sql.'</code><br/>'.$error;
-			$this->queries[0] += $d;
-		}
-		else
-			$res = @mysql_query($sql, $this->dbcon);
-//	}
-//	else
-//	{
-//		// WordPress connection
-//		if ( $this->options['debug'] )
-//		{
-//			$t = microtime(true);
-////			$r = $wpdb->query($sql);
-//			
-//			$res = $wpdb->get_results($sql);
-//			
-//			
-//			
-////			if ( $wpdb->last_result )
-////			{
-////				$res = array();
-////				foreach( (array) $wpdb->last_result as $row )
-////					$res[] = get_object_vars( $row );
-////			}
-//			
-//			var_dump($res);
-//			
-//			$d = number_format( microtime(true) - $t , 5);
-//			$error = ($r) ? '' : '<b style="color:red">ERROR:</b> '.mysql_errno().' - '.mysql_error();
-//			$this->queries[] = $r;
-//			$this->queries[] = $func.' : <b>'.$d.'</b><br/><code>'.$sql.'</code><br/>'.$error;
-//			$this->queries[0] += $d;
-//		}
-//		else
-//		{
-//			$res = $wpdb->query($sql);
-//		}
-//			
-//	}
+	if ( $this->options['debug'] )
+	{
+		$t = microtime(true);
+		$res = mysql_query($sql, $this->dbcon);
+		$d = number_format( microtime(true) - $t , 5);
+		$error = ($res) ? '' : '<b style="color:red">ERROR:</b> '.mysql_errno($this->dbcon).' - '.mysql_error($this->dbcon);
+		$this->queries[] = $func.' : <b>'.$d.'</b><br/><code>'.$sql.'</code><br/>'.$error;
+		$this->queries[0] += $d;
+	}
+	else
+		$res = @mysql_query($sql, $this->dbcon);
+
 	return $res;
 }
 
@@ -1134,11 +1069,12 @@ function getClients( $frontend = false )
 	$r = '<ul id="cpd_clients" class="cpd_front_list">';
 	foreach ($clients as $c)
 	{
-		$res = $this->getQuery("SELECT COUNT(*) count FROM ".CPD_C_TABLE." WHERE client like '%".trim($c)."%'", 'getClients_'.$c);
+		$c = trim($c);
+		$res = $this->getQuery("SELECT COUNT(*) count FROM ".CPD_C_TABLE." WHERE client like '%".$c."%'", 'getClients_'.$c);
 		$row = @mysql_fetch_row($res);
 		$percent = number_format(100 * $row[0] / $all, 0);
 		$rest -= $percent;
-		$r .= '<li>'.$c.'<b>'.$percent.' %</b></li>';
+		$r .= '<li class="cpd-client-logo cpd-client-'.strtolower($c).'">'.$c.'<b>'.$percent.' %</b></li>';
 	}
 	if ( $rest > 0 )
 		$r .= '<li>'.__('Other', 'cpd').'<b>'.$rest.' %</b></li>';
@@ -1161,7 +1097,6 @@ function getReferers( $limit = 0, $frontend = false )
 	
 	// local url filter 
 	$localref = ($this->options['localref']) ? '' : " AND referer NOT LIKE '".get_bloginfo('url')."%' ";
-		
 	$res = $this->getQuery("SELECT COUNT(*) count, referer FROM ".CPD_C_TABLE." WHERE referer > '' $localref GROUP BY referer ORDER BY count DESC LIMIT $limit", 'getReferers');
 
 	$r = '<ul id="cpd_referers" class="cpd_front_list">';
@@ -1471,12 +1406,13 @@ function cpdInfo()
 {
 	global $cpd_version;
 	
-	$t = date_i18n('Y-m-d H:i');
-	echo '<p>Count per Day: '.$cpd_version.'<br/>';
+	$t = '<span style="white-space:nowrap">'.date_i18n('Y-m-d H:i').'</span>';
+	echo '<p>Count per Day: <code>'.$cpd_version.'</code><br/>';
 	printf(__('Time for Count per Day: <code>%s</code>.', 'cpd'), $t);
-	echo '<br />'.__('Bug? Problem? Question? Hint? Praise?', 'cpd').'<br/>';
+	echo '<br />'.__('Bug? Problem? Question? Hint? Praise?', 'cpd').' ';
 	printf(__('Write a comment on the <a href="%s">plugin page</a>.', 'cpd'), 'http://www.tomsdimension.de/wp-plugins/count-per-day');
 	echo '<br />'.__('License').': <a href="http://www.tomsdimension.de/postcards">Postcardware :)</a>';
+	echo '<br /><a href="'.$this->dir.'/readme.txt?KeepThis=true&amp;TB_iframe=true" title="Count per Day - Readme.txt" class="thickbox"><strong>Readme.txt</strong></a></p>';
 	echo '</p>';
 }
 
@@ -1750,6 +1686,7 @@ function showQueries()
 		.'<b>mySQL Client:</b> '.mysql_get_client_info().'<br/>'
 		.'<b>WordPress:</b> '.get_bloginfo('version').'<br/>'
 		.'<b>Count per Day:</b> '.$cpd_version.'<br/>'
+		.'<b>Time for Count per Day:</b> '.date_i18n('Y-m-d H:i').'<br/>'
 		.'<b>URL:</b> '.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'].'<br/>'
 		.'<b>Referer:</b> '.$_SERVER['HTTP_REFERER']
 		.'</li>';
@@ -1787,7 +1724,6 @@ function showQueries()
 		a_llow_url_fopen=<?php echo (ini_get('allow_url_fopen')) ? 'true' : 'false' ?>
 	</p>
 	<?php
-	$this->cpdInfo();
 	echo '</div>';
 }
 
