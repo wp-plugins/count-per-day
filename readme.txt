@@ -2,7 +2,7 @@
 Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 2.7
-Tested up to: 3.0.1
+Tested up to: 3.0.2
 Stable tag: 2.14
 License: Postcardware
 Donate link: http://www.tomsdimension.de/postcards
@@ -24,30 +24,30 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 = Languages, Translators =
 
-- German		- 100% - Tom Braider, me ;) -
+- German		- 100% - me ;) -
 - Italian		- 100% - Gianni Diurno -		http://gidibao.net
-- Dansk			- 95% - Georg S. Adamsen -		http://www.blogos.dk
-- Dansk 2*		- 95% - Jonas Thomsen -			http://jonasthomsen.com
-- Dutch NL		- 95% - Rene -					http://wpwebshop.com
-- Espanol		- 95% - Juan Carlos del R&iacute;o -
-- France		- 95% - Bjork -					http://www.habbzone.fr
-- Russian		- 95% - Ilya -					http://iluhis.com
-- Swedish		- 95% - Magnus Suther -			http://www.magnussuther.se
-- Portuguese BR	- 95% - Beto Ribeiro -			http://www.sevenarts.com.br
-
+- Dansk			-  95% - Georg S. Adamsen -		http://www.blogos.dk
+- Dansk 2*		-  95% - Jonas Thomsen -		http://jonasthomsen.com
+- Dutch NL		-  95% - Rene -					http://wpwebshop.com
+- Espanol		-  95% - Juan Carlos del R&iacute;o -
+- France		-  95% - Bjork -				http://www.habbzone.fr
+- Russian		-  95% - Ilya -					http://iluhis.com
+- Swedish		-  95% - Magnus Suther -		http://www.magnussuther.se
+- Portuguese BR	-  95% - Beto Ribeiro -			http://www.sevenarts.com.br
 - Polish 		-  85% - LeXuS -				http://intrakardial.de
 - Uzbek			-  60% - Alisher -
 - Belarus		-  40% - Marcis Gasuns -		http://www.fatcow.com
 
-*) Rename cpd-da_DK-2.mo to cpd-da_DK.mo in "locale" dir to use the second dansk translation.
+*) Rename cpd-da_DK-2.mo to cpd-da_DK.mo in "locale" directory to use the second dansk translation.
 
 == Installation ==
 
 1. unzip plugin directory into the '/wp-content/plugins/' directory
 1. activate the plugin through the 'Plugins' menu in WordPress
-1. on every update you have to deactivate/reactivate the plugin
+1. on every update you have to deactivate and reactivate the plugin to update some settings
+1. if you want to use the GeoIP function you have to download the GeoIP-database on options page
 
-First activation will create the 3 tables wp_cpd_counter, wp_cpd_counter_useronline and wp_cpd_notes.
+The activation will create or update 3 tables wp_cpd_counter, wp_cpd_counter_useronline and wp_cpd_notes.
 
 **Configuration**
 
@@ -226,6 +226,10 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
+= 2.14.1 =
++ Bugfix: Ajax counter for cached pages is now multi widget compatible
++ New: "reads last week" in widget
+
 = 2.14 =
 + New: multi widget compatible, place the widget several times with individual settings
 + New: WordPress Multisite compatible, networkwide activation creates tables in all blogs
@@ -239,6 +243,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + Bugfix: yesterday reads and visitors (timezone)
 + Bugfix: links on mass bots page
 + little cosmetics
++ Language update: Italian
 
 = 2.13.1 =
 + New Language: Espanol, thanks to Juan Carlos del R&iacute;o
