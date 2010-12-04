@@ -219,7 +219,7 @@ switch($mode) {
 		</tr>
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Clients and referers', 'cpd') ?>:</th>
-			<td><label for="cpd_referers"><input type="checkbox" name="cpd_referers" id="cpd_referers" <?php if($o['referers']==1) echo 'checked="checked"'; ?> /> <?php _e('Save and show clients and referers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors.', 'cpd') ?></label></td>
+			<td><label for="cpd_referers"><input type="checkbox" name="cpd_referers" id="cpd_referers" <?php if($o['referers']==1) echo 'checked="checked"'; ?> /> <?php _e('Save and show clients and referers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors.', 'cpd') ?> (1000000 <?php _e('Reads', 'cpd') ?> ~ 130 MB)</label></td>
 		</tr>
 		</table>
 		</fieldset>

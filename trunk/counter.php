@@ -3,14 +3,14 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 2.14
+Version: 2.14.1
 License: Postcardware :)
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '2.14';
+$cpd_version = '2.14.1';
 
 /**
  * include GeoIP addon
@@ -75,7 +75,10 @@ function CountPerDay()
 
 	// javascript to count cached posts
 	if ( $this->options['ajax'] == 1 )
+	{
+		wp_enqueue_script( 'jquery' );
 		add_action('wp_footer', array(&$this,'addAjaxScript'));
+	}
 
 	// widget on dashboard page
 	add_action('wp_dashboard_setup', array(&$this, 'dashboardWidgetSetup'));
@@ -187,7 +190,7 @@ function show( $before='', $after=' reads', $show = true, $count = true, $page =
 		$this->count();
 	if ( $page == 'x' )
 		$page = get_the_ID();
-	$res = $this->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE page='$page'", 'show');
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE page='$page'", 'show');
 	$row = mysql_fetch_row($res);
 	if ( $show )
 		echo $before.$row[0].$after;
@@ -1321,7 +1324,7 @@ function updateOptions()
 	'startreads'			=> (isset($o['startreads'])) ? $o['startreads'] : '',
 	'anoip'					=> (isset($o['anoip'])) ? $o['anoip'] : 0,
 	'massbotlimit'			=> (isset($o['massbotlimit'])) ? $o['massbotlimit'] : 25,
-	'clients'				=> (isset($o['clients'])) ? $o['clients'] : 'Firefox, MSIE, Chrome, AppleWebKit, Opera',
+	'clients'				=> (isset($o['clients'])) ? $o['clients'] : 'Firefox, MSIE, Chrome, Safari, Opera',
 	'ajax'					=> (isset($o['ajax'])) ? $o['ajax'] : 0,
 	'debug'					=> (isset($o['debug'])) ? $o['debug'] : 0,
 	'referers'				=> (isset($o['referers'])) ? $o['referers'] : 1
@@ -1650,6 +1653,7 @@ function addCss()
 function addAjaxScript()
 {
 	$this->getPostID();
+	
 	echo <<< JSEND
 <script type="text/javascript">
 // Count per Day
@@ -1658,11 +1662,13 @@ jQuery(document).ready( function($)
 {
 	jQuery.get('{$this->dir}/ajax.php?f=count&page={$this->page}', function(text)
 	{
-		var d = text.split('|');
-		for(var i = 0; i < d.length; i++)
+		var cpd_funcs = text.split('|');
+		for(var i = 0; i < cpd_funcs.length; i++)
 		{
-			var v = d[i].split('===');
-			document.getElementById('cpd_number_'+v[1]).innerHTML = v[0]; 
+			var cpd_daten = cpd_funcs[i].split('===');
+			var cpd_fields = document.getElementsByName('cpd_number_' + cpd_daten[0].toLowerCase());
+			for(var x = 0; x < cpd_fields.length; x++)
+				cpd_fields[x].innerHTML = cpd_daten[1];
 		}
 	});
 } );
@@ -1774,22 +1780,28 @@ function register_widgets()
  */
 class CountPerDay_Widget extends WP_Widget
 {
-	var $fields = array( 'title', 'show', 'getreadsall', 'getreadstoday', 'getreadsyesterday',
+	var $fields = array( 'title', 'show', 'getreadsall', 'getreadstoday', 'getreadsyesterday', 'getreadslastweek',
 		'getuserall', 'getusertoday', 'getuseryesterday', 'getuserlastweek',
 		'getuserperday', 'getuseronline', 'getfirstcount',
-		'show_name', 'getreadsall_name', 'getreadstoday_name', 'getreadsyesterday_name',
+	
+		'show_name', 'getreadsall_name', 'getreadstoday_name', 'getreadsyesterday_name', 'getreadslastweek_name',
 		'getuserall_name', 'getusertoday_name', 'getuseryesterday_name', 'getuserlastweek_name',
 		'getuserperday_name', 'getuseronline_name', 'getfirstcount_name' );
-	var $cpd_funcs = array ( 'show', 'getReadsAll', 'getReadsToday', 'getReadsYesterday',
+	var $cpd_funcs = array ( 'show', 'getReadsAll', 'getReadsToday', 'getReadsYesterday', 'getReadsLastWeek',
 		'getUserAll', 'getUserToday', 'getUserYesterday', 'getUserLastWeek',
 		'getUserPerDay', 'getUserOnline', 'getFirstCount' );
 	var $funcs;
 	var $names;
 	
+//	public static function getWidgetFuncs()
+//	{
+//		return $this->cpd_funcs;
+//	}
+//	
 	// constructor
 	function CountPerDay_Widget() {
-		$this->funcs = array_slice( $this->fields, 1, 11);
-		$this->names = array_slice( $this->fields, 12, 11);
+		$this->funcs = array_slice( $this->fields, 1, 12);
+		$this->names = array_slice( $this->fields, 13, 12);
 		parent::WP_Widget('countperday_widget', 'Count per Day',
 			array('description' => __('Statistics', 'cpd')), array('width' => 400) );	
 	}
@@ -1804,7 +1816,6 @@ class CountPerDay_Widget extends WP_Widget
 		echo $before_widget;
 		if ( !empty( $title ) )
 			echo $before_title.$title.$after_title;
-			
 			echo '<ul class="cpd">';
 			foreach ( $instance as $k=>$v )
 			{
@@ -1814,7 +1825,7 @@ class CountPerDay_Widget extends WP_Widget
 					if ( ($k == 'show' && is_singular()) || $k != 'show' )
 					{
 						$f = str_replace( $this->funcs, $this->cpd_funcs, $k );
-						echo '<li class="cpd-l"><span id="cpd_number_'.$k.'" class="cpd-r">';
+						echo '<li class="cpd-l"><span id="cpd_number_'.$k.'" name="cpd_number_'.$k.'" class="cpd-r">';
 						// parameters only for special functions
 						if ( $f == 'getUserPerDay' )
 							eval('echo $count_per_day->getUserPerDay('.$count_per_day->options['dashboard_last_days'].');');
@@ -1862,6 +1873,7 @@ class CountPerDay_Widget extends WP_Widget
 			'getreadsall_name' => __('Total reads', 'cpd'),
 			'getreadstoday_name' => __('Reads today', 'cpd'),
 			'getreadsyesterday_name' => __('Reads yesterday', 'cpd'),
+			'getreadslastweek_name' => __('Reads last week', 'cpd'),
 			'getuserall_name' => __('Total visitors', 'cpd'),
 			'getusertoday_name' => __('Visitors today', 'cpd'),
 			'getuseryesterday_name' => __('Visitors yesterday', 'cpd'),
