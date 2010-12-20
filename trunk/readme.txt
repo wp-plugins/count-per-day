@@ -26,15 +26,15 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 - German		- 100% - me ;) -
 - Italian		- 100% - Gianni Diurno -		http://gidibao.net
+- Polish 		- 100% - LeXuS -				http://intrakardial.de
+- Russian		- 100% - Ilya Pshenichny -		http://iluhis.com
 - Dansk			-  95% - Georg S. Adamsen -		http://www.blogos.dk
 - Dansk 2*		-  95% - Jonas Thomsen -		http://jonasthomsen.com
 - Dutch NL		-  95% - Rene -					http://wpwebshop.com
 - Espanol		-  95% - Juan Carlos del R&iacute;o -
 - France		-  95% - Bjork -				http://www.habbzone.fr
-- Russian		-  95% - Ilya -					http://iluhis.com
 - Swedish		-  95% - Magnus Suther -		http://www.magnussuther.se
 - Portuguese BR	-  95% - Beto Ribeiro -			http://www.sevenarts.com.br
-- Polish 		-  85% - LeXuS -				http://intrakardial.de
 - Uzbek			-  60% - Alisher -
 - Belarus		-  40% - Marcis Gasuns -		http://www.fatcow.com
 
@@ -44,7 +44,7 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 1. unzip plugin directory into the '/wp-content/plugins/' directory
 1. activate the plugin through the 'Plugins' menu in WordPress
-1. on every update you have to deactivate and reactivate the plugin to update some settings
+1. after every update you have to deactivate and reactivate the plugin to update some settings!
 1. if you want to use the GeoIP function you have to download the GeoIP-database on options page
 
 The activation will create or update 3 tables wp_cpd_counter, wp_cpd_counter_useronline and wp_cpd_notes.
@@ -54,7 +54,7 @@ The activation will create or update 3 tables wp_cpd_counter, wp_cpd_counter_use
 See the Options Page and check the default values. It's easy. :)
 Install optional GeoIP database to show countries of your visitors.
 
-If "Auto counter" is on reads on single-posts and pages will count without any changes on template.
+If "Auto counter" is on reads will count without any changes on template.
 
 == Frequently Asked Questions ==
 
@@ -71,13 +71,14 @@ read and write comments on http://www.tomsdimension.de/wp-plugins/count-per-day
 
 **Shortcodes**
 
-You can use these shortcodes in the content while writing you posts.
+You can use these shortcodes in the content while writing you posts to show a number.
 
 [CPD_READS_THIS]
 [CPD_READS_TOTAL]
 [CPD_READS_TODAY]
 [CPD_READS_YESTERDAY]
 [CPD_READS_LAST_WEEK]
+[CPD_READS_THIS_MONTH]
 [CPD_READS_PER_MONTH]
 [CPD_READS_CHART]
 [CPD_VISITORS_TOTAL]
@@ -85,6 +86,7 @@ You can use these shortcodes in the content while writing you posts.
 [CPD_VISITORS_TODAY]
 [CPD_VISITORS_YESTERDAY]
 [CPD_VISITORS_LAST_WEEK]
+[CPD_VISITORS_THIS_MONTH]
 [CPD_VISITORS_PER_MONTH]
 [CPD_VISITORS_PER_DAY]
 [CPD_VISITORS_PER_POST]
@@ -148,6 +150,11 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * shows number of reads last week (7 days)
 * $frontend: 0 echo, 1 return output
 
+'getReadsThisMonth( $frontend )'
+
+* shows number of reads current month
+* $frontend: 0 echo, 1 return output
+
 'getReadsPerMonth( $frontend )'
 
 * lists number of reads per month
@@ -176,6 +183,11 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 'getUserLastWeek( $frontend )'
 
 * shows number of visitors last week (7 days)
+* $frontend: 0 echo, 1 return output
+
+'getUserThisMonth( $frontend )'
+
+* shows number of visitors current month
 * $frontend: 0 echo, 1 return output
 
 'getUserPerMonth( $frontend )'
@@ -226,9 +238,11 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
-= 2.14.1 =
+= 2.15 =
++ New: functions and shortcodes [CPD_READS_THIS_MONTH] [CPD_VISITORS_THIS_MONTH]
++ New: reads last week, reads this month and visitors this month in widget
 + Bugfix: Ajax counter for cached pages is now multi widget compatible
-+ New: "reads last week" in widget
++ Language updates: Polish, Russia
 
 = 2.14 =
 + New: multi widget compatible, place the widget several times with individual settings

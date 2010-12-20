@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-02 12:13+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Tom Braider <post@tomsdimension.de>\n"
+"Last-Translator: Ilya Pshenichny\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -216,7 +216,7 @@ msgid "Visitors per month"
 msgstr "Посетителей в месяц"
 
 #: counter-options.php:233
-#: counter.php:1451
+#: counter.php:1451y
 #@ cpd
 msgid "Visitors per post"
 msgstr "Посетителей записи"
@@ -581,7 +581,7 @@ msgstr "Приносим извинения, произошла ошибка. П
 #: notes.php:87
 #@ cpd
 msgid "(1 per day)"
-msgstr "1 на сутки"
+msgstr "(1 на сутки)"
 
 #: notes.php:88
 #@ default
@@ -611,12 +611,12 @@ msgstr "редактировать"
 #: counter-options.php:217
 #@ cpd
 msgid "Cache"
-msgstr "Кеш"
+msgstr "Кэш"
 
 #: counter-options.php:218
 #@ cpd
 msgid "I use a cache plugin. Count these visits with ajax."
-msgstr "Я использую кешированый плагин. Считать эти посещения при помощи ajax"
+msgstr "Я использую кэшированый плагин. Считать эти посещения при помощи ajax"
 
 #: counter-options.php:260
 #@ cpd
@@ -671,70 +671,69 @@ msgstr "ничего не найдено"
 #: counter-options.php:183
 #@ cpd
 msgid "Counter"
-msgstr ""
+msgstr "Счетчик"
 
 #: counter-options.php:221
 #@ cpd
 msgid "Clients and referers"
-msgstr ""
+msgstr "Клиенты и ссылающиеся сайты"
 
 #: counter-options.php:222
 #@ cpd
 msgid "Save and show clients and referers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors."
-msgstr ""
+msgstr "Сохранить и показать клиентов и ссылающиеся сайты.<br />Требует много дискового пространства в базе данных, но предоставляет более детальную информацию о ваших посетителях."
 
 #: counter-options.php:263
 #@ cpd
 msgid "Local URLs"
-msgstr ""
+msgstr "Локальные URL"
 
 #: counter-options.php:264
 #@ cpd
 msgid "Show local referers too."
-msgstr ""
+msgstr "Показывать локальные переходы тоже."
 
 #: counter-options.php:272
 #@ default
 msgid "Posts"
-msgstr ""
+msgstr "Записи"
 
 #: counter-options.php:272
 #@ default
 msgid "Pages"
-msgstr ""
+msgstr "Страницы"
 
 #: counter.php:507
 #@ cpd
 msgid "Reads last week"
-msgstr ""
+msgstr "Прочтений на прошлой неделе"
 
 #: counter.php:1171
 #@ default
 msgid "Category"
-msgstr ""
+msgstr "Категория"
 
 #: counter.php:1174
 #@ default
 msgid "Tag"
-msgstr ""
+msgstr "Тег"
 
 #: counter.php:1417
 #@ default
 msgid "License"
-msgstr ""
+msgstr "Лицензия"
 
 #: counter.php:1450
 #@ cpd
 msgid "Reads per month"
-msgstr ""
+msgstr "Прочтений за месяц"
 
 #: counter.php:1459
 #@ cpd
 msgid "Referer"
-msgstr ""
+msgstr "Ссылающийся сайт"
 
 #: counter.php:1891
 #@ default
 msgid "Title"
-msgstr ""
-
+msgstr "Заголовок"
