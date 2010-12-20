@@ -855,7 +855,7 @@ function getUserPerMonth( $frontend = false )
 	$r = '<ul class="cpd_front_list">';
 	while ( $row = mysql_fetch_row($m) )
 	{
-		$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE LEFT(date,7) = '".$row[0]."' GROUP BY date, ip", 'getUserPerMonth');
+		$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE LEFT(date,7) = '".$row[0]."' GROUP BY ip", 'getUserPerMonth');
 		$r .= '<li><b>'.mysql_num_rows($res).'</b> '.$row[0].'</li>'."\n";
 	}
 	$r .= '</ul>';
