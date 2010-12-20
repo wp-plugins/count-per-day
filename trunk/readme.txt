@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 2.7
 Tested up to: 3.0.2
-Stable tag: 2.14
+Stable tag: 2.15
 License: Postcardware
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -242,6 +242,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + New: functions and shortcodes [CPD_READS_THIS_MONTH] [CPD_VISITORS_THIS_MONTH]
 + New: reads last week, reads this month and visitors this month in widget
 + Bugfix: Ajax counter for cached pages is now multi widget compatible
++ Bugifx: "Visitors per month" showed to many visitors
 + Language updates: Polish, Russia
 
 = 2.14 =
