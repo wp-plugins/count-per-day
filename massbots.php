@@ -1,9 +1,16 @@
 <?php 
-require('../../../wp-load.php');
+// windows junction patch
+$dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
+for ( $x = 1; $x <= 5; $x++ )
+{
+	$dir = dirname($dir.'x');
+	if ( is_file($dir.'/wp-load.php') )
+		require_once($dir.'/wp-load.php');
+}
 
 if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 {
-	$sql = 'SELECT	p.ID post_id, p.post_title post,
+	$sql = 'SELECT	c.page post_id, p.post_title post,
 					t.name tag_cat_name,
 					t.slug tag_cat_slug,
 					x.taxonomy tax
@@ -26,28 +33,41 @@ if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Count per Day</title>
+<link rel="stylesheet" type="text/css" href="counter.css" />
 </head>
-<body style="font-size: 13px;">
+<body class="cpd-thickbox">
+<h2><?php _e('Mass Bots', 'cpd') ?></h2>
 <ol>
 <?php
 while ( $row = mysql_fetch_array($massbots) )
 {
 	if ( $row['post_id'] < 0 && $row['tax'] == 'category' )
+	{
 		$name = '- '.$row['tag_cat_name'].' -';
+		$link = get_bloginfo('url').'?cat='.abs($row['post_id']);
+	}
 	else if ( $row['post_id'] < 0 )
+	{
 		$name = '- '.$row['tag_cat_name'].' -';
+		$link = get_bloginfo('url').'?tag='.$row['tag_cat_slug'];
+	}
 	else if ( $row['post_id'] == 0 )
+	{
 		$name = '- '.__('Front page displays').' -';
+		$link =	get_bloginfo('url');
+	}
 	else
 	{
 		$postname = $row['post'];
 		if ( empty($postname) ) 
 			$postname = '---';
 		$name = $postname;
+		$link =	get_permalink($row['post_id']);
 	}
-	echo '<li><a href="'.get_permalink($row['post_id']).'" target="_blank">'.$name.'</a></li>';
+	echo '<li><a href="'.$link.'" target="_blank">'.$name.'</a></li>';
 }
 ?>
 </ol>
+<?php if ($count_per_day->options['debug']) $count_per_day->showQueries(); ?>
 </body>
 </html>

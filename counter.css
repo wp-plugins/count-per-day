@@ -21,6 +21,28 @@
 	vertical-align: bottom;
 }
 
+/* settings */
+
+.cpd_settings fieldset {
+	margin: 10px 5px 20px;
+	padding: 0 10px 10px;
+	border: 1px solid #dfdfdf;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+}
+
+.cpd_settings legend {
+    background: #dfdfdf;
+    border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+    margin: 0 10px;
+    padding: 5px 10px;
+    text-shadow: 0 1px 0 #fff;
+	font-weight: bold;
+}
+
 /* dashboard */
 
 .cpd-dashboard .inside {
@@ -29,8 +51,9 @@
 
 .cpd-dashboard li {
 	color: #777;
-	padding-top: 2px;
-	border-top: 1px #ddd dotted;
+	padding-bottom: 2px;
+	border-bottom: 1px #ddd dotted;
+	overflow: hidden;
 }
 
 .cpd-dashboard li b {
@@ -59,6 +82,26 @@
 .cpd-r {
 	float: right;
 }
+
+/* thickbox */
+
+.cpd-thickbox {
+	background-color: #F7F6F1;
+	font-size: 13px;
+	}
+
+.cpd-thickbox h2 {
+	font: italic 1.5em Georgia,"Times New Roman","Bitstream Charter",Times,serif;
+	margin: 0;
+	padding: 0;
+	color: #093E56;
+}
+
+.cpd-thickbox li {
+	padding-bottom: 5px;
+	border-top: none;
+}
+
 
 /* notes thickbox */
 .cpd-notes {
@@ -99,6 +142,29 @@
 .cpd-notes input { 
  	width: 97%;
 	font: 12px Verdana, Arial, Helvetica, sans-serif;
+}
+
+/* clients */
+
+.cpd-client-logo {
+	padding-left: 25px;
+	background: url(img/cpd_clients.png) no-repeat left -25px;
+}
+
+.cpd-client-chrome{background-position:0 0;}
+.cpd-client-firefox{background-position:0 -49px;}
+.cpd-client-msie{background-position:0 -98px;}
+.cpd-client-opera{background-position:0 -147px;}
+.cpd-client-safari{background-position:0 -196px;}
+
+/*referers */
+
+#cpd_referers li a {
+	width: 85%;
+	display: block;
+	float: left;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 /* flags */
@@ -229,4 +295,3 @@
 .cpd-flag-vn {background-position:0 -1495px;}
 .cpd-flag-ye {background-position:0 -1508px;}
 .cpd-flag-za {background-position:0 -1521px;}
-
