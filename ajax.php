@@ -8,8 +8,9 @@ for ( $x = 1; $x <= 5; $x++ )
 		require_once($dir.'/wp-load.php');
 }
 
-$cpd_funcs = array ( 'show', 'getReadsAll', 'getReadsToday', 'getReadsYesterday', 'getReadsLastWeek',
-	'getUserAll', 'getUserToday', 'getUserYesterday', 'getUserLastWeek',
+$cpd_funcs = array ( 'show',
+	'getReadsAll', 'getReadsToday', 'getReadsYesterday', 'getReadsLastWeek', 'getReadsThisMonth',
+	'getUserAll', 'getUserToday', 'getUserYesterday', 'getUserLastWeek', 'getUserThisMonth',
 	'getUserPerDay', 'getUserOnline', 'getFirstCount' );
 
 if ( $_GET['f'] == 'count' )

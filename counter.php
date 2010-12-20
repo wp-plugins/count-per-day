@@ -3,19 +3,18 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 2.14.1
+Version: 2.15
 License: Postcardware :)
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '2.14.1';
+$cpd_version = '2.15';
 
 /**
  * include GeoIP addon
  */
-//$cpd_path = ABSPATH.PLUGINDIR.'/'.dirname(plugin_basename(__FILE__));
 $cpd_path = ABSPATH.PLUGINDIR.'/'.$cpd_dir_name.'/';
 $cpd_path = str_replace('/', DIRECTORY_SEPARATOR, $cpd_path);
 
@@ -48,7 +47,7 @@ function CountPerDay()
 	define('CPD_N_TABLE', $table_prefix.'cpd_notes');
 	define('CPD_METABOX', 'cpd_metaboxes');
 	
-	// use local time not UTC
+	// use local time, not UTC
 	get_option('gmt_offset');
 	
 	$this->options = get_option('count_per_day');
@@ -295,7 +294,8 @@ function count( $x, $page = 'x' )
 		else if ($role['subscriber'])	$userlevel = 0;
 		else							$userlevel = -1;
 	}
-		else $userlevel = -1;
+	else
+		$userlevel = -1;
 
 	// count visitor?
 	$countUser = 1;
@@ -499,17 +499,20 @@ function createTables()
  */
 function dashboardReadsAtAll()
 {
+	$thisMonth = date_i18n('F');
 	?>
 	<ul>
 		<li><b><span><?php $this->getReadsAll(); ?></span></b><?php _e('Total reads', 'cpd') ?>:</li>
 		<li><b><?php $this->getReadsToday(); ?></b><?php _e('Reads today', 'cpd') ?>:</li>
 		<li><b><?php $this->getReadsYesterday(); ?></b><?php _e('Reads yesterday', 'cpd') ?>:</li>
 		<li><b><?php $this->getReadsLastWeek(); ?></b><?php _e('Reads last week', 'cpd') ?>:</li>
+		<li><b><?php $this->getReadsThisMonth(); ?></b><?php _e('Reads', 'cpd') ?> <?php echo $thisMonth ?>:</li>
 		<li><b><span><?php $this->getUserAll(); ?></span></b><?php _e('Total visitors', 'cpd') ?>:</li>
 		<li><b><span><?php $this->getUserOnline(); ?></span></b><?php _e('Visitors currently online', 'cpd') ?>:</li>
 		<li><b><?php $this->getUserToday(); ?></b><?php _e('Visitors today', 'cpd') ?>:</li>
 		<li><b><?php $this->getUserYesterday(); ?></b><?php _e('Visitors yesterday', 'cpd') ?>:</li>
 		<li><b><?php $this->getUserLastWeek(); ?></b><?php _e('Visitors last week', 'cpd') ?>:</li>
+		<li><b><?php $this->getUserThisMonth(); ?></b><?php _e('Total visitors', 'cpd') ?> <?php echo $thisMonth ?>:</li>
 		<li><b><?php $this->getUserPerDay($this->options['dashboard_last_days']); ?></b>&Oslash; <?php _e('Visitors per day', 'cpd') ?>:</li>
 		<li><b><?php $this->getFirstCount(); ?></b><?php _e('Counter starts on', 'cpd') ?>:</li>
 	</ul>
@@ -809,7 +812,34 @@ function getReadsLastWeek( $frontend = false )
 	$date = date_i18n('Y-m-d', current_time('timestamp')-86400*7);
 	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date >= '$date';", 'getReadsLastWeek');
 	$row = mysql_fetch_row($res);
-//	$c = mysql_num_rows($res);
+	if ($frontend)
+		return $row[0];
+	else
+		echo $row[0];
+}
+
+/**
+ * shows this month visitors
+ */
+function getUserThisMonth( $frontend = false )
+{
+	$first = date_i18n('Y-m-', current_time('timestamp')).'01';
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$first' GROUP BY ip;", 'getUserThisMonth');
+	$c = mysql_num_rows($res);
+	if ($frontend)
+		return $c;
+	else
+		echo $c;
+}
+
+/**
+ * shows this month reads
+ */
+function getReadsThisMonth( $frontend = false )
+{
+	$first = date_i18n('Y-m-', current_time('timestamp')).'01';
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date >= '$first';", 'getReadsThisMonth');
+	$row = mysql_fetch_row($res);
 	if ($frontend)
 		return $row[0];
 	else
@@ -1356,24 +1386,6 @@ function cpdColumnContent($column_name, $id = 0)
     }
 }
 
-
-/**
- * activation when adding a new blog
- */
-//add_action( 'wpmu_new_blog', 'new_blog', 10, 6); 		
-// 
-//function new_blog($blog_id, $user_id, $domain, $path, $site_id, $meta ) {
-//	global $wpdb;
-// 
-//	if (is_plugin_active_for_network('shiba-custom-background/shiba-custom-background.php')) {
-//		$old_blog = $wpdb->blogid;
-//		switch_to_blog($blog_id);
-//		$this->_shiba_activate();
-//		switch_to_blog($old_blog);
-//	}
-//}
-
-
 /**
  * gets image recource with given name
  */
@@ -1586,11 +1598,13 @@ function addShortcodes()
 	add_shortcode('CPD_READS_YESTERDAY', array( &$this, 'shortReadsYesterday'));
 	add_shortcode('CPD_READS_LAST_WEEK', array( &$this, 'shortReadsLastWeek'));
 	add_shortcode('CPD_READS_PER_MONTH', array( &$this, 'shortReadsPerMonth'));
+	add_shortcode('CPD_READS_THIS_MONTH', array( &$this, 'shortReadsThisMonth'));
 	add_shortcode('CPD_VISITORS_TOTAL', array( &$this, 'shortUserAll'));
 	add_shortcode('CPD_VISITORS_ONLINE', array( &$this, 'shortUserOnline'));
 	add_shortcode('CPD_VISITORS_TODAY', array( &$this, 'shortUserToday'));
 	add_shortcode('CPD_VISITORS_YESTERDAY', array( &$this, 'shortUserYesterday'));
 	add_shortcode('CPD_VISITORS_LAST_WEEK', array( &$this, 'shortUserLastWeek'));
+	add_shortcode('CPD_VISITORS_THIS_MONTH', array( &$this, 'shortUserThisMonth'));
 	add_shortcode('CPD_VISITORS_PER_DAY', array( &$this, 'shortUserPerDay'));
 	add_shortcode('CPD_FIRST_COUNT', array( &$this, 'shortFirstCount'));
 	add_shortcode('CPD_CLIENTS', array( &$this, 'shortClients'));
@@ -1607,6 +1621,7 @@ function shortShow()			{ return $this->show('', '', false, false); }
 function shortReadsTotal()		{ return $this->getReadsAll(true); }
 function shortReadsToday()		{ return $this->getReadsToday(true); }
 function shortReadsYesterday()	{ return $this->getReadsYesterday(true); }
+function shortReadsThisMonth()	{ return $this->getReadsThisMonth(true); }
 function shortReadsLastWeek()	{ return $this->getReadsLastWeek(true); }
 function shortReadsPerMonth()	{ return $this->getReadsPerMonth(true); }
 function shortUserAll()			{ return $this->getUserAll(true); }
@@ -1614,6 +1629,7 @@ function shortUserOnline()		{ return $this->getUserOnline(true); }
 function shortUserToday()		{ return $this->getUserToday(true); }
 function shortUserYesterday()	{ return $this->getUserYesterday(true); }
 function shortUserLastWeek()	{ return $this->getUserLastWeek(true); }
+function shortUserThisMonth()	{ return $this->getUserThisMonth(true); }
 function shortUserPerDay()		{ return $this->getUserPerDay($this->options['dashboard_last_days'], true); }
 function shortFirstCount()		{ return $this->getFirstCount(true); }
 function shortClients()			{ return $this->getClients(true); }
@@ -1780,15 +1796,17 @@ function register_widgets()
  */
 class CountPerDay_Widget extends WP_Widget
 {
-	var $fields = array( 'title', 'show', 'getreadsall', 'getreadstoday', 'getreadsyesterday', 'getreadslastweek',
-		'getuserall', 'getusertoday', 'getuseryesterday', 'getuserlastweek',
+	var $fields = array( 'title', 'show',
+		'getreadsall', 'getreadstoday', 'getreadsyesterday', 'getreadslastweek', 'getreadsthismonth',
+		'getuserall', 'getusertoday', 'getuseryesterday', 'getuserlastweek', 'getuserthismonth',
 		'getuserperday', 'getuseronline', 'getfirstcount',
-	
-		'show_name', 'getreadsall_name', 'getreadstoday_name', 'getreadsyesterday_name', 'getreadslastweek_name',
-		'getuserall_name', 'getusertoday_name', 'getuseryesterday_name', 'getuserlastweek_name',
+		'show_name',
+		'getreadsall_name', 'getreadstoday_name', 'getreadsyesterday_name', 'getreadslastweek_name', 'getreadsthismonth_name',
+		'getuserall_name', 'getusertoday_name', 'getuseryesterday_name', 'getuserlastweek_name', 'getuserthismonth_name',
 		'getuserperday_name', 'getuseronline_name', 'getfirstcount_name' );
-	var $cpd_funcs = array ( 'show', 'getReadsAll', 'getReadsToday', 'getReadsYesterday', 'getReadsLastWeek',
-		'getUserAll', 'getUserToday', 'getUserYesterday', 'getUserLastWeek',
+	var $cpd_funcs = array ( 'show',
+		'getReadsAll', 'getReadsToday', 'getReadsYesterday', 'getReadsLastWeek', 'getReadsThisMonth',
+		'getUserAll', 'getUserToday', 'getUserYesterday', 'getUserLastWeek', 'getUserThisMonth',
 		'getUserPerDay', 'getUserOnline', 'getFirstCount' );
 	var $funcs;
 	var $names;
@@ -1800,8 +1818,8 @@ class CountPerDay_Widget extends WP_Widget
 //	
 	// constructor
 	function CountPerDay_Widget() {
-		$this->funcs = array_slice( $this->fields, 1, 12);
-		$this->names = array_slice( $this->fields, 13, 12);
+		$this->funcs = array_slice( $this->fields, 1, 14);
+		$this->names = array_slice( $this->fields, 15, 14);
 		parent::WP_Widget('countperday_widget', 'Count per Day',
 			array('description' => __('Statistics', 'cpd')), array('width' => 400) );	
 	}
@@ -1862,9 +1880,12 @@ class CountPerDay_Widget extends WP_Widget
 			'getreadsall' => 0,
 			'getreadstoday' => 0,
 			'getreadsyesterday' => 0,
+			'getreadslastweek' => 0,
+			'getreadsthismonth' => 0,
 			'getuserall' => 0,
 			'getusertoday' => 0,
 			'getuseryesterday' => 0,
+			'getuserthismonth' => 0,
 			'getuserlastweek' => 0,
 			'getuserperday' => 0,
 			'getuseronline' => 0,
@@ -1874,10 +1895,12 @@ class CountPerDay_Widget extends WP_Widget
 			'getreadstoday_name' => __('Reads today', 'cpd'),
 			'getreadsyesterday_name' => __('Reads yesterday', 'cpd'),
 			'getreadslastweek_name' => __('Reads last week', 'cpd'),
+			'getreadsthismonth_name' => __('Reads per month', 'cpd'),
 			'getuserall_name' => __('Total visitors', 'cpd'),
 			'getusertoday_name' => __('Visitors today', 'cpd'),
 			'getuseryesterday_name' => __('Visitors yesterday', 'cpd'),
 			'getuserlastweek_name' => __('Visitors last week', 'cpd'),
+			'getuserthismonth_name' => __('Visitors per month', 'cpd'),
 			'getuserperday_name' => __('Visitors per day', 'cpd'),
 			'getuseronline_name' => __('Visitors currently online', 'cpd'),
 			'getfirstcount_name' => __('Counter starts on', 'cpd')		
