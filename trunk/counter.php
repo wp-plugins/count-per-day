@@ -3,14 +3,14 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 2.15
+Version: 2.15.1
 License: Postcardware :)
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '2.15';
+$cpd_version = '2.15.1';
 
 /**
  * include GeoIP addon
@@ -796,7 +796,7 @@ function getReadsYesterday( $frontend = false )
 function getUserLastWeek( $frontend = false )
 {
 	$date = date_i18n('Y-m-d', current_time('timestamp')-86400*7);
-	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$date' GROUP BY ip;", 'getUserLastWeek');
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$date' GROUP BY date, ip;", 'getUserLastWeek');
 	$c = mysql_num_rows($res);
 	if ($frontend)
 		return $c;
@@ -824,7 +824,7 @@ function getReadsLastWeek( $frontend = false )
 function getUserThisMonth( $frontend = false )
 {
 	$first = date_i18n('Y-m-', current_time('timestamp')).'01';
-	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$first' GROUP BY ip;", 'getUserThisMonth');
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$first' GROUP BY date, ip;", 'getUserThisMonth');
 	$c = mysql_num_rows($res);
 	if ($frontend)
 		return $c;
@@ -855,7 +855,7 @@ function getUserPerMonth( $frontend = false )
 	$r = '<ul class="cpd_front_list">';
 	while ( $row = mysql_fetch_row($m) )
 	{
-		$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE LEFT(date,7) = '".$row[0]."' GROUP BY ip", 'getUserPerMonth');
+		$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE LEFT(date,7) = '".$row[0]."' GROUP BY date, ip", 'getUserPerMonth');
 		$r .= '<li><b>'.mysql_num_rows($res).'</b> '.$row[0].'</li>'."\n";
 	}
 	$r .= '</ul>';
