@@ -53,8 +53,8 @@ else
 }
 
 header("content-type: text/xml; charset=utf-8");
+echo '<?xml version="1.0" encoding="UTF-8"?>';
 ?>
-<?xml version="1.0" encoding="UTF-8"?>
 
 <map map_file="world.swf" tl_long="-168.49" tl_lat="83.63" br_long="190.3" br_lat="-55.58" zoom_x="10%" zoom_y="6%" zoom="85%">
 <areas>
