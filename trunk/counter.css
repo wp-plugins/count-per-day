@@ -45,8 +45,49 @@
 
 /* dashboard */
 
+#cpd-flot-place {
+	padding: 5px;
+	background: #fff;
+	border-radius: 6px;
+	border: 1px #ccc solid;
+}
+
+#cpd-flot-choice {
+	padding: 5px;
+	text-align: center;
+}
+
+#cpd-flot {
+	overflow: hidden;
+}
+#cpd-tooltip {
+	position: absolute;
+	z-index: 10;
+	display: none;
+	text-align: center;
+	padding: 2px 4px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	background-color: #fff;
+	box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.4);
+}
+
+.cpd-list-chart {
+	margin-bottom: 10px;
+	height: 50px;
+	border: 1px solid #ddd;
+	background: -moz-linear-gradient(top, #ccc 0, #fff 80%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #005), color-stop(81%, #4a7eb8), color-stop(82%, #5A646D), color-stop(87%, #fafafa));
+}
+
 .cpd-dashboard .inside {
 	padding: 5px;
+}
+
+.cpd-dashboard .cpd_front_list {
+	padding-right: 5px;
+	max-height: 200px;
+	overflow-y: auto;
 }
 
 .cpd-dashboard li {
@@ -83,6 +124,25 @@
 	float: right;
 }
 
+/* widget */
+
+.cpd_widget_item {
+	padding: 2px 5px;
+	height: 25x;
+	background: #eee;
+	cursor: move;
+	border-radius: 4px;
+}
+
+.cpd_widget_title {
+	cursor:auto;
+}
+
+.cpd_widget_item .widefat {
+	width: 235px !important;
+	margin-left: 15px;
+}
+
 /* thickbox */
 
 .cpd-thickbox {
@@ -102,8 +162,8 @@
 	border-top: none;
 }
 
-
 /* notes thickbox */
+
 .cpd-notes {
 	width: 100%;
 	width: auto;
@@ -170,9 +230,10 @@
 /* flags */
 
 .cpd-flag {
-	width: 18px;
+	float: left;
+	width: 23px;
 	height: 12px;
-	display: inline-block;
+	margin-top: 3px;
 	background-image: url(img/cpd_flags.png);
 	background-repeat: no-repeat;
 }
@@ -295,3 +356,4 @@
 .cpd-flag-vn {background-position:0 -1495px;}
 .cpd-flag-ye {background-position:0 -1508px;}
 .cpd-flag-za {background-position:0 -1521px;}
+.cpd-flag-me {background-position:0 -1534px;}
