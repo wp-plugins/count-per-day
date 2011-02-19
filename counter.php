@@ -150,6 +150,7 @@ function startSession()
 {
 	if (!session_id())
 		session_start();
+	$_SESSION['cpd_wp'] = ABSPATH;
 }
 
 /**
@@ -641,13 +642,13 @@ function getFlotChart( $limit = 0 )
 			val.color = i;
 			++i;
 			choiceContainer.append(
-				'<input type="checkbox" name="' + key + '" checked="checked" id="id' + key + '" /> '
-				+ '<label style="padding-left:3px;margin-right:10px;border-left:14px solid ' + colors[val.color] + '" for="id' + key + '">' + val.label + '</label> ');
+				'<input type="checkbox" name="' + key + '" checked="checked" id="id' + key + '" \/> '
+				+ '<label style="padding-left:3px;margin-right:10px;border-left:14px solid ' + colors[val.color] + '" for="id' + key + '">' + val.label + '<\/label> ');
 		});
 		choiceContainer.find("input").click(plotAccordingToChoices);
 
 		function showTooltip(x, y, contents) {
-			jQuery('<div id="cpd-tooltip">' + contents + '</div>').css({ top:y-70, left:x-80 }).appendTo("body").fadeIn(200);
+			jQuery('<div id="cpd-tooltip">' + contents + '<\/div>').css({ top:y-70, left:x-80 }).appendTo("body").fadeIn(200);
 		}
 
 		var previousPoint = null;
@@ -659,7 +660,7 @@ function getFlotChart( $limit = 0 )
 					var dx = new Date(item.datapoint[0]);
 					var datum = dx.getDate() + '.' + (dx.getMonth() + 1) + '.' + dx.getFullYear();
 					showTooltip(item.pageX, item.pageY,
-						datum + '<br/><b>' + item.datapoint[1] + '</b> ' + item.series.label);
+						datum + '<br\/><b>' + item.datapoint[1] + '<\/b> ' + item.series.label);
 				}
 			}
 			else {
@@ -703,7 +704,7 @@ function getFlotChart( $limit = 0 )
 
 		plotAccordingToChoices();
 	});
-	//-->
+	//]]>
 	</script>
 	<?php
 }
@@ -1441,8 +1442,9 @@ function getReferers( $limit = 0, $frontend = false, $days = 0 )
 	if ( @mysql_num_rows($res) )
 		while ( $row = mysql_fetch_array($res) )
 		{
-			$ref2 = str_replace('http://', '', $row['referer']);
-			$r .= '<li><a href="'.$row['referer'].'">'.$ref2.'</a><b>'.$row['count'].'</b></li>';
+			$ref =  str_replace('&', '&amp;', $row['referer']);
+			$ref2 = str_replace('http://', '', $ref);
+			$r .= '<li><a href="'.$ref.'">'.$ref2.'</a><b>'.$row['count'].'</b></li>';
 		}
 	$r .= '</ul>';
 	
@@ -1493,7 +1495,7 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false )
 		{
 			if ( $row['post_id'] > 0 )
 				$r .= '<a href="post.php?action=edit&amp;post='.$row['post_id'].'"><img src="'.$this->getResource('cpd_pen.png').'" alt="[e]" title="'.__('Edit Post').'" style="width:9px;height:12px;" /></a> '
-					.'<a href='.$this->dir.'/userperspan.php?page='.$row['post_id'].'&amp;KeepThis=true&amp;TB_iframe=true" class="thickbox" title="Count per Day"><img src="'.$this->getResource('cpd_calendar.png').'" alt="[v]" style="width:12px;height:12px;" /></a> ';
+					.'<a href="'.$this->dir.'/userperspan.php?page='.$row['post_id'].'&amp;KeepThis=true&amp;TB_iframe=true" class="thickbox" title="Count per Day"><img src="'.$this->getResource('cpd_calendar.png').'" alt="[v]" style="width:12px;height:12px;" /></a> ';
 			else
 				$r .= '<img src="'.$this->getResource('cpd_trans.png').'" alt="" style="width:25px;height:12px;" /> ';
 		}
@@ -1708,7 +1710,6 @@ function cpdInfo()
 	printf(__('Write a comment on the <a href="%s">plugin page</a>.', 'cpd'), 'http://www.tomsdimension.de/wp-plugins/count-per-day');
 	echo '<br />'.__('License').': <a href="http://www.tomsdimension.de/postcards">Postcardware :)</a>';
 	echo '<br /><a href="'.$this->dir.'/readme.txt?KeepThis=true&amp;TB_iframe=true" title="Count per Day - Readme.txt" class="thickbox"><strong>Readme.txt</strong></a></p>';
-	echo '</p>';
 }
 
 /**
@@ -1791,12 +1792,12 @@ function onShowPage()
 		</div>	
 	</div>
 	<script type="text/javascript">
-		//<![CDATA[
-		jQuery(document).ready( function($) {
-			$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
-			postboxes.add_postbox_toggles('<?php echo $this->pagehook; ?>');
-		});
-		//]]>
+	//<![CDATA[
+	jQuery(document).ready( function($) {
+		$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
+		postboxes.add_postbox_toggles('<?php echo $this->pagehook; ?>');
+	});
+	//]]>
 	</script>
 	<?php
 }
@@ -1961,7 +1962,6 @@ function addJS()
 function addAjaxScript()
 {
 	$this->getPostID();
-	$_SESSION['cpd_wp'] = ABSPATH;
 	echo <<< JSEND
 <script type="text/javascript">
 // Count per Day
@@ -2095,7 +2095,7 @@ function includeChartJS( $id, $data, $html )
 		<script type="text/javascript">
 		//<![CDATA[
 		jQuery(function(){jQuery.plot(jQuery("#'.$id.'"),'.$d.',{series:{lines:{fill:true,lineWidth:1}},colors:["red"],grid:{show:false}});});
-		//-->
+		//]]>
 		</script>
 		'.$html;
 	return $code;
