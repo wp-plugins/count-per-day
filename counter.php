@@ -75,7 +75,7 @@ function CountPerDay()
 	// javascript to count cached posts
 	if ( $this->options['ajax'] == 1 )
 	{
-		wp_enqueue_script( 'jquery' );
+		wp_enqueue_script('jquery');
 		add_action('wp_footer', array(&$this,'addAjaxScript'));
 	}
 
@@ -144,7 +144,7 @@ function CountPerDay()
 }
 
 /**
- * starts Session to provide WP variables to "Addons"
+ * starts session to provide WP variables to "addons"
  */
 function startSession()
 {
@@ -1400,8 +1400,6 @@ function getClients( $frontend = false )
 	$row = @mysql_fetch_row($res);
 	$all = max(1, $row[0]);
 	$rest = 100;
-//	$awe_name = array();
-//	$awe_data = array();
 	$r = '<ul id="cpd_clients" class="cpd_front_list">';
 	foreach ($clients as $c)
 	{
@@ -1411,16 +1409,9 @@ function getClients( $frontend = false )
 		$percent = number_format(100 * $row[0] / $all, 0);
 		$rest -= $percent;
 		$r .= '<li class="cpd-client-logo cpd-client-'.strtolower($c).'">'.$c.'<b>'.$percent.' %</b></li>';
-		
-//		$awe_name[] = '"'.substr($c, 0, 3).'"';
-//		$awe_data[] = $percent;
 	}
 	if ( $rest > 0 )
-	{
 		$r .= '<li>'.__('Other', 'cpd').'<b>'.$rest.' %</b></li>';
-//		$awe_name[] = '"'.__('Other', 'cpd').'"';
-//		$awe_data[] = $rest;
-	}
 	$r .= '</ul>';
 	
 	if ($frontend)
@@ -1824,7 +1815,6 @@ function getCountries( $limit = 0, $frontend, $visitors = false )
 	// with GeoIP addon only
 	if ( $cpd_geoip )
 	{
-//		$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
 		$geoip = new GeoIPCpD();
 		if ( $limit == 0 )
 			$limit = max( 0, $this->options['countries'] );
@@ -2002,7 +1992,7 @@ function showQueries()
 {
 	global $cpd_path, $cpd_version;
 	echo '<div style="margin:10px; padding-left:30px; border:1px red solid">
-		<b>Count per Day - DEBUG: '.$this->queries[0].' s</b><ol>';
+		<b>Count per Day - DEBUG: '.round($this->queries[0], 3).' s</b><ol>';
 	echo '<li>'
 		.'<b>Server:</b> '.$_SERVER['SERVER_SOFTWARE'].'<br/>'
 		.'<b>PHP:</b> '.phpversion().'<br/>'
@@ -2016,6 +2006,8 @@ function showQueries()
 		.'</li>';
 	echo '<li><b>POST:</b><br/>';
 	var_dump($_POST);
+	echo '<li><b>SESSION:</b><br/>';
+	var_dump($_SESSION);
 	echo '</li>';
 	echo '<li><b>Tables:</b><br><b>'.CPD_C_TABLE.'</b>: ';
 	$res = $this->getQuery( "SHOW FIELDS FROM `".CPD_C_TABLE."`", 'showFields' );
