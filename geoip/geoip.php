@@ -6,7 +6,7 @@
 
 /**
  */
-if (!class_exists('GeoIp'))
+if (!class_exists('GeoIpCpD'))
 	include_once('geoip.inc');
 
 class CpdGeoIp
@@ -21,14 +21,14 @@ function getCountry( $ip )
 {
 	global $cpd_path;
 	
-	$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
-	$c = strtolower(geoip_country_code_by_addr($gi, $ip));
+	$gi = cpd_geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
+	$c = strtolower(cpd_geoip_country_code_by_addr($gi, $ip));
 	
 	if ( empty($c) )
 		$c = 'unknown';
-	$cname = geoip_country_name_by_addr($gi, $ip);
+	$cname = cpd_geoip_country_name_by_addr($gi, $ip);
 	$country = array( $c, '<div class="cpd-flag cpd-flag-'.$c.'" title="'.$cname.'"></div>', $cname );
-	geoip_close($gi);
+	cpd_geoip_close($gi);
 	
 	return $country;
 }
@@ -51,7 +51,7 @@ function updateDB()
 	
 	$limit = 10;
 	$res = $count_per_day->getQuery("SELECT ip, INET_NTOA(ip) AS realip FROM ".CPD_C_TABLE." WHERE country LIKE '' GROUP BY ip LIMIT $limit;", 'GeoIP updateDB');
-	$gi = geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
+	$gi = cpd_geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
 	
 	if ( @mysql_num_rows($res) )
 		while ( $r = mysql_fetch_array($res) )
@@ -67,13 +67,13 @@ function updateDB()
 				$c = '-';
 			else
 				// get country
-				$c = strtolower(geoip_country_code_by_addr($gi, $r['realip']));
+				$c = strtolower(cpd_geoip_country_code_by_addr($gi, $r['realip']));
 			
 			if ( !empty($c) )
 				$count_per_day->getQuery("UPDATE ".CPD_C_TABLE." SET country = '".$c."' WHERE ip = '".$r['ip']."'", 'GeoIP updateDB');
 		}
 
-	geoip_close($gi);
+	cpd_geoip_close($gi);
 	
 	$res = $count_per_day->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE country like ''", 'GeoIP updateDB');
 	if ( @mysql_num_rows($res) )

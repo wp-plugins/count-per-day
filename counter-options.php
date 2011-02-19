@@ -31,9 +31,12 @@ if(!empty($_POST['do']))
 			$count_per_day->options['debug'] = empty( $_POST['cpd_debug'] ) ? 0 : 1 ;
 			$count_per_day->options['localref'] = empty( $_POST['cpd_localref'] ) ? 0 : 1 ;
 			$count_per_day->options['referers'] = empty( $_POST['cpd_referers'] ) ? 0 : 1 ;
+			$count_per_day->options['dashboard_referers'] = $_POST['cpd_dashboard_referers'];
+			$count_per_day->options['referers_last_days'] = $_POST['cpd_referers_last_days'];
+			$count_per_day->options['chart_old'] = empty( $_POST['cpd_chart_old'] ) ? 0 : 1 ;
 			
 			if (empty($count_per_day->options['clients']))
-				$count_per_day->options['clients'] = 'Firefox, MSIE, Chrome, AppleWebKit, Opera';
+				$count_per_day->options['clients'] = 'Firefox, MSIE, Chrome, Safari, Opera';
 			
 			if ( isset($_POST['cpd_countries']) )
 				$count_per_day->options['countries'] = $_POST['cpd_countries'];
@@ -249,6 +252,10 @@ switch($mode) {
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Chart - Height', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_chart_height" size="3" value="<?php echo $o['chart_height']; ?>" /> px - <?php _e('Height of the biggest bar', 'cpd') ?></td>
 		</tr>
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Old Charts', 'cpd') ?>:</th>
+			<td><label for="cpd_chart_old"><input type="checkbox" name="cpd_chart_old" id="cpd_chart_old" <?php if($o['chart_old']==1) echo 'checked="checked"'; ?> />  <?php _e('Show old bar charts.', 'cpd') ?></label></td>
+		</tr>
 		<?php if ( $cpd_geoip ) { ?>
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Countries', 'cpd') ?>:</th>
@@ -259,6 +266,14 @@ switch($mode) {
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Browsers', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_clients" size="50" value="<?php echo $o['clients']; ?>" /> <?php _e('Substring of the user agent, separated by comma', 'cpd') ?></td>
 		</tr>		
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Referers - Entries', 'cpd') ?>:</th>
+			<td><input class="code" type="text" name="cpd_dashboard_referers" size="3" value="<?php echo $o['dashboard_referers']; ?>" /> <?php _e('How many referers do you want to see on dashboard page?', 'cpd') ?></td>
+		</tr>
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Referers - Days', 'cpd') ?>:</th>
+			<td><input class="code" type="text" name="cpd_referers_last_days" size="3" value="<?php echo $o['referers_last_days']; ?>" /> <?php _e('How many days do you want look back?', 'cpd') ?></td>
+		</tr>
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Local URLs', 'cpd') ?>:</th>
 			<td><label for="cpd_localref"><input type="checkbox" name="cpd_localref" id="cpd_localref" <?php if($o['localref']==1) echo 'checked="checked"'; ?> />  <?php _e('Show local referers too.', 'cpd') ?> (<?php echo bloginfo('url') ?>/...)</label></td>
@@ -496,4 +511,4 @@ switch($mode) {
 	</div><!-- poststuff -->
 	</div><!-- wrap -->
 
-<?php } // End switch($mode) ?>
+<?php } // End switch($mode)

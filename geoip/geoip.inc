@@ -53,7 +53,7 @@ define("GEOIP_DIALUP_SPEED", 1);
 define("GEOIP_CABLEDSL_SPEED", 2);
 define("GEOIP_CORPORATE_SPEED", 3);
 
-class GeoIP {
+class GeoIPCpd {
     var $flags;
     var $filehandle;
     var $memory_buffer;
@@ -205,7 +205,7 @@ class GeoIP {
 );
 }
 
-function geoip_load_shared_mem ($file) {
+function cpd_geoip_load_shared_mem ($file) {
 
   $fp = fopen($file, "rb");
   if (!$fp) {
@@ -223,7 +223,7 @@ function geoip_load_shared_mem ($file) {
   shmop_close ($shmid);
 }
 
-function _setup_segments($gi){
+function cpd_setup_segments($gi){
   $gi->databaseType = GEOIP_COUNTRY_EDITION;
   $gi->record_length = STANDARD_RECORD_LENGTH;
   if ($gi->flags & GEOIP_SHARED_MEMORY) {
@@ -306,8 +306,8 @@ function _setup_segments($gi){
   return $gi;
 }
 
-function geoip_open($filename, $flags) {
-  $gi = new GeoIP;
+function cpd_geoip_open($filename, $flags) {
+  $gi = new GeoIPCpD;
   $gi->flags = $flags;
   if ($gi->flags & GEOIP_SHARED_MEMORY) {
     $gi->shmid = @shmop_open (GEOIP_SHM_KEY, "a", 0, 0);
@@ -319,11 +319,11 @@ function geoip_open($filename, $flags) {
     }
   }
 
-  $gi = _setup_segments($gi);
+  $gi = cpd_setup_segments($gi);
   return $gi;
 }
 
-function geoip_close($gi) {
+function cpd_geoip_close($gi) {
   if ($gi->flags & GEOIP_SHARED_MEMORY) {
     return true;
   }
@@ -331,43 +331,43 @@ function geoip_close($gi) {
   return fclose($gi->filehandle);
 }
 
-function geoip_country_id_by_name($gi, $name) {
+function cpd_geoip_country_id_by_name($gi, $name) {
   $addr = gethostbyname($name);
   if (!$addr || $addr == $name) {
     return false;
   }
-  return geoip_country_id_by_addr($gi, $addr);
+  return cpd_geoip_country_id_by_addr($gi, $addr);
 }
 
-function geoip_country_code_by_name($gi, $name) {
-  $country_id = geoip_country_id_by_name($gi,$name);
+function cpd_geoip_country_code_by_name($gi, $name) {
+  $country_id = cpd_geoip_country_id_by_name($gi,$name);
   if ($country_id !== false) {
         return $gi->GEOIP_COUNTRY_CODES[$country_id];
   }
   return false;
 }
 
-function geoip_country_name_by_name($gi, $name) {
-  $country_id = geoip_country_id_by_name($gi,$name);
+function cpd_geoip_country_name_by_name($gi, $name) {
+  $country_id = cpd_geoip_country_id_by_name($gi,$name);
   if ($country_id !== false) {
         return $gi->GEOIP_COUNTRY_NAMES[$country_id];
   }
   return false;
 }
 
-function geoip_country_id_by_addr($gi, $addr) {
+function cpd_geoip_country_id_by_addr($gi, $addr) {
   $ipnum = ip2long($addr);
-  return _geoip_seek_country($gi, $ipnum) - GEOIP_COUNTRY_BEGIN;
+  return cpd_geoip_seek_country($gi, $ipnum) - GEOIP_COUNTRY_BEGIN;
 }
 
-function geoip_country_code_by_addr($gi, $addr) {
+function cpd_geoip_country_code_by_addr($gi, $addr) {
   if ($gi->databaseType == GEOIP_CITY_EDITION_REV1) {
-    $record = geoip_record_by_addr($gi,$addr);
+    $record = cpd_geoip_record_by_addr($gi,$addr);
     if ( $record !== false ) {
       return $record->country_code;
     }
   } else {
-    $country_id = geoip_country_id_by_addr($gi,$addr);
+    $country_id = cpd_geoip_country_id_by_addr($gi,$addr);
     if ($country_id !== false) {
       return $gi->GEOIP_COUNTRY_CODES[$country_id];
     }
@@ -375,12 +375,12 @@ function geoip_country_code_by_addr($gi, $addr) {
   return false;
 }
 
-function geoip_country_name_by_addr($gi, $addr) {
+function cpd_geoip_country_name_by_addr($gi, $addr) {
   if ($gi->databaseType == GEOIP_CITY_EDITION_REV1) {
-    $record = geoip_record_by_addr($gi,$addr);
+    $record = cpd_geoip_record_by_addr($gi,$addr);
     return $record->country_name;
   } else {
-    $country_id = geoip_country_id_by_addr($gi,$addr);
+    $country_id = cpd_geoip_country_id_by_addr($gi,$addr);
     if ($country_id !== false) {
       return $gi->GEOIP_COUNTRY_NAMES[$country_id];
     }
@@ -388,7 +388,7 @@ function geoip_country_name_by_addr($gi, $addr) {
   return false;
 }
 
-function _geoip_seek_country($gi, $ipnum) {
+function cpd_geoip_seek_country($gi, $ipnum) {
   $offset = 0;
   for ($depth = 31; $depth >= 0; --$depth) {
     if ($gi->flags & GEOIP_MEMORY_CACHE) {
@@ -426,77 +426,77 @@ function _geoip_seek_country($gi, $ipnum) {
   return false;
 }
 
-function _get_org($gi,$ipnum){
-  $seek_org = _geoip_seek_country($gi,$ipnum);
-  if ($seek_org == $gi->databaseSegments) {
-    return NULL;
-  }
-  $record_pointer = $seek_org + (2 * $gi->record_length - 1) * $gi->databaseSegments;
-  if ($gi->flags & GEOIP_SHARED_MEMORY) {
-    $org_buf = @shmop_read ($gi->shmid, $record_pointer, MAX_ORG_RECORD_LENGTH);
-    } else {
-    fseek($gi->filehandle, $record_pointer, SEEK_SET);
-    $org_buf = fread($gi->filehandle,MAX_ORG_RECORD_LENGTH);
-  }
-  $org_buf = substr($org_buf, 0, strpos($org_buf, 0));
-  return $org_buf;
-}
+//function cpd_get_org($gi,$ipnum){
+//  $seek_org = cpd_geoip_seek_country($gi,$ipnum);
+//  if ($seek_org == $gi->databaseSegments) {
+//    return NULL;
+//  }
+//  $record_pointer = $seek_org + (2 * $gi->record_length - 1) * $gi->databaseSegments;
+//  if ($gi->flags & GEOIP_SHARED_MEMORY) {
+//    $org_buf = @shmop_read ($gi->shmid, $record_pointer, MAX_ORG_RECORD_LENGTH);
+//    } else {
+//    fseek($gi->filehandle, $record_pointer, SEEK_SET);
+//    $org_buf = fread($gi->filehandle,MAX_ORG_RECORD_LENGTH);
+//  }
+//  $org_buf = substr($org_buf, 0, strpos($org_buf, 0));
+//  return $org_buf;
+//}
+//
+//function cpd_geoip_org_by_addr ($gi,$addr) {
+//  if ($addr == NULL) {
+//    return 0;
+//  }
+//  $ipnum = ip2long($addr);
+//  return cpd_get_org($gi, $ipnum);
+//}
 
-function geoip_org_by_addr ($gi,$addr) {
-  if ($addr == NULL) {
-    return 0;
-  }
-  $ipnum = ip2long($addr);
-  return _get_org($gi, $ipnum);
-}
+//function cpd_get_region($gi,$ipnum){
+//  if ($gi->databaseType == GEOIP_REGION_EDITION_REV0){
+//    $seek_region = cpd_geoip_seek_country($gi,$ipnum) - GEOIP_STATE_BEGIN_REV0;
+//    if ($seek_region >= 1000){
+//      $country_code = "US";
+//      $region = chr(($seek_region - 1000)/26 + 65) . chr(($seek_region - 1000)%26 + 65);
+//    } else {
+//            $country_code = $gi->GEOIP_COUNTRY_CODES[$seek_region];
+//      $region = "";
+//    }
+//  return array ($country_code,$region);
+//    }  else if ($gi->databaseType == GEOIP_REGION_EDITION_REV1) {
+//    $seek_region = cpd_geoip_seek_country($gi,$ipnum) - GEOIP_STATE_BEGIN_REV1;
+//    //print $seek_region;
+//    if ($seek_region < US_OFFSET){
+//      $country_code = "";
+//      $region = "";  
+//        } else if ($seek_region < CANADA_OFFSET) {
+//      $country_code = "US";
+//      $region = chr(($seek_region - US_OFFSET)/26 + 65) . chr(($seek_region - US_OFFSET)%26 + 65);
+//        } else if ($seek_region < WORLD_OFFSET) {
+//      $country_code = "CA";
+//      $region = chr(($seek_region - CANADA_OFFSET)/26 + 65) . chr(($seek_region - CANADA_OFFSET)%26 + 65);
+//    } else {
+//            $country_code = $gi->GEOIP_COUNTRY_CODES[($seek_region - WORLD_OFFSET) / FIPS_RANGE];
+//      $region = "";
+//    }
+//  return array ($country_code,$region);
+//  }
+//}
 
-function _get_region($gi,$ipnum){
-  if ($gi->databaseType == GEOIP_REGION_EDITION_REV0){
-    $seek_region = _geoip_seek_country($gi,$ipnum) - GEOIP_STATE_BEGIN_REV0;
-    if ($seek_region >= 1000){
-      $country_code = "US";
-      $region = chr(($seek_region - 1000)/26 + 65) . chr(($seek_region - 1000)%26 + 65);
-    } else {
-            $country_code = $gi->GEOIP_COUNTRY_CODES[$seek_region];
-      $region = "";
-    }
-  return array ($country_code,$region);
-    }  else if ($gi->databaseType == GEOIP_REGION_EDITION_REV1) {
-    $seek_region = _geoip_seek_country($gi,$ipnum) - GEOIP_STATE_BEGIN_REV1;
-    //print $seek_region;
-    if ($seek_region < US_OFFSET){
-      $country_code = "";
-      $region = "";  
-        } else if ($seek_region < CANADA_OFFSET) {
-      $country_code = "US";
-      $region = chr(($seek_region - US_OFFSET)/26 + 65) . chr(($seek_region - US_OFFSET)%26 + 65);
-        } else if ($seek_region < WORLD_OFFSET) {
-      $country_code = "CA";
-      $region = chr(($seek_region - CANADA_OFFSET)/26 + 65) . chr(($seek_region - CANADA_OFFSET)%26 + 65);
-    } else {
-            $country_code = $gi->GEOIP_COUNTRY_CODES[($seek_region - WORLD_OFFSET) / FIPS_RANGE];
-      $region = "";
-    }
-  return array ($country_code,$region);
-  }
-}
+//function cpd_geoip_region_by_addr ($gi,$addr) {
+//  if ($addr == NULL) {
+//    return 0;
+//  }
+//  $ipnum = ip2long($addr);
+//  return cpd_get_region($gi, $ipnum);
+//}
 
-function geoip_region_by_addr ($gi,$addr) {
-  if ($addr == NULL) {
-    return 0;
-  }
-  $ipnum = ip2long($addr);
-  return _get_region($gi, $ipnum);
-}
-
-function getdnsattributes ($l,$ip){
-  $r = new Net_DNS_Resolver();
-  $r->nameservers = array("ws1.maxmind.com");
-  $p = $r->search($l."." . $ip .".s.maxmind.com","TXT","IN");
-  $str = is_object($p->answer[0])?$p->answer[0]->string():'';
-  ereg("\"(.*)\"",$str,$regs);
-  $str = $regs[1];
-  return $str;
-}
+//function cpd_getdnsattributes ($l,$ip){
+//  $r = new Net_DNS_Resolver();
+//  $r->nameservers = array("ws1.maxmind.com");
+//  $p = $r->search($l."." . $ip .".s.maxmind.com","TXT","IN");
+//  $str = is_object($p->answer[0])?$p->answer[0]->string():'';
+//  ereg("\"(.*)\"",$str,$regs);
+//  $str = $regs[1];
+//  return $str;
+//}
 
 ?>

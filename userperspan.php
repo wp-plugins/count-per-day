@@ -1,19 +1,13 @@
 <?php 
-// windows junction patch
-$dir = dirname($_SERVER['DOCUMENT_ROOT'].$_SERVER['SCRIPT_NAME']);
-for ( $x = 1; $x <= 5; $x++ )
-{
-	$dir = dirname($dir.'x');
-	if ( is_file($dir.'/wp-load.php') )
-		require_once($dir.'/wp-load.php');
-}
+if (!session_id()) session_start();
+require_once($_SESSION['cpd_wp'].'wp-load.php');
 
 $cpd_datemin = ( !empty($_REQUEST['datemin']) ) ? $_REQUEST['datemin'] : date_i18n('Y-m-d', time() - 86400 * 14); // 14 days
 $cpd_datemax = ( !empty($_REQUEST['datemax']) ) ? $_REQUEST['datemax'] : date_i18n('Y-m-d');
 $cpd_page = ( isset($_REQUEST['page']) ) ? $_REQUEST['page'] : 0;
 
 $sql = "SELECT	p.post_title,
-				COUNT(*) as count,
+				COUNT(*) AS count,
 				c.page,
 				c.date
 		FROM	".CPD_C_TABLE." c

@@ -3,20 +3,19 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 2.15.1
+Version: 2.16
 License: Postcardware :)
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '2.15.1';
+$cpd_version = '2.16';
 
 /**
  * include GeoIP addon
  */
-$cpd_path = ABSPATH.PLUGINDIR.'/'.$cpd_dir_name.'/';
-$cpd_path = str_replace('/', DIRECTORY_SEPARATOR, $cpd_path);
+$cpd_path = str_replace('/', DIRECTORY_SEPARATOR, ABSPATH.PLUGINDIR.'/'.$cpd_dir_name.'/');
 
 if ( file_exists($cpd_path.'geoip/geoip.php') )
 	include_once($cpd_path.'geoip/geoip.php');
@@ -52,7 +51,8 @@ function CountPerDay()
 	
 	$this->options = get_option('count_per_day');
 	
-	if ( !empty($_GET['debug']) )
+	// manual debug mode
+	if ( !empty($_GET['debug']) && WP_DEBUG )
 		$this->options['debug'] = 1;
 	
 	$this->dir = get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.$cpd_dir_name;
@@ -101,8 +101,11 @@ function CountPerDay()
 		load_plugin_textdomain('cpd', false, $cpd_dir_name.'/locale');
 		 
 	// adds stylesheet
-	add_action( 'admin_head', array(&$this, 'addCss') );
-	add_action( 'wp_head', array(&$this, 'addCss') );
+	add_action('admin_head', array(&$this, 'addCss'));
+	add_action('wp_head', array(&$this, 'addCss'));
+	
+	// adds javascript
+	add_action('admin_head', array(&$this, 'addJS'));
 	
 	// widget setup
 	add_action('widgets_init', array( &$this, 'register_widgets'));
@@ -124,14 +127,29 @@ function CountPerDay()
 		add_action('admin_footer', array(&$this, 'showQueries'));
 	}
 	
-	// add shorcode support
+	// add shortcode support
 	$this->addShortcodes();
 	
 	// thickbox in backend only
 	if ( strpos($_SERVER['SCRIPT_NAME'], '/wp-admin/') !== false )
-		wp_enqueue_script( 'thickbox' );
+	{
+		wp_enqueue_script('thickbox');
+		wp_enqueue_script('cpd_flot', $this->dir.'/js/jquery.flot.min.js', 'jQuery');
+	}
+	
+	// Session
+	add_action('init', array(&$this, 'startSession'));
 	
 	$this->connectDB();
+}
+
+/**
+ * starts Session to provide WP variables to "Addons"
+ */
+function startSession()
+{
+	if (!session_id())
+		session_start();
 }
 
 /**
@@ -328,8 +346,8 @@ function count( $x, $page = 'x' )
 			if ( $cpd_geoip )
 			{
 				// with GeoIP addon save country
-				$gi = geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
-				$country = strtolower(geoip_country_code_by_addr($gi, $userip));
+				$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
+				$country = strtolower(cpd_geoip_country_code_by_addr($gi, $userip));
 				$this->getQuery($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, country, referer)
 				VALUES (%s, INET_ATON(%s), %s, %s, %s, %s)", $page, $userip, $client, $date, $country, $referer), 'count insert');
 			}
@@ -520,6 +538,177 @@ function dashboardReadsAtAll()
 }
 
 /**
+ * creates the big chart with reads and visotors
+ * @param int $limit last x days
+ */
+function getFlotChart( $limit = 0 )
+{
+	global $table_prefix;
+	if ( $limit == 0 )
+		$limit = (!empty($this->options['chart_days'])) ? $this->options['chart_days'] : 30;
+	$limit -= 1;
+	
+	 // last day
+	$end_sql = (isset($_GET['cpd_chart_start'])) ? $_GET['cpd_chart_start'] : date_i18n('Y-m-d');
+	$end_time = strtotime($end_sql);
+	$end_str = mysql2date(get_option('date_format'), $end_sql);
+	
+	// first day
+	$start_time = $end_time - $limit * 86400;
+	$start_sql = date('Y-m-d', $start_time);
+	$start_str = mysql2date(get_option('date_format'), $start_sql);
+	
+	// buttons
+	$button_back = date('Y-m-d', $start_time - 86400);
+	$button_forward = date('Y-m-d', $end_time + 86400 * ($limit + 1));
+	
+	// create data array
+	$data = array();
+	for  ( $day = $start_time; $day < $end_time; $day = $day + 86400 )
+		$data[$day] = array(0, 0);
+
+	// reads
+	$sql = "
+	SELECT	count(*) count, c.date,	n.note
+	FROM	".CPD_C_TABLE." AS c
+	LEFT	JOIN ".$table_prefix."cpd_notes AS n
+			ON n.date = c.date
+	WHERE	c.date BETWEEN '$start_sql' AND '$end_sql'
+	GROUP	BY c.date
+	LIMIT	$limit";
+	$res = $this->getQuery($sql, 'ChartReads');
+	if ( @mysql_num_rows($res) )
+		while ( $row = mysql_fetch_array($res) )
+			$data[strtotime($row['date'])][0] = $row['count'];
+	
+	// visitors
+	$sql = "
+	SELECT count(*) count, t.date, n.note
+	FROM (	SELECT	count(*) count, date
+			FROM	".CPD_C_TABLE."
+			GROUP	BY date, ip
+			) AS t
+	LEFT	JOIN ".$table_prefix."cpd_notes AS n
+			ON n.date = t.date
+	WHERE	t.date BETWEEN '$start_sql' AND '$end_sql'
+	GROUP	BY t.date
+	LIMIT $limit";
+	$res = $this->getQuery($sql, 'ChartVisitors');
+	if ( @mysql_num_rows($res) )
+		while ( $row = mysql_fetch_array($res) )
+			$data[strtotime($row['date'])][1] = $row['count'];
+	
+	// fill data array
+	$reads = array();
+	$visitors = array();
+	foreach ( $data as $day => $values )
+	{
+		$reads[] = '['.$day.'000,'.$values[0].']';
+		$visitors[] = '['.$day.'000,'.$values[1].']';
+	}
+	$reads_line = '['.implode(',', $reads).']';
+	$visitors_line = '['.implode(',', $visitors).']';
+	?>
+
+	<div id="cpd-flot-place">
+		<div id="cpd-flot-choice">
+			<div style="float:left">
+				<a href="index.php?page=cpd_metaboxes&amp;cpd_chart_start=<?php echo $button_back ?>" class="button">&lt;</a>
+				<?php echo $start_str ?>
+			</div>
+			<div style="float:right">
+				<?php echo $end_str ?>
+				<a href="index.php?page=cpd_metaboxes&amp;cpd_chart_start=<?php echo $button_forward ?>" class="button">&gt;</a>
+			</div>
+		</div>
+		<div id="cpd-flot" style="height:<?php echo (!empty($this->options['chart_height'])) ? $this->options['chart_height'] : 200; ?>px"></div>
+	</div>
+	
+	<script type="text/javascript">
+	//<![CDATA[
+	jQuery(function() {
+		var placeholder = jQuery("#cpd-flot");
+		var choiceContainer = jQuery("#cpd-flot-choice");
+		var colors = ['blue', 'red'];
+		var datasets = {
+			'reads': { data: <?php echo $reads_line ?>, label: '<?php _e('Reads per day', 'cpd') ?>' },
+			'visitors' : { data: <?php echo $visitors_line ?>, label: '<?php _e('Visitors per day', 'cpd') ?>' }
+			};
+			
+		// Checkboxen
+		var i = 0;
+		jQuery.each(datasets, function(key, val) {
+			val.color = i;
+			++i;
+			choiceContainer.append(
+				'<input type="checkbox" name="' + key + '" checked="checked" id="id' + key + '" /> '
+				+ '<label style="padding-left:3px;margin-right:10px;border-left:14px solid ' + colors[val.color] + '" for="id' + key + '">' + val.label + '</label> ');
+		});
+		choiceContainer.find("input").click(plotAccordingToChoices);
+
+		function showTooltip(x, y, contents) {
+			jQuery('<div id="cpd-tooltip">' + contents + '</div>').css({ top:y-70, left:x-80 }).appendTo("body").fadeIn(200);
+		}
+
+		var previousPoint = null;
+		jQuery(placeholder).bind("plothover", function (event, pos, item) {
+			if (item) {
+				if (previousPoint != item.datapoint) {
+					previousPoint = item.datapoint;
+					jQuery("#cpd-tooltip").remove();
+					var dx = new Date(item.datapoint[0]);
+					var datum = dx.getDate() + '.' + (dx.getMonth() + 1) + '.' + dx.getFullYear();
+					showTooltip(item.pageX, item.pageY,
+						datum + '<br/><b>' + item.datapoint[1] + '</b> ' + item.series.label);
+				}
+			}
+			else {
+				jQuery("#cpd-tooltip").remove();
+				previousPoint = null;			
+			}
+		});
+
+	    function weekendAreas(axes) {
+	        var markings = [];
+	        var d = new Date(axes.xaxis.min);
+	        d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 1) % 7));
+	        d.setUTCSeconds(0);
+	        d.setUTCMinutes(0);
+	        d.setUTCHours(0);
+	        var i = d.getTime();
+	        do {
+	            markings.push({ xaxis: { from: i, to: i + 2 * 24 * 60 * 60 * 1000 } });
+	            i += 7 * 24 * 60 * 60 * 1000;
+	        } while (i < axes.xaxis.max);
+	        return markings;
+	    }
+		
+		function plotAccordingToChoices() {
+			var data = [];
+			choiceContainer.find("input:checked").each(function () {
+				var key = jQuery(this).attr("name");
+				if (key && datasets[key])
+					data.push(datasets[key]);
+			});
+
+			if (data.length > 0)
+				jQuery.plot(jQuery(placeholder), data , { 
+					xaxis: { mode: 'time', timeformat: '%d.%m.%y' },
+					legend: { show: false },
+					colors: colors,
+					lines: { fill: true	},
+					grid: { borderWidth: 1, borderColor: '#ccc', hoverable: true, markings: weekendAreas }
+				});
+		}
+
+		plotAccordingToChoices();
+	});
+	//-->
+	</script>
+	<?php
+}
+
+/**
  * creates dashboard chart metabox content - page visits
  * @param integer $limit days to show
  * @param boolean $frontend limit function on frontend
@@ -697,14 +886,59 @@ function dashboardChartDataRequest( $sql = '', $limit, $frontend = false )
 /**
  * shows current visitors
  */
-function getUserOnline( $frontend = false )
+function getUserOnline( $frontend = false, $country = false )
 {
-	$res = $this->getQuery("SELECT count(*) FROM ".CPD_CO_TABLE, 'getUserOnline');
-	$row = mysql_fetch_row($res);
-	if ($frontend)
-		return $row[0];
+	global $cpd_geoip, $cpd_path;
+	$c = '';
+	
+	if ( $cpd_geoip && $country )
+	{
+		// map link
+		if (!$frontend && file_exists($cpd_path.'map/map.php') )
+			$c .= '<div style="margin: 5px 0 10px 0;"><a href="'.$this->dir.'/map/map.php?map=visitors%20online'
+				 .'&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Map', 'cpd').'" class="thickbox button">'.__('Map', 'cpd').'</a></div>';
+		
+		// countries list
+		$geoip = new GeoIPCpd();
+		$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
+		
+		$res = $this->getQuery("SELECT INET_NTOA(ip) AS ip FROM ".CPD_CO_TABLE, 'getUserOnline');
+		if ( @mysql_num_rows($res) )
+		{
+			$vo = array();
+			while ( $r = mysql_fetch_array($res) )
+			{
+				$country = strtolower(cpd_geoip_country_code_by_addr($gi, $r['ip']));
+				$id = $geoip->GEOIP_COUNTRY_CODE_TO_NUMBER[strtoupper($country)];
+				if ( empty($id) )
+				{
+					$name = '???';
+					$country = 'unknown';
+				}
+				else
+					$name = $geoip->GEOIP_COUNTRY_NAMES[$id];
+				$count = (isset($vo[$country])) ? $vo[$country][1] + 1 : 1;
+				$vo[$country] = array($name, $count);
+			}
+			
+			$c .= '<ul class="cpd_front_list">';
+			foreach ( $vo as $k => $v )
+				$c .= '<li><b>'.$v[1].'</b><div class="cpd-flag cpd-flag-'.$k.'"></div> '.$v[0].'&nbsp;</li>'."\n";
+			$c .= "</ul>\n";
+		}
+	}
 	else
-		echo $row[0];
+	{
+		// number only
+		$res = $this->getQuery("SELECT count(*) FROM ".CPD_CO_TABLE, 'getUserOnline');
+		$row = mysql_fetch_row($res);
+		$c = $row[0];
+	}
+
+	if ($frontend)
+		return $c;
+	else
+		echo $c;
 }
 
 /**
@@ -853,13 +1087,16 @@ function getUserPerMonth( $frontend = false )
 {
 	$m = $this->getQuery("SELECT LEFT(date,7) FROM ".CPD_C_TABLE." GROUP BY year(date), month(date) ORDER BY date DESC", 'getUserPerMonths');
 	$r = '<ul class="cpd_front_list">';
+	$d = array();
+	$i = 1;
 	while ( $row = mysql_fetch_row($m) )
 	{
 		$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE LEFT(date,7) = '".$row[0]."' GROUP BY date, ip", 'getUserPerMonth');
 		$r .= '<li><b>'.mysql_num_rows($res).'</b> '.$row[0].'</li>'."\n";
+		$d[] = '[-'.$i++.','.mysql_num_rows($res).']';
 	}
 	$r .= '</ul>';
-	
+	$r = $this->includeChartJS( 'cpd-flot-userpermonth', $d, $r );
 	if ($frontend)
 		return $r;
 	else
@@ -873,12 +1110,15 @@ function getReadsPerMonth( $frontend = false )
 {
 	$res = $this->getQuery("SELECT COUNT(*), LEFT(date,7) FROM ".CPD_C_TABLE." GROUP BY year(date), month(date) ORDER BY date DESC", 'getReadsPerMonths');
 	$r = '<ul class="cpd_front_list">';
+	$d = array();
+	$i = 1;
 	while ( $row = mysql_fetch_row($res) )
 	{
 		$r .= '<li><b>'.$row[0].'</b> '.$row[1].'</li>'."\n";
+		$d[] = '[-'.$i++.','.$row[0].']';
 	}
 	$r .= '</ul>';
-	
+	$r = $this->includeChartJS( 'cpd-flot-readspermonth', $d, $r );
 	if ($frontend)
 		return $r;
 	else
@@ -994,7 +1234,6 @@ function getMostVisitedPosts( $days = 0, $limit = 0, $frontend = false )
 	if ( $limit == 0 )
 		$limit = $this->options['dashboard_last_posts'];
 	$date = date_i18n('Y-m-d', current_time('timestamp') - 86400 * $days);
-
 	$sql = "
 	SELECT	COUNT(c.id) count,
 			c.page post_id,
@@ -1013,12 +1252,75 @@ function getMostVisitedPosts( $days = 0, $limit = 0, $frontend = false )
 	GROUP	BY c.page
 	ORDER	BY count DESC
 	LIMIT	$limit";
+	
 	$r =  '<small>'.sprintf(__('The %s most visited posts in last %s days:', 'cpd'), $limit, $days).'<br/>&nbsp;</small>';
 	$r .= $this->getUserPer_SQL( $sql, 'getMostVisitedPosts', $frontend );
 	if ($frontend)
 		return $r;
 	else
 		echo $r;		
+}
+
+/**
+ * gets Post_IDs of most visited pages in last days with category filter
+ * @param integer $days days to calc (last days)
+ * @param integer $limit count of posts (last posts)
+ * @param array/integer $cats IDs of category to filter
+ * @param boolean $return_array returns an array with Post-ID and title, otherwise comma separated list of Post-IDs
+ * @return string/array list of Post-IDs
+ */
+function getMostVisitedPostIDs( $days = 365, $limit = 10, $cats = false, $return_array = false )
+{
+	global $wpdb;
+	$date = date_i18n('Y-m-d', current_time('timestamp') - 86400 * $days);
+	if ( is_array($cats) )
+	{
+		if ( is_object($cats[0]) )
+		{
+			$catIDs = array();
+			foreach( $cats as $cat )
+				$catIDs[] = $cat->term_id;
+		}
+		else
+			$catIDs = (array) $cats;
+		$cats = implode(',', $catIDs);
+	}
+	$cat_filter = ($cats) ? 'AND x.term_id IN ('.$cats.')' : '';
+	
+	$q1 = ($return_array) ? ', p.post_title' : '';
+	$q2 = ($return_array) ? ' LEFT JOIN '.$wpdb->posts.' p ON p.ID = c.page ' : '';
+	
+	$sql = "
+	SELECT	COUNT(c.id) count,
+			c.page post_id
+			$q1
+	FROM	".CPD_C_TABLE." c
+	$q2
+	LEFT	JOIN ".$wpdb->term_relationships." r 
+			ON r.object_id = c.page
+	LEFT	JOIN ".$wpdb->term_taxonomy." x
+			ON x.term_taxonomy_id = r.term_taxonomy_id
+	WHERE	c.date >= '$date'
+	$cat_filter
+	GROUP	BY c.page
+	ORDER	BY count DESC
+	LIMIT	$limit";
+	$res = $this->getQuery($sql, 'getMostVisitedPostIDs');
+
+	$ids = array();
+	if ( @mysql_num_rows($res) )
+		while ( $row = mysql_fetch_array($res) )
+		{
+			if ( $return_array )
+				$ids[] = array('id' => $row['post_id'], 'title' => $row['post_title'], 'count' => $row['count']);
+			else
+				$ids[] = $row['post_id'];
+		}
+
+	if ( $return_array )
+		return $ids;
+	else
+		return implode(',', $ids);
 }
 
 /**
@@ -1091,7 +1393,6 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0, $show_form = true, $show_n
 function getClients( $frontend = false )
 {
 	global $wpdb;
-//	$clients = array('Firefox', 'MSIE', 'Chrome', 'AppleWebKit', 'Opera');
 	$c_string = $this->options['clients'];
 	$clients = explode(',', $c_string);
 	
@@ -1099,6 +1400,8 @@ function getClients( $frontend = false )
 	$row = @mysql_fetch_row($res);
 	$all = max(1, $row[0]);
 	$rest = 100;
+//	$awe_name = array();
+//	$awe_data = array();
 	$r = '<ul id="cpd_clients" class="cpd_front_list">';
 	foreach ($clients as $c)
 	{
@@ -1108,31 +1411,42 @@ function getClients( $frontend = false )
 		$percent = number_format(100 * $row[0] / $all, 0);
 		$rest -= $percent;
 		$r .= '<li class="cpd-client-logo cpd-client-'.strtolower($c).'">'.$c.'<b>'.$percent.' %</b></li>';
+		
+//		$awe_name[] = '"'.substr($c, 0, 3).'"';
+//		$awe_data[] = $percent;
 	}
 	if ( $rest > 0 )
+	{
 		$r .= '<li>'.__('Other', 'cpd').'<b>'.$rest.' %</b></li>';
+//		$awe_name[] = '"'.__('Other', 'cpd').'"';
+//		$awe_data[] = $rest;
+	}
 	$r .= '</ul>';
+	
 	if ($frontend)
 		return $r;
 	else
 		echo $r;
 }
 
-
 /**
  * shows top referers
  */
-function getReferers( $limit = 0, $frontend = false )
+function getReferers( $limit = 0, $frontend = false, $days = 0 )
 {
 	global $wpdb;
 	if ( $limit == 0 )
-		$limit = $this->options['dashboard_last_posts'];
+		$limit = $this->options['dashboard_referers'];
+	if ( $days == 0 )
+		$days = $this->options['referers_last_days'];
 	
 	// local url filter 
+	$dayfiltre = "AND date > DATE_SUB('".date_i18n('Y-m-d')."', INTERVAL $days DAY)";
+		
 	$localref = ($this->options['localref']) ? '' : " AND referer NOT LIKE '".get_bloginfo('url')."%' ";
-	$res = $this->getQuery("SELECT COUNT(*) count, referer FROM ".CPD_C_TABLE." WHERE referer > '' $localref GROUP BY referer ORDER BY count DESC LIMIT $limit", 'getReferers');
-
-	$r = '<ul id="cpd_referers" class="cpd_front_list">';
+	$res = $this->getQuery("SELECT COUNT(*) count, referer FROM ".CPD_C_TABLE." WHERE referer > '' $dayfiltre $localref GROUP BY referer ORDER BY count DESC LIMIT $limit", 'getReferers');
+		$r =  '<small>'.sprintf(__('The %s referers in last %s days:', 'cpd'), $limit, $days).'<br/>&nbsp;</small>';
+	$r .= '<ul id="cpd_referers" class="cpd_front_list">';
 	if ( @mysql_num_rows($res) )
 		while ( $row = mysql_fetch_array($res) )
 		{
@@ -1146,8 +1460,6 @@ function getReferers( $limit = 0, $frontend = false )
 	else
 		echo $r;
 }
-
-// end of statistic functions
 
 /**
  * gets mass bots
@@ -1308,40 +1620,14 @@ function updateOptions()
 {
 	global $cpd_version;
 	
-	$o = get_option('count_per_day', '');
-	if ( empty($o) )
-	{
-		$onlinetime = get_option('cpd_onlinetime', 300);
-		$user = get_option('cpd_user', 0);
-		$autocount = get_option('cpd_autocount', 1);
-		$bots = get_option('cpd_bots', "bot\nspider\nsearch\ncrawler\nask.com\nvalidator\nsnoopy\nsuchen.de\nsuchbaer.de\nshelob\nsemager\nxenu\nsuch_de\nia_archiver\nMicrosoft URL Control\nnetluchs");
-		
-		$o = array(
-		'version' => $cpd_version,
-		'onlinetime' => $onlinetime,
-		'user' => $user,
-		'autocount' => $autocount,
-		'bots' => $bots
-		);
-		add_option('count_per_day', $o);
-		
-		// delete all old options
-		delete_option('cpd_cdb_version');
-		delete_option('cpd_codb_version');
-		delete_option('cpd_onlinetime');
-		delete_option('cpd_user');
-		delete_option('cpd_autocount');
-		delete_option('cpd_bots');
-	}
-	
-	// set all default values, delete old options
+	$o = get_option('count_per_day', array());
 	$onew = array(
 	'version'				=> $cpd_version,
 	'onlinetime'			=> (isset($o['onlinetime'])) ? $o['onlinetime'] : 300,
 	'user'					=> (isset($o['user'])) ? $o['user'] : 0,
 	'user_level'			=> (isset($o['user_level'])) ? $o['user_level'] : 0,
 	'autocount'				=> (isset($o['autocount'])) ? $o['autocount'] : 1,
-	'bots'					=> (isset($o['bots'])) ? $o['bots'] : '',
+	'bots'					=> (isset($o['bots'])) ? $o['bots'] : "bot\nspider\nsearch\ncrawler\nask.com\nvalidator\nsnoopy\nsuchen.de\nsuchbaer.de\nshelob\nsemager\nxenu\nsuch_de\nia_archiver\nMicrosoft URL Control\nnetluchs",
 	'dashboard_posts'		=> (isset($o['dashboard_posts'])) ? $o['dashboard_posts'] : 20,
 	'dashboard_last_posts'	=> (isset($o['dashboard_last_posts'])) ? $o['dashboard_last_posts'] : 20,
 	'dashboard_last_days'	=> (isset($o['dashboard_last_days'])) ? $o['dashboard_last_days'] : 7,
@@ -1357,7 +1643,10 @@ function updateOptions()
 	'clients'				=> (isset($o['clients'])) ? $o['clients'] : 'Firefox, MSIE, Chrome, Safari, Opera',
 	'ajax'					=> (isset($o['ajax'])) ? $o['ajax'] : 0,
 	'debug'					=> (isset($o['debug'])) ? $o['debug'] : 0,
-	'referers'				=> (isset($o['referers'])) ? $o['referers'] : 1
+	'referers'				=> (isset($o['referers'])) ? $o['referers'] : 1,
+	'dashboard_referers'	=> (isset($o['dashboard_referers'])) ? $o['dashboard_referers'] : 20,
+	'referers_last_days'	=> (isset($o['referers_last_days'])) ? $o['referers_last_days'] : 7,
+	'chart_old'				=> (isset($o['chart_old'])) ? $o['chart_old'] : 0
 	);
 	update_option('count_per_day', $onew);
 }
@@ -1368,7 +1657,7 @@ function updateOptions()
 function cpdColumn($defaults)
 {
 	if ( $this->options['show_in_lists']  )
-		$defaults['cpd_reads'] = '<img src="'.$this->GetResource('cpd_menu.gif').'" alt="'.__('Reads', 'cpd').'" title="'.__('Reads', 'cpd').'" style="width:9px;height:12px;" />';
+		$defaults['cpd_reads'] = '<img src="'.$this->getResource('cpd_menu.gif').'" alt="'.__('Reads', 'cpd').'" title="'.__('Reads', 'cpd').'" style="width:9px;height:12px;" />';
 	return $defaults;
 }
 
@@ -1442,6 +1731,7 @@ function dashboardChartVisitorsMeta() { $this->dashboardChartVisitors( 0, false)
 function getCountriesMeta()	{ $this->getCountries(0, false); }
 function getCountriesVisitorsMeta()	{ $this->getCountries(0, false, true); }
 function getReferersMeta() { $this->getReferers(0, false); }
+function getUserOnlineMeta() { $this->getUserOnline( false, true); }
 
 /**
  * will be executed if wordpress core detects this page has to be rendered
@@ -1452,26 +1742,28 @@ function onLoadPage()
 	// needed javascripts
 	wp_enqueue_script('common');
 	wp_enqueue_script('wp-lists');
-	wp_enqueue_script('postbox');
+	if ( !$this->options['chart_old'] )
+		wp_enqueue_script('postbox');
 
 	// add the metaboxes
 	add_meta_box('reads_at_all', __('Total visitors', 'cpd'), array(&$this, 'dashboardReadsAtAll'), $this->pagehook, 'cpdrow1', 'core');
-	add_meta_box('chart_visitors', __('Visitors per day', 'cpd'), array(&$this, 'dashboardChartVisitorsMeta'), $this->pagehook, 'cpdrow1', 'default');
-	add_meta_box('chart_reads', __('Reads per day', 'cpd'), array(&$this, 'dashboardChartMeta'), $this->pagehook, 'cpdrow1', 'default');
+	add_meta_box('user_online', __('Visitors online', 'cpd'), array(&$this, 'getUserOnlineMeta'), $this->pagehook, 'cpdrow1', 'default');
 	add_meta_box('user_per_month', __('Visitors per month', 'cpd'), array(&$this, 'getUserPerMonth'), $this->pagehook, 'cpdrow2', 'default');
 	add_meta_box('reads_per_month', __('Reads per month', 'cpd'), array(&$this, 'getReadsPerMonth'), $this->pagehook, 'cpdrow3', 'default');
 	add_meta_box('reads_per_post', __('Visitors per post', 'cpd'), array(&$this, 'getUserPerPostMeta'), $this->pagehook, 'cpdrow3', 'default');
 	add_meta_box('last_reads', __('Latest Counts', 'cpd'), array(&$this, 'getMostVisitedPostsMeta'), $this->pagehook, 'cpdrow4', 'default');
 	add_meta_box('day_reads', __('Visitors per day', 'cpd'), array(&$this, 'getVisitedPostsOnDayMeta'), $this->pagehook, 'cpdrow4', 'default');
 	add_meta_box('cpd_info', __('Plugin'), array(&$this, 'cpdInfo'), $this->pagehook, 'cpdrow1', 'low');
-	
 	if ( $this->options['referers'] )
 	{
 		add_meta_box('browsers', __('Browsers', 'cpd'), array(&$this, 'getClients'), $this->pagehook, 'cpdrow2', 'default');
 		add_meta_box('referers', __('Referer', 'cpd'), array(&$this, 'getReferersMeta'), $this->pagehook, 'cpdrow3', 'default');
 	}
-	
-	// countries with GeoIP addon only
+	if ( $this->options['chart_old'] )
+	{
+		add_meta_box('chart_visitors', __('Visitors per day', 'cpd'), array(&$this, 'dashboardChartVisitorsMeta'), $this->pagehook, 'cpdrow1', 'default');
+		add_meta_box('chart_reads', __('Reads per day', 'cpd'), array(&$this, 'dashboardChartMeta'), $this->pagehook, 'cpdrow1', 'default');
+	}
 	if ( $cpd_geoip )
 	{
 		add_meta_box('countries', __('Reads per Country', 'cpd'), array(&$this, 'getCountriesMeta'), $this->pagehook, 'cpdrow2', 'default');
@@ -1496,6 +1788,8 @@ function onShowPage()
 		wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false );
 		wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false );
 		$css = 'style="width:'.round(98 / $screen_layout_columns, 1).'%;"';
+		if ( !$this->options['chart_old'] )
+			$this->getFlotChart();
 		?>
 		<div id="dashboard-widgets" class="metabox-holder cpd-dashboard">
 			<div class="postbox-container" <?php echo $css; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow1', $data); ?></div>
@@ -1530,8 +1824,8 @@ function getCountries( $limit = 0, $frontend, $visitors = false )
 	// with GeoIP addon only
 	if ( $cpd_geoip )
 	{
-		$gi = geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
-		$geoip = new GeoIP();
+//		$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
+		$geoip = new GeoIPCpD();
 		if ( $limit == 0 )
 			$limit = max( 0, $this->options['countries'] );
 
@@ -1664,12 +1958,20 @@ function addCss()
 }
 
 /**
+ * adds javascript to admin header
+ */
+function addJS()
+{
+	echo '<!--[if IE]><script type="text/javascript" src="'.$this->dir.'/js/excanvas.min.js"></script><![endif]-->'."\n";
+}
+
+/**
  * adds ajax script to count cached posts
  */
 function addAjaxScript()
 {
 	$this->getPostID();
-	
+	$_SESSION['cpd_wp'] = ABSPATH;
 	echo <<< JSEND
 <script type="text/javascript">
 // Count per Day
@@ -1704,7 +2006,7 @@ function showQueries()
 	echo '<li>'
 		.'<b>Server:</b> '.$_SERVER['SERVER_SOFTWARE'].'<br/>'
 		.'<b>PHP:</b> '.phpversion().'<br/>'
-		.'<b>mySQL Server:</b> '.mysql_get_server_info().'<br/>'
+		.'<b>mySQL Server:</b> '.mysql_get_server_info($this->dbcon).'<br/>'
 		.'<b>mySQL Client:</b> '.mysql_get_client_info().'<br/>'
 		.'<b>WordPress:</b> '.get_bloginfo('version').'<br/>'
 		.'<b>Count per Day:</b> '.$cpd_version.'<br/>'
@@ -1749,7 +2051,6 @@ function showQueries()
 	echo '</div>';
 }
 
-
 /**
  * checks installation in sub blogs 
  */
@@ -1786,17 +2087,38 @@ function register_widgets()
 	register_widget('CountPerDay_Widget');
 }
 
+/**
+ * adds charts to lists on dashboard
+ * @param string $id HTML-id of the DIV
+ * @param array $data data
+ * @param string $html given list code to add the chart
+ */
+function includeChartJS( $id, $data, $html )
+{
+	if ( $this->options['chart_old'] )
+		return $html;
+	$d = array_reverse($data);
+	$d = '[['.implode(',', $d).']]';
+	$code = '<div id="'.$id.'" class="cpd-list-chart"></div>
+		<script type="text/javascript">
+		//<![CDATA[
+		jQuery(function(){jQuery.plot(jQuery("#'.$id.'"),'.$d.',{series:{lines:{fill:true,lineWidth:1}},colors:["red"],grid:{show:false}});});
+		//-->
+		</script>
+		'.$html;
+	return $code;
+}
 
 } // class end
 
 
 
 /**
- * widget class
+  widget class
  */
 class CountPerDay_Widget extends WP_Widget
 {
-	var $fields = array( 'title', 'show',
+	var $fields = array( 'title', 'order', 'show',
 		'getreadsall', 'getreadstoday', 'getreadsyesterday', 'getreadslastweek', 'getreadsthismonth',
 		'getuserall', 'getusertoday', 'getuseryesterday', 'getuserlastweek', 'getuserthismonth',
 		'getuserperday', 'getuseronline', 'getfirstcount',
@@ -1804,28 +2126,28 @@ class CountPerDay_Widget extends WP_Widget
 		'getreadsall_name', 'getreadstoday_name', 'getreadsyesterday_name', 'getreadslastweek_name', 'getreadsthismonth_name',
 		'getuserall_name', 'getusertoday_name', 'getuseryesterday_name', 'getuserlastweek_name', 'getuserthismonth_name',
 		'getuserperday_name', 'getuseronline_name', 'getfirstcount_name' );
-	var $cpd_funcs = array ( 'show',
-		'getReadsAll', 'getReadsToday', 'getReadsYesterday', 'getReadsLastWeek', 'getReadsThisMonth',
-		'getUserAll', 'getUserToday', 'getUserYesterday', 'getUserLastWeek', 'getUserThisMonth',
-		'getUserPerDay', 'getUserOnline', 'getFirstCount' );
+	const CPDF = 'show,getReadsAll,getReadsToday,getReadsYesterday,getReadsLastWeek,getReadsThisMonth,getUserAll,getUserToday,getUserYesterday,getUserLastWeek,getUserThisMonth,getUserPerDay,getUserOnline,getFirstCount';
+	var $cpd_funcs;
 	var $funcs;
 	var $names;
 	
-//	public static function getWidgetFuncs()
-//	{
-//		return $this->cpd_funcs;
-//	}
-//	
+	// export functions to ajax script
+	public static function getWidgetFuncs()
+	{
+		return explode(',', self::CPDF);
+	}
+	
 	// constructor
 	function CountPerDay_Widget() {
-		$this->funcs = array_slice( $this->fields, 1, 14);
-		$this->names = array_slice( $this->fields, 15, 14);
+		$this->cpd_funcs = explode(',', self::CPDF);
+		$this->funcs = array_slice( $this->fields, 2, 14);
+		$this->names = array_slice( $this->fields, 16, 14);
 		parent::WP_Widget('countperday_widget', 'Count per Day',
-			array('description' => __('Statistics', 'cpd')), array('width' => 400) );	
+			array('description' => __('Statistics', 'cpd')), array('width' => 270) );	
 	}
  
 	// display widget
-	function widget( $args, $instance)
+	function widget( $args, $instance )
 	{
 		global $count_per_day;
 		
@@ -1835,9 +2157,10 @@ class CountPerDay_Widget extends WP_Widget
 		if ( !empty( $title ) )
 			echo $before_title.$title.$after_title;
 			echo '<ul class="cpd">';
-			foreach ( $instance as $k=>$v )
+			$order = explode('|', $instance['order']);
+			foreach ( $order as $k )
 			{
-				if ( $v == 1 )
+				if ( $k && $instance[$k] == 1 )
 				// checked only
 				{
 					if ( ($k == 'show' && is_singular()) || $k != 'show' )
@@ -1876,6 +2199,7 @@ class CountPerDay_Widget extends WP_Widget
 	{
 		$default = 	array(
 			'title' => 'Count per Day',
+			'order' => '',
 			'show' => 0,
 			'getreadsall' => 0,
 			'getreadstoday' => 0,
@@ -1903,47 +2227,71 @@ class CountPerDay_Widget extends WP_Widget
 			'getuserthismonth_name' => __('Visitors per month', 'cpd'),
 			'getuserperday_name' => __('Visitors per day', 'cpd'),
 			'getuseronline_name' => __('Visitors currently online', 'cpd'),
-			'getfirstcount_name' => __('Counter starts on', 'cpd')		
+			'getfirstcount_name' => __('Counter starts on', 'cpd')
 		);
 		$instance = wp_parse_args( (array) $instance, $default );
-
-		echo '<table style="border: 1px #ddd solid;">'."\n";
+		
 		// title field
 		$field_id = $this->get_field_id('title');
 		$field_name = $this->get_field_name('title');
-		echo "<tr>\n";
-		echo '<td colspan="2"><label for="'.$field_id.'">'.__('Title').":<label></td>\n";
-		echo '<td><input type="text" class="widefat" id="'.$field_id.'" name="'.$field_name.'" value="'.attribute_escape( $instance['title'] ).'" /></td>'."\n";
-		echo "</tr>\n";
+
+		echo '
+		<ul id="cpdwidgetlist'.$field_id.'">
+		<li class="cpd_widget_item cpd_widget_title">
+		<label for="'.$field_id.'">'.__('Title').':<label>
+		<input type="text" class="widefat" id="'.$field_id.'" name="'.$field_name.'" value="'.esc_attr( $instance['title'] ).'" />
+		</li>';
 		
-		$i = 1;
-		foreach ( $this->funcs as $f )
+		$order = explode('|', $instance['order']);
+		foreach ( $order as $f )
 		{
-			$check_id = $this->get_field_id( $f );
-			$check_name = $this->get_field_name( $f );
-			$check_status = ( !empty($instance[$f]) ) ? 'checked="checked"' : '';
-			
-			$fl = $f.'_name';
-			$label_id = $this->get_field_id( $fl );
-			$label_name = $this->get_field_name( $fl );
-			$label_value = esc_attr( $instance[$fl] );
-			
-			if ( $i )
+			if ( $f )
 			{
-				echo '<tr style="background:#eee">'."\n";
-				$i = 0;
+				$check_id = $this->get_field_id( $f );
+				$check_name = $this->get_field_name( $f );
+				$check_status = ( !empty($instance[$f]) ) ? 'checked="checked"' : '';
+				
+				$fl = $f.'_name';
+				$label_id = $this->get_field_id( $fl );
+				$label_name = $this->get_field_name( $fl );
+				$label_value = esc_attr( $instance[$fl] );
+	
+				echo '
+				<li itemid="'.$f.'" class="cpd_widget_item">
+				<input type="checkbox" class="checkbox" id="'.$check_id.'" name="'.$check_name.'" value="1" '.$check_status.' />
+				<label for="'.$check_id.'"> '.$default[$fl].'</label>
+				<input type="text" class="widefat" id="'.$label_id.'" name="'.$label_name.'" value="'.$label_value.'" style="width:200px" />
+				</li>';
 			}
-			else
-			{
-				echo "<tr>\n";
-				$i = 1;
-			}
-			echo '<td><input type="checkbox" id="'.$check_id.'" name="'.$check_name.'" value="1" '.$check_status.' /></td>'."\n";
-			echo '<td><label for="'.$check_id.'">'.$default[$fl].'</label></td>'."\n";
-			echo '<td><input type="text" class="widefat" id="'.$label_id.'" name="'.$label_name.'" value="'.$label_value.'" style="width:200px" /></td>'."\n";
-			echo "</tr>\n";
 		}
-		echo "</table>\n";
+		echo "</ul>\n";
+
+		// order
+		$of_id = $this->get_field_id('order');
+		$of_name = $this->get_field_name('order');
+		echo '<input type="hidden" id="'.$of_id.'" name="'.$of_name.'" value="'.esc_attr( $instance['order'] ).'" />';
+		?>
+		<script type="text/javascript">
+		//<![CDATA[
+		jQuery.noConflict();
+		jQuery(document).ready(function(){
+  			jQuery('#cpdwidgetlist<?php echo $field_id ?>').sortable({
+  				items: 'li:not(.cpd_widget_title)',
+  				update: function (event, ui) {
+					var ul = window.document.getElementById('cpdwidgetlist<?php echo $field_id ?>');
+					var items = ul.getElementsByTagName('li');
+					var array = new Array();
+					for (var i = 1, n = items.length; i < n; i++) {
+						var identifier = items[i].getAttribute('itemid');
+						array.push(identifier);
+					}
+					window.document.getElementById('<?php echo $of_id ?>').value = array.join('|');
+				}
+  			});
+		});
+		//]]>
+		</script>
+		<?php
 	}
 	
 } // widget class
@@ -1963,6 +2311,4 @@ function count_per_day_uninstall()
 }
 
 
-
 $count_per_day = new CountPerDay();
-?>

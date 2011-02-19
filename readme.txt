@@ -20,7 +20,7 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 * Plugin: http://www.tomsdimension.de/wp-plugins/count-per-day
 * Donate: http://www.tomsdimension.de/postcards
 
-"Count per Day" counts 1 visit per IP per day. So any reload of the page don't increment the counter.
+"Count per Day" counts 1 visit per IP per day. So any reload of the page do not increment the counter.
 
 = Languages, Translators =
 
@@ -71,7 +71,7 @@ read and write comments on http://www.tomsdimension.de/wp-plugins/count-per-day
 
 **Shortcodes**
 
-You can use these shortcodes in the content while writing you posts to show a number.
+You can use these shortcodes in the content while writing you posts to show a number or list.
 
 [CPD_READS_THIS]
 [CPD_READS_TOTAL]
@@ -98,8 +98,8 @@ You can use these shortcodes in the content while writing you posts to show a nu
 [CPD_COUNTRIES]
 [CPD_REFERERS]
 [CPD_POSTS_ON_DAY date="2010-10-06" limit="3"]
-date (optional), format: year-month-day, default = today
-limit (optional) = max records to show, default = all 
+- date (optional), format: year-month-day, default = today
+- limit (optional): max records to show, default = all 
 
 **Functions**
 
@@ -107,12 +107,13 @@ You can place these functions in your template.<br/>
 Place functions within post-loop (e.g. in single.php)<br/>
 Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); ?&gt;' to check if plugin is activated.
 
-'show( $before, $after, $show, $count )'
+'show( $before, $after, $show, $count, $page )'
 
 * $before = text before number e.g. '&lt;p&gt;' (default "")
 * $after = text after number e.g. 'reads&lt;/p&gt;' (default " reads")
 * $show = true/false, "echo" complete string or "return" number only (default true)
 * $count = true/false, false will not count the reads (default true)
+* $page (optional) PostID
 
 'count()'
 
@@ -165,10 +166,11 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * shows number of total visitors
 * $frontend: 0 echo, 1 return output
 
-'getUserOnline( $frontend )'
+'getUserOnline( $frontend, $country )'
 
 * shows number of visitors just online
 * $frontend: 0 echo, 1 return output
+* $country: 0 number, 1 country list
 
 'getUserToday( $frontend )'
 
@@ -218,7 +220,6 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 'getClients( $frontend )'
 
 * shows visits per client/browser in percent
-* clients are hardcoded in function but easy to change ;)
 * $frontend: 0 echo, 1 return output
 
 'getReferers( $limit = 0, $frontend )'
@@ -226,9 +227,16 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * lists top _$limit_ referers, 0: get option from DB, x: number
 * $frontend: 0 echo, 1 return output
 
+'getMostVisitedPostIDs( $days, $limit, $cats, $return_array )'
+
+* $days last x days, default = 100
+* $limit return max. x posts
+* $cats IDs of categories to filter, array or number
+* $return_array true returns an array with Post-ID, title and count, false returns comma separated list of Post-IDs
+
 **GeoIP**
 
-* With the GeoIP addon you can associate your visitors to an country using the ip address.
+* With GeoIP you can associate your visitors to an country using the ip address.
 * In the database a new column 'country' will be insert on plugin activation.
 * On options page you can update you current visits. This take a while! The Script checks 100 IP addresses at once an reload itself until less then 100 addresses left. Click the update button to check the rest.
 * If the rest remains greater than 0 the IP address is not in GeoIP database (accuracy 99.5%).
@@ -237,6 +245,15 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * More information about GeoIP on http://www.maxmind.com/app/geoip_country
 
 == Changelog ==
+
+= Dev =
++ New: more modern charts (jQuery)
++ New: GeoIP database included, non extra download after plugin update necessary
++ New: list visitors online per country
++ New: options to limit the referers list
++ New: function getMostVisitedPostIDs, can create a "related posts" list
++ New: widgets now sortable
++ Bugfix: GeoIP functions renamed, conflicts with other plugins
 
 = 2.15.1 =
 + Bugifx: error in "Visitors per month" counter

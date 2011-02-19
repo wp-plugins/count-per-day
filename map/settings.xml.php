@@ -2,8 +2,9 @@
 $what = (empty($_GET['map'])) ? 'Reads' : ucfirst($_GET['map']);
 
 header("content-type: text/xml; charset=utf-8");
+?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-echo '<?xml version="1.0" encoding="UTF-8"?>
 <settings>
 <projection>mercator</projection>
 <always_hand>true</always_hand>  
@@ -13,7 +14,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 </small_map>
 
 <area>
-	<balloon_text><![CDATA[{title}<br/><b>{value}</b> '.$what.']]></balloon_text>
+	<balloon_text><![CDATA[{title}<br/><b>{value}</b> <?php echo $what ?>]]></balloon_text>
 	<color_solid>#CC0000</color_solid>
 	<color_light>#FFFFFF</color_light>
 	<color_hover>#FFFF00</color_hover>
@@ -50,12 +51,10 @@ echo '<?xml version="1.0" encoding="UTF-8"?>
 		<border_color>#AAAAAA</border_color>
 	</key>
 	<entries>
-		<entry color="#3388EE">no '.$what.'</entry>
-		<entry color="#FFFFFF">least '.$what.'</entry>
-		<entry color="#CC0000">most '.$what.'</entry>
+		<entry color="#3388EE">no <?php echo $what ?></entry>
+		<entry color="#FFFFFF">least <?php echo $what ?></entry>
+		<entry color="#CC0000">most <?php echo $what ?></entry>
 	</entries>
 </legend>
 
 </settings>
-';
-?>
