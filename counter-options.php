@@ -30,10 +30,11 @@ if(!empty($_POST['do']))
 			$count_per_day->options['ajax'] = empty( $_POST['cpd_ajax'] ) ? 0 : 1 ;
 			$count_per_day->options['debug'] = empty( $_POST['cpd_debug'] ) ? 0 : 1 ;
 			$count_per_day->options['localref'] = empty( $_POST['cpd_localref'] ) ? 0 : 1 ;
-			$count_per_day->options['referers'] = empty( $_POST['cpd_referers'] ) ? 0 : 1 ;
+			$count_per_day->options['referrers'] = empty( $_POST['cpd_referrers'] ) ? 0 : 1 ;
 			$count_per_day->options['dashboard_referers'] = $_POST['cpd_dashboard_referers'];
 			$count_per_day->options['referers_last_days'] = $_POST['cpd_referers_last_days'];
 			$count_per_day->options['chart_old'] = empty( $_POST['cpd_chart_old'] ) ? 0 : 1 ;
+			$count_per_day->options['no_front_css'] = empty( $_POST['cpd_no_front_css'] ) ? 0 : 1 ;
 			
 			if (empty($count_per_day->options['clients']))
 				$count_per_day->options['clients'] = 'Firefox, MSIE, Chrome, Safari, Opera';
@@ -191,7 +192,7 @@ switch($mode) {
 			<td><input class="code" type="text" name="cpd_onlinetime" size="3" value="<?php echo $o['onlinetime']; ?>" /> <?php _e('Seconds for online counter. Used for "Visitors online" on dashboard page.', 'cpd') ?></td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Loged on Users', 'cpd') ?>:</th>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Logged on Users', 'cpd') ?>:</th>
 			<td>
 				<label for="cpd_user"><input type="checkbox" name="cpd_user" id="cpd_user" <?php if($o['user']==1) echo 'checked="checked"'; ?> /> <?php _e('count too', 'cpd') ?></label>
 				- <?php _e('until User Level', 'cpd') ?>
@@ -221,8 +222,8 @@ switch($mode) {
 			<td><label for="cpd_ajax"><input type="checkbox" name="cpd_ajax" id="cpd_ajax" <?php if($o['ajax']==1) echo 'checked="checked"'; ?> /> <?php _e('I use a cache plugin. Count these visits with ajax.', 'cpd') ?></label></td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Clients and referers', 'cpd') ?>:</th>
-			<td><label for="cpd_referers"><input type="checkbox" name="cpd_referers" id="cpd_referers" <?php if($o['referers']==1) echo 'checked="checked"'; ?> /> <?php _e('Save and show clients and referers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors.', 'cpd') ?> (1000000 <?php _e('Reads', 'cpd') ?> ~ 130 MB)</label></td>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Clients and referrers', 'cpd') ?>:</th>
+			<td><label for="cpd_referrers"><input type="checkbox" name="cpd_referrers" id="cpd_referrers" <?php if($o['referrers']==1) echo 'checked="checked"'; ?> /> <?php _e('Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors.', 'cpd') ?> (1000000 <?php _e('Reads', 'cpd') ?> ~ 130 MB)</label></td>
 		</tr>
 		</table>
 		</fieldset>
@@ -256,7 +257,7 @@ switch($mode) {
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Old Charts', 'cpd') ?>:</th>
 			<td><label for="cpd_chart_old"><input type="checkbox" name="cpd_chart_old" id="cpd_chart_old" <?php if($o['chart_old']==1) echo 'checked="checked"'; ?> />  <?php _e('Show old bar charts.', 'cpd') ?></label></td>
 		</tr>
-		<?php if ( $cpd_geoip ) { ?>
+		<?php if ($cpd_geoip) { ?>
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Countries', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_countries" size="3" value="<?php echo $o['countries']; ?>" /> <?php _e('How many countries do you want to see on dashboard page?', 'cpd') ?></td>
@@ -267,16 +268,16 @@ switch($mode) {
 			<td><input class="code" type="text" name="cpd_clients" size="50" value="<?php echo $o['clients']; ?>" /> <?php _e('Substring of the user agent, separated by comma', 'cpd') ?></td>
 		</tr>		
 		<tr>
-			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Referers - Entries', 'cpd') ?>:</th>
-			<td><input class="code" type="text" name="cpd_dashboard_referers" size="3" value="<?php echo $o['dashboard_referers']; ?>" /> <?php _e('How many referers do you want to see on dashboard page?', 'cpd') ?></td>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Referrers - Entries', 'cpd') ?>:</th>
+			<td><input class="code" type="text" name="cpd_dashboard_referers" size="3" value="<?php echo $o['dashboard_referers']; ?>" /> <?php _e('How many referrers do you want to see on dashboard page?', 'cpd') ?></td>
 		</tr>
 		<tr>
-			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Referers - Days', 'cpd') ?>:</th>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Referrers - Days', 'cpd') ?>:</th>
 			<td><input class="code" type="text" name="cpd_referers_last_days" size="3" value="<?php echo $o['referers_last_days']; ?>" /> <?php _e('How many days do you want look back?', 'cpd') ?></td>
 		</tr>
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Local URLs', 'cpd') ?>:</th>
-			<td><label for="cpd_localref"><input type="checkbox" name="cpd_localref" id="cpd_localref" <?php if($o['localref']==1) echo 'checked="checked"'; ?> />  <?php _e('Show local referers too.', 'cpd') ?> (<?php echo bloginfo('url') ?>/...)</label></td>
+			<td><label for="cpd_localref"><input type="checkbox" name="cpd_localref" id="cpd_localref" <?php if($o['localref']==1) echo 'checked="checked"'; ?> />  <?php _e('Show local referrers too.', 'cpd') ?> (<?php echo bloginfo('url') ?>/...)</label></td>
 		</tr>
 		</table>
 		</fieldset>
@@ -318,6 +319,18 @@ switch($mode) {
 		</table>
 		</fieldset>
 		
+		<!-- Stylesheet -->
+		
+		<fieldset>
+		<legend><?php _e('Stylesheet') ?></legend>
+		<table class="form-table">
+		<tr>
+			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('NO Stylesheet in Frontend', 'cpd') ?>:</th>
+			<td><label for="cpd_no_front_css"><input type="checkbox" name="cpd_no_front_css" id="cpd_no_front_css" <?php if($o['no_front_css']==1) echo 'checked="checked"'; ?> /> <?php _e('Do not load the stylesheet "counter.css" in frontend.', 'cpd') ?></label></td>
+		</tr>
+		</table>
+		</fieldset>
+		
 		<!-- debug -->
 		
 		<fieldset>
@@ -349,7 +362,7 @@ switch($mode) {
 					<input type="submit" name="updcon" value="<?php _e('Update old counter data', 'cpd') ?>" class="button" />
 					</form>
 				</td>
-				<td><?php _e('You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!', 'cpd') ?></td>
+				<td><?php _e('You can get the country data for all entries in database by checking the IP adress against the GeoIP database. This can take a while!', 'cpd') ?></td>
 			</tr>
 		<?php } ?>
 		
@@ -408,15 +421,15 @@ switch($mode) {
 			while ( $row = mysql_fetch_assoc($bots) )
 			{
 				$ip = $row['ip'];
-				echo '<tr><td style="white-space:nowrap;">';
-				echo '<a href="?page=count-per-day/counter-options.php&amp;dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'"
-					title="'.sprintf(__('Delete these %s counts', 'cpd'), $row['posts']).'"
-					style="color:red; font-weight: bold;">X</a> &nbsp;';
+				echo '<tr><td style="white-space:nowrap">';
 				if ( $cpd_geoip )
 				{
 					$c = CpdGeoIp::getCountry($ip);
-					echo $c[1].' ';
+					echo $c[1].' &nbsp;';
 				}
+				echo '<a href="?page=count-per-day/counter-options.php&amp;dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'"
+					title="'.sprintf(__('Delete these %s counts', 'cpd'), $row['posts']).'"
+					style="color:red; font-weight: bold;">X</a> &nbsp;';
 				echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$ip.'">'.$ip.'</a></td>'
 					.'<td style="white-space:nowrap;">'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
 					.'<td>'.$row['client'].'</td>'
@@ -440,7 +453,7 @@ switch($mode) {
 	</div>
 
 	<!-- Cleaner -->
-	<?php if ( $count_per_day->options['referers'] ) : ?>
+	<?php if ( $count_per_day->options['referrers'] ) : ?>
 		<div class="postbox">
 		<h3><?php _e('Clean the database', 'cpd') ?></h3>
 		<div class="inside">

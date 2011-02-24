@@ -2,8 +2,8 @@
 Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 2.7
-Tested up to: 3.0.3
-Stable tag: 2.15.1
+Tested up to: 3.1
+Stable tag: 2.16
 License: Postcardware
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -15,8 +15,7 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 * shows reads per page
 * shows visitors today, yesterday, last week, last months and other statistics on dashboard
 * shows country of your visitors
-* you can show these statistics on frontend (e.g. on sidebar) too
-* if you use Wordpress < 2.7 please use Count-per-Day v1.4
+* you can show these statistics on frontend per widget or shortcodes too
 * Plugin: http://www.tomsdimension.de/wp-plugins/count-per-day
 * Donate: http://www.tomsdimension.de/postcards
 
@@ -24,21 +23,19 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 = Languages, Translators =
 
-- German		- 100% - me ;) -
+- Dansk			- 100% - Jonas Thomsen -		http://jonasthomsen.com
+- Dutch NL		- 100% - Rene -					http://wpwebshop.com
+- France		- 100% - Bjork -				http://www.habbzone.fr
+- German		- 100% - I, Tom -				http://www.tomsdimension.de
+- Greek			- 100% - Essetai_Imar -			http://www.elliniki-grothia.com
 - Italian		- 100% - Gianni Diurno -		http://gidibao.net
-- Polish 		- 100% - LeXuS -				http://intrakardial.de
 - Russian		- 100% - Ilya Pshenichny -		http://iluhis.com
-- Dansk			-  95% - Georg S. Adamsen -		http://www.blogos.dk
-- Dansk 2*		-  95% - Jonas Thomsen -		http://jonasthomsen.com
-- Dutch NL		-  95% - Rene -					http://wpwebshop.com
-- Espanol		-  95% - Juan Carlos del R&iacute;o -
-- France		-  95% - Bjork -				http://www.habbzone.fr
-- Swedish		-  95% - Magnus Suther -		http://www.magnussuther.se
-- Portuguese BR	-  95% - Beto Ribeiro -			http://www.sevenarts.com.br
-- Uzbek			-  60% - Alisher -
-- Belarus		-  40% - Marcis Gasuns -		http://www.fatcow.com
+- Swedish		- 100% - Magnus Suther -		http://www.magnussuther.se
 
-*) Rename cpd-da_DK-2.mo to cpd-da_DK.mo in "locale" directory to use the second dansk translation.
+- Polish 		-  95% - LeXuS -				http://intrakardial.de
+- Bulgarian		-  90% - joro -					http://www.joro711.com
+- Espanol		-  90% - Juan Carlos del R&iacute;o -
+- Portuguese BR	-  90% - Beto Ribeiro -			http://www.sevenarts.com.br
 
 == Installation ==
 
@@ -224,7 +221,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 'getReferers( $limit = 0, $frontend )'
 
-* lists top _$limit_ referers, 0: get option from DB, x: number
+* lists top _$limit_ referrers, 0: get option from DB, x: number
 * $frontend: 0 echo, 1 return output
 
 'getMostVisitedPostIDs( $days, $limit, $cats, $return_array )'
@@ -246,14 +243,16 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
-= Dev =
-+ New: more modern charts (jQuery)
-+ New: GeoIP database included, non extra download after plugin update necessary
-+ New: list visitors online per country
-+ New: options to limit the referers list
-+ New: function getMostVisitedPostIDs, can create a "related posts" list
+= 2.16 =
++ New: more modern charts (jQuery flot plugin)
 + New: widgets now sortable
++ New: GeoIP database included, non extra download after plugin update necessary
++ New: list "Visitors online" per country
++ New: option to limit the referrers list
++ New: option to not load stylesheet in frontend 
++ New: function 'getMostVisitedPostIDs', can create a "related posts" list
 + Bugfix: GeoIP functions renamed, conflicts with other plugins
++ New Language: Greek, thanks to Essetai_Imar
 
 = 2.15.1 =
 + Bugifx: error in "Visitors per month" counter
@@ -269,8 +268,8 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + New: WordPress Multisite compatible, networkwide activation creates tables in all blogs
 + New: list reads per month  
 + New: functions and shortcodes [CPD_POSTS_ON_DAY] [CPD_READS_PER_MONTH] [CPD_READS_LAST_WEEK]
-+ New: show/hide local referers
-+ New: optional deactivation of saving clients and referers to save space in the database
++ New: show/hide local referrers
++ New: optional deactivation of saving clients and referrers to save space in the database
 + New: debug mode per URL parameter (?debug=1)
 + Bugfix: GeoIP database update, problem with local IP adresses
 + Bugfix: Userlevel/Capabilities
@@ -285,7 +284,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + Bugfix: changed error handling
 
 = 2.13 =
-+ New: Top referers
++ New: Top referrers
 + Bugfix: Thickbox only in backend needed, RTL on he_IL was broken
 + Bugfix: startpage was not counted everywhere
 + Language update: Portuguese (Brazil)
@@ -331,7 +330,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + Language update: German
 
 = 2.8 =
-+ New: set user level until CpD will count loged users
++ New: set user level until CpD will count logged users
 + New: link to plugin page on Count per Day dashboard
 + New: click on a bar in the charts reload the page with given date for 'Visitors per day' metabox
 + New language: Swedish, thanks to Magnus

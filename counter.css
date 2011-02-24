@@ -217,9 +217,9 @@
 .cpd-client-opera{background-position:0 -147px;}
 .cpd-client-safari{background-position:0 -196px;}
 
-/*referers */
+/*referrers */
 
-#cpd_referers li a {
+#cpd_referrers li a {
 	width: 85%;
 	display: block;
 	float: left;
@@ -230,6 +230,7 @@
 /* flags */
 
 .cpd-flag {
+	display: inline-block;
 	float: left;
 	width: 23px;
 	height: 12px;
