@@ -82,7 +82,7 @@ msgstr "Секунд для онлайн счетчика. Использует�
 
 #: counter-options.php:194
 #@ cpd
-msgid "Loged on Users"
+msgid "Logged on Users"
 msgstr "Вошедших пользователей"
 
 #: counter-options.php:196
@@ -429,7 +429,7 @@ msgstr "Больше информации про GeoIP"
 #: massbots.php:33
 #@ cpd
 msgid "Mass Bots"
-msgstr ""
+msgstr "Вероятные боты"
 
 #: counter-options.php:390
 #, php-format
@@ -667,7 +667,7 @@ msgstr "Добавить значение к \"Всего прочтений\"."
 
 #: counter-options.php:352
 #@ cpd
-msgid "You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!"
+msgid "You can get the country data for all entries in database by checking the IP adress against the GeoIP database. This can take a while!"
 msgstr "Вы можете получить данные стран для всех записей проверив IP адреса заново. Может занять некоторое время!"
 
 #: userperspan.php:49
@@ -682,12 +682,12 @@ msgstr "Счетчик"
 
 #: counter-options.php:224
 #@ cpd
-msgid "Clients and referers"
+msgid "Clients and referrers"
 msgstr "Клиенты и ссылающиеся сайты"
 
 #: counter-options.php:225
 #@ cpd
-msgid "Save and show clients and referers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors."
+msgid "Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors."
 msgstr "Сохранить и показать клиентов и ссылающиеся сайты.<br />Требует много дискового пространства в базе данных, но предоставляет более детальную информацию о ваших посетителях."
 
 #: counter-options.php:278
@@ -697,7 +697,7 @@ msgstr "Локальные URL"
 
 #: counter-options.php:279
 #@ cpd
-msgid "Show local referers too."
+msgid "Show local referrers too."
 msgstr "Показывать локальные переходы тоже."
 
 #: counter-options.php:287
@@ -739,47 +739,46 @@ msgstr "Прочтений за месяц"
 
 #: counter.php:1761
 #@ cpd
-msgid "Referer"
+msgid "Referrer"
 msgstr "Ссылающийся сайт"
 
 #: counter-options.php:256
 #@ cpd
 msgid "Old Charts"
-msgstr ""
+msgstr "Старые таблицы"
 
 #: counter-options.php:257
 #@ cpd
 msgid "Show old bar charts."
-msgstr ""
+msgstr "Отображать в таблицу столбиками"
 
 #: counter-options.php:270
 #@ cpd
-msgid "Referers - Entries"
-msgstr ""
+msgid "Referrers - Entries"
+msgstr "Ссылающиеся сайты - Вхождения"
 
 #: counter-options.php:271
 #@ cpd
-msgid "How many referers do you want to see on dashboard page?"
-msgstr ""
+msgid "How many referrers do you want to see on dashboard page?"
+msgstr "Сколько ссылающихся сайтов вы хотите увидеть на странице статистики?"
 
 #: counter-options.php:274
 #@ cpd
-msgid "Referers - Days"
-msgstr ""
+msgid "Referrers - Days"
+msgstr "Ссылающиеся сайты - Дни"
 
 #: counter.php:1449
 #, php-format
 #@ cpd
-msgid "The %s referers in last %s days:"
-msgstr ""
+msgid "The %s referrers in last %s days:"
+msgstr "%s ссылающихся сайтов за последние %s дней:"
 
 #: counter.php:1751
 #@ cpd
 msgid "Visitors online"
-msgstr ""
+msgstr "Посетителей на сайте"
 
 #: counter.php:2242
 #@ default
 msgid "Title"
-msgstr ""
-
+msgstr "Заголовок"

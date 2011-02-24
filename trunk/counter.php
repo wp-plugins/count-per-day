@@ -85,7 +85,7 @@ function CountPerDay()
 	// CpD dashboard page
 	add_filter('screen_layout_columns', array(&$this, 'screenLayoutColumns'), 10, 2);
 	
-	// register callback for admin menu  setup
+	// register callback for admin menu setup
 	add_action('admin_menu', array(&$this, 'setAdminMenu'));
 	
 	// column page list
@@ -102,7 +102,8 @@ function CountPerDay()
 		 
 	// adds stylesheet
 	add_action('admin_head', array(&$this, 'addCss'));
-	add_action('wp_head', array(&$this, 'addCss'));
+	if ( empty($this->options['no_front_css']) )
+		add_action('wp_head', array(&$this, 'addCss'));
 	
 	// adds javascript
 	add_action('admin_head', array(&$this, 'addJS'));
@@ -570,13 +571,10 @@ function getFlotChart( $limit = 0 )
 
 	// reads
 	$sql = "
-	SELECT	count(*) count, c.date,	n.note
+	SELECT	COUNT(*) count, c.date
 	FROM	".CPD_C_TABLE." AS c
-	LEFT	JOIN ".$table_prefix."cpd_notes AS n
-			ON n.date = c.date
 	WHERE	c.date BETWEEN '$start_sql' AND '$end_sql'
-	GROUP	BY c.date
-	LIMIT	$limit";
+	GROUP	BY c.date";
 	$res = $this->getQuery($sql, 'ChartReads');
 	if ( @mysql_num_rows($res) )
 		while ( $row = mysql_fetch_array($res) )
@@ -584,16 +582,13 @@ function getFlotChart( $limit = 0 )
 	
 	// visitors
 	$sql = "
-	SELECT count(*) count, t.date, n.note
-	FROM (	SELECT	count(*) count, date
+	SELECT COUNT(*) count, t.date
+	FROM (	SELECT	COUNT(*) count, date
 			FROM	".CPD_C_TABLE."
 			GROUP	BY date, ip
 			) AS t
-	LEFT	JOIN ".$table_prefix."cpd_notes AS n
-			ON n.date = t.date
 	WHERE	t.date BETWEEN '$start_sql' AND '$end_sql'
-	GROUP	BY t.date
-	LIMIT $limit";
+	GROUP	BY t.date";
 	$res = $this->getQuery($sql, 'ChartVisitors');
 	if ( @mysql_num_rows($res) )
 		while ( $row = mysql_fetch_array($res) )
@@ -721,7 +716,7 @@ function dashboardChart( $limit = 0, $frontend = false )
 	if ( $limit == 0 )
 		$limit = ( !empty($this->options['chart_days']) )? $this->options['chart_days'] : 30;
 	$start = ( isset($_GET['cpd_chart_start']) ) ? $_GET['cpd_chart_start'] : date_i18n('Y-m-d');
-		
+	
 	$sql = "
 	SELECT	count(*) count, c.date,	n.note
 	FROM	".CPD_C_TABLE." AS c
@@ -1097,11 +1092,13 @@ function getUserPerMonth( $frontend = false )
 		$d[] = '[-'.$i++.','.mysql_num_rows($res).']';
 	}
 	$r .= '</ul>';
-	$r = $this->includeChartJS( 'cpd-flot-userpermonth', $d, $r );
 	if ($frontend)
 		return $r;
 	else
+	{
+		$r = $this->includeChartJS( 'cpd-flot-userpermonth', $d, $r );
 		echo $r;
+	}
 }
 
 /**
@@ -1119,11 +1116,13 @@ function getReadsPerMonth( $frontend = false )
 		$d[] = '[-'.$i++.','.$row[0].']';
 	}
 	$r .= '</ul>';
-	$r = $this->includeChartJS( 'cpd-flot-readspermonth', $d, $r );
 	if ($frontend)
 		return $r;
 	else
+	{
+		$r = $this->includeChartJS( 'cpd-flot-readspermonth', $d, $r );
 		echo $r;
+	}
 }
 
 /**
@@ -1422,7 +1421,7 @@ function getClients( $frontend = false )
 }
 
 /**
- * shows top referers
+ * shows top referrers
  */
 function getReferers( $limit = 0, $frontend = false, $days = 0 )
 {
@@ -1437,8 +1436,8 @@ function getReferers( $limit = 0, $frontend = false, $days = 0 )
 		
 	$localref = ($this->options['localref']) ? '' : " AND referer NOT LIKE '".get_bloginfo('url')."%' ";
 	$res = $this->getQuery("SELECT COUNT(*) count, referer FROM ".CPD_C_TABLE." WHERE referer > '' $dayfiltre $localref GROUP BY referer ORDER BY count DESC LIMIT $limit", 'getReferers');
-		$r =  '<small>'.sprintf(__('The %s referers in last %s days:', 'cpd'), $limit, $days).'<br/>&nbsp;</small>';
-	$r .= '<ul id="cpd_referers" class="cpd_front_list">';
+		$r =  '<small>'.sprintf(__('The %s referrers in last %s days:', 'cpd'), $limit, $days).'<br/>&nbsp;</small>';
+	$r .= '<ul id="cpd_referrers" class="cpd_front_list">';
 	if ( @mysql_num_rows($res) )
 		while ( $row = mysql_fetch_array($res) )
 		{
@@ -1639,7 +1638,8 @@ function updateOptions()
 	'referers'				=> (isset($o['referers'])) ? $o['referers'] : 1,
 	'dashboard_referers'	=> (isset($o['dashboard_referers'])) ? $o['dashboard_referers'] : 20,
 	'referers_last_days'	=> (isset($o['referers_last_days'])) ? $o['referers_last_days'] : 7,
-	'chart_old'				=> (isset($o['chart_old'])) ? $o['chart_old'] : 0
+	'chart_old'				=> (isset($o['chart_old'])) ? $o['chart_old'] : 0,
+	'no_front_css'			=> (isset($o['no_front_css'])) ? $o['no_front_css'] : 0
 	);
 	update_option('count_per_day', $onew);
 }
@@ -1749,7 +1749,7 @@ function onLoadPage()
 	if ( $this->options['referers'] )
 	{
 		add_meta_box('browsers', __('Browsers', 'cpd'), array(&$this, 'getClients'), $this->pagehook, 'cpdrow2', 'default');
-		add_meta_box('referers', __('Referer', 'cpd'), array(&$this, 'getReferersMeta'), $this->pagehook, 'cpdrow3', 'default');
+		add_meta_box('referers', __('Referrer', 'cpd'), array(&$this, 'getReferersMeta'), $this->pagehook, 'cpdrow3', 'default');
 	}
 	if ( $this->options['chart_old'] )
 	{
@@ -2002,7 +2002,7 @@ function showQueries()
 		.'<b>Count per Day:</b> '.$cpd_version.'<br/>'
 		.'<b>Time for Count per Day:</b> '.date_i18n('Y-m-d H:i').'<br/>'
 		.'<b>URL:</b> '.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'].'<br/>'
-		.'<b>Referer:</b> '.$_SERVER['HTTP_REFERER']
+		.'<b>Referrer:</b> '.$_SERVER['HTTP_REFERER']
 		.'</li>';
 	echo '<li><b>POST:</b><br/>';
 	var_dump($_POST);

@@ -109,7 +109,7 @@ msgstr "Време онлайн"
 
 #: counter-options.php:194
 #@ cpd
-msgid "Loged on Users"
+msgid "Logged on Users"
 msgstr "Включени потребители"
 
 #: counter-options.php:196
@@ -154,12 +154,12 @@ msgstr "Използвам кеш добавка. Преброявай тези 
 
 #: counter-options.php:224
 #@ cpd
-msgid "Clients and referers"
+msgid "Clients and referrers"
 msgstr "Потребители и препращащи сайтове"
 
 #: counter-options.php:225
 #@ cpd
-msgid "Save and show clients and referers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors."
+msgid "Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors."
 msgstr "Запази и покажи потребители и препращащи сайтове.<br />Нужда от повече място в базата-данни, но това е нужно за повече информация относно Вашите потребители."
 
 #: counter-options.php:225
@@ -246,7 +246,7 @@ msgstr "Локални URLs"
 
 #: counter-options.php:279
 #@ cpd
-msgid "Show local referers too."
+msgid "Show local referrers too."
 msgstr "Покажи и местните препращащи сайтове."
 
 #: counter-options.php:287
@@ -332,7 +332,7 @@ msgstr "Обнови старите данни на брояча"
 
 #: counter-options.php:352
 #@ cpd
-msgid "You can get the country data for all entries in database by check the IP adress again GeoIP database. This take a while!"
+msgid "You can get the country data for all entries in database by checking the IP adress against the GeoIP database. This can take a while!"
 msgstr "Можете да видите информация за държавите в базата-данни чрез проверка на IP адрес и GeoIP базата-данни. Това може да отнеме известно време!"
 
 #: counter-options.php:362
@@ -647,7 +647,7 @@ msgstr "Разширение"
 
 #: counter.php:1761
 #@ cpd
-msgid "Referer"
+msgid "Referrer"
 msgstr "Препращащ сайт"
 
 #: counter.php:1770
@@ -759,23 +759,23 @@ msgstr ""
 
 #: counter-options.php:270
 #@ cpd
-msgid "Referers - Entries"
+msgid "Referrers - Entries"
 msgstr ""
 
 #: counter-options.php:271
 #@ cpd
-msgid "How many referers do you want to see on dashboard page?"
+msgid "How many referrers do you want to see on dashboard page?"
 msgstr ""
 
 #: counter-options.php:274
 #@ cpd
-msgid "Referers - Days"
+msgid "Referrers - Days"
 msgstr ""
 
 #: counter.php:1449
 #, php-format
 #@ cpd
-msgid "The %s referers in last %s days:"
+msgid "The %s referrers in last %s days:"
 msgstr ""
 
 #: counter.php:1751
