@@ -2191,7 +2191,7 @@ class CountPerDay_Widget extends WP_Widget
 	{
 		$default = 	array(
 			'title' => 'Count per Day',
-			'order' => '',
+			'order' => implode('|', $this->funcs),
 			'show' => 0,
 			'getreadsall' => 0,
 			'getreadstoday' => 0,
