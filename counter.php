@@ -3,7 +3,7 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 2.16
+Version: 2.16.1
 License: Postcardware :)
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
@@ -2191,7 +2191,7 @@ class CountPerDay_Widget extends WP_Widget
 	{
 		$default = 	array(
 			'title' => 'Count per Day',
-			'order' => '',
+			'order' => implode('|', $this->funcs),
 			'show' => 0,
 			'getreadsall' => 0,
 			'getreadstoday' => 0,

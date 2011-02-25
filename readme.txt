@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 2.7
 Tested up to: 3.1
-Stable tag: 2.16
+Stable tag: 2.16.1
 License: Postcardware
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -242,6 +242,9 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * More information about GeoIP on http://www.maxmind.com/app/geoip_country
 
 == Changelog ==
+
+= 2.16.1 =
+Bugfix: widget was empty
 
 = 2.16 =
 + New: more modern charts (jQuery flot plugin)
