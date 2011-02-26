@@ -10,7 +10,7 @@ Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '2.16';
+$cpd_version = '2.16.1';
 
 /**
  * include GeoIP addon
