@@ -10,7 +10,7 @@ Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '2.16';
+$cpd_version = '2.16.1';
 
 /**
  * include GeoIP addon
@@ -2118,20 +2118,24 @@ class CountPerDay_Widget extends WP_Widget
 		'getreadsall_name', 'getreadstoday_name', 'getreadsyesterday_name', 'getreadslastweek_name', 'getreadsthismonth_name',
 		'getuserall_name', 'getusertoday_name', 'getuseryesterday_name', 'getuserlastweek_name', 'getuserthismonth_name',
 		'getuserperday_name', 'getuseronline_name', 'getfirstcount_name' );
-	const CPDF = 'show,getReadsAll,getReadsToday,getReadsYesterday,getReadsLastWeek,getReadsThisMonth,getUserAll,getUserToday,getUserYesterday,getUserLastWeek,getUserThisMonth,getUserPerDay,getUserOnline,getFirstCount';
-	var $cpd_funcs;
+//	const CPDF = 'show,getReadsAll,getReadsToday,getReadsYesterday,getReadsLastWeek,getReadsThisMonth,getUserAll,getUserToday,getUserYesterday,getUserLastWeek,getUserThisMonth,getUserPerDay,getUserOnline,getFirstCount';
+//	var $cpd_funcs;
+	var $cpd_funcs = array ( 'show',
+		'getReadsAll', 'getReadsToday', 'getReadsYesterday', 'getReadsLastWeek', 'getReadsThisMonth',
+		'getUserAll', 'getUserToday', 'getUserYesterday', 'getUserLastWeek', 'getUserThisMonth',
+		'getUserPerDay', 'getUserOnline', 'getFirstCount' );
 	var $funcs;
 	var $names;
 	
 	// export functions to ajax script
-	public static function getWidgetFuncs()
-	{
-		return explode(',', self::CPDF);
-	}
+//	public static function getWidgetFuncs()
+//	{
+//		return explode(',', self::CPDF);
+//	}
 	
 	// constructor
 	function CountPerDay_Widget() {
-		$this->cpd_funcs = explode(',', self::CPDF);
+//		$this->cpd_funcs = explode(',', self::CPDF);
 		$this->funcs = array_slice( $this->fields, 2, 14);
 		$this->names = array_slice( $this->fields, 16, 14);
 		parent::WP_Widget('countperday_widget', 'Count per Day',
