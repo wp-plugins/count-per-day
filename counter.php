@@ -2094,7 +2094,8 @@ function includeChartJS( $id, $data, $html )
 	$code = '<div id="'.$id.'" class="cpd-list-chart"></div>
 		<script type="text/javascript">
 		//<![CDATA[
-		jQuery(function(){jQuery.plot(jQuery("#'.$id.'"),'.$d.',{series:{lines:{fill:true,lineWidth:1}},colors:["red"],grid:{show:false}});});
+		if (jQuery("#'.$id.'").width() > 0)
+			jQuery(function(){jQuery.plot(jQuery("#'.$id.'"),'.$d.',{series:{lines:{fill:true,lineWidth:1}},colors:["red"],grid:{show:false}});});
 		//]]>
 		</script>
 		'.$html;
