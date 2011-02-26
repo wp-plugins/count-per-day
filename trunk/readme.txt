@@ -243,6 +243,10 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
+= Dev =
+Bugfix: JavaScript error on dashboard page, boxes not movable
+Bugfix: PHP4 compatibility
+
 = 2.16.1 =
 Bugfix: widget was empty
 
