@@ -2257,7 +2257,7 @@ class CountPerDay_Widget extends WP_Widget
 				<li itemid="'.$f.'" class="cpd_widget_item">
 				<input type="checkbox" class="checkbox" id="'.$check_id.'" name="'.$check_name.'" value="1" '.$check_status.' />
 				<label for="'.$check_id.'"> '.$default[$fl].'</label>
-				<input type="text" class="widefat" id="'.$label_id.'" name="'.$label_name.'" value="'.$label_value.'" style="width:200px" />
+				<input type="text" class="widefat" id="'.$label_id.'" name="'.$label_name.'" value="'.$label_value.'" />
 				</li>';
 			}
 		}
