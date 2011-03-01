@@ -30,7 +30,7 @@ if(!empty($_POST['do']))
 			$count_per_day->options['ajax'] = empty( $_POST['cpd_ajax'] ) ? 0 : 1 ;
 			$count_per_day->options['debug'] = empty( $_POST['cpd_debug'] ) ? 0 : 1 ;
 			$count_per_day->options['localref'] = empty( $_POST['cpd_localref'] ) ? 0 : 1 ;
-			$count_per_day->options['referrers'] = empty( $_POST['cpd_referrers'] ) ? 0 : 1 ;
+			$count_per_day->options['referers'] = empty( $_POST['cpd_referers'] ) ? 0 : 1 ;
 			$count_per_day->options['dashboard_referers'] = $_POST['cpd_dashboard_referers'];
 			$count_per_day->options['referers_last_days'] = $_POST['cpd_referers_last_days'];
 			$count_per_day->options['chart_old'] = empty( $_POST['cpd_chart_old'] ) ? 0 : 1 ;
@@ -224,7 +224,7 @@ switch($mode) {
 		</tr>
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Clients and referrers', 'cpd') ?>:</th>
-			<td><label for="cpd_referrers"><input type="checkbox" name="cpd_referrers" id="cpd_referrers" <?php if($o['referrers']==1) echo 'checked="checked"'; ?> /> <?php _e('Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors.', 'cpd') ?> (1000000 <?php _e('Reads', 'cpd') ?> ~ 130 MB)</label></td>
+			<td><label for="cpd_referers"><input type="checkbox" name="cpd_referers" id="cpd_referers" <?php if($o['referers']==1) echo 'checked="checked"'; ?> /> <?php _e('Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors.', 'cpd') ?> (1000000 <?php _e('Reads', 'cpd') ?> ~ 130 MB)</label></td>
 		</tr>
 		</table>
 		</fieldset>
