@@ -97,6 +97,10 @@ You can use these shortcodes in the content while writing you posts to show a nu
 [CPD_POSTS_ON_DAY date="2010-10-06" limit="3"]
 - date (optional), format: year-month-day, default = today
 - limit (optional): max records to show, default = all 
+[CPD_MAP width="500" height="340" what="reads" min=1]
+- width and height: size, default 500x340 px
+- what: map content - reads|visitors|online, default reads
+- min: 1 (disable title, legend and zoombar), default 0
 
 **Functions**
 
@@ -194,7 +198,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * lists number of visitors per month
 * $frontend: 0 echo, 1 return output
 
-'getUserPerPost( $limit = 0, $frontend )'
+'getUserPerPost( $limit, $frontend )'
 
 * lists _$limit_ number of posts, -1: all, 0: get option from DB, x: number
 * $frontend: 0 echo, 1 return output
@@ -206,20 +210,20 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * $limit = count of posts (last posts), 0: get option from DB
 * $frontend: 0 echo, 1 return output
 
-'getVisitedPostsOnDay( $date = 0, $limit = 0, $show_form, $show_notes )'
+'getVisitedPostsOnDay( $date, $limit, $show_form, $show_notes )'
 
- * shows visited pages at given day
- * $date day in MySQL date format yyyy-mm-dd, 0 today
- * $limit count of posts
- * $show_form show form for date selection, default on, in frontend set it to 0
- * $show_notes show button to add notes in form, default on, in frontend set it to 0
+* shows visited pages at given day
+* $date day in MySQL date format yyyy-mm-dd, 0 today
+* $limit count of posts
+* $show_form show form for date selection, default on, in frontend set it to 0
+* $show_notes show button to add notes in form, default on, in frontend set it to 0
 
 'getClients( $frontend )'
 
 * shows visits per client/browser in percent
 * $frontend: 0 echo, 1 return output
 
-'getReferers( $limit = 0, $frontend )'
+'getReferers( $limit, $frontend )'
 
 * lists top _$limit_ referrers, 0: get option from DB, x: number
 * $frontend: 0 echo, 1 return output
@@ -230,6 +234,14 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * $limit return max. x posts
 * $cats IDs of categories to filter, array or number
 * $return_array true returns an array with Post-ID, title and count, false returns comma separated list of Post-IDs
+
+'function getMap( $what, $width, $height, $min )'
+
+* gets a world map
+* $what visitors|reads|online
+* $width size in px
+* $height size in px
+* $min : 1 disable title, legend and zoombar
 
 **GeoIP**
 
@@ -243,9 +255,12 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
-= Dev =
-Bugfix: JavaScript error on dashboard page, boxes not movable
-Bugfix: PHP4 compatibility
+= Development Version =
++ New: option - who is allowed to see the statistics page
++ New: function and shortcode to show world map in frontend
++ Bugfix: JavaScript error on dashboard page, boxes not movable
++ Bugfix: PHP4 compatibility
+
 
 = 2.16.1 =
 Bugfix: widget was empty

@@ -80,33 +80,40 @@ function CountPerDay()
 	}
 
 	// widget on dashboard page
-	add_action('wp_dashboard_setup', array(&$this, 'dashboardWidgetSetup'));
+	if (is_admin())
+		add_action('wp_dashboard_setup', array(&$this, 'dashboardWidgetSetup'));
 	
 	// CpD dashboard page
-	add_filter('screen_layout_columns', array(&$this, 'screenLayoutColumns'), 10, 2);
+	if (is_admin())
+		add_filter('screen_layout_columns', array(&$this, 'screenLayoutColumns'), 10, 2);
 	
-	// register callback for admin menu setup
-	add_action('admin_menu', array(&$this, 'setAdminMenu'));
+	// CpD dashboard
+	if (is_admin())
+		add_action('admin_menu', array(&$this, 'setAdminMenu'));
 	
 	// column page list
-	add_action('manage_pages_custom_column', array(&$this, 'cpdColumnContent'), 10, 2);
-	add_filter('manage_pages_columns', array(&$this, 'cpdColumn'));
+	if (is_admin())
+		add_action('manage_pages_custom_column', array(&$this, 'cpdColumnContent'), 10, 2);
+		add_filter('manage_pages_columns', array(&$this, 'cpdColumn'));
 	
 	// column post list
-	add_action('manage_posts_custom_column', array(&$this, 'cpdColumnContent'), 10, 2);
-	add_filter('manage_posts_columns', array(&$this, 'cpdColumn'));
+	if (is_admin())
+		add_action('manage_posts_custom_column', array(&$this, 'cpdColumnContent'), 10, 2);
+		add_filter('manage_posts_columns', array(&$this, 'cpdColumn'));
 	
 	// locale support
 	if (defined('WPLANG') && function_exists('load_plugin_textdomain'))
 		load_plugin_textdomain('cpd', false, $cpd_dir_name.'/locale');
 		 
 	// adds stylesheet
-	add_action('admin_head', array(&$this, 'addCss'));
+	if (is_admin())
+		add_action('admin_head', array(&$this, 'addCss'));
 	if ( empty($this->options['no_front_css']) )
 		add_action('wp_head', array(&$this, 'addCss'));
 	
 	// adds javascript
-	add_action('admin_head', array(&$this, 'addJS'));
+	if (is_admin())
+		add_action('admin_head', array(&$this, 'addJS'));
 	
 	// widget setup
 	add_action('widgets_init', array( &$this, 'register_widgets'));
@@ -1639,7 +1646,8 @@ function updateOptions()
 	'dashboard_referers'	=> (isset($o['dashboard_referers'])) ? $o['dashboard_referers'] : 20,
 	'referers_last_days'	=> (isset($o['referers_last_days'])) ? $o['referers_last_days'] : 7,
 	'chart_old'				=> (isset($o['chart_old'])) ? $o['chart_old'] : 0,
-	'no_front_css'			=> (isset($o['no_front_css'])) ? $o['no_front_css'] : 0
+	'no_front_css'			=> (isset($o['no_front_css'])) ? $o['no_front_css'] : 0,
+	'whocansee'				=> (isset($o['whocansee'])) ? $o['whocansee'] : 'publish_posts'
 	);
 	update_option('count_per_day', $onew);
 }
@@ -1692,7 +1700,7 @@ function screenLayoutColumns($columns, $screen)
 function setAdminMenu()
 {
 	$menutitle = '<img src="'.$this->getResource('cpd_menu.gif').'" alt="" style="width:12px;height:12px;" /> Count per Day';
-	$this->pagehook = add_submenu_page('index.php', 'CountPerDay', $menutitle, 1, CPD_METABOX, array(&$this, 'onShowPage'));
+	$this->pagehook = add_submenu_page('index.php', 'CountPerDay', $menutitle, $this->options['whocansee'], CPD_METABOX, array(&$this, 'onShowPage'));
 	add_action('load-'.$this->pagehook, array(&$this, 'onLoadPage'));
 }
 
@@ -1873,6 +1881,38 @@ function getCountries( $limit = 0, $frontend, $visitors = false )
 }
 
 /**
+ * gets a world map
+ * @param string $what visitors|reads|online
+ * @param int $width size
+ * @param int $height size
+ * @param int $min : 1 disable title, legend and zoombar
+ */
+function getMap( $what = 'visitors', $width = 500, $height = 340, $min = 0 )
+{
+	$divid = uniqid('cpdmap_');
+	$dir = $this->dir.'/map/';
+	?>
+	<script type="text/javascript" src="<?php echo $dir ?>swfobject.js"></script>
+	<div id="<?php echo $divid ?>" class="cpd_worldmap" style="width:<?php echo $width ?>px; height:<?php echo $height ?>px; background:#4499FF;">
+		<strong>Flash content</strong>
+	</div>
+	<script type="text/javascript">
+		// <![CDATA[
+		var so = new SWFObject("<?php echo $dir ?>ammap.swf", "ammap", "100%", "100%", "8", "#4499FF");
+		so.addVariable("path", "<?php echo $dir ?>");
+		so.addVariable("settings_file", escape("<?php echo $dir ?>settings.xml.php?map=<?php echo $what ?>&min=<?php echo $min ?>"));
+		so.addVariable("data_file", escape("<?php echo $dir ?>data.xml.php?map=<?php echo $what ?>&min=<?php echo $min ?>"));
+		so.write("<?php echo $divid ?>");
+		// ]]>
+	</script>
+	<?php
+}
+
+
+
+
+
+/**
  * adds some shortcodes to use functions in frontend
  */
 function addShortcodes()
@@ -1901,6 +1941,7 @@ function addShortcodes()
 	add_shortcode('CPD_MOST_VISITED_POSTS', array( &$this, 'shortMostVisitedPosts'));
 	add_shortcode('CPD_REFERERS', array( &$this, 'shortReferers'));
 	add_shortcode('CPD_POSTS_ON_DAY', array( &$this, 'shortPostsOnDay'));
+	add_shortcode('CPD_MAP', array( &$this, 'shortShowMap'));
 }
 function shortShow()			{ return $this->show('', '', false, false); }
 function shortReadsTotal()		{ return $this->getReadsAll(true); }
@@ -1932,6 +1973,16 @@ function shortPostsOnDay( $atts )
 		'limit' => 0
 	), $atts) );
 	return $this->getVisitedPostsOnDay( $date, $limit, false, false, true );
+}
+function shortShowMap( $atts )
+{
+	extract( shortcode_atts( array(
+		'width' => 500,
+		'height' => 340,
+		'what' => 'reads',
+		'min' => 0
+	), $atts) );
+	return $this->getMap( $what, $width, $height, $min );
 }
 
 /**
@@ -2301,10 +2352,11 @@ class CountPerDay_Widget extends WP_Widget
 function count_per_day_uninstall()
 {
 	global $wpdb;
-	$wpdb->query('DROP TABLE IF EXISTS '.CPD_C_TABLE);
-	$wpdb->query('DROP TABLE IF EXISTS '.CPD_CO_TABLE);
-	$wpdb->query('DROP TABLE IF EXISTS '.CPD_N_TABLE);
-	delete_option('count_per_day');
+//	$wpdb->query('DROP TABLE IF EXISTS '.CPD_C_TABLE);
+//	$wpdb->query('DROP TABLE IF EXISTS '.CPD_CO_TABLE);
+//	$wpdb->query('DROP TABLE IF EXISTS '.CPD_N_TABLE);
+//	delete_option('count_per_day');
+	$wpdb->query("DELETE FROM ".$wpdb->usermeta." WHERE meta_key like '%_cpd_metaboxes%';");
 }
 
 
