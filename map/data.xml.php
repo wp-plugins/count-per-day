@@ -67,7 +67,8 @@ foreach ( $data as $d )
 
 <area title="borders" mc_name="borders" color="#AAAAAA" balloon="false"></area>
 </areas>
-	
+
+<?php if (empty($_GET['min'])) { ?>
 <labels>
 	<label x="0" y="0" width="100%" align="center" text_size="16" color="#000000">
 		<text><![CDATA[<b>Your Visitors all over the World</b>]]></text>
@@ -77,5 +78,6 @@ foreach ( $data as $d )
 <movies>
 	<movie long="13" lat="53.4" file="target" width="10" height="10" color="#000000" fixed_size="true" title="Home of your best friend:      Tom, the plugin author ;)"></movie>
 </movies>
+<?php } ?>
 
 </map>
