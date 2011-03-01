@@ -77,7 +77,7 @@
 	height: 50px;
 	border: 1px solid #ddd;
 	background: -moz-linear-gradient(top, #ccc 0, #fff 80%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #005), color-stop(81%, #4a7eb8), color-stop(82%, #5A646D), color-stop(87%, #fafafa));
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #ccc), color-stop(80%, #fff));
 }
 
 .cpd-dashboard .inside {
