@@ -35,7 +35,7 @@ if(!empty($_POST['do']))
 			$count_per_day->options['referers_last_days'] = $_POST['cpd_referers_last_days'];
 			$count_per_day->options['chart_old'] = empty( $_POST['cpd_chart_old'] ) ? 0 : 1 ;
 			$count_per_day->options['no_front_css'] = empty( $_POST['cpd_no_front_css'] ) ? 0 : 1 ;
-			$count_per_day->options['whocansee'] = $_POST['cpd_whocansee'];
+			$count_per_day->options['whocansee'] = ($_POST['cpd_whocansee'] == 'custom') ? $_POST['cpd_whocansee_custom'] : $_POST['cpd_whocansee'];
 			
 			if (empty($count_per_day->options['clients']))
 				$count_per_day->options['clients'] = 'Firefox, MSIE, Chrome, Safari, Opera';
@@ -233,18 +233,37 @@ switch($mode) {
 		
 		<fieldset>
 		<legend><?php _e('Dashboard') ?></legend>
+		
+		<script>
+		function checkcustom()
+		{
+			var b = document.getElementById('cpd_whocansee');
+			var i = document.getElementById('cpd_whocansee_custom_div');
+			if ( b.value == 'custom' )
+				i.style.display = 'block';
+			else
+				i.style.display = 'none';
+		}
+		</script>
+		
 		<table class="form-table">
 		<tr>
 			<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Who can see it', 'cpd') ?>:</th>
 			<td>
-				<select name="cpd_whocansee">
+				<?php $cus = (in_array($o['whocansee'], array('manage_options','manage_links','publish_posts','edit_posts','read'))) ? 0 : 1 ?> 
+				<select id="cpd_whocansee" name="cpd_whocansee" onchange="checkcustom()">
 					<option value="manage_options" <?php if ($o['whocansee'] == 'manage_options') echo 'selected="selected"' ?>><?php echo translate_user_role('Administrator') ?> </option>
 					<option value="manage_links" <?php if ($o['whocansee'] == 'manage_links') echo 'selected="selected"' ?>><?php echo translate_user_role('Editor') ?></option>
 					<option value="publish_posts" <?php if ($o['whocansee'] == 'publish_posts') echo 'selected="selected"' ?>><?php echo translate_user_role('Author') ?></option>
 					<option value="edit_posts" <?php if ($o['whocansee'] == 'edit_posts') echo 'selected="selected"' ?>><?php echo translate_user_role('Contributor') ?></option>
 					<option value="read" <?php if ($o['whocansee'] == 'read') echo 'selected="selected"' ?>><?php echo translate_user_role('Subscriber') ?></option>
+					<option value="custom" <?php if ($cus) echo 'selected="selected"' ?>>- <?php echo _e('custom', 'cpd') ?> -</option>
 				</select>
 				<?php _e('and higher are allowed to see the statistics page.', 'cpd') ?>
+				<div id="cpd_whocansee_custom_div" <?php if (!$cus) echo 'style="display:none"' ?>>
+					Set the <a href="https://codex.wordpress.org/Roles_and_Capabilities">capability</a> a user need:
+					<input type="text" name="cpd_whocansee_custom" value="<?php echo $o['whocansee'] ?>" />
+				</div>
 			</td>
 		</tr>
 		<tr>
