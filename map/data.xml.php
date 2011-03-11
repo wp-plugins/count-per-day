@@ -7,7 +7,7 @@ $data = array();
 
 $what = (empty($_GET['map'])) ? 'reads' : $_GET['map'];
 
-if ( $what == 'visitors online' )
+if ( $what == 'online' )
 {
 	$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
 	
