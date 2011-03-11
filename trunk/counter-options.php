@@ -261,7 +261,7 @@ switch($mode) {
 				</select>
 				<?php _e('and higher are allowed to see the statistics page.', 'cpd') ?>
 				<div id="cpd_whocansee_custom_div" <?php if (!$cus) echo 'style="display:none"' ?>>
-					Set the <a href="https://codex.wordpress.org/Roles_and_Capabilities">capability</a> a user need:
+				<?php printf(__('Set the %s capability %s a user need:', 'cpd'), '<a href="https://codex.wordpress.org/Roles_and_Capabilities">', '</a>'); ?>
 					<input type="text" name="cpd_whocansee_custom" value="<?php echo $o['whocansee'] ?>" />
 				</div>
 			</td>
@@ -463,7 +463,7 @@ switch($mode) {
 				echo '<a href="?page=count-per-day/counter-options.php&amp;dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'"
 					title="'.sprintf(__('Delete these %s counts', 'cpd'), $row['posts']).'"
 					style="color:red; font-weight: bold;">X</a> &nbsp;';
-				echo '<a href="http://www.easywhois.com/index.php?mode=iplookup&amp;domain='.$ip.'">'.$ip.'</a></td>'
+				echo '<a href="http://www.utrace.de/?query='.$ip.'">'.$ip.'</a></td>'
 					.'<td style="white-space:nowrap;">'.mysql2date(get_option('date_format'), $row['date'] ).'</td>'
 					.'<td>'.$row['client'].'</td>'
 					.'<td style="text-align:right;"><a href="'.$count_per_day->dir.'/massbots.php?dmbip='.$row['longip'].'&amp;dmbdate='.$row['date'].'&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day" class="thickbox">'
@@ -486,7 +486,7 @@ switch($mode) {
 	</div>
 
 	<!-- Cleaner -->
-	<?php if ( $count_per_day->options['referrers'] ) : ?>
+	<?php if ( $count_per_day->options['referers'] ) : ?>
 		<div class="postbox">
 		<h3><?php _e('Clean the database', 'cpd') ?></h3>
 		<div class="inside">
