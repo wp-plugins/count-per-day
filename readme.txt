@@ -23,26 +23,26 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 = Languages, Translators =
 
-- Dansk			- 100% - Jonas Thomsen -		http://jonasthomsen.com
-- Dutch NL		- 100% - Rene -					http://wpwebshop.com
-- France		- 100% - Bjork -				http://www.habbzone.fr
-- German		- 100% - I, Tom -				http://www.tomsdimension.de
-- Greek			- 100% - Essetai_Imar -			http://www.elliniki-grothia.com
-- Italian		- 100% - Gianni Diurno -		http://gidibao.net
-- Russian		- 100% - Ilya Pshenichny -		http://iluhis.com
-- Swedish		- 100% - Magnus Suther -		http://www.magnussuther.se
+- Dansk			- 100% - Jonas Thomsen -					http://jonasthomsen.com
+- Dutch NL		- 100% - Rene -								http://wpwebshop.com
+- France		- 100% - Bjork -							http://www.habbzone.fr
+- German		- 100% - I, Tom -							http://www.tomsdimension.de
+- Greek			- 100% - Essetai_Imar -						http://www.elliniki-grothia.com
+- Italian		- 100% - Gianni Diurno -					http://gidibao.net
+- Russian		- 100% - Ilya Pshenichny -					http://iluhis.com
+- Swedish		- 100% - Magnus Suther -					http://www.magnussuther.se
+- Turkish		- 100% - Emrullah Tahir Ekmek&ccedil;i - 	http://emrullahekmekci.com.tr
 
-- Polish 		-  95% - LeXuS -				http://intrakardial.de
-- Bulgarian		-  90% - joro -					http://www.joro711.com
+- Polish 		-  95% - LeXuS -							http://intrakardial.de
+- Bulgarian		-  90% - joro -								http://www.joro711.com
 - Espanol		-  90% - Juan Carlos del R&iacute;o -
-- Portuguese BR	-  90% - Beto Ribeiro -			http://www.sevenarts.com.br
+- Portuguese BR	-  90% - Beto Ribeiro -						http://www.sevenarts.com.br
 
 == Installation ==
 
 1. unzip plugin directory into the '/wp-content/plugins/' directory
 1. activate the plugin through the 'Plugins' menu in WordPress
 1. after every update you have to deactivate and reactivate the plugin to update some settings!
-1. if you want to use the GeoIP function you have to download the GeoIP-database on options page
 
 The activation will create or update 3 tables wp_cpd_counter, wp_cpd_counter_useronline and wp_cpd_notes.
 
@@ -260,10 +260,10 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + New: function and shortcode to show world map in frontend
 + Bugfix: JavaScript error on dashboard page, boxes not movable
 + Bugfix: PHP4 compatibility
-
++ New language: Turkish, thanks to Emrullah Tahir Ekmek&ccedil;i
 
 = 2.16.1 =
-Bugfix: widget was empty
++ Bugfix: widget was empty
 
 = 2.16 =
 + New: more modern charts (jQuery flot plugin)

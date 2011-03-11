@@ -3,14 +3,14 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 2.16.1
+Version: 2.17
 License: Postcardware :)
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '2.16.1';
+$cpd_version = '2.17';
 
 /**
  * include GeoIP addon
@@ -170,7 +170,7 @@ function connectDB()
 
 	$this->dbcon = @mysql_connect(DB_HOST, DB_USER, DB_PASSWORD, true);
 	@mysql_select_db(DB_NAME, $this->dbcon);
-	$this->getQuery("SET NAMES '".$wpdb->charset."'", 'SET NAMES');
+	$this->getQuery("SET NAMES '".$wpdb->charset."'", 'SET NAMES'.__LINE__);
 }
 
 /**
@@ -216,7 +216,7 @@ function show( $before='', $after=' reads', $show = true, $count = true, $page =
 		$this->count();
 	if ( $page == 'x' )
 		$page = get_the_ID();
-	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE page='$page'", 'show');
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE page='$page'", 'show'.__LINE__);
 	$row = mysql_fetch_row($res);
 	if ( $show )
 		echo $before.$row[0].$after;
@@ -347,7 +347,7 @@ function count( $x, $page = 'x' )
 		$date = date_i18n('Y-m-d');
 		
 		// new visitor on page?
-		$res = $this->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE ip=INET_ATON('$userip') AND date='$date' AND page='$page'", 'count check');
+		$res = $this->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE ip=INET_ATON('$userip') AND date='$date' AND page='$page'", 'count check'.__LINE__);
 		$row = mysql_fetch_row($res);
 		if ( $row[0] == 0 )
 		{
@@ -358,20 +358,20 @@ function count( $x, $page = 'x' )
 				$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
 				$country = strtolower(cpd_geoip_country_code_by_addr($gi, $userip));
 				$this->getQuery($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, country, referer)
-				VALUES (%s, INET_ATON(%s), %s, %s, %s, %s)", $page, $userip, $client, $date, $country, $referer), 'count insert');
+				VALUES (%s, INET_ATON(%s), %s, %s, %s, %s)", $page, $userip, $client, $date, $country, $referer), 'count insert'.__LINE__);
 			}
 			else
 			{
 				// without country
 				$this->getQuery($wpdb->prepare("INSERT INTO ".CPD_C_TABLE." (page, ip, client, date, referer)
-				VALUES (%s, INET_ATON(%s), %s, %s, %s)", $page, $userip, $client, $date, $referer), 'count insert');
+				VALUES (%s, INET_ATON(%s), %s, %s, %s)", $page, $userip, $client, $date, $referer), 'count insert'.__LINE__);
 			}
 		}
 		
 		// online counter
 		$timestamp = time();
 		$this->getQuery($wpdb->prepare("REPLACE INTO ".CPD_CO_TABLE." (timestamp, ip, page)
-			VALUES ( %s, INET_ATON(%s), %s)", $timestamp, $userip, $page), 'count online');
+			VALUES ( %s, INET_ATON(%s), %s)", $timestamp, $userip, $page), 'count online'.__LINE__);
 	}
 }
 
@@ -381,7 +381,7 @@ function count( $x, $page = 'x' )
 function deleteOnlineCounter()
 {
 	$timeout = time() - $this->options['onlinetime'];
-	$this->getQuery("DELETE FROM ".CPD_CO_TABLE." WHERE timestamp < $timeout", 'deleteOnlineCounter');
+	$this->getQuery("DELETE FROM ".CPD_CO_TABLE." WHERE timestamp < $timeout", 'deleteOnlineCounter'.__LINE__);
 }
 
 /**
@@ -449,7 +449,7 @@ function createTables()
 	KEY `idx_page` (`page`),
 	KEY `idx_dateip` (`date`,`ip`) )
 	$charset_collate;";
-	$this->getQuery($sql);
+	$this->getQuery($sql, __LINE__);
 	
 	// update fields in old table
 	$field = $this->getQuery( "SHOW FIELDS FROM `$cpd_c` LIKE 'ip'" );
@@ -465,7 +465,7 @@ function createTables()
 		"ALTER TABLE `$cpd_c` CHANGE `page` `page` mediumint(9) NOT NULL");
 		
 		foreach ( $queries as $sql)
-			$this->getQuery($sql, 'update old fields');
+			$this->getQuery($sql, 'update old fields'.__LINE__);
 	}
 	
 	// make new keys
@@ -582,7 +582,7 @@ function getFlotChart( $limit = 0 )
 	FROM	".CPD_C_TABLE." AS c
 	WHERE	c.date BETWEEN '$start_sql' AND '$end_sql'
 	GROUP	BY c.date";
-	$res = $this->getQuery($sql, 'ChartReads');
+	$res = $this->getQuery($sql, 'ChartReads'.__LINE__);
 	if ( @mysql_num_rows($res) )
 		while ( $row = mysql_fetch_array($res) )
 			$data[strtotime($row['date'])][0] = $row['count'];
@@ -596,7 +596,7 @@ function getFlotChart( $limit = 0 )
 			) AS t
 	WHERE	t.date BETWEEN '$start_sql' AND '$end_sql'
 	GROUP	BY t.date";
-	$res = $this->getQuery($sql, 'ChartVisitors');
+	$res = $this->getQuery($sql, 'ChartVisitors'.__LINE__);
 	if ( @mysql_num_rows($res) )
 		while ( $row = mysql_fetch_array($res) )
 			$data[strtotime($row['date'])][1] = $row['count'];
@@ -783,7 +783,7 @@ function dashboardChartDataRequest( $sql = '', $limit, $frontend = false )
 	// get options
 	$max_height = ( !empty($this->options['chart_height']) ) ? $this->options['chart_height'] : 200;
 	
-	$res = $this->getQuery($sql, 'Chart');
+	$res = $this->getQuery($sql, 'Chart'.__LINE__);
 	if ( mysql_errno() || !mysql_num_rows($res) )
 		return;
 		
@@ -898,14 +898,14 @@ function getUserOnline( $frontend = false, $country = false )
 	{
 		// map link
 		if (!$frontend && file_exists($cpd_path.'map/map.php') )
-			$c .= '<div style="margin: 5px 0 10px 0;"><a href="'.$this->dir.'/map/map.php?map=visitors%20online'
+			$c .= '<div style="margin: 5px 0 10px 0;"><a href="'.$this->dir.'/map/map.php?map=online'
 				 .'&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Map', 'cpd').'" class="thickbox button">'.__('Map', 'cpd').'</a></div>';
 		
 		// countries list
 		$geoip = new GeoIPCpd();
 		$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
 		
-		$res = $this->getQuery("SELECT INET_NTOA(ip) AS ip FROM ".CPD_CO_TABLE, 'getUserOnline');
+		$res = $this->getQuery("SELECT INET_NTOA(ip) AS ip FROM ".CPD_CO_TABLE, 'getUserOnline'.__LINE__);
 		if ( @mysql_num_rows($res) )
 		{
 			$vo = array();
@@ -933,7 +933,7 @@ function getUserOnline( $frontend = false, $country = false )
 	else
 	{
 		// number only
-		$res = $this->getQuery("SELECT count(*) FROM ".CPD_CO_TABLE, 'getUserOnline');
+		$res = $this->getQuery("SELECT count(*) FROM ".CPD_CO_TABLE, 'getUserOnline'.__LINE__);
 		$row = mysql_fetch_row($res);
 		$c = $row[0];
 	}
@@ -949,7 +949,7 @@ function getUserOnline( $frontend = false, $country = false )
  */
 function getUserAll( $frontend = false )
 {
-	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." GROUP BY date, ip", 'getUserAll');
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." GROUP BY date, ip", 'getUserAll'.__LINE__);
 	$c = mysql_num_rows($res) + intval($this->options['startcount']);
 	if ($frontend)
 		return $c;
@@ -962,7 +962,7 @@ function getUserAll( $frontend = false )
  */
 function getReadsAll( $frontend = false )
 {
-	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE, 'getReadsAll');
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE, 'getReadsAll'.__LINE__);
 	$row = mysql_fetch_row($res);
 	$c = $row[0] + intval($this->options['startreads']);
 	if ($frontend)
@@ -977,7 +977,7 @@ function getReadsAll( $frontend = false )
 function getUserToday( $frontend = false )
 {
 	$date = date_i18n('Y-m-d');
-	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip", 'getUserToday');
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip", 'getUserToday'.__LINE__);
 	$c = mysql_num_rows($res);
 	if ($frontend)
 		return $c;
@@ -991,7 +991,7 @@ function getUserToday( $frontend = false )
 function getReadsToday( $frontend = false )
 {
 	$date = date_i18n('Y-m-d');
-	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date = '$date'", 'getReadsToday');
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date = '$date'", 'getReadsToday'.__LINE__);
 	$row = mysql_fetch_row($res);
 	if ($frontend)
 		return $row[0];
@@ -1005,7 +1005,7 @@ function getReadsToday( $frontend = false )
 function getUserYesterday( $frontend = false )
 {
 	$date = date_i18n('Y-m-d', current_time('timestamp')-86400);
-	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip", 'getUserYesterday');
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date = '$date' GROUP BY ip", 'getUserYesterday'.__LINE__);
 	$c = mysql_num_rows($res);
 	if ($frontend)
 		return $c;
@@ -1019,7 +1019,7 @@ function getUserYesterday( $frontend = false )
 function getReadsYesterday( $frontend = false )
 {
 	$date = date_i18n('Y-m-d', current_time('timestamp')-86400);
-	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date = '$date'", 'getReadsYesterday');
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date = '$date'", 'getReadsYesterday'.__LINE__);
 	$row = mysql_fetch_row($res);
 	if ($frontend)
 		return $row[0];
@@ -1033,7 +1033,7 @@ function getReadsYesterday( $frontend = false )
 function getUserLastWeek( $frontend = false )
 {
 	$date = date_i18n('Y-m-d', current_time('timestamp')-86400*7);
-	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$date' GROUP BY date, ip;", 'getUserLastWeek');
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$date' GROUP BY date, ip;", 'getUserLastWeek'.__LINE__);
 	$c = mysql_num_rows($res);
 	if ($frontend)
 		return $c;
@@ -1047,7 +1047,7 @@ function getUserLastWeek( $frontend = false )
 function getReadsLastWeek( $frontend = false )
 {
 	$date = date_i18n('Y-m-d', current_time('timestamp')-86400*7);
-	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date >= '$date';", 'getReadsLastWeek');
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date >= '$date';", 'getReadsLastWeek'.__LINE__);
 	$row = mysql_fetch_row($res);
 	if ($frontend)
 		return $row[0];
@@ -1061,7 +1061,7 @@ function getReadsLastWeek( $frontend = false )
 function getUserThisMonth( $frontend = false )
 {
 	$first = date_i18n('Y-m-', current_time('timestamp')).'01';
-	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$first' GROUP BY date, ip;", 'getUserThisMonth');
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date >= '$first' GROUP BY date, ip;", 'getUserThisMonth'.__LINE__);
 	$c = mysql_num_rows($res);
 	if ($frontend)
 		return $c;
@@ -1075,7 +1075,7 @@ function getUserThisMonth( $frontend = false )
 function getReadsThisMonth( $frontend = false )
 {
 	$first = date_i18n('Y-m-', current_time('timestamp')).'01';
-	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date >= '$first';", 'getReadsThisMonth');
+	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE date >= '$first';", 'getReadsThisMonth'.__LINE__);
 	$row = mysql_fetch_row($res);
 	if ($frontend)
 		return $row[0];
@@ -1088,13 +1088,13 @@ function getReadsThisMonth( $frontend = false )
  */
 function getUserPerMonth( $frontend = false )
 {
-	$m = $this->getQuery("SELECT LEFT(date,7) FROM ".CPD_C_TABLE." GROUP BY year(date), month(date) ORDER BY date DESC", 'getUserPerMonths');
+	$m = $this->getQuery("SELECT LEFT(date,7) FROM ".CPD_C_TABLE." GROUP BY year(date), month(date) ORDER BY date DESC", 'getUserPerMonths'.__LINE__);
 	$r = '<ul class="cpd_front_list">';
 	$d = array();
 	$i = 1;
 	while ( $row = mysql_fetch_row($m) )
 	{
-		$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE LEFT(date,7) = '".$row[0]."' GROUP BY date, ip", 'getUserPerMonth');
+		$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE LEFT(date,7) = '".$row[0]."' GROUP BY date, ip", 'getUserPerMonth'.__LINE__);
 		$r .= '<li><b>'.mysql_num_rows($res).'</b> '.$row[0].'</li>'."\n";
 		$d[] = '[-'.$i++.','.mysql_num_rows($res).']';
 	}
@@ -1113,7 +1113,7 @@ function getUserPerMonth( $frontend = false )
  */
 function getReadsPerMonth( $frontend = false )
 {
-	$res = $this->getQuery("SELECT COUNT(*), LEFT(date,7) FROM ".CPD_C_TABLE." GROUP BY year(date), month(date) ORDER BY date DESC", 'getReadsPerMonths');
+	$res = $this->getQuery("SELECT COUNT(*), LEFT(date,7) FROM ".CPD_C_TABLE." GROUP BY year(date), month(date) ORDER BY date DESC", 'getReadsPerMonths'.__LINE__);
 	$r = '<ul class="cpd_front_list">';
 	$d = array();
 	$i = 1;
@@ -1162,7 +1162,7 @@ function getUserPerPost( $limit = 0, $frontend = false )
 	ORDER	BY count DESC";
 	if ( $limit > 0 )
 		$sql .= " LIMIT ".$limit;
-	$r = $this->getUserPer_SQL( $sql, 'getUserPerPost', $frontend );
+	$r = $this->getUserPer_SQL( $sql, 'getUserPerPost'.__LINE__, $frontend );
 	if ($frontend)
 		return $r;
 	else
@@ -1179,7 +1179,7 @@ function getFirstCount( $frontend = false )
 		$c = mysql2date(get_option('date_format'), $this->options['startdate'] );
 	else
 	{
-		$res = $this->getQuery("SELECT date FROM ".CPD_C_TABLE." ORDER BY date LIMIT 1", 'getFirstCount');
+		$res = $this->getQuery("SELECT date FROM ".CPD_C_TABLE." ORDER BY date LIMIT 1", 'getFirstCount'.__LINE__);
 		$row = mysql_fetch_row($res);
 		$c = mysql2date(get_option('date_format'), $row[0] );
 	}
@@ -1212,7 +1212,7 @@ function getUserPerDay( $days = 0, $frontend = false )
 		}
 	}
 
-	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date > '$datemin' AND date < '$datemax' GROUP BY ip, date", 'getUserPerDay');
+	$res = $this->getQuery("SELECT 1 FROM ".CPD_C_TABLE." WHERE date > '$datemin' AND date < '$datemax' GROUP BY ip, date", 'getUserPerDay'.__LINE__);
 	$count = @mysql_num_rows($res) / $days;
 	
 	$c = '<abbr title="last '.$days.' days without today">';
@@ -1312,7 +1312,7 @@ function getMostVisitedPostIDs( $days = 365, $limit = 10, $cats = false, $return
 	GROUP	BY c.page
 	ORDER	BY count DESC
 	LIMIT	$limit";
-	$res = $this->getQuery($sql, 'getMostVisitedPostIDs');
+	$res = $this->getQuery($sql, 'getMostVisitedPostIDs'.__LINE__);
 
 	$ids = array();
 	if ( @mysql_num_rows($res) )
@@ -1403,7 +1403,7 @@ function getClients( $frontend = false )
 	$c_string = $this->options['clients'];
 	$clients = explode(',', $c_string);
 	
-	$res = $this->getQuery("SELECT COUNT(*) count FROM ".CPD_C_TABLE, 'getClients_all');
+	$res = $this->getQuery("SELECT COUNT(*) count FROM ".CPD_C_TABLE, 'getClients_all'.__LINE__);
 	$row = @mysql_fetch_row($res);
 	$all = max(1, $row[0]);
 	$rest = 100;
@@ -1411,7 +1411,7 @@ function getClients( $frontend = false )
 	foreach ($clients as $c)
 	{
 		$c = trim($c);
-		$res = $this->getQuery("SELECT COUNT(*) count FROM ".CPD_C_TABLE." WHERE client like '%".$c."%'", 'getClients_'.$c);
+		$res = $this->getQuery("SELECT COUNT(*) count FROM ".CPD_C_TABLE." WHERE client like '%".$c."%'", 'getClients_'.$c.'_'.__LINE__);
 		$row = @mysql_fetch_row($res);
 		$percent = number_format(100 * $row[0] / $all, 0);
 		$rest -= $percent;
@@ -1442,7 +1442,7 @@ function getReferers( $limit = 0, $frontend = false, $days = 0 )
 	$dayfiltre = "AND date > DATE_SUB('".date_i18n('Y-m-d')."', INTERVAL $days DAY)";
 		
 	$localref = ($this->options['localref']) ? '' : " AND referer NOT LIKE '".get_bloginfo('url')."%' ";
-	$res = $this->getQuery("SELECT COUNT(*) count, referer FROM ".CPD_C_TABLE." WHERE referer > '' $dayfiltre $localref GROUP BY referer ORDER BY count DESC LIMIT $limit", 'getReferers');
+	$res = $this->getQuery("SELECT COUNT(*) count, referer FROM ".CPD_C_TABLE." WHERE referer > '' $dayfiltre $localref GROUP BY referer ORDER BY count DESC LIMIT $limit", 'getReferers'.__LINE__);
 		$r =  '<small>'.sprintf(__('The %s referrers in last %s days:', 'cpd'), $limit, $days).'<br/>&nbsp;</small>';
 	$r .= '<ul id="cpd_referrers" class="cpd_front_list">';
 	if ( @mysql_num_rows($res) )
@@ -1479,7 +1479,7 @@ function getMassBots( $limit = 0 )
 	LEFT	JOIN ".CPD_C_TABLE." c
 			ON c.id = t.id
 	WHERE	posts > $limit";
-	return $this->getQuery($sql, 'getMassBots');
+	return $this->getQuery($sql, 'getMassBots'.__LINE__);
 }
 
 /**
@@ -1491,7 +1491,7 @@ function getMassBots( $limit = 0 )
 function getUserPer_SQL( $sql, $name = '', $frontend = false )
 {
 	global $userdata;
-	$m = $this->getQuery($sql, $name);
+	$m = $this->getQuery($sql, $name.__LINE__);
 	$r = '<ul class="cpd_front_list">';
 	while ( $row = mysql_fetch_assoc($m) )
 	{
@@ -1550,14 +1550,14 @@ function cleanDB()
 	// delete by ip
 	foreach( $bots as $ip )
 		if ( ip2long($ip) !== false )
-			$this->getQuery('DELETE FROM '.CPD_C_TABLE.' WHERE INET_NTOA(ip) LIKE \''.$ip.'%\'', 'clenaDB_ip');
+			$this->getQuery('DELETE FROM '.CPD_C_TABLE.' WHERE INET_NTOA(ip) LIKE \''.$ip.'%\'', 'clenaDB_ip'.__LINE__);
 	
 	// delete by client
 	foreach ($bots as $bot)
-		$this->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%$bot%'", 'cleanDB_client');
+		$this->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE client LIKE '%$bot%'", 'cleanDB_client'.__LINE__);
 	
 	// delete if a previously countered page was deleted
-	$this->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE page NOT IN ( SELECT id FROM ".$wpdb->posts.") AND page > 0", 'cleanDB_delPosts');
+	$this->getQuery("DELETE FROM ".CPD_C_TABLE." WHERE page NOT IN ( SELECT id FROM ".$wpdb->posts.") AND page > 0", 'cleanDB_delPosts'.__LINE__);
 	
 	$rows_after = $wpdb->get_var('SELECT COUNT(*) FROM '.CPD_C_TABLE);
 	return $rows_before - $rows_after;
@@ -1670,7 +1670,7 @@ function cpdColumnContent($column_name, $id = 0)
 	global $wpdb;
 	if( $column_name == 'cpd_reads' )
     {
-    	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE page='$id'", 'cpdColumn_'.$id);
+    	$res = $this->getQuery("SELECT COUNT(*) FROM ".CPD_C_TABLE." WHERE page='$id'", 'cpdColumn_'.$id.'_'.__LINE__);
     	$row = mysql_fetch_row($res);
 		echo (int) $row[0];
     }
@@ -1838,10 +1838,10 @@ function getCountries( $limit = 0, $frontend, $visitors = false )
 						GROUP BY country, ip ) as t
 				GROUP BY country
 				ORDER BY c desc
-				LIMIT $limit", 'getCountries');
+				LIMIT $limit", 'getCountries'.__LINE__);
 		else
 			// reads
-			$res = $this->getQuery("SELECT country, COUNT(*) c FROM ".CPD_C_TABLE." WHERE ip > 0 GROUP BY country ORDER BY c DESC LIMIT $limit", 'getCountries');
+			$res = $this->getQuery("SELECT country, COUNT(*) c FROM ".CPD_C_TABLE." WHERE ip > 0 GROUP BY country ORDER BY c DESC LIMIT $limit", 'getCountries'.__LINE__);
 		
 		// map link
 		if (!$frontend && file_exists($cpd_path.'map/map.php') )
