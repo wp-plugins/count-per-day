@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 2.7
 Tested up to: 3.1
-Stable tag: 2.16.1
+Stable tag: 2.17
 License: Postcardware
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -255,11 +255,11 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 
 == Changelog ==
 
-= Development Version =
-+ New: option - who is allowed to see the statistics page
-+ New: function and shortcode to show world map in frontend
+= 2.17 =
 + Bugfix: JavaScript error on dashboard page, boxes not movable
 + Bugfix: PHP4 compatibility
++ New: function and shortcode to show world map in frontend
++ New: option - who is allowed to see the statistics page
 + New language: Turkish, thanks to Emrullah Tahir Ekmek&ccedil;i
 
 = 2.16.1 =

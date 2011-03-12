@@ -111,7 +111,7 @@ if ( $notes )
 			<tr>
 				<td><?php echo $row['date'] ?></td>
 				<td><?php echo $row['note'] ?></td>
-				<td><input type="image" src="cpd_pen.png" name="edit_<?php echo $row['id'] ?>" title="<?php _e('edit', 'cpd') ?>" style="width:auto;" /></td>
+				<td><input type="image" src="img/cpd_pen.png" name="edit_<?php echo $row['id'] ?>" title="<?php _e('edit', 'cpd') ?>" style="width:auto;" /></td>
 			</tr>
 			<?php
 		}
