@@ -93,13 +93,17 @@ function CountPerDay()
 	
 	// column page list
 	if (is_admin())
+	{
 		add_action('manage_pages_custom_column', array(&$this, 'cpdColumnContent'), 10, 2);
 		add_filter('manage_pages_columns', array(&$this, 'cpdColumn'));
+	}
 	
 	// column post list
 	if (is_admin())
+	{
 		add_action('manage_posts_custom_column', array(&$this, 'cpdColumnContent'), 10, 2);
 		add_filter('manage_posts_columns', array(&$this, 'cpdColumn'));
+	}
 	
 	// locale support
 	if (defined('WPLANG') && function_exists('load_plugin_textdomain'))
@@ -2352,10 +2356,10 @@ class CountPerDay_Widget extends WP_Widget
 function count_per_day_uninstall()
 {
 	global $wpdb;
-//	$wpdb->query('DROP TABLE IF EXISTS '.CPD_C_TABLE);
-//	$wpdb->query('DROP TABLE IF EXISTS '.CPD_CO_TABLE);
-//	$wpdb->query('DROP TABLE IF EXISTS '.CPD_N_TABLE);
-//	delete_option('count_per_day');
+	$wpdb->query('DROP TABLE IF EXISTS '.CPD_C_TABLE);
+	$wpdb->query('DROP TABLE IF EXISTS '.CPD_CO_TABLE);
+	$wpdb->query('DROP TABLE IF EXISTS '.CPD_N_TABLE);
+	delete_option('count_per_day');
 	$wpdb->query("DELETE FROM ".$wpdb->usermeta." WHERE meta_key like '%_cpd_metaboxes%';");
 }
 
