@@ -1,8 +1,8 @@
 === Count per Day ===
 Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
-Requires at least: 2.7
-Tested up to: 3.1
+Requires at least: 3.0
+Tested up to: 3.2.1
 Stable tag: 2.17
 License: Postcardware
 Donate link: http://www.tomsdimension.de/postcards
@@ -23,20 +23,23 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 = Languages, Translators =
 
+- Azerbaijani	- 100% - Bohdan Zograf -					http://wwww.webhostingrating.com
 - Dansk			- 100% - Jonas Thomsen -					http://jonasthomsen.com
 - Dutch NL		- 100% - Rene -								http://wpwebshop.com
 - France		- 100% - Bjork -							http://www.habbzone.fr
 - German		- 100% - I, Tom -							http://www.tomsdimension.de
 - Greek			- 100% - Essetai_Imar -						http://www.elliniki-grothia.com
 - Italian		- 100% - Gianni Diurno -					http://gidibao.net
+- Japanese		- 100% - Juno Hayami						http://juno.main.jp/blog/
+- Norwegian		- 100% - Stein Ivar Johnsen -				http://iDyrøy.no
+- Norwegian		- 100% - Tore Johnny Bråtveit -				http://www.braatveit.net/
 - Russian		- 100% - Ilya Pshenichny -					http://iluhis.com
 - Swedish		- 100% - Magnus Suther -					http://www.magnussuther.se
 - Turkish		- 100% - Emrullah Tahir Ekmek&ccedil;i - 	http://emrullahekmekci.com.tr
-
 - Polish 		-  95% - LeXuS -							http://intrakardial.de
 - Bulgarian		-  90% - joro -								http://www.joro711.com
 - Espanol		-  90% - Juan Carlos del R&iacute;o -
-- Portuguese BR	-  90% - Beto Ribeiro -						http://www.sevenarts.com.br
+- Portuguese	-  90% - Beto Ribeiro -						http://www.sevenarts.com.br
 
 == Installation ==
 
@@ -44,18 +47,18 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 1. activate the plugin through the 'Plugins' menu in WordPress
 1. after every update you have to deactivate and reactivate the plugin to update some settings!
 
-The activation will create or update 3 tables wp_cpd_counter, wp_cpd_counter_useronline and wp_cpd_notes.
+The activation will create or update a table wp_cpd_counter.
+
+The Visitors-per-Day function use 7 days as default. So don't surprise about a wrong value in the first week.
 
 **Configuration**
 
-See the Options Page and check the default values. It's easy. :)
-Install optional GeoIP database to show countries of your visitors.
-
-If "Auto counter" is on reads will count without any changes on template.
+See the Options Page and check the default values.
 
 == Frequently Asked Questions ==
 
 = Need Help? Find Bug? =
+
 read and write comments on http://www.tomsdimension.de/wp-plugins/count-per-day
 
 == Screenshots ==
@@ -68,7 +71,8 @@ read and write comments on http://www.tomsdimension.de/wp-plugins/count-per-day
 
 **Shortcodes**
 
-You can use these shortcodes in the content while writing you posts to show a number or list.
+You can use these shortcodes in the content of your posts to show a number or list
+or in your theme files while adding e.g. '&lt;?php echo do_shortcode("[THE_SHORTCODE]"); ?>'.
 
 [CPD_READS_THIS]
 [CPD_READS_TOTAL]
@@ -77,7 +81,6 @@ You can use these shortcodes in the content while writing you posts to show a nu
 [CPD_READS_LAST_WEEK]
 [CPD_READS_THIS_MONTH]
 [CPD_READS_PER_MONTH]
-[CPD_READS_CHART]
 [CPD_VISITORS_TOTAL]
 [CPD_VISITORS_ONLINE]
 [CPD_VISITORS_TODAY]
@@ -87,7 +90,6 @@ You can use these shortcodes in the content while writing you posts to show a nu
 [CPD_VISITORS_PER_MONTH]
 [CPD_VISITORS_PER_DAY]
 [CPD_VISITORS_PER_POST]
-[CPD_VISITORS_CHART]
 [CPD_FIRST_COUNT]
 [CPD_MOST_VISITED_POSTS]
 [CPD_POSTS_ON_DAY]
@@ -104,9 +106,13 @@ You can use these shortcodes in the content while writing you posts to show a nu
 
 **Functions**
 
-You can place these functions in your template.<br/>
-Place functions within post-loop (e.g. in single.php)<br/>
-Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); ?&gt;' to check if plugin is activated.
+You can place these functions in your template.
+Use
+<code>&lt;?php
+global $count_per_day;
+if(method_exists($count_per_day,"show")) echo $count_per_day->getReadsAll(true);
+?></code>
+to check if plugin is activated.
 
 'show( $before, $after, $show, $count, $page )'
 
@@ -121,117 +127,124 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * only count reads, without any output
 * cpdShow call it
 
-'getFirstCount( $frontend )'
+'getFirstCount( $return )'
 
 * shows date of first count
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getUserPerDay( $days, $frontend )'
+'getUserPerDay( $days, $return )'
 
 * shows average number of visitors per day of the last _$days_ days
 * default on dashboard (see it with mouse over number) = "Latest Counts - Days" in options
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getReadsAll( $frontend )'
+'getReadsAll( $return )'
  
 * shows number of total reads
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getReadsToday( $frontend )'
+'getReadsToday( $return )'
 
 * shows number of reads today
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getReadsYesterday( $frontend )'
+'getReadsYesterday( $return )'
  
 * shows number of reads yesterday
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getReadsLastWeek( $frontend )'
+'getReadsLastWeek( $return )'
 
 * shows number of reads last week (7 days)
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getReadsThisMonth( $frontend )'
+'getReadsThisMonth( $return )'
 
 * shows number of reads current month
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getReadsPerMonth( $frontend )'
+'getReadsPerMonth( $return )'
 
 * lists number of reads per month
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getUserAll( $frontend )'
+'getUserAll( $return )'
 
 * shows number of total visitors
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getUserOnline( $frontend, $country )'
+'getUserOnline( $frontend, $country, $return )'
 
 * shows number of visitors just online
-* $frontend: 0 echo, 1 return output
+* $frontend: 1 no link to map
 * $country: 0 number, 1 country list
+* $return: 0 echo, 1 return output
 
-'getUserToday( $frontend )'
+'getUserToday( $return )'
 
 * shows number of visitors today
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getUserYesterday( $frontend )'
+'getUserYesterday( $return )'
  
 * shows number of visitors yesterday
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getUserLastWeek( $frontend )'
+'getUserLastWeek( $return )'
 
 * shows number of visitors last week (7 days)
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getUserThisMonth( $frontend )'
+'getUserThisMonth( $return )'
 
 * shows number of visitors current month
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getUserPerMonth( $frontend )'
+'getUserPerMonth( $frontend, $return )'
 
 * lists number of visitors per month
-* $frontend: 0 echo, 1 return output
+* $frontend: 1 no links
+* $return: 0 echo, 1 return output
 
-'getUserPerPost( $limit, $frontend )'
+'getUserPerPost( $limit, $frontend, $return )'
 
 * lists _$limit_ number of posts, -1: all, 0: get option from DB, x: number
-* $frontend: 0 echo, 1 return output
+* $frontend: 1 no links
+* $return: 0 echo, 1 return output
 
-'getMostVisitedPosts( $days, $limits, $frontend )'
+'getMostVisitedPosts( $days, $limits, $frontend, $postsonly, $return )'
 
 * shows a list with the most visited posts in the last days
 * $days = days to calc (last days), 0: get option from DB
 * $limit = count of posts (last posts), 0: get option from DB
-* $frontend: 0 echo, 1 return output
+* $frontend: 1 no links
+* $postsonly: 0 show, 1 don't show categories and taxonomies
+* $return: 0 echo, 1 return output
 
-'getVisitedPostsOnDay( $date, $limit, $show_form, $show_notes )'
+'getVisitedPostsOnDay( $date, $limit, $show_form, $show_notes, $frontend, $return )'
 
 * shows visited pages at given day
 * $date day in MySQL date format yyyy-mm-dd, 0 today
 * $limit count of posts
 * $show_form show form for date selection, default on, in frontend set it to 0
 * $show_notes show button to add notes in form, default on, in frontend set it to 0
+* $frontend: 1 no links
+* $return: 0 echo, 1 return output
 
-'getClients( $frontend )'
+'getClients( $return )'
 
 * shows visits per client/browser in percent
-* $frontend: 0 echo, 1 return output
+* $return: 0 echo, 1 return output
 
-'getReferers( $limit, $frontend )'
+'getReferers( $limit, $return, $days )'
 
-* lists top _$limit_ referrers, 0: get option from DB, x: number
-* $frontend: 0 echo, 1 return output
+* lists top _$limit_ referrers of the last $days days, 0: get option from DB, x: number
+* $return: 0 echo, 1 return output
 
 'getMostVisitedPostIDs( $days, $limit, $cats, $return_array )'
 
-* $days last x days, default = 100
-* $limit return max. x posts
+* $days last x days, default = 365
+* $limit return max. x posts, default = 10
 * $cats IDs of categories to filter, array or number
 * $return_array true returns an array with Post-ID, title and count, false returns comma separated list of Post-IDs
 
@@ -242,6 +255,16 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * $width size in px
 * $height size in px
 * $min : 1 disable title, legend and zoombar
+
+'getDayWithMostReads( $return )'
+
+* shows day with most Reads
+* $return: 0 echo, 1 return output
+
+'getDayWithMostVisitors( $return )'
+
+* shows day with most Visitors
+* $return: 0 echo, 1 return output
 
 **GeoIP**
 
@@ -254,6 +277,25 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 * More information about GeoIP on http://www.maxmind.com/app/geoip_country
 
 == Changelog ==
+
+= 3.0 =
+
++ New: use now default WordPress database functions to be compatible to e.g. multi-db plugins
++ New: backup of your counter data
++ New: collect entries of counter table per month and per post to reduce the database and speed up the statistics
++ New: functions and shortcodes [CPD_DAY_MOST_READS] [CPD_DAY_MOST_USERS] to shows days with most reads/visitors
++ New: option to cut referrer on ? to not store query string
++ New: parameter '$postsonly' for 'getMostVisitedPosts' function to list single posts and pages only
++ New: flags for Moldavia and Nepal
++ New laguage: Norwegian, thanks to Stein Ivar Johnsen and Tore Johnny Bråtveit
++ New laguage: Azerbaijani, thanks to Bohdan Zograf
++ New laguage: Japanese, thanks to Juno Hayami
++ Bugfix: visitors per month list
++ Change: some function parameters
++ Change: little memory optimizing
++ Change: visitors currently online and notes now manages per option, without seperate tables in database
++ Change: design updated
++ Change: old bar charts deleted
 
 = 2.17 =
 + Bugfix: JavaScript error on dashboard page, boxes not movable

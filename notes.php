@@ -1,6 +1,7 @@
 <?php
 if (!session_id()) session_start();
-require_once($_SESSION['cpd_wp'].'wp-load.php');
+$cpd_wp = (!empty($_SESSION['cpd_wp'])) ? $_SESSION['cpd_wp'] : '../../../';
+require_once($cpd_wp.'wp-load.php');
 
 // set default values
 if ( isset($_POST['month']) )
@@ -16,28 +17,22 @@ else if ( isset($_GET['year']) )
 	$year = $_GET['year'];
 else	
 	$year = date_i18n('Y');
-	
+
+// load notes
+$n = get_option('count_per_day_notes', array());
+
 // save changes
 if ( isset($_POST['new']) )
-	$sql = "INSERT INTO ".$table_prefix."cpd_notes (date, note) VALUES ('".$_POST['date']."', '".$_POST['note']."')";
+	$n[] = array( $_POST['date'], $_POST['note'] );
 else if ( isset($_POST['edit']) )
-	$sql = "UPDATE ".$table_prefix."cpd_notes SET date = '".$_POST['date']."', note = '".$_POST['note']."' WHERE id = ".$_POST['id'];
+	$n[$_POST['id']] = array( $_POST['date'], $_POST['note'] );
 else if ( isset($_POST['delete']) )
-	$sql = "DELETE FROM ".$table_prefix."cpd_notes WHERE id = ".$_POST['id'];
-if ( !empty($sql) )
-	$wpdb->query($wpdb->prepare($sql)); 
- 
-// load notes
-$where = '';
-if ( $month )
-	$where .= " AND MONTH(date) = $month "; 
-if ( $year )
-	$where .= " AND YEAR(date) = $year ";
-$notes = $wpdb->get_results('SELECT * FROM '.$table_prefix.'cpd_notes WHERE 1 '.$where.' ORDER BY date DESC', ARRAY_A);
+	unset($n[$_POST['id']]);
+update_option('count_per_day_notes', $n);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"  dir="ltr" lang="de-DE">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>CountPerDay</title>
@@ -78,7 +73,7 @@ $notes = $wpdb->get_results('SELECT * FROM '.$table_prefix.'cpd_notes WHERE 1 '.
 </tr>
 <tr>
 	<th style="width:15%"><?php _e('Date') ?></th>
-	<th style="width:75%"><?php _e('Notes', 'cpd') ?> <?php _e('(1 per day)', 'cpd') ?></th>
+	<th style="width:75%"><?php _e('Notes', 'cpd') ?></th>
 	<th style="width:10%"><?php _e('Action') ?></th>
 </tr>
 <tr>
@@ -87,18 +82,19 @@ $notes = $wpdb->get_results('SELECT * FROM '.$table_prefix.'cpd_notes WHERE 1 '.
 	<td><input type="submit" name="new" value="+" title="<?php _e('add', 'cpd') ?>" class="green" /></td>
 </tr>
 <?php
-if ( $notes )
+foreach ($n as $id => $v)
 {
-	foreach ( $notes as $row )
+	if ( (!$month || $month == date('m', strtotime($v[0])))
+		 && (!$year || $year == date('Y', strtotime($v[0]))) )
 	{
-		if ( isset($_POST['edit_'.$row['id']]) || isset($_POST['edit_'.$row['id'].'_x']) )
+		if ( isset($_POST['edit_'.$id]) || isset($_POST['edit_'.$id.'_x']) )
 		{
 			?>
 			<tr style="background: #ccc">
-				<td><input name="date" value="<?php echo $row['date'] ?>" /></td>
-				<td><input name="note" value="<?php echo $row['note'] ?>" maxlength="250" /></td>
+				<td><input name="date" value="<?php echo $v[0] ?>" /></td>
+				<td><input name="note" value="<?php echo $v[1] ?>" /></td>
 				<td class="nowrap">
-					<input type="hidden" name="id" value="<?php echo $row['id'] ?>" />
+					<input type="hidden" name="id" value="<?php echo $id ?>" />
 					<input type="submit" name="edit" value="V" title="<?php _e('save', 'cpd') ?>" class="green" style="width:45%;" />
 					<input type="submit" name="delete" value="X"title="<?php _e('delete', 'cpd') ?>" class="red" style="width:45%;" />
 				</td>
@@ -109,9 +105,9 @@ if ( $notes )
 		{
 			?>
 			<tr>
-				<td><?php echo $row['date'] ?></td>
-				<td><?php echo $row['note'] ?></td>
-				<td><input type="image" src="img/cpd_pen.png" name="edit_<?php echo $row['id'] ?>" title="<?php _e('edit', 'cpd') ?>" style="width:auto;" /></td>
+				<td><?php echo $v[0] ?></td>
+				<td><?php echo $v[1] ?></td>
+				<td><input type="image" src="img/cpd_pen.png" name="edit_<?php echo $id ?>" title="<?php _e('edit', 'cpd') ?>" style="width:auto;" /></td>
 			</tr>
 			<?php
 		}

@@ -2,9 +2,9 @@
 if ( $_GET['f'] == 'count' )
 {
 	if (!session_id()) session_start();
-	require_once($_SESSION['cpd_wp'].'wp-load.php');
+	$cpd_wp = (!empty($_SESSION['cpd_wp'])) ? $_SESSION['cpd_wp'] : '../../../';
+	require_once($cpd_wp.'wp-load.php');
 
-//	$cpd_funcs = CountPerDay_Widget::getWidgetFuncs();
 	$cpd_funcs = array ( 'show',
 	'getReadsAll', 'getReadsToday', 'getReadsYesterday', 'getReadsLastWeek', 'getReadsThisMonth',
 	'getUserAll', 'getUserToday', 'getUserYesterday', 'getUserLastWeek', 'getUserThisMonth',
