@@ -15,7 +15,7 @@ class CpdGeoIp
 /**
  * gets country of ip adress
  * @param $ip IP
- * @return array e.g. ( 'de', image link to easywhois.com , 'Germany' )
+ * @return array e.g. ( 'de', image div , 'Germany' )
  */
 function getCountry( $ip )
 {
@@ -33,61 +33,46 @@ function getCountry( $ip )
 	return $country;
 }
 
-
-
 /**
  * updates CountPerDay table
  */
 function updateDB()
 {
-	global $count_per_day;
-	global $cpd_path;
-	global $wpdb;
+	global $count_per_day, $cpd_path, $wpdb;
 	
-	$count_per_day->getQuery("SELECT country FROM `".CPD_C_TABLE."`", 'GeoIP updateDB Table');
+	$count_per_day->mysqlQuery('rows', "SELECT country FROM $wpdb->cpd_counter LIMIT 1", 'GeoIP updateDB Table '.__LINE__);
 	if ((int) mysql_errno() == 1054)
 		// add row "country" to table
-		$count_per_day->getQuery("ALTER TABLE `".CPD_C_TABLE."` ADD `country` CHAR( 2 ) NOT NULL", 'GeoIP updateDB create column');
+		$count_per_day->mysqlQuery('', "ALTER TABLE $wpdb->cpd_counter ADD `country` CHAR( 2 ) NOT NULL", 'GeoIP updateDB create column '.__LINE__);
 	
-	$limit = 10;
-	$res = $count_per_day->getQuery("SELECT ip, INET_NTOA(ip) AS realip FROM ".CPD_C_TABLE." WHERE country LIKE '' GROUP BY ip LIMIT $limit;", 'GeoIP updateDB');
+	$limit = 20;
+	$res = $count_per_day->mysqlQuery('rows', "SELECT ip, INET_NTOA(ip) realip FROM $wpdb->cpd_counter WHERE country LIKE '' GROUP BY ip LIMIT $limit", 'GeoIP updateDB '.__LINE__);
 	$gi = cpd_geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
 	
-	if ( @mysql_num_rows($res) )
-		while ( $r = mysql_fetch_array($res) )
-		{
-			$c = '';
-			$ip = explode('.', $r['realip']);
-			if ( $ip[0] == 10
-				|| $ip[0] == 127
-				|| ($ip[0] == 169 && $ip[1] == 254)
-				|| ($ip[0] == 172 && $ip[1] >= 16 && $ip[1] <= 31)
-				|| ($ip[0] == 192 && $ip[1] == 168) )
-				// set local IPs to '-'
-				$c = '-';
-			else
-				// get country
-				$c = strtolower(cpd_geoip_country_code_by_addr($gi, $r['realip']));
-			
-			if ( !empty($c) )
-				$count_per_day->getQuery("UPDATE ".CPD_C_TABLE." SET country = '".$c."' WHERE ip = '".$r['ip']."'", 'GeoIP updateDB');
-		}
+	foreach ($res as $r)
+	{
+		$c = '';
+		$ip = explode('.', $r->realip);
+		if ( $ip[0] == 10
+			|| $ip[0] == 127
+			|| ($ip[0] == 169 && $ip[1] == 254)
+			|| ($ip[0] == 172 && $ip[1] >= 16 && $ip[1] <= 31)
+			|| ($ip[0] == 192 && $ip[1] == 168) )
+			// set local IPs to '-'
+			$c = '-';
+		else
+			// get country
+			$c = strtolower(cpd_geoip_country_code_by_addr($gi, $r->realip));
+		
+		if ( !empty($c) )
+			$count_per_day->mysqlQuery('', "UPDATE $wpdb->cpd_counter SET country = '$c' WHERE ip = '$r->ip'", 'GeoIP updateDB '.__LINE__);
+	}
 
 	cpd_geoip_close($gi);
 	
-	$res = $count_per_day->getQuery("SELECT count(*) FROM ".CPD_C_TABLE." WHERE country like ''", 'GeoIP updateDB');
-	if ( @mysql_num_rows($res) )
-	{
-		$row = mysql_fetch_array($res);
-		$rest = (!empty($row[0])) ? $row[0] : 0;
-	}
-	else
-		$rest = 0;
-
-	return $rest;
+	$rest = $count_per_day->mysqlQuery('var', "SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE country like ''", 'GeoIP updateDB '.__LINE__);
+	return (int) $rest;
 }
-
-
 
 /**
  * updates the GeoIP database file
