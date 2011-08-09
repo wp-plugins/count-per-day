@@ -53,6 +53,7 @@
 	width: 16px;
 	height: 16px;
 	vertical-align: text-bottom;
+	padding: 0 !important;
 }
 .cpd_backup{background-position: 0 0} 
 .cpd_clean{background-position: 0 -46px} 

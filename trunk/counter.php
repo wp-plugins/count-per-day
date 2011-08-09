@@ -782,7 +782,7 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0, $show_form = true, $show_n
 	if ($show_form)
 	{
 		echo '<form action="" method="post">
-			  <input name="daytoshow" value="'.$date.'" size="10" />
+			  <input name="daytoshow" value="'.$date.'" size="11" />
 			  <input type="submit" name="showday" value="'.__('Show').'" class="button" />';
 		if ( $show_notes )	
 			echo ' <a href="'.$this->dir.'/notes.php?KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Notes', 'cpd').'" class="button thickbox">'.__('Notes', 'cpd').'</a> ';
@@ -955,7 +955,7 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 		LEFT	JOIN $wpdb->term_taxonomy x
 				ON x.term_id = t.term_id
 		WHERE	p.id IN ($list)
-		OR		0 - t.term_id IN ($list)
+		OR		-t.term_id IN ($list)
 		GROUP	BY p.id
 		ORDER	BY count DESC";
 				

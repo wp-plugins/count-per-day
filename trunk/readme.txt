@@ -4,7 +4,7 @@ Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
 Tested up to: 3.2.1
 Stable tag: 2.17
-License: Postcardware
+License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
 Visit Counter, shows reads per page, visitors today, yesterday, last week, last months and other statistics.
@@ -23,23 +23,27 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 = Languages, Translators =
 
-- Azerbaijani	- 100% - Bohdan Zograf -					http://wwww.webhostingrating.com
-- Dansk			- 100% - Jonas Thomsen -					http://jonasthomsen.com
-- Dutch NL		- 100% - Rene -								http://wpwebshop.com
-- France		- 100% - Bjork -							http://www.habbzone.fr
-- German		- 100% - I, Tom -							http://www.tomsdimension.de
-- Greek			- 100% - Essetai_Imar -						http://www.elliniki-grothia.com
-- Italian		- 100% - Gianni Diurno -					http://gidibao.net
-- Japanese		- 100% - Juno Hayami						http://juno.main.jp/blog/
-- Norwegian		- 100% - Stein Ivar Johnsen -				http://iDyrøy.no
-- Norwegian		- 100% - Tore Johnny Bråtveit -				http://www.braatveit.net/
-- Russian		- 100% - Ilya Pshenichny -					http://iluhis.com
-- Swedish		- 100% - Magnus Suther -					http://www.magnussuther.se
-- Turkish		- 100% - Emrullah Tahir Ekmek&ccedil;i - 	http://emrullahekmekci.com.tr
-- Polish 		-  95% - LeXuS -							http://intrakardial.de
-- Bulgarian		-  90% - joro -								http://www.joro711.com
-- Espanol		-  90% - Juan Carlos del R&iacute;o -
-- Portuguese	-  90% - Beto Ribeiro -						http://www.sevenarts.com.br
+- up to date translations:
+- Dutch NL		- Rene -							http://wpwebshop.com
+- France		- Bjork -							http://www.habbzone.fr
+- German		- I, Tom -							http://www.tomsdimension.de
+- Japanese		- Juno Hayami						http://juno.main.jp/blog/
+- Norwegian		- Stein Ivar Johnsen -				http://iDyrøy.no
+- Portuguese	- Beto Ribeiro -					http://www.sevenarts.com.br
+- Russian		- Ilya Pshenichny -					http://iluhis.com
+
+- older translations:
+- Azerbaijani	- Bohdan Zograf -					http://wwww.webhostingrating.com
+- Bulgarian		- joro -							http://www.joro711.com
+- Dansk			- Jonas Thomsen -					http://jonasthomsen.com
+- Espanol		- Juan Carlos del R&iacute;o -
+- Greek			- Essetai_Imar -					http://www.elliniki-grothia.com
+- Italian		- Gianni Diurno -					http://gidibao.net
+- Norwegian		- Tore Johnny Bråtveit -			http://www.braatveit.net/
+- Polish 		- LeXuS -							http://intrakardial.de
+- Swedish		- Magnus Suther -					http://www.magnussuther.se
+- Turkish		- Emrullah Tahir Ekmek&ccedil;i - 	http://emrullahekmekci.com.tr
+- Ukrainian		- Alyona Lompar -
 
 == Installation ==
 
@@ -278,22 +282,21 @@ to check if plugin is activated.
 
 == Changelog ==
 
-= 3.0 =
-
+= 3.0 Dev =
 + New: use now default WordPress database functions to be compatible to e.g. multi-db plugins
-+ New: backup of your counter data
++ New: backup your counter data
 + New: collect entries of counter table per month and per post to reduce the database and speed up the statistics
 + New: functions and shortcodes [CPD_DAY_MOST_READS] [CPD_DAY_MOST_USERS] to shows days with most reads/visitors
-+ New: option to cut referrer on ? to not store query string
++ New: option to cut referrer on "?" to not store query strings
 + New: parameter '$postsonly' for 'getMostVisitedPosts' function to list single posts and pages only
 + New: flags for Moldavia and Nepal
-+ New laguage: Norwegian, thanks to Stein Ivar Johnsen and Tore Johnny Bråtveit
-+ New laguage: Azerbaijani, thanks to Bohdan Zograf
-+ New laguage: Japanese, thanks to Juno Hayami
++ New language: Norwegian, thanks to Stein Ivar Johnsen and Tore Johnny Bråtveit
++ New language: Azerbaijani, thanks to Bohdan Zograf
++ New language: Japanese, thanks to Juno Hayami
 + Bugfix: visitors per month list
 + Change: some function parameters
 + Change: little memory optimizing
-+ Change: visitors currently online and notes now manages per option, without seperate tables in database
++ Change: visitors currently online and notes will now managed per option, without seperate tables in database
 + Change: design updated
 + Change: old bar charts deleted
 
