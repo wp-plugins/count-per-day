@@ -19,7 +19,7 @@ class CountPerDayCore
 
 var $options;			// options array
 var $dir;				// this plugin dir
-var $dbh;				// database connection
+var $dbcon;				// database connection
 var $queries = array();	// queries times for debug
 var $page;				// Post/Page-ID
 var $installed = false; // CpD installed in subblogs?
@@ -146,10 +146,17 @@ function startSession()
 	$_SESSION['cpd_wp'] = ABSPATH;
 }
 
+/**
+ * get result from database
+ * @param string $kind kind of result
+ * @param string $sql sql query
+ * @param string $func name for debug info
+ */
 function mysqlQuery( $kind = '', $sql, $func = '' )
 {
 	global $wpdb;
 	$t = microtime(true);
+	$con = $wpdb->dbh;
 
 	if ($kind == 'var')
 		$r = $wpdb->get_var($sql);
@@ -166,11 +173,12 @@ function mysqlQuery( $kind = '', $sql, $func = '' )
 	if ( $this->options['debug'] )
 	{
 		$d = number_format( microtime(true) - $t , 5);
-		$m = sprintf("%.2f", memory_get_usage(true)/1024/1024).' MB';
-		$error = (!$r && mysql_errno($wpdb->dbh)) ? '<b style="color:red">ERROR:</b> '.mysql_errno($wpdb->dbh).' - '.mysql_error($wpdb->dbh).' - ' : '';
+		$m = sprintf("%.2f", memory_get_usage()/1048576).' MB';
+		$error = (!$r && mysql_errno($con)) ? '<b style="color:red">ERROR:</b> '.mysql_errno($con).' - '.mysql_error($con).' - ' : '';
 		$this->queries[] = $func." : <b>$d</b> - $m<br/><code>$sql</code><br/>$error";
 		$this->queries[0] += $d;
 	}
+	
 	return $r;
 }
 
@@ -1111,10 +1119,7 @@ function flush_buffers()
 function getLastCollectedMonth()
 {
 	$s = get_option('count_per_day_summary');
-	if (isset($s['lastcollectedmonth']))
-		return $s['lastcollectedmonth'];
-	else
-		return false;
+	return (isset($s['lastcollectedmonth'])) ? $s['lastcollectedmonth'] : false;
 }
 
 function getCollectedReads()
@@ -1200,21 +1205,19 @@ function getTableSize( $table )
 	$res = $this->mysqlQuery('rows', "SHOW TABLE STATUS");
 	if ($res)
 		foreach ($res as $row)
-		{
 			if ($row->Name == $table)
-			{
-				$size = ($row->Data_length + $row->Index_length) / 1024;
-				$e = 'KB';
-				if ($size >= 1024)
-				{
-					$size = $size / 1024;
-					$e = 'MB';
-				}
-			}
-				
-		}
+				$size = $this->formatBytes( $row->Data_length + $row->Index_length );
 	if ($size)
-		return sprintf("%.2f %s", $size, $e);	 
+		return $size;
 }
+
+function formatBytes( $size )
+{
+    $units = array(' B', ' KB', ' MB', ' GB', ' TB');
+    for ($i = 0; $size >= 1024 && $i < 4; $i++)
+    	$size /= 1024;
+    return round($size, 2).$units[$i];
+}
+
 
 } // class

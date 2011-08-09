@@ -9,45 +9,46 @@ if(!empty($_POST['do']))
 {
 	switch($_POST['do'])
 	{
-	// update options
-	case 'cpd_update' :
-		$count_per_day->options['onlinetime'] = $_POST['cpd_onlinetime'];
-		$count_per_day->options['user'] = empty( $_POST['cpd_user'] ) ? 0 : 1 ;
-		$count_per_day->options['user_level'] = $_POST['cpd_user_level'];
-		$count_per_day->options['autocount'] = empty( $_POST['cpd_autocount'] ) ? 0 : 1 ;
-		$count_per_day->options['bots'] = $_POST['cpd_bots'];
-		$count_per_day->options['dashboard_posts'] = $_POST['cpd_dashboard_posts'];
-		$count_per_day->options['dashboard_last_posts'] = $_POST['cpd_dashboard_last_posts'];
-		$count_per_day->options['dashboard_last_days'] = $_POST['cpd_dashboard_last_days'];
-		$count_per_day->options['show_in_lists'] = empty( $_POST['cpd_show_in_lists'] ) ? 0 : 1 ;
-		$count_per_day->options['chart_days'] = $_POST['cpd_chart_days'];
-		$count_per_day->options['chart_height'] = $_POST['cpd_chart_height'];
-		$count_per_day->options['startdate'] = $_POST['cpd_startdate'];
-		$count_per_day->options['startcount'] = $_POST['cpd_startcount'];
-		$count_per_day->options['startreads'] = $_POST['cpd_startreads'];
-		$count_per_day->options['anoip'] = empty( $_POST['cpd_anoip'] ) ? 0 : 1 ;
-		$count_per_day->options['clients'] = $_POST['cpd_clients'];
-		$count_per_day->options['ajax'] = empty( $_POST['cpd_ajax'] ) ? 0 : 1 ;
-		$count_per_day->options['debug'] = empty( $_POST['cpd_debug'] ) ? 0 : 1 ;
-		$count_per_day->options['localref'] = empty( $_POST['cpd_localref'] ) ? 0 : 1 ;
-		$count_per_day->options['referers'] = empty( $_POST['cpd_referers'] ) ? 0 : 1 ;
-		$count_per_day->options['referers_cut'] = empty( $_POST['cpd_referers_cut'] ) ? 0 : 1 ;
-		$count_per_day->options['dashboard_referers'] = $_POST['cpd_dashboard_referers'];
-		$count_per_day->options['referers_last_days'] = $_POST['cpd_referers_last_days'];
-		$count_per_day->options['no_front_css'] = empty( $_POST['cpd_no_front_css'] ) ? 0 : 1 ;
-		$count_per_day->options['whocansee'] = ($_POST['cpd_whocansee'] == 'custom') ? $_POST['cpd_whocansee_custom'] : $_POST['cpd_whocansee'];
-		$count_per_day->options['backup_part'] = $_POST['cpd_backup_part'];
-		
-		if (empty($count_per_day->options['clients']))
-			$count_per_day->options['clients'] = 'Firefox, MSIE, Chrome, Safari, Opera';
-		
-		if ( isset($_POST['cpd_countries']) )
-			$count_per_day->options['countries'] = $_POST['cpd_countries'];
-		
-		update_option('count_per_day', $count_per_day->options);
-		
-		echo '<div class="updated"><p>'.__('Options updated', 'cpd').'</p></div>';
-		break;
+		// update options
+		case 'cpd_update' :
+			$count_per_day->options['onlinetime'] = $_POST['cpd_onlinetime'];
+			$count_per_day->options['user'] = empty( $_POST['cpd_user'] ) ? 0 : 1 ;
+			$count_per_day->options['user_level'] = $_POST['cpd_user_level'];
+			$count_per_day->options['autocount'] = empty( $_POST['cpd_autocount'] ) ? 0 : 1 ;
+			$count_per_day->options['bots'] = $_POST['cpd_bots'];
+			$count_per_day->options['dashboard_posts'] = $_POST['cpd_dashboard_posts'];
+			$count_per_day->options['dashboard_last_posts'] = $_POST['cpd_dashboard_last_posts'];
+			$count_per_day->options['dashboard_last_days'] = $_POST['cpd_dashboard_last_days'];
+			$count_per_day->options['show_in_lists'] = empty( $_POST['cpd_show_in_lists'] ) ? 0 : 1 ;
+			$count_per_day->options['chart_days'] = $_POST['cpd_chart_days'];
+			$count_per_day->options['chart_height'] = $_POST['cpd_chart_height'];
+			$count_per_day->options['startdate'] = $_POST['cpd_startdate'];
+			$count_per_day->options['startcount'] = $_POST['cpd_startcount'];
+			$count_per_day->options['startreads'] = $_POST['cpd_startreads'];
+			$count_per_day->options['anoip'] = empty( $_POST['cpd_anoip'] ) ? 0 : 1 ;
+			$count_per_day->options['clients'] = $_POST['cpd_clients'];
+			$count_per_day->options['ajax'] = empty( $_POST['cpd_ajax'] ) ? 0 : 1 ;
+			$count_per_day->options['debug'] = empty( $_POST['cpd_debug'] ) ? 0 : 1 ;
+			$count_per_day->options['localref'] = empty( $_POST['cpd_localref'] ) ? 0 : 1 ;
+			$count_per_day->options['referers'] = empty( $_POST['cpd_referers'] ) ? 0 : 1 ;
+			$count_per_day->options['referers_cut'] = empty( $_POST['cpd_referers_cut'] ) ? 0 : 1 ;
+			$count_per_day->options['dashboard_referers'] = $_POST['cpd_dashboard_referers'];
+			$count_per_day->options['referers_last_days'] = $_POST['cpd_referers_last_days'];
+			$count_per_day->options['chart_old'] = empty( $_POST['cpd_chart_old'] ) ? 0 : 1 ;
+			$count_per_day->options['no_front_css'] = empty( $_POST['cpd_no_front_css'] ) ? 0 : 1 ;
+			$count_per_day->options['whocansee'] = ($_POST['cpd_whocansee'] == 'custom') ? $_POST['cpd_whocansee_custom'] : $_POST['cpd_whocansee'];
+			$count_per_day->options['backup_part'] = $_POST['cpd_backup_part'];
+			
+			if (empty($count_per_day->options['clients']))
+				$count_per_day->options['clients'] = 'Firefox, MSIE, Chrome, Safari, Opera';
+			
+			if ( isset($_POST['cpd_countries']) )
+				$count_per_day->options['countries'] = $_POST['cpd_countries'];
+			
+			update_option('count_per_day', $count_per_day->options);
+			
+			echo '<div class="updated"><p>'.__('Options updated', 'cpd').'</p></div>';
+			break;
 
 	// update countries
 	case 'cpd_countries' :
@@ -346,8 +347,7 @@ switch($mode) {
 
 	<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 		
-	<!-- counter -->
-	
+	<?php // counter ?>
 	<fieldset>
 	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Counter', 'cpd') ?></legend>
 	
@@ -398,8 +398,7 @@ switch($mode) {
 	</table>
 	</fieldset>
 	
-	<!-- dashboard -->
-	
+	<?php // dashboard ?>
 	<fieldset>
 	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Dashboard') ?></legend>
 	
@@ -480,8 +479,7 @@ switch($mode) {
 	</table>
 	</fieldset>
 	
-	<!-- lists -->
-	
+	<?php // lists ?>
 	<fieldset>
 	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Posts') ?> / <?php _e('Pages') ?></legend>
 	<table class="form-table">
@@ -492,8 +490,7 @@ switch($mode) {
 	</table>
 	</fieldset>
 	
-	<!-- start values -->
-	
+	<?php // start values ?>
 	<fieldset>
 	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Start Values', 'cpd') ?></legend>
 	<table class="form-table">
@@ -517,8 +514,7 @@ switch($mode) {
 	</table>
 	</fieldset>
 	
-	<!-- Stylesheet -->
-	
+	<?php // stylesheet ?>
 	<fieldset>
 	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Stylesheet', 'cpd') ?></legend>
 	<table class="form-table">
@@ -529,8 +525,7 @@ switch($mode) {
 	</table>
 	</fieldset>
 	
-	<!-- backup -->
-	
+	<?php // backup ?>
 	<fieldset>
 	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Backup', 'cpd') ?></legend>
 	<table class="form-table">
@@ -549,8 +544,7 @@ switch($mode) {
 	</table>
 	</fieldset>
 	
-	<!-- debug -->
-	
+	<?php // debug ?>
 	<fieldset>
 		<legend style="color:red"><span class="cpd_icon cpd_settings"></span> <?php _e('Debug mode', 'cpd') ?></legend>
 		<p style="margin-top:15px;margin-left:10px">
@@ -567,7 +561,7 @@ switch($mode) {
 			<span class="cpd_icon cpd_tools"></span> <?php _e('Tools') ?></h3>
 	</div>
 
-	<!-- Mass Bots -->
+	<?php // mass bots ?>
 	<div class="postbox">
 	<?php
 	$limit = (isset($o['massbotlimit'])) ? $o['massbotlimit'] : 25;
@@ -648,6 +642,18 @@ switch($mode) {
 			<input type="submit" name="backup" value="<?php _e('Backup the database', 'cpd') ?>" class="button" />
 		</p>
 		</form>
+		<p>
+		<?php
+		if ( is_writable(WP_CONTENT_DIR) )
+		{
+			$d = dir(WP_CONTENT_DIR);
+			while ( ($entry = $d->read()) !== false )
+			if ( preg_match('/count_per_day|cpd_counter/i', $entry) )
+				echo '<a href="'.content_url().'/'.$entry.'">'.$entry.'</a> - '.$count_per_day->formatbytes(filesize(WP_CONTENT_DIR.'/'.$entry)).'<br/>';
+			$d->close();
+		}	
+		?>
+		</p>
 	</div>
 	</div>
 	
@@ -683,8 +689,8 @@ switch($mode) {
 			echo '<br/>';
 			$x = $count_per_day->getLastCollectedMonth();
 			$m = __(date( 'F', strtotime($x.'-01'))).' '.substr($x, 0, 4);
-			if ($m)
-				printf(__('Currently your colletion contains data until %s.', 'cpd'), $m);
+			if ($x && $m)
+				printf(__('Currently your collection contains data until %s.', 'cpd'), $m);
 			?>
 		</p>
 		<p>
