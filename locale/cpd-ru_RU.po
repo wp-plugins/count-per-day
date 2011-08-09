@@ -222,7 +222,7 @@ msgstr "Посетителей записи"
 #: counter-options.php:122
 #@ cpd
 msgid "Counter reseted."
-msgstr "Счетчик обнулен"
+msgstr "Счетчик обнулен."
 
 #: counter-options.php:403
 #@ default
@@ -753,220 +753,220 @@ msgstr "Посетителей на сайте"
 #, php-format
 #@ cpd
 msgid "\"Count per Day\" updated to version %s."
-msgstr ""
+msgstr "\"Count per Day\" обновлен до версии %s"
 
 #: counter-core.php:917
 #@ cpd
 msgid "Backup failed! Cannot open file"
-msgstr ""
+msgstr "Обновление не удалось! Не могу открыть файл"
 
 #: counter-core.php:940
 #, php-format
 #@ cpd
 msgid "Backup of %s entries in progress. Every point complies %s entries."
-msgstr ""
+msgstr "Происходит резервное соранение %s записей. Каждой точке соответствует %s записей."
 
 #: counter-core.php:1027
 #@ cpd
 msgid "Your wp-content directory is not writable. But you can copy the content of this box to a plain text file."
-msgstr ""
+msgstr "Ваша папка wp-content только для чтения, но вы можете скопировать содержимое этого поля в текстовый файл."
 
 #: counter-core.php:1033
 #, php-format
 #@ cpd
 msgid "Backup of counter table saved in %s."
-msgstr ""
+msgstr "Резервная копия таблицы счетчика сохранена в %s"
 
 #: counter-core.php:1035
 #, php-format
 #@ cpd
 msgid "Backup of counter options and collection saved in %s."
-msgstr ""
+msgstr "Резервная копия настроек счетчика и коллекции сохранены в %s"
 
 #: counter-options.php:170
 #@ cpd
 msgid "Collection in progress..."
-msgstr ""
+msgstr "Происходит сбор данных..."
 
 #: counter-options.php:240
 #@ cpd
 msgid "Get Visitors per Post..."
-msgstr ""
+msgstr "Получить посетителей по записям..."
 
 #: counter-options.php:261
 #@ cpd
 msgid "Delete old data..."
-msgstr ""
+msgstr "Удалить старые данные..."
 
 #: counter-options.php:285
 #, php-format
 #@ cpd
 msgid "Counter entries until %s collected and counter table %s optimized (size before = %s &gt; size after = %s)."
-msgstr ""
+msgstr "Записи счетчика до %s собраны и оптимизирована таблица счетчика %s (размер перед = %s &gt; размер после = %s)."
 
 #: counter-options.php:294
 #@ cpd
 msgid "Installation of \"Count per Day\" checked"
-msgstr ""
+msgstr "Установка \"Count per Day\" проверена"
 
 #: counter-options.php:342
 #: counter-options.php:566
 #@ default
 msgid "Tools"
-msgstr ""
+msgstr "Инструменты"
 
 #: counter-options.php:394
 #@ cpd
 msgid "Save URL only, no query string."
-msgstr ""
+msgstr "Сохранять только URL без строки запроса."
 
 #: counter-options.php:419
 #@ cpd
 msgid "Who can see it"
-msgstr ""
+msgstr "Кто может это видеть"
 
 #: counter-options.php:428
 #@ cpd
 msgid "custom"
-msgstr ""
+msgstr "пользовательский"
 
 #: counter-options.php:430
 #@ cpd
 msgid "and higher are allowed to see the statistics page."
-msgstr ""
+msgstr "и выше могут видеть статистику страницы."
 
 #: counter-options.php:432
 #, php-format
 #@ cpd
 msgid "Set the %s capability %s a user need:"
-msgstr ""
+msgstr "Установить %s права % необходимые пользователю:"
 
 #: counter-options.php:522
 #@ cpd
 msgid "Stylesheet"
-msgstr ""
+msgstr "Стили"
 
 #: counter-options.php:525
 #@ cpd
 msgid "NO Stylesheet in Frontend"
-msgstr ""
+msgstr "НЕ использовать стили в интерфейсе"
 
 #: counter-options.php:526
 #@ cpd
 msgid "Do not load the stylesheet \"counter.css\" in frontend."
-msgstr ""
+msgstr "Не загружать файл стилей \"counter.css\" для интерфейса."
 
 #: counter-options.php:534
 #: counter-options.php:639
 #@ cpd
 msgid "Backup"
-msgstr ""
+msgstr "Резервирование"
 
 #: counter-options.php:537
 #@ cpd
 msgid "Entries per pass"
-msgstr ""
+msgstr "Записей за один проход"
 
 #: counter-options.php:540
 #@ cpd
 msgid "How many entries should be saved per pass? Default: 10000"
-msgstr ""
+msgstr "Сколько записей сохранять за один проход? По умолчанию: 10000"
 
 #: counter-options.php:545
 #@ cpd
 msgid "If your PHP memory limit less then 50 MB and you get a white page or error messages try a smaller value."
-msgstr ""
+msgstr "Если ограничение памяти вашего PHP меньше 50 MB и вы получаете белую страницу или сообщения об ошибках, то попробуйте меньшее значение."
 
 #: counter-options.php:643
 #, php-format
 #@ cpd
 msgid "Create a backup of the counter table %s in your wp-content directory (if writable)."
-msgstr ""
+msgstr "Создать резервную копию таблицы счетчика %s в вашей папке wp-content (если она не только для чтения)"
 
 #: counter-options.php:647
 #@ cpd
 msgid "Backup the database"
-msgstr ""
+msgstr "Резервирование базы данных"
 
 #: counter-options.php:674
 #: counter-options.php:706
 #@ cpd
 msgid "Collect old data"
-msgstr ""
+msgstr "Собрать старые данные"
 
 #: counter-options.php:679
 #, php-format
 #@ cpd
 msgid "Current size of your counter table %s is %s."
-msgstr ""
+msgstr "Текущий размер вашей таблицы счетчика %s : %s."
 
 #: counter-options.php:681
 #@ cpd
 msgid "You can collect old data and clean up the counter table.<br/>Reads and visitors will be saved per month, per country and per post.<br/>Clients and referrers will deleted."
-msgstr ""
+msgstr "Вы можете собрать старые данные и очистить таблицу счетчика.<br/>Прочтения и посетители будут сохранены за каждый месяц, по стране и по записям.<br/>Клиенты и ссылающиеся сайты будут удалены."
 
 #: counter-options.php:686
 #, php-format
 #@ cpd
-msgid "Currently your colletion contains data until %s."
-msgstr ""
+msgid "Currently your collection contains data until %s."
+msgstr "Сейчас ваша коллекция содержит данные до %s."
 
 #: counter-options.php:690
 #@ cpd
 msgid "Normally new data will be added to the collection."
-msgstr ""
+msgstr "Если все пройдет успешно, то новые данные будут добавлены в коллекцию."
 
 #: counter-options.php:696
 #@ cpd
 msgid "Delete old collection and create a new one which contains only the data currently in counter table."
-msgstr ""
+msgstr "Удалить старую коллекцию и создать новую, которая содержит только данные, которые сейчас в таблице счетчика."
 
 #: counter-options.php:697
 #, php-format
 #@ cpd
 msgid "All collected data until %s will deleted."
-msgstr ""
+msgstr "Все данные до %s будут удалены."
 
 #: counter-options.php:702
 #, php-format
 #@ cpd
 msgid "Keep entries of last %s full months + current month in counter table."
-msgstr ""
+msgstr "Сохранить записи за последние %s полные месяца + текущий месяц в таблице счетчика."
 
 #: counter-options.php:761
 #@ cpd
 msgid "ReActivation"
-msgstr ""
+msgstr "Переактивация"
 
 #: counter-options.php:764
 #@ cpd
 msgid "Here you can start the installation functions manually.<br/>Same as deactivate and reactivate the plugin."
-msgstr ""
+msgstr "Здесь вы можете запустить функции установки вручную.<br/>Точно также, как и деактивация и активация плагина."
 
 #: counter-options.php:769
 #@ cpd
 msgid "ReActivate the plugin"
-msgstr ""
+msgstr "Переактивировать плагин"
 
 #: counter.php:165
 #: counter.php:899
 #@ cpd
 msgid "Visitors"
-msgstr ""
+msgstr "Посетителей"
 
 #: counter.php:168
 #: counter.php:169
 #@ cpd
 msgid "Most visited day"
-msgstr ""
+msgstr "Самый посещаемый день"
 
 #: counter.php:1220
 #@ default
 msgid "Title"
-msgstr ""
+msgstr "Заголовок"
 
 #: counter.php:1239
 #@ cpd
 msgid "drag and drop to sort"
-msgstr ""
+msgstr "перетащите для сортировки"
 

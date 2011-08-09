@@ -913,7 +913,7 @@ msgstr "Du kannst alte Daten zusammenfassen und die Z&auml;hler-Tabelle bereinig
 #: counter-options.php:695
 #, php-format
 #@ cpd
-msgid "Currently your colletion contains data until %s."
+msgid "Currently your collection contains data until %s."
 msgstr "Momentan enth&auml;lt die Zusammenfassung Daten bis %s."
 
 #: counter-options.php:699

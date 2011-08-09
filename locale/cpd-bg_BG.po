@@ -913,7 +913,7 @@ msgstr ""
 #: counter-options.php:686
 #, php-format
 #@ cpd
-msgid "Currently your colletion contains data until %s."
+msgid "Currently your collection contains data until %s."
 msgstr ""
 
 #: counter-options.php:690
