@@ -1,5 +1,6 @@
 <?php
 $what = (empty($_GET['map'])) ? 'Reads' : ucfirst($_GET['map']);
+$disable = (empty($_GET['min'])) ? '' : '<enabled>false</enabled>';
 
 header("content-type: text/xml; charset=utf-8");
 echo '<?xml version="1.0" encoding="UTF-8"?>';
@@ -38,12 +39,14 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 </balloon>
 
 <zoom>
+	<?php echo $disable ?>
     <x>5</x>
     <y>27</y>
 	<min>85</min>
 </zoom>
 
 <legend>
+	<?php echo $disable ?>
 	<x>5</x>
 	<y>!32</y>
 	<margins>5</margins>
