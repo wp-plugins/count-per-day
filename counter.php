@@ -47,7 +47,9 @@ function show( $before='', $after=' reads', $show = true, $count = true, $page =
 		$this->count();
 	if ( $page == 'x' )
 		$page = get_the_ID();
-	if ($c = $this->mysqlQuery('var', "SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE page='$page'", 'show '.__LINE__))
+	else
+		$page = (int) $page;
+	if ($c = $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE page='$page'"), 'show '.__LINE__))
 	{
 		if ($show)
 			echo $before.$c.$after;
@@ -73,7 +75,7 @@ function count( $x, $page = 'x' )
 		$page = $this->getPostID();
 	else
 		// ajax counter on cached pages
-		$page = intval($page);
+		$page = (int) $page;
 	
 	// get userlevel from role
 	if (current_user_can('administrator'))		$userlevel = 10;
@@ -92,7 +94,7 @@ function count( $x, $page = 'x' )
 	
 	if ($this->options['debug'])
 		$this->queries[] = 'called Function: <b style="color:blue">count (variables)</b> '
-			.'isBot: <code>'.intval($isBot).'</code> '
+			.'isBot: <code>'.(int) $isBot.'</code> '
 			.'countUser: <code>'.$countUser.'</code> '
 			.'page: <code>'.$page.'</code> '
 			.'userlevel: <code>'.$userlevel.'</code>';
@@ -108,7 +110,7 @@ function count( $x, $page = 'x' )
 		$date = date_i18n('Y-m-d');
 		
 		// new visitor on page?
-		$count = $this->mysqlQuery('var', "SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE ip=INET_ATON('$userip') AND date='$date' AND page='$page'", 'count check '.__LINE__);
+		$count = $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE ip=INET_ATON(%s) AND date=%s AND page=%d", $userip, $date, $page), 'count check '.__LINE__);
 		if ( !$count )
 		{
 			// save count
@@ -202,25 +204,27 @@ function getFlotChart( $limit = 0 )
 		$data[$day] = array(0, 0);
 
 	// reads
-	$sql = "
-	SELECT	COUNT(*) count, c.date
-	FROM	$wpdb->cpd_counter c
-	WHERE	c.date BETWEEN '$start_sql' AND '$end_sql'
-	GROUP	BY c.date";
+	$sql = $wpdb->prepare("
+		SELECT	COUNT(*) count, c.date
+		FROM	$wpdb->cpd_counter c
+		WHERE	c.date BETWEEN %s AND %s
+		GROUP	BY c.date",
+		$start_sql, $end_sql );
 	$res = $this->mysqlQuery('rows', $sql, 'ChartReads '.__LINE__);
 	if ($res)
 		foreach ($res as $row)
 			$data[strtotime($row->date)][0] = $row->count;
 	
 	// visitors
-	$sql = "
-	SELECT COUNT(*) count, t.date
-	FROM (	SELECT	COUNT(*) count, date
-			FROM	$wpdb->cpd_counter
-			GROUP	BY date, ip
-			) AS t
-	WHERE	t.date BETWEEN '$start_sql' AND '$end_sql'
-	GROUP	BY t.date";
+	$sql = $wpdb->prepare("
+		SELECT COUNT(*) count, t.date
+		FROM (	SELECT	COUNT(*) count, date
+				FROM	$wpdb->cpd_counter
+				GROUP	BY date, ip
+				) AS t
+		WHERE	t.date BETWEEN %s AND %s
+		GROUP	BY t.date",
+		$start_sql, $end_sql );
 	$res = $this->mysqlQuery('rows', $sql, 'ChartVisitors '.__LINE__);
 	if ($res)
 		foreach ($res as $row)
@@ -391,7 +395,7 @@ function getUserAll( $return = false )
 {
 	global $wpdb;
 	$res = $this->mysqlQuery('count', "SELECT 1 FROM $wpdb->cpd_counter GROUP BY date, ip", 'getUserAll '.__LINE__);
-	$c = $res + intval($this->options['startcount']) + $this->getCollectedUsers();
+	$c = $res + (int) $this->options['startcount'] + $this->getCollectedUsers();
 	if ($return) return $c; else echo $c;
 }
 
@@ -402,7 +406,7 @@ function getReadsAll( $return = false )
 {
 	global $wpdb;
 	$res = $this->mysqlQuery('var', "SELECT COUNT(*) FROM $wpdb->cpd_counter", 'getReadsAll '.__LINE__);
-	$c = intval($res) + intval($this->options['startreads']) + $this->getCollectedReads();
+	$c = (int) $res + (int) $this->options['startreads'] + $this->getCollectedReads();
 	if ($return) return $c; else echo $c;
 }
 
@@ -603,12 +607,8 @@ function getUserPerDay( $days = 0, $return = false )
 	{ 
 		$res = $this->mysqlQuery('rows', 'SELECT MIN(date) min, MAX(date) max FROM '.$wpdb->cpd_counter, 'getUserPerDay '.__LINE__);
 		foreach ($res as $row)
-		{
-			$min = strtotime($row->min);
-			$max = strtotime($row->max);
-			$days =  (($max - $min) / 86400 + 1);
-			$datemin = 0;
-		}
+			$days =  ((strtotime($row->max) - strtotime($row->min)) / 86400 + 1);
+		$datemin = 0;
 	}
 	$c = $this->mysqlQuery('count', "SELECT 1 FROM $wpdb->cpd_counter WHERE date > '$datemin' AND date < '$datemax' GROUP BY ip, date", 'getUserPerDay '.__LINE__);
 	$count = $c / $days;
@@ -638,20 +638,21 @@ function getMostVisitedPosts( $days = 0, $limit = 0, $frontend = false, $postson
 	$date = date_i18n('Y-m-d', current_time('timestamp') - 86400 * $days);
 	
 	if ($postsonly)
-		$sql = "
+		$sql = $wpdb->prepare("
 		SELECT	COUNT(c.id) count,
 				c.page post_id,
 				p.post_title post
 		FROM	$wpdb->cpd_counter c
 		LEFT	JOIN $wpdb->posts p
 				ON p.id = c.page
-		WHERE	c.date >= '$date'
+		WHERE	c.date >= %s
 		AND		c.page > 0
 		GROUP	BY c.page
 		ORDER	BY count DESC
-		LIMIT	$limit";
+		LIMIT	%d",
+		$date, $limit);
 	else
-		$sql = "
+		$sql = $wpdb->prepare("
 		SELECT	COUNT(c.id) count,
 				c.page post_id,
 				p.post_title post,
@@ -665,10 +666,11 @@ function getMostVisitedPosts( $days = 0, $limit = 0, $frontend = false, $postson
 				ON t.term_id = 0 - c.page
 		LEFT	JOIN $wpdb->term_taxonomy x
 				ON x.term_id = t.term_id
-		WHERE	c.date >= '$date'
+		WHERE	c.date >= %s
 		GROUP	BY c.page
 		ORDER	BY count DESC
-		LIMIT	$limit";
+		LIMIT	%d",
+		$date, $limit);
 	$r =  '<small>'.sprintf(__('The %s most visited posts in last %s days:', 'cpd'), $limit, $days).'<br/>&nbsp;</small>';
 	$r .= $this->getUserPer_SQL( $sql, 'getMostVisitedPosts', $frontend );
 	if ($return) return $r; else echo $r;
@@ -760,24 +762,25 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0, $show_form = true, $show_n
 		if ( $n[0] == $date )
 			$note[] = $n[1];
 
-	$sql = "
-	SELECT	COUNT(c.id) count,
-			c.page post_id,
-			p.post_title post,
-			t.name tag_cat_name,
-			t.slug tag_cat_slug,
-			x.taxonomy tax
-	FROM	$wpdb->cpd_counter c
-	LEFT	JOIN $wpdb->posts p
-			ON p.id = c.page
-	LEFT	JOIN $wpdb->terms t
-			ON t.term_id = 0 - c.page
-	LEFT	JOIN $wpdb->term_taxonomy x
-			ON x.term_id = t.term_id
-	WHERE	c.date = '$date'
-	GROUP	BY c.page
-	ORDER	BY count DESC
-	LIMIT	$limit";
+	$sql = $wpdb->prepare("
+		SELECT	COUNT(c.id) count,
+				c.page post_id,
+				p.post_title post,
+				t.name tag_cat_name,
+				t.slug tag_cat_slug,
+				x.taxonomy tax
+		FROM	$wpdb->cpd_counter c
+		LEFT	JOIN $wpdb->posts p
+				ON p.id = c.page
+		LEFT	JOIN $wpdb->terms t
+				ON t.term_id = 0 - c.page
+		LEFT	JOIN $wpdb->term_taxonomy x
+				ON x.term_id = t.term_id
+		WHERE	c.date = %s
+		GROUP	BY c.page
+		ORDER	BY count DESC
+		LIMIT	%d",
+		$date, $limit );
 	
 	if ($show_form)
 	{
@@ -806,7 +809,7 @@ function getClients( $return = false )
 	$res = $this->mysqlQuery('var', "SELECT COUNT(*) FROM ".$wpdb->cpd_counter, 'getClients_all '.__LINE__);
 	if (!$res)
 		return;
-	$all = max(1, intval($res));
+	$all = max(1, (int) $res);
 	$rest = 100;
 	$r = '<ul id="cpd_clients" class="cpd_front_list">';
 	foreach ($clients as $c)
@@ -970,7 +973,7 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 	{
 		$r .= '<li>';
 		// link only for editors in backend
-		if ( isset($userdata->user_level) && intval($userdata->user_level) >= 7 && !$frontend)
+		if ( isset($userdata->user_level) && (int) $userdata->user_level >= 7 && !$frontend)
 		{
 			if ( $row->post_id > 0 )
 				$r .= '<a href="post.php?action=edit&amp;post='.$row->post_id.'"><img src="'.$this->img('cpd_pen.png').'" alt="[e]" title="'.__('Edit Post').'" style="width:9px;height:12px;" /></a> '

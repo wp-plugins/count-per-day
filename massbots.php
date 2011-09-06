@@ -5,7 +5,7 @@ require_once($cpd_wp.'wp-load.php');
 
 if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 {
-	$sql = "
+	$sql = $wpdb->prepare("
 	SELECT	c.page post_id, p.post_title post,
 			t.name tag_cat_name,
 			t.slug tag_cat_slug,
@@ -17,9 +17,10 @@ if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 			ON t.term_id = 0 - c.page
 	LEFT	JOIN $wpdb->term_taxonomy x
 			ON x.term_id = t.term_id
-	WHERE	c.ip = {$_GET['dmbip']}
-	AND		c.date = '{$_GET['dmbdate']}'
-	ORDER	BY p.ID";
+	WHERE	c.ip = %d
+	AND		c.date = %s
+	ORDER	BY p.ID",
+	$_GET['dmbip'], $_GET['dmbdate'] );
 	$massbots = $count_per_day->mysqlQuery('rows', $sql, 'showMassbotPosts');
 }
 ?>

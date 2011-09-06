@@ -5,16 +5,16 @@ require_once($cpd_wp.'wp-load.php');
 
 // set default values
 if ( isset($_POST['month']) )
-	$month = $_POST['month'];
+	$month = (int) $_POST['month'];
 else if ( isset($_GET['month']) )
-	$month = $_GET['month'];
+	$month = (int) $_GET['month'];
 else	
 	$month = date_i18n('m');
 
 if ( isset($_POST['month']) )
-	$year = $_POST['year'];
+	$year = (int) $_POST['year'];
 else if ( isset($_GET['year']) )
-	$year = $_GET['year'];
+	$year = (int) $_GET['year'];
 else	
 	$year = date_i18n('Y');
 

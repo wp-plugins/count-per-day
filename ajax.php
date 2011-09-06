@@ -10,7 +10,7 @@ if ( $_GET['f'] == 'count' )
 	'getUserAll', 'getUserToday', 'getUserYesterday', 'getUserLastWeek', 'getUserThisMonth',
 	'getUserPerDay', 'getUserOnline', 'getFirstCount' );
 	
-	$page = intval($_GET['page']);
+	$page = (int) $_GET['page'];
 	if ( is_numeric($page) )
 	{
 		$count_per_day->count( '', $page );
