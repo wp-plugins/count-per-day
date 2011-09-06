@@ -4,16 +4,16 @@ require_once($_SESSION['cpd_wp'].'wp-load.php');
 
 // set default values
 if ( isset($_POST['month']) )
-	$month = $_POST['month'];
+	$month = (int) $_POST['month'];
 else if ( isset($_GET['month']) )
-	$month = $_GET['month'];
+	$month = (int) $_GET['month'];
 else	
 	$month = date_i18n('m');
 
 if ( isset($_POST['month']) )
-	$year = $_POST['year'];
+	$year = (int) $_POST['year'];
 else if ( isset($_GET['year']) )
-	$year = $_GET['year'];
+	$year = (int) $_GET['year'];
 else	
 	$year = date_i18n('Y');
 	
@@ -33,7 +33,7 @@ if ( $month )
 	$where .= " AND MONTH(date) = $month "; 
 if ( $year )
 	$where .= " AND YEAR(date) = $year ";
-$notes = $wpdb->get_results('SELECT * FROM '.$table_prefix.'cpd_notes WHERE 1 '.$where.' ORDER BY date DESC', ARRAY_A);
+$notes = $wpdb->get_results($wpdb->prepare('SELECT * FROM '.$table_prefix.'cpd_notes WHERE 1 '.$where.' ORDER BY date DESC'), ARRAY_A);
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
