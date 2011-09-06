@@ -159,16 +159,16 @@ function mysqlQuery( $kind = '', $sql, $func = '' )
 	$con = $wpdb->dbh;
 
 	if ($kind == 'var')
-		$r = $wpdb->get_var($sql);
+		$r = $wpdb->get_var( $wpdb->prepare($sql) );
 	else if ($kind == 'count')
 	{
 		$sql = 'SELECT COUNT(*) FROM ('.trim($sql,';').') t';
-		$r = $wpdb->get_var($sql);
+		$r = $wpdb->get_var( $wpdb->prepare($sql) );
 	}
 	else if ($kind = 'rows')
-		$r = $wpdb->get_results($sql);		
+		$r = $wpdb->get_results( $wpdb->prepare($sql) );
 	else
-		$wpdb->query($sql);
+		$wpdb->query( $wpdb->prepare($sql) );
 		
 	if ( $this->options['debug'] )
 	{
@@ -889,7 +889,7 @@ function includeChartJS( $id, $data, $html )
 function getMassBots( $limit )
 {
 	global $wpdb;
-	$sql = "
+	$sql = $wpdb->prepare("
 	SELECT	t.id, t.ip AS longip, INET_NTOA(t.ip) AS ip, t.date, t.posts, c.client
 	FROM (	SELECT	id, ip, date, count(*) posts
 			FROM	$wpdb->cpd_counter
@@ -897,7 +897,7 @@ function getMassBots( $limit )
 			ORDER	BY posts DESC ) AS t
 	LEFT	JOIN	$wpdb->cpd_counter c
 			ON		c.id = t.id
-	WHERE	posts > $limit";
+	WHERE	posts > %d", (int) $limit );
 	return $this->mysqlQuery('rows', $sql, 'getMassBots '.__LINE__);
 }
 

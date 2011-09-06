@@ -52,7 +52,7 @@ else
 {
 	$cpd_maxcount = 1;
 	foreach ($cpd_visits as $r)
-		$cpd_maxcount = max( array( $cpd_maxcount, intval($r->count) ) );
+		$cpd_maxcount = max( array( $cpd_maxcount, (int) $r->count ) );
 	$cpd_faktor = 300 / $cpd_maxcount; 
 	
 	foreach ($cpd_visits as $r)
@@ -85,7 +85,7 @@ else
 			echo $cpd_date_str.'</li>';
 		}
 		$cpd_date_str = mysql2date(get_option('date_format'), $r->date);
-		$cpd_new = intval($r->count);
+		$cpd_new = (int) $r->count;
 	}
 
 	$cpd_bar = $cpd_new * $cpd_faktor;
