@@ -815,7 +815,7 @@ function getClients( $return = false )
 	foreach ($clients as $c)
 	{
 		$c = trim($c);
-		$count = $this->mysqlQuery('var', "SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE client like '%".$c."%'", 'getClients_'.$c.'_ '.__LINE__);
+		$count = $this->mysqlQuery('var', "SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE client like '%%".$c."%%'", 'getClients_'.$c.'_ '.__LINE__);
 		$percent = number_format(100 * $count / $all, 0);
 		$rest -= $percent;
 		$r .= '<li class="cpd-client-logo cpd-client-'.strtolower($c).'">'.$c.' <b>'.$percent.' %</b></li>';
@@ -843,7 +843,7 @@ function getReferers( $limit = 0, $return = false, $days = 0 )
 	// local url filter 
 	$dayfiltre = "AND date > DATE_SUB('".date_i18n('Y-m-d')."', INTERVAL $days DAY)";
 		
-	$localref = ($this->options['localref']) ? '' : " AND referer NOT LIKE '".get_bloginfo('url')."%' ";
+	$localref = ($this->options['localref']) ? '' : " AND referer NOT LIKE '".get_bloginfo('url')."%%' ";
 	$res = $this->mysqlQuery('rows', "SELECT COUNT(*) count, referer FROM $wpdb->cpd_counter WHERE referer > '' $dayfiltre $localref GROUP BY referer ORDER BY count DESC LIMIT $limit", 'getReferers '.__LINE__);
 	$r =  '<small>'.sprintf(__('The %s referrers in last %s days:', 'cpd'), $limit, $days).'<br/>&nbsp;</small>';
 	$r .= '<ul id="cpd_referrers" class="cpd_front_list">';

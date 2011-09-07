@@ -27,22 +27,24 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 - Dutch NL		- Rene -							http://wpwebshop.com
 - France		- Bjork -							http://www.habbzone.fr
 - German		- I, Tom -							http://www.tomsdimension.de
+- Italian		- Gianni Diurno -					http://gidibao.net
 - Japanese		- Juno Hayami						http://juno.main.jp/blog/
 - Norwegian		- Stein Ivar Johnsen -				http://iDyrøy.no
 - Portuguese	- Beto Ribeiro -					http://www.sevenarts.com.br
 - Russian		- Ilya Pshenichny -					http://iluhis.com
+- Turkish		- Emrullah Tahir Ekmek&ccedil;i - 	http://emrullahekmekci.com.tr
 
 - older translations:
 - Azerbaijani	- Bohdan Zograf -					http://wwww.webhostingrating.com
+- Belarusian	- Alexander Alexandrov -			http://www.designcontest.com
 - Bulgarian		- joro -							http://www.joro711.com
 - Dansk			- Jonas Thomsen -					http://jonasthomsen.com
 - Espanol		- Juan Carlos del R&iacute;o -
 - Greek			- Essetai_Imar -					http://www.elliniki-grothia.com
-- Italian		- Gianni Diurno -					http://gidibao.net
+- Lithuanian	- Nata Strazda - 					http://www.webhostinghub.com
 - Norwegian		- Tore Johnny Bråtveit -			http://www.braatveit.net/
 - Polish 		- LeXuS -							http://intrakardial.de
 - Swedish		- Magnus Suther -					http://www.magnussuther.se
-- Turkish		- Emrullah Tahir Ekmek&ccedil;i - 	http://emrullahekmekci.com.tr
 - Ukrainian		- Alyona Lompar -
 
 == Installation ==
@@ -282,7 +284,7 @@ to check if plugin is activated.
 
 == Changelog ==
 
-= 3.0 Dev =
+= 3.0 =
 + New: use now default WordPress database functions to be compatible to e.g. multi-db plugins
 + New: backup your counter data
 + New: collect entries of counter table per month and per post to reduce the database and speed up the statistics

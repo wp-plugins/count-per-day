@@ -157,25 +157,27 @@ function mysqlQuery( $kind = '', $sql, $func = '' )
 	global $wpdb;
 	$t = microtime(true);
 	$con = $wpdb->dbh;
+	
+	$preparedSql = $wpdb->prepare($sql);
 
 	if ($kind == 'var')
-		$r = $wpdb->get_var( $wpdb->prepare($sql) );
+		$r = $wpdb->get_var( $preparedSql );
 	else if ($kind == 'count')
 	{
 		$sql = 'SELECT COUNT(*) FROM ('.trim($sql,';').') t';
 		$r = $wpdb->get_var( $wpdb->prepare($sql) );
 	}
 	else if ($kind = 'rows')
-		$r = $wpdb->get_results( $wpdb->prepare($sql) );
+		$r = $wpdb->get_results( $preparedSql );
 	else
-		$wpdb->query( $wpdb->prepare($sql) );
+		$wpdb->query( $preparedSql );
 		
 	if ( $this->options['debug'] )
 	{
 		$d = number_format( microtime(true) - $t , 5);
 		$m = sprintf("%.2f", memory_get_usage()/1048576).' MB';
 		$error = (!$r && mysql_errno($con)) ? '<b style="color:red">ERROR:</b> '.mysql_errno($con).' - '.mysql_error($con).' - ' : '';
-		$this->queries[] = $func." : <b>$d</b> - $m<br/><code>$sql</code><br/>$error";
+		$this->queries[] = $func." : <b>$d</b> - $m<br/><code>$preparedSql</code><br/>$error";
 		$this->queries[0] += $d;
 	}
 	
@@ -544,11 +546,11 @@ function cleanDB()
 	// delete by ip
 	foreach( $bots as $ip )
 		if ( ip2long($ip) !== false )
-			$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE INET_NTOA(ip) LIKE '".$ip."%", 'clenaDB_ip'.__LINE__);
+			$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE INET_NTOA(ip) LIKE '".$ip."%%", 'clenaDB_ip'.__LINE__);
 	
 	// delete by client
 	foreach ($bots as $bot)
-		$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE client LIKE '%".$bot."%'", 'cleanDB_client'.__LINE__);
+		$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE client LIKE '%%".$bot."%%'", 'cleanDB_client'.__LINE__);
 	
 	// delete if a previously countered page was deleted
 	$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE page NOT IN ( SELECT id FROM $wpdb->posts) AND page > 0", 'cleanDB_delPosts'.__LINE__);
