@@ -175,7 +175,7 @@ if(!empty($_POST['do']))
 		$sql = "
 		SELECT	LEFT(date,7) month, COUNT(*) c, country
 		FROM	$wpdb->cpd_counter
-		WHERE	date < DATE_SUB( DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL $keep MONTH )
+		WHERE	date < DATE_SUB( DATE_FORMAT(CURDATE(), '%%Y-%%m-01'), INTERVAL $keep MONTH )
 		GROUP	BY date, country, ip
 		ORDER	BY LEFT(date,7), country";
 		$res = $count_per_day->mysqlQuery('rows', $sql, 'getReadsPerMonthsCompress '.__LINE__);
@@ -245,7 +245,7 @@ if(!empty($_POST['do']))
 		$sql = "
 		SELECT	COUNT(*) count, page
 		FROM 	$wpdb->cpd_counter
-		WHERE	date < DATE_SUB( DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL $keep MONTH )
+		WHERE	date < DATE_SUB( DATE_FORMAT(CURDATE(), '%%Y-%%m-01'), INTERVAL $keep MONTH )
 		AND		page
 		GROUP	BY page";
 		$res = $count_per_day->mysqlQuery('rows', $sql, 'getUsersPerPostCompress '.__LINE__);
@@ -274,7 +274,7 @@ if(!empty($_POST['do']))
 		$sizeold = $count_per_day->getTableSize($wpdb->cpd_counter);
 		$sql = "
 		DELETE	FROM $wpdb->cpd_counter
-		WHERE	date < DATE_SUB( DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL $keep MONTH )";
+		WHERE	date < DATE_SUB( DATE_FORMAT(CURDATE(), '%%Y-%%m-01'), INTERVAL $keep MONTH )";
 		$count_per_day->mysqlQuery('', $sql, 'deleteAfterCollection '.__LINE__);
 		$count_per_day->mysqlQuery('', "REPAIR TABLE `$wpdb->cpd_counter`", 'repairTable '.__LINE__);
 		$sizenew = $count_per_day->getTableSize($wpdb->cpd_counter);
