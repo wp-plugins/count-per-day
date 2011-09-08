@@ -2,8 +2,8 @@
 Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
-Tested up to: 3.2.1
-Stable tag: 2.17
+Tested up to: 3.3
+Stable tag: 3.0
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
