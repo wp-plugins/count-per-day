@@ -1,0 +1,784 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Count per Day\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-11-02 12:13+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: Alexandr Alexandrov <yuzver@gmx.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Belarusian\n"
+"X-Poedit-Country: BELARUS\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-Basepath: P:/xampp/htdocs/wp/wp-content/plugins/count-per-day\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#@ cpd
+#: counter-options.php:46
+msgid "Options updated"
+msgstr "Налады захаваныя"
+
+#@ cpd
+#: counter-options.php:111
+#, php-format
+msgid "Database cleaned. %s rows deleted."
+msgstr "База дадзеных ачышчана.%s радкоў выдаленае."
+
+#@ cpd
+#: counter-options.php:121
+#: counter-options.php:496
+msgid "UNINSTALL Count per Day"
+msgstr "Выдаліць Count per Day"
+
+#@ cpd
+#: counter-options.php:126
+#: counter-options.php:128
+#: counter-options.php:130
+#, php-format
+msgid "Table %s deleted"
+msgstr "Табліца% s выдалена"
+
+#@ cpd
+#: counter-options.php:132
+msgid "Options deleted"
+msgstr "Налады выдалены"
+
+#@ cpd
+#: counter-options.php:156
+#: counter-options.php:481
+msgid "Uninstall"
+msgstr "Деинсталяция"
+
+#@ cpd
+#: counter-options.php:157
+msgid "Click here"
+msgstr "Націсніце сюды"
+
+#@ cpd
+#: counter-options.php:157
+msgid "to finish the uninstall and to deactivate \"Count per Day\"."
+msgstr "Для завяршэння деинсталяции і адключэння \" Штодзённага лічыльніка\"."
+
+#@ cpd
+#: counter-options.php:179
+msgid "Options"
+msgstr "Налады"
+
+#@ cpd
+#: counter-options.php:190
+msgid "Online time"
+msgstr "Час онлайн"
+
+#@ cpd
+#: counter-options.php:191
+msgid "Seconds for online counter. Used for \"Visitors online\" on dashboard page."
+msgstr "Сэкунд для онлайн лічыльніка. Выкарыстоўваецца для \" Наведвальнікаў онлайн\"на \" Панэлі інструмэнтаў\"."
+
+#@ cpd
+#: counter-options.php:194
+msgid "Logged on Users"
+msgstr "Якія ўвайшлі карыстальнікаў"
+
+#@ cpd
+#: counter-options.php:196
+msgid "count too"
+msgstr "Таксама лічыць"
+
+#@ cpd
+#: counter-options.php:208
+msgid "Auto counter"
+msgstr "Аўтаматычны лічыльнік"
+
+#@ cpd
+#: counter-options.php:209
+msgid "Counts automatically single-posts and pages, no changes on template needed."
+msgstr "Лічыць аўтаматычна асобныя публікацыі і старонкі, ніякіх зменаў у шаблон не спатрэбіцца."
+
+#@ cpd
+#: counter-options.php:212
+msgid "Bots to ignore"
+msgstr "Ігнараваць робатаў"
+
+#@ cpd
+#: counter-options.php:331
+msgid "Update options"
+msgstr "Захаваць наладкі"
+
+#@ cpd
+#: counter-options.php:445
+#: counter-options.php:454
+msgid "Clean the database"
+msgstr "Ачысьціць базу даных"
+
+#@ cpd
+#: counter-options.php:448
+msgid "You can clean the counter table by delete the \"spam data\".<br />If you add new bots above the old \"spam data\" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots."
+msgstr "Вы можаце ачысціць лічыльнік выдаліўшы \" Спам \". <br /> Калі вы дадасце новых робатаў-над \"Спам \", вы захаваеце базу дадзеных. <br /> Тут вы можаце запусціць бот-фільтр зноў і выдаліць наведвання ботаў. "
+
+#@ cpd
+#: counter-options.php:484
+msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
+msgstr "Калі \" Штодзённы лічыльнік \"актываваны, табліцы ў базах дадзеных будуць захаваныя:)."
+
+#@ cpd
+#: counter-options.php:485
+msgid "Here you can delete the tables and disable \"Count per Day\"."
+msgstr "Тут вы можаце выдаліць табліцы і адключыць \" Штодзённы лічыльнік \"."
+
+#@ cpd
+#: counter-options.php:488
+msgid "WARNING"
+msgstr "УВАГА"
+
+#@ cpd
+#: counter-options.php:489
+msgid "These tables (with ALL counter data) will be deleted."
+msgstr "Гэтыя табліцы (са усімі дадзенымі лічыльніка), будуць выдаленыя."
+
+#@ cpd
+#: counter-options.php:491
+msgid "If \"Count per Day\" re-installed, the counter starts at 0."
+msgstr "Калі \" Штодзённы лічыльнік \"переинсталлирован, лічыльнік пачынаецца з 0."
+
+#@ cpd
+#: counter-options.php:495
+msgid "Yes"
+msgstr "Так"
+
+#@ cpd
+#: counter-options.php:496
+msgid "You are sure to disable Count per Day and delete all data?"
+msgstr "Ці вы ўпэўненыя, што жадаеце адключыць \" Штодзённы лічыльнік \"і выдаліць усе дадзеныя?"
+
+#@ cpd
+#: counter.php:1786
+#: counter.php:2147
+msgid "Statistics"
+msgstr "Статыстыка"
+
+#@ cpd
+#: counter.php:529
+#: counter.php:534
+#: counter.php:1604
+#: counter.php:1750
+#: counter.php:2224
+msgid "Total visitors"
+msgstr "Усяго наведвальнікаў"
+
+#@ cpd
+#: counter.php:530
+#: counter.php:2230
+msgid "Visitors currently online"
+msgstr "Наведвальнікаў зараз на сайце"
+
+#@ cpd
+#: counter.php:531
+#: counter.php:2225
+msgid "Visitors today"
+msgstr "Наведвальнікаў сёння"
+
+#@ cpd
+#: counter.php:532
+#: counter.php:2226
+msgid "Visitors yesterday"
+msgstr "Наведвальнікаў ўчора"
+
+#@ cpd
+#: counter.php:533
+#: counter.php:2227
+msgid "Visitors last week"
+msgstr "Наведвальнікаў на мінулым тыдні"
+
+#@ cpd
+#: counter.php:536
+#: counter.php:2231
+msgid "Counter starts on"
+msgstr "Лічыльнік пачынаецца з"
+
+#@ cpd
+#: counter.php:535
+#: counter.php:636
+#: counter.php:1606
+#: counter.php:1756
+#: counter.php:1765
+#: counter.php:2229
+#: userperspan.php:33
+msgid "Visitors per day"
+msgstr "Наведвальнікаў у дзень"
+
+#@ cpd
+#: counter.php:1752
+#: counter.php:2228
+msgid "Visitors per month"
+msgstr "Наведвальнікаў у месяц"
+
+#@ cpd
+#: counter-options.php:236
+#: counter.php:1754
+msgid "Visitors per post"
+msgstr "Наведвальнікаў запісы"
+
+#@ cpd
+#: counter-options.php:117
+msgid "Counter reseted."
+msgstr "Лічыльнік абнулены"
+
+#@ default
+#: counter-options.php:233
+msgid "Dashboard"
+msgstr "Кансоль"
+
+#@ cpd
+#: counter-options.php:237
+#: counter-options.php:241
+msgid "How many posts do you want to see on dashboard page?"
+msgstr "Колькі запісаў вы хочаце бачыць на старонцы кансолі?"
+
+#@ cpd
+#: counter-options.php:240
+msgid "Latest Counts - Posts"
+msgstr "Апошнія лічыльнікі - Запісы"
+
+#@ cpd
+#: counter-options.php:244
+msgid "Latest Counts - Days"
+msgstr "Апошнія лічыльнікі - Дні"
+
+#@ cpd
+#: counter-options.php:245
+#: counter-options.php:249
+#: counter-options.php:275
+msgid "How many days do you want look back?"
+msgstr "Наколькі дзён таму вы хочаце бачыць статыстыку?"
+
+#@ cpd
+#: counter-options.php:248
+msgid "Chart - Days"
+msgstr "Табліца - Дні"
+
+#@ cpd
+#: counter-options.php:252
+msgid "Chart - Height"
+msgstr "Табліца - Вышыня"
+
+#@ cpd
+#: counter-options.php:253
+msgid "Height of the biggest bar"
+msgstr "Вышыня самага вялікага слупка"
+
+#@ cpd
+#: counter-options.php:290
+msgid "Show in lists"
+msgstr "Паказаць ў спісах"
+
+#@ cpd
+#: counter-options.php:291
+msgid "Show \"Reads per Post\" in a new column in post management views."
+msgstr "Паказаць \" чытанне паведамленняў\"у новай калонцы ва ўпраўленні запісамі"
+
+#@ cpd
+#: counter-options.php:463
+#: counter-options.php:472
+msgid "Reset the counter"
+msgstr "Абнуліць лічыльнік"
+
+#@ cpd
+#: counter-options.php:466
+msgid "You can reset the counter by empty the table. ALL TO 0!<br />Make a backup if you need the current data!"
+msgstr "Вы можаце абнуліць лічыльнік шляхам ачысткі табліцы. УСЕ У 0! <br /> Захавайце рэзервовую копію калі вам неабходныя бягучыя дадзеныя "
+
+#@ cpd
+#: counter.php:845
+msgid "no reads at this time"
+msgstr "Няма разоў прачытана да гэтага часу"
+
+#@ cpd
+#: counter.php:819
+msgid "days"
+msgstr "Дзён"
+
+#@ cpd
+#: counter.php:1257
+#, php-format
+msgid "The %s most visited posts in last %s days:"
+msgstr "Самае% s наведвальныя запісы за апошнія% s дзён:"
+
+#@ default
+#: counter.php:1591
+msgid "Settings"
+msgstr "Налады"
+
+#@ cpd
+#: counter.php:635
+#: counter.php:1766
+msgid "Reads per day"
+msgstr "Чытанне ў дзень"
+
+#@ cpd
+#: counter-options.php:225
+#: counter.php:528
+#: counter.php:1661
+msgid "Reads"
+msgstr "Чытанне"
+
+#@ cpd
+#: counter.php:2218
+msgid "This post"
+msgstr "Гэтая запіс"
+
+#@ cpd
+#: counter-options.php:57
+#, php-format
+msgid "Countries updated. <b>%s</b> entries in %s without country left"
+msgstr "Краіны <b>абноўлены.% s</b> запісаў у% s засталося без краін"
+
+#@ cpd
+#: counter-options.php:62
+msgid "update next"
+msgstr "Абнавіць наступны"
+
+#@ cpd
+#: counter-options.php:104
+#, php-format
+msgid "Mass Bots cleaned. %s counts deleted."
+msgstr "Табліца робатаў ачышчана.% s запісаў выдаленае"
+
+#@ cpd
+#: counter-options.php:197
+msgid "until User Level"
+msgstr "Да ўзроўню карыстальніка"
+
+#@ cpd
+#: counter-options.php:216
+msgid "Anonymous IP"
+msgstr "Ананімны IP"
+
+#@ cpd
+#: counter-options.php:261
+msgid "Countries"
+msgstr "Краіны"
+
+#@ cpd
+#: counter-options.php:262
+msgid "How many countries do you want to see on dashboard page?"
+msgstr "Колькі краін вы хочаце бачыць у спісе?"
+
+#@ cpd
+#: counter-options.php:299
+msgid "Start Values"
+msgstr "Пачатковыя дадзеныя"
+
+#@ cpd
+#: counter-options.php:303
+msgid "Here you can change the date of first count and add a start count."
+msgstr "Тут вы можаце памяняць дату пачатку адліку і дадаць пачатковы лічыльнік"
+
+#@ cpd
+#: counter-options.php:307
+msgid "Start date"
+msgstr "Дата пачатку"
+
+#@ cpd
+#: counter-options.php:308
+msgid "Your old Counter starts at?"
+msgstr "Ваш стары Лічыльнік пачынаўся з"
+
+#@ cpd
+#: counter-options.php:311
+#: counter-options.php:315
+msgid "Start count"
+msgstr "Пачатак адліку"
+
+#@ cpd
+#: counter-options.php:312
+msgid "Add this value to \"Total visitors\"."
+msgstr "Дадаць значэнне да \" Усяго наведвальнікаў \"."
+
+#@ cpd
+#: counter-options.php:340
+msgid "GeoIP - Countries"
+msgstr "GeoIP - Краіны"
+
+#@ cpd
+#: counter-options.php:349
+msgid "Update old counter data"
+msgstr "Абнавіць дадзеныя старога лічыльніка"
+
+#@ cpd
+#: counter-options.php:362
+msgid "Update GeoIP database"
+msgstr "Абнавіць базу дадзеных GeoIP"
+
+#@ cpd
+#: counter-options.php:365
+msgid "Download a new version of GeoIP.dat file."
+msgstr "Запампаваць новую версію файла GeoIP.dat."
+
+#@ cpd
+#: counter-options.php:371
+msgid "More informations about GeoIP"
+msgstr "Больш інфармацыі пра GeoIP"
+
+#@ cpd
+#: counter-options.php:386
+#: massbots.php:33
+msgid "Mass Bots"
+msgstr "Верагодныя боты"
+
+#@ cpd
+#: counter-options.php:390
+#, php-format
+msgid "Show all IPs with more than %s page views per day"
+msgstr "Паказаць усе IP з больш чым% s праглядаў у суткі"
+
+#@ cpd
+#: counter-options.php:391
+#: notes.php:76
+#: userperspan.php:43
+msgid "show"
+msgstr "Паказаць"
+
+#@ cpd
+#: counter-options.php:399
+msgid "IP"
+msgstr "IP"
+
+#@ cpd
+#@ default
+#: counter-options.php:400
+#: notes.php:80
+msgid "Date"
+msgstr "Дата"
+
+#@ cpd
+#: counter-options.php:401
+msgid "Client"
+msgstr "Кліент"
+
+#@ cpd
+#: counter-options.php:402
+msgid "Views"
+msgstr "Праглядаў"
+
+#@ cpd
+#: counter-options.php:413
+#: counter-options.php:435
+#, php-format
+msgid "Delete these %s counts"
+msgstr "Выдаліць гэтыя% s лічыльнікаў"
+
+#@ cpd
+#: counter-options.php:504
+msgid "Support"
+msgstr "Падтрымка"
+
+#@ cpd
+#: counter.php:1716
+#, php-format
+msgid "Time for Count per Day: <code>%s</code>."
+msgstr "Час для Count per Day: <code>%s</code> "
+
+#@ cpd
+#: counter.php:1717
+msgid "Bug? Problem? Question? Hint? Praise?"
+msgstr "Памылка? Праблема? Пытанне? Савет? Хвала?"
+
+#@ cpd
+#: counter.php:1718
+#, php-format
+msgid "Write a comment on the <a href=\"%s\">plugin page</a>."
+msgstr "Напішыце каментар на <a href=\"%s\">старонцы плагіна</a> "
+
+#@ cpd
+#: counter.php:524
+#: counter.php:2219
+msgid "Total reads"
+msgstr "Усяго чытанняў"
+
+#@ cpd
+#: counter.php:525
+#: counter.php:2220
+msgid "Reads today"
+msgstr "Чытанне сёння"
+
+#@ cpd
+#: counter.php:526
+#: counter.php:2221
+msgid "Reads yesterday"
+msgstr "Чытанне ўчора"
+
+#@ cpd
+#: counter.php:822
+#: counter.php:1376
+#: notes.php:47
+#: notes.php:81
+msgid "Notes"
+msgstr "Нататкі"
+
+#@ default
+#: counter.php:1374
+msgid "Show"
+msgstr "Паказаць"
+
+#@ cpd
+#: counter.php:1421
+msgid "Other"
+msgstr "Іншыя"
+
+#@ default
+#: counter.php:1505
+msgid "Edit Post"
+msgstr "Рэдагаваць запіс"
+
+#@ default
+#: counter.php:1520
+#: massbots.php:50
+#: userperspan.php:63
+msgid "Front page displays"
+msgstr "Адлюстраванне галоўнай старонкі"
+
+#@ cpd
+#: counter-options.php:266
+#: counter.php:1760
+msgid "Browsers"
+msgstr "Браўзэры"
+
+#@ cpd
+#: counter.php:1755
+msgid "Latest Counts"
+msgstr "Нядаўнія падлікі"
+
+#@ default
+#: counter.php:1757
+msgid "Plugin"
+msgstr "Плагін"
+
+#@ cpd
+#: counter.php:1770
+msgid "Reads per Country"
+msgstr "Чытанне па краінах"
+
+#@ cpd
+#: counter.php:900
+#: counter.php:1856
+msgid "Map"
+msgstr "Карта"
+
+#@ cpd
+#: geoip/geoip.php:108
+msgid "Sorry, necessary functions (zlib) not installed or enabled in php.ini."
+msgstr "Прыносім выбачэнні, неабходныя функцыі (zlib) не ўстаноўлена або не ўключана ў php.ini."
+
+#@ cpd
+#: geoip/geoip.php:132
+msgid "New GeoIP database installed."
+msgstr "Новая база дадзеных GeoIP ўсталяваная."
+
+#@ cpd
+#: geoip/geoip.php:134
+msgid "Sorry, an error occurred. Try again or check the access rights of directory \"geoip\" is 777."
+msgstr "Прыносім выбачэнні, адбылася памылка. Паспрабуйце зноў або праверце што правы доступу да тэчцы \" geoip \"- 777"
+
+#@ cpd
+#: notes.php:81
+msgid "(1 per day)"
+msgstr "(1 на суткі)"
+
+#@ default
+#: notes.php:82
+msgid "Action"
+msgstr "Дзеянне"
+
+#@ cpd
+#: notes.php:87
+msgid "add"
+msgstr "Дадаць"
+
+#@ cpd
+#: notes.php:102
+msgid "save"
+msgstr "Захаваць"
+
+#@ cpd
+#: notes.php:103
+msgid "delete"
+msgstr "Выдаліць"
+
+#@ cpd
+#: notes.php:114
+msgid "edit"
+msgstr "Рэдагаваць"
+
+#@ cpd
+#: counter-options.php:220
+msgid "Cache"
+msgstr "Кэш"
+
+#@ cpd
+#: counter-options.php:221
+msgid "I use a cache plugin. Count these visits with ajax."
+msgstr "Я выкарыстоўваю кэшавання убудова. Лічыць гэтыя наведвання пры дапамозе ajax"
+
+#@ cpd
+#: counter-options.php:267
+msgid "Substring of the user agent, separated by comma"
+msgstr "Падрадок агента карыстальніка падзелены коскі"
+
+#@ cpd
+#: counter-options.php:324
+msgid "Debug mode"
+msgstr "Рэжым адладкі"
+
+#@ cpd
+#: counter-options.php:326
+msgid "Show debug informations at the bottom of all pages."
+msgstr "Дадаць дапаможную інфармацыю ўнізе кожнай старонкі."
+
+#@ cpd
+#: counter.php:1771
+msgid "Visitors per Country"
+msgstr "Наведвальнікаў па краінах"
+
+#@ cpd
+#: userperspan.php:37
+msgid "Start"
+msgstr "Пачатак"
+
+#@ cpd
+#: userperspan.php:39
+msgid "End"
+msgstr "Канец"
+
+#@ cpd
+#: userperspan.php:41
+msgid "PostID"
+msgstr "ID паведамлення"
+
+#@ cpd
+#: counter-options.php:316
+msgid "Add this value to \"Total reads\"."
+msgstr "Дадаць значэнне да \" Усяго разоў прачытана \"."
+
+#@ cpd
+#: counter-options.php:352
+msgid "You can get the country data for all entries in database by checking the IP adress against the GeoIP database. This can take a while!"
+msgstr "Вы можаце атрымаць дадзеныя краін для ўсіх запісаў праверыўшы IP адрасы зноўку. Можа заняць некаторы час!"
+
+#@ cpd
+#: userperspan.php:49
+msgid "no data found"
+msgstr "Нічога не знойдзена"
+
+#@ cpd
+#: counter-options.php:186
+msgid "Counter"
+msgstr "Лічыльнік"
+
+#@ cpd
+#: counter-options.php:224
+msgid "Clients and referrers"
+msgstr "Кліенты і якія спасылаюцца сайты"
+
+#@ cpd
+#: counter-options.php:225
+msgid "Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors."
+msgstr "Захаваць і паказаць кліентаў і якія спасылаюцца сайты. <br /> Патрабуе шмат дыскавай прасторы ў базе дадзеных, але дае больш дэталёвую інфармацыю аб вашых наведвальніках. "
+
+#@ cpd
+#: counter-options.php:278
+msgid "Local URLs"
+msgstr "Лакальныя URL"
+
+#@ cpd
+#: counter-options.php:279
+msgid "Show local referrers too."
+msgstr "Паказваць лакальныя пераходы таксама."
+
+#@ default
+#: counter-options.php:287
+msgid "Posts"
+msgstr "Запісы"
+
+#@ default
+#: counter-options.php:287
+msgid "Pages"
+msgstr "Старонкі"
+
+#@ cpd
+#: counter.php:527
+#: counter.php:2222
+msgid "Reads last week"
+msgstr "Чытанне на мінулым тыдні"
+
+#@ default
+#: counter.php:1514
+msgid "Category"
+msgstr "Катэгорыя"
+
+#@ default
+#: counter.php:1517
+msgid "Tag"
+msgstr "Тег"
+
+#@ default
+#: counter.php:1719
+msgid "License"
+msgstr "Ліцэнзія"
+
+#@ cpd
+#: counter.php:1753
+#: counter.php:2223
+msgid "Reads per month"
+msgstr "Чытанне за месяц"
+
+#@ cpd
+#: counter.php:1761
+msgid "Referrer"
+msgstr "Спасылаецца сайт"
+
+#@ cpd
+#: counter-options.php:256
+msgid "Old Charts"
+msgstr "Старыя табліцы"
+
+#@ cpd
+#: counter-options.php:257
+msgid "Show old bar charts."
+msgstr "Паказаць у табліцу слупкамі"
+
+#@ cpd
+#: counter-options.php:270
+msgid "Referrers - Entries"
+msgstr "Старонкі, якія спасылаюцца сайты - Уваходжанне"
+
+#@ cpd
+#: counter-options.php:271
+msgid "How many referrers do you want to see on dashboard page?"
+msgstr "Колькі спасылаюцца сайтаў вы хочаце ўбачыць на старонцы статыстыкі?"
+
+#@ cpd
+#: counter-options.php:274
+msgid "Referrers - Days"
+msgstr "Старонкі, якія спасылаюцца сайты - Дні"
+
+#@ cpd
+#: counter.php:1449
+#, php-format
+msgid "The %s referrers in last %s days:"
+msgstr "%s спасылаюцца сайтаў за апошнія% s дзён:"
+
+#@ cpd
+#: counter.php:1751
+msgid "Visitors online"
+msgstr "Наведвальнікаў на сайце"
+
+#@ default
+#: counter.php:2242
+msgid "Title"
+msgstr "Загаловак"
+
