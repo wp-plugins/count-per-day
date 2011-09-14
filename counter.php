@@ -514,12 +514,15 @@ function getUserPerMonth( $frontend = false, $return = false )
 	}
 	// add collection
 	$coll = get_option('count_per_day_collected');
-	$coll = array_reverse($coll, true);
-	foreach ($coll as $m => $c)
+	if ($coll)
 	{
-		$m2 = str_split($m, 4);
-		$r .= '<li>'.$m2[0].'-'.$m2[1].' <b>'.$c['users'].'</b></li>'."\n";
-		$d[] = '[-'.$i++.','.$c['users'].']';
+		$coll = array_reverse($coll, true);
+		foreach ($coll as $m => $c)
+		{
+			$m2 = str_split($m, 4);
+			$r .= '<li>'.$m2[0].'-'.$m2[1].' <b>'.$c['users'].'</b></li>'."\n";
+			$d[] = '[-'.$i++.','.$c['users'].']';
+		}
 	}
 	$r .= '</ul>';
 	if (!$frontend)
@@ -546,12 +549,15 @@ function getReadsPerMonth( $frontend = false, $return = false )
 	}
 	// add collection
 	$coll = get_option('count_per_day_collected');
-	$coll = array_reverse($coll, true);
-	foreach ($coll as $m => $c)
+	if ($coll)
 	{
-		$m2 = str_split($m, 4);
-		$r .= '<li>'.$m2[0].'-'.$m2[1].' <b>'.$c['reads'].'</b></li>'."\n";
-		$d[] = '[-'.$i++.','.$c['reads'].']';
+		$coll = array_reverse($coll, true);
+		foreach ($coll as $m => $c)
+		{
+			$m2 = str_split($m, 4);
+			$r .= '<li>'.$m2[0].'-'.$m2[1].' <b>'.$c['reads'].'</b></li>'."\n";
+			$d[] = '[-'.$i++.','.$c['reads'].']';
+		}
 	}
 	$r .= '</ul>';
 	if (!$frontend)
@@ -757,10 +763,11 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0, $show_form = true, $show_n
 		$limit = $this->options['dashboard_last_posts'];
 
 	// get note
-	$notes = get_option('count_per_day_notes', array());
-	foreach ( $notes as $n )
-		if ( $n[0] == $date )
-			$note[] = $n[1];
+	$notes = get_option('count_per_day_notes');
+	if ( isset($notes) && is_array($notes) )
+		foreach ( $notes as $n )
+			if ( $n[0] == $date )
+				$note[] = $n[1];
 
 	$sql = $wpdb->prepare("
 		SELECT	COUNT(c.id) count,
@@ -921,6 +928,8 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 	{
 		// get collection
 		$p = get_option('count_per_day_posts');
+		if (empty($p))
+			$p = array();
 		// add normal data
 		foreach ( $m as $r )
 		{
@@ -973,7 +982,8 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 	{
 		$r .= '<li>';
 		// link only for editors in backend
-		if ( isset($userdata->user_level) && (int) $userdata->user_level >= 7 && !$frontend)
+		if ( current_user_can('editor') && !$frontend )
+//		if ( isset($userdata->user_level) && (int) $userdata->user_level >= 7 && !$frontend)
 		{
 			if ( $row->post_id > 0 )
 				$r .= '<a href="post.php?action=edit&amp;post='.$row->post_id.'"><img src="'.$this->img('cpd_pen.png').'" alt="[e]" title="'.__('Edit Post').'" style="width:9px;height:12px;" /></a> '

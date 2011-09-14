@@ -399,10 +399,15 @@ function createTables()
 	// delete table "notes", since v3.0
 	if (!get_option('count_per_day_notes'))
 	{
-		$ndb = $this->mysqlQuery('rows', "SELECT * FROM $cpd_n", 'table notes '.__LINE__);
-		foreach ($ndb as $note)
-			$n[] = array( $note->date, $note->note );
-		update_option('count_per_day_notes', $n);
+		$table = $this->mysqlQuery('rows', "SHOW TABLES LIKE '$cpd_n'", 'table notes '.__LINE__);
+		if (!empty($table))
+		{
+			$ndb = $this->mysqlQuery('rows', "SELECT * FROM $cpd_n", 'table notes '.__LINE__);
+			$n = array();
+			foreach ($ndb as $note)
+				$n[] = array( $note->date, $note->note );
+			update_option('count_per_day_notes', $n);
+		}
 	}
 	$this->mysqlQuery('', "DROP TABLE IF EXISTS `$cpd_n`", 'table notes '.__LINE__);
 	
@@ -767,8 +772,7 @@ function onShowPage()
 		wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false);
 		wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false);
 		$css = 'style="width:'.round(98 / $screen_layout_columns, 1).'%;"';
-		if (!$this->options['chart_old'])
-			$this->getFlotChart();
+		$this->getFlotChart();
 		?>
 		<div id="dashboard-widgets" class="metabox-holder cpd-dashboard">
 			<div class="postbox-container" <?php echo $css; ?>><?php do_meta_boxes($this->pagehook, 'cpdrow1', $data); ?></div>
@@ -870,8 +874,6 @@ function shortShowMap( $atts )
  */
 function includeChartJS( $id, $data, $html )
 {
-	if ( $this->options['chart_old'] )
-		return $html;
 	$d = array_reverse($data);
 	$d = '[['.implode(',', $d).']]';
 	$code = '<div id="'.$id.'" class="cpd-list-chart" style="width:100%;height:50px"></div>
@@ -1076,22 +1078,25 @@ function addCollectionToCountries( $visitors, $limit = false )
 		
 	// add collection values
 	$coll = get_option('count_per_day_collected');
-	foreach ($coll as $month)
+	if ($coll)
 	{
-		$countries = explode(';', $month['country']);
-		// country:reads|visitors	
-		foreach ($countries as $v)
+		foreach ($coll as $month)
 		{
-			if (!empty($v))
+			$countries = explode(';', $month['country']);
+			// country:reads|visitors	
+			foreach ($countries as $v)
 			{
-				$x = explode(':', $v);
-				$country = $x[0];
-				$y = explode('|', $x[1]);
-				$value = ($visitors) ? $y[1] : $y[0];
-				if (isset($temp[$country]))
-					$temp[$country] += $value;
-				else
-					$temp[$country] = $value;
+				if (!empty($v))
+				{
+					$x = explode(':', $v);
+					$country = $x[0];
+					$y = explode('|', $x[1]);
+					$value = ($visitors) ? $y[1] : $y[0];
+					if (isset($temp[$country]))
+						$temp[$country] += $value;
+					else
+						$temp[$country] = $value;
+				}
 			}
 		}
 	}
@@ -1151,9 +1156,12 @@ function getCollectedDayMostUsers()
 function getCollectedData( $month ) // YYYYMM
 {
 	$d = get_option('count_per_day_collected');
-	$m = $d[$month];
-	unset($d);
-	return $m;
+	if ($d)
+	{
+		$m = $d[$month];
+		unset($d);
+		return $m;
+	}
 }
 
 /* update if new count is bigger than collected */
