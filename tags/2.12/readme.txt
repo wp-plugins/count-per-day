@@ -34,7 +34,7 @@ It counts 1 visit per IP per day. So any reload of the page don't increment the 
 - Polish 		-  90% - LeXuS -				http://intrakardial.de
 - Portuguese BR	-  90% - Lucato -				http://www.ilucato.com.br
 - Uzbek			-  60% - Alisher -
-- Belarus		-  40% - Marcis Gasuns -		http://www.fatcow.com
+- Belarus		-  40% - Marcis Gasuns -		
 
 *) Rename cpd-da_DK-2.mo to cpd-da_DK.mo in "locale" dir to use the second dansk translation.
 

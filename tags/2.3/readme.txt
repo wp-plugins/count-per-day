@@ -166,7 +166,7 @@ Use '&lt;?php if(method _ exists($count _ per _ day, "show")) $count _ per _ day
 + create class, update/clean up/rename functions
 
 = 1.5.1 =
-+ New language: Belorussian, thanks to Marcis Gasuns http://www.fatcow.com
++ New language: Belorussian, thanks to Marcis Gasuns 
 
 = 1.5 =
 + New: Dashboard Widget

@@ -119,7 +119,7 @@ You can place these functions in your template.
 
 _Version 1.5.1_
 
-+ New language: Belorussian, thanks to Marcis Gasuns http://www.fatcow.com
++ New language: Belorussian, thanks to Marcis Gasuns 
 
 _Version 1.5_
 
