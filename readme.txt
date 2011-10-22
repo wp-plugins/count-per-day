@@ -251,7 +251,7 @@ Use '&lt;?php if(method_exists($count_per_day, "show")) $count_per_day->show(); 
 + create class, update/clean up/rename functions
 
 = 1.5.1 =
-+ New language: Belorussian, thanks to Marcis Gasuns http://www.fatcow.com
++ New language: Belorussian, thanks to Marcis Gasuns 
 
 = 1.5 =
 + New: Dashboard Widget
