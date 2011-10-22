@@ -3,14 +3,14 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 3.0
+Version: 3.1
 License: Postcardware
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '3.0';
+$cpd_version = '3.1';
 
 $cpd_path = str_replace('/', DIRECTORY_SEPARATOR, ABSPATH.PLUGINDIR.'/'.$cpd_dir_name.'/');
 include_once($cpd_path.'counter-core.php');
@@ -1054,7 +1054,7 @@ function getCountries( $limit = 0, $frontend = false, $visitors = false, $return
 			$c .= '&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day - '.__('Map', 'cpd').'" class="thickbox button">'.__('Map', 'cpd').'</a></div>';
 		}
 
-		$temp = $this->addCollectionToCountries( $visitors );
+		$temp = $this->addCollectionToCountries( $visitors, $limit );
 		
 		// make list				
 		$c .= '<ul class="cpd_front_list">';
@@ -1157,7 +1157,7 @@ class CountPerDay_Widget extends WP_Widget
 					if ( ($k == 'show' && is_singular()) || $k != 'show' )
 					{
 						$f = str_replace( $this->funcs, $this->cpd_funcs, $k );
-						echo '<li class="cpd-l">'.$instance[$k.'_name'].':';
+						echo '<li class="cpd-l">';
 						echo '<span id="cpd_number_'.$k.'" class="cpd-r">';
 						// parameters only for special functions
 						if ( $f == 'getUserPerDay' )
@@ -1166,7 +1166,7 @@ class CountPerDay_Widget extends WP_Widget
 							eval('echo $count_per_day->show("","",false,false);');
 						else
 							eval('echo $count_per_day->'.$f.'();');
-						echo '</span></li>';
+						echo '</span>'.$instance[$k.'_name'].':</li>';
 					}
 				}
 			}

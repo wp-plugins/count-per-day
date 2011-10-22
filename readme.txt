@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 3.0
+Stable tag: 3.1
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -284,6 +284,13 @@ to check if plugin is activated.
 
 == Changelog ==
 
+= 3.1 =
++ New: memory check before backup to avoid "out of memory" error
++ New: create temporary backup files for download only
++ New: delete backup files in wp-content on settings page
++ Bugfix: all posts shows 1 read in posts list
++ Bugfix: clean database shows 0 entries deleted
+
 = 3.0 =
 + New: use now default WordPress database functions to be compatible to e.g. multi-db plugins
 + New: backup your counter data
@@ -380,10 +387,10 @@ to check if plugin is activated.
 + New language: Polish, thanks to LeXuS
 
 = 2.10.1 =
-+ New language: Dutch, thanks to Rene http://wpwebshop.com
++ New language: Dutch, thanks to Rene
 
 = 2.10 =
-+ New language: French, thanks to Bjork http://www.habbzone.fr
++ New language: French, thanks to Bjork
 + New: Worldmap to visualize visitors per country
 + New: Shortcodes to add lists and charts to posts and pages, check counter.css too
 + Bugfix: mysql_fetch_assoc() error, non existing options
@@ -402,7 +409,7 @@ to check if plugin is activated.
 + New: set user level until CpD will count logged users
 + New: link to plugin page on Count per Day dashboard
 + New: click on a bar in the charts reload the page with given date for 'Visitors per day' metabox
-+ New language: Swedish, thanks to Magnus
++ New language: Swedish, thanks to Magnus Suther
 + New language: Dansk, thanks to GeorgeWP
 
 = 2.7 =

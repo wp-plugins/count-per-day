@@ -329,7 +329,7 @@ switch($mode) {
 	// save massbot limit
 	if(isset($_POST['limit']))
 	{
-		$o['massbotlimit'] = $_POST['limit'];
+		$o['massbotlimit'] = (int) $_POST['limit'];
 		update_option('count_per_day', $o);
 	}
 	?>
@@ -340,8 +340,8 @@ switch($mode) {
  	
 	<div class="postbox">
 		<h3>
-			<span class="cpd_icon cpd_settings"></span> <?php _e('Settings') ?> |
-			<span class="cpd_icon cpd_tools"></span> <a href="#cpdtools"><?php _e('Tools') ?></a>
+			<span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Settings') ?> |
+			<span class="cpd_icon cpd_tools">&nbsp;</span> <a href="#cpdtools"><?php _e('Tools') ?></a>
 		</h3>
 	</div>
 
@@ -349,7 +349,7 @@ switch($mode) {
 		
 	<?php // counter ?>
 	<fieldset>
-	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Counter', 'cpd') ?></legend>
+	<legend><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Counter', 'cpd') ?></legend>
 	
 	<table class="form-table">
 	<tr>
@@ -400,7 +400,7 @@ switch($mode) {
 	
 	<?php // dashboard ?>
 	<fieldset>
-	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Dashboard') ?></legend>
+	<legend><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Dashboard') ?></legend>
 	
 	<script type="text/javascript">
 	function checkcustom()
@@ -481,7 +481,7 @@ switch($mode) {
 	
 	<?php // lists ?>
 	<fieldset>
-	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Posts') ?> / <?php _e('Pages') ?></legend>
+	<legend><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Posts') ?> / <?php _e('Pages') ?></legend>
 	<table class="form-table">
 	<tr>
 		<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Show in lists', 'cpd') ?>:</th>
@@ -492,7 +492,7 @@ switch($mode) {
 	
 	<?php // start values ?>
 	<fieldset>
-	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Start Values', 'cpd') ?></legend>
+	<legend><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Start Values', 'cpd') ?></legend>
 	<table class="form-table">
 	<tr>
 		<th colspan="2">
@@ -516,7 +516,7 @@ switch($mode) {
 	
 	<?php // stylesheet ?>
 	<fieldset>
-	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Stylesheet', 'cpd') ?></legend>
+	<legend><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Stylesheet', 'cpd') ?></legend>
 	<table class="form-table">
 	<tr>
 		<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('NO Stylesheet in Frontend', 'cpd') ?>:</th>
@@ -527,7 +527,7 @@ switch($mode) {
 	
 	<?php // backup ?>
 	<fieldset>
-	<legend><span class="cpd_icon cpd_settings"></span> <?php _e('Backup', 'cpd') ?></legend>
+	<legend><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Backup', 'cpd') ?></legend>
 	<table class="form-table">
 	<tr>
 		<th nowrap="nowrap" scope="row" style="vertical-align:middle;"><?php _e('Entries per pass', 'cpd') ?>:</th>
@@ -546,7 +546,7 @@ switch($mode) {
 	
 	<?php // debug ?>
 	<fieldset>
-		<legend style="color:red"><span class="cpd_icon cpd_settings"></span> <?php _e('Debug mode', 'cpd') ?></legend>
+		<legend style="color:red"><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Debug mode', 'cpd') ?></legend>
 		<p style="margin-top:15px;margin-left:10px">
 			<label for="cpd_debug"><input type="checkbox" name="cpd_debug" id="cpd_debug" <?php checked($o['debug'], 1) ?> /> <?php _e('Show debug informations at the bottom of all pages.', 'cpd') ?></label>
 		</p>
@@ -557,8 +557,8 @@ switch($mode) {
 	</form>
 	
 	<div id="cpdtools" class="postbox" style="margin-top:40px">
-		<h3><span class="cpd_icon cpd_settings"></span> <a href="#cpdsettings"><?php _e('Settings') ?></a> |
-			<span class="cpd_icon cpd_tools"></span> <?php _e('Tools') ?></h3>
+		<h3><span class="cpd_icon cpd_settings">&nbsp;</span> <a href="#cpdsettings"><?php _e('Settings') ?></a> |
+			<span class="cpd_icon cpd_tools">&nbsp;</span> <?php _e('Tools') ?></h3>
 	</div>
 
 	<?php // mass bots ?>
@@ -572,7 +572,7 @@ switch($mode) {
 		$limit = 50;
 	$bots = $count_per_day->getMassBots( $limit );
 	?>
-	<h3><span class="cpd_icon cpd_massbots"></span> <?php _e('Mass Bots', 'cpd') ?></h3>
+	<h3><span class="cpd_icon cpd_massbots">&nbsp;</span> <?php _e('Mass Bots', 'cpd') ?></h3>
 	<div class="inside">
 		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>#cpdtools">
 		<p>
@@ -631,11 +631,14 @@ switch($mode) {
 	
 	<!-- Backup -->
 	<div class="postbox">
-	<h3><span class="cpd_icon cpd_backup"></span> <?php _e('Backup', 'cpd') ?></h3>
+	<h3><span class="cpd_icon cpd_backup">&nbsp;</span> <?php _e('Backup', 'cpd') ?></h3>
 	<div class="inside">
 		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 		<p>
 			<?php printf(__('Create a backup of the counter table %s in your wp-content directory (if writable).', 'cpd'), '<code>'.$wpdb->cpd_counter.'</code>') ?>
+		</p>
+		<p>
+			<input type="checkbox" name="downloadonly" value="1" /> <?php _e('Download only', 'cpd') ?>
 		</p>
 		<p>
 			<input type="hidden" name="do" value="cpd_backup" />
@@ -646,11 +649,27 @@ switch($mode) {
 		<?php
 		if ( is_writable(WP_CONTENT_DIR) )
 		{
+			$nonce = wp_create_nonce('cpdnonce');
+			
+			// delete file?
+			if ( isset($_GET['cpddel']) && isset($_GET['_wpnonce']) && wp_verify_nonce($_GET['_wpnonce'], 'cpdnonce') )
+				$delfile = WP_CONTENT_DIR.'/'.$_GET['cpddel'];
+			if ( isset($delfile) && preg_match('/count_per_day|cpd_counter/i', $delfile) && file_exists($delfile) )
+				@unlink($delfile);
+			
+			// list backup files
 			$d = dir(WP_CONTENT_DIR);
+			$dirarray = array();
 			while ( ($entry = $d->read()) !== false )
-			if ( preg_match('/count_per_day|cpd_counter/i', $entry) )
-				echo '<a href="'.content_url().'/'.$entry.'">'.$entry.'</a> - '.$count_per_day->formatbytes(filesize(WP_CONTENT_DIR.'/'.$entry)).'<br/>';
+				$dirarray[] = $entry;
 			$d->close();
+			sort($dirarray); // sort by names on all servers
+			foreach ( $dirarray as $entry )
+				if ( preg_match('/count_per_day|cpd_counter/i', $entry) )
+					echo '<a href="?page=count-per-day/counter-options.php&amp;_wpnonce='.$nonce.'&amp;cpddel='.$entry.'"
+						style="color:red;font-weight:bold;text-decoration:none" title="'.__('Delete').'"
+						onclick="return confirm(\''.sprintf(__('Delete the backup file %s ?','cpd'), '\n'.$entry).'\')">X</a>
+						<a href="'.content_url().'/'.$entry.'" style="text-decoration:none">'.$entry.'</a> - '.$count_per_day->formatbytes(filesize(WP_CONTENT_DIR.'/'.$entry)).'<br/>';
 		}	
 		?>
 		</p>
@@ -660,7 +679,7 @@ switch($mode) {
 	<!-- Cleaner -->
 	<?php if ( $count_per_day->options['referers'] ) : ?>
 		<div class="postbox">
-		<h3><span class="cpd_icon cpd_clean"></span> <?php _e('Clean the database', 'cpd') ?></h3>
+		<h3><span class="cpd_icon cpd_clean">&nbsp;</span> <?php _e('Clean the database', 'cpd') ?></h3>
 		<div class="inside">
 			<p>
 				<?php _e('You can clean the counter table by delete the "spam data".<br />If you add new bots above the old "spam data" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots.', 'cpd') ?>
@@ -678,7 +697,7 @@ switch($mode) {
 	
 	<!-- Collect -->
 	<div class="postbox">
-	<h3><span class="cpd_icon cpd_collection"></span> <?php _e('Collect old data', 'cpd') ?></h3>
+	<h3><span class="cpd_icon cpd_collection">&nbsp;</span> <?php _e('Collect old data', 'cpd') ?></h3>
 	<div class="inside">
 		<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 		<p>
@@ -718,7 +737,7 @@ switch($mode) {
 
 	<!-- Plugin page -->
 	<div class="postbox">
-	<h3><span class="cpd_icon cpd_help"></span> <?php _e('Support', 'cpd') ?></h3>
+	<h3><span class="cpd_icon cpd_help">&nbsp;</span> <?php _e('Support', 'cpd') ?></h3>
 	<div class="inside">
 		<?php $count_per_day->cpdInfo() ?>
 	</div>
@@ -731,7 +750,7 @@ switch($mode) {
 	
 	<!-- Countries -->
 	<div class="postbox">
-	<h3><span class="cpd_icon cpd_geoip"></span> <?php _e('GeoIP - Countries', 'cpd') ?></h3>
+	<h3><span class="cpd_icon cpd_geoip">&nbsp;</span> <?php _e('GeoIP - Countries', 'cpd') ?></h3>
 	<div class="inside">
 		<p>
 			<?php _e('You can get the country data for all entries in database by checking the IP adress against the GeoIP database. This can take a while!', 'cpd') ?>
@@ -765,7 +784,7 @@ switch($mode) {
 
 	<!-- ReActivation -->
 	<div class="postbox">
-	<h3><span class="cpd_icon cpd_update"></span> <?php _e('ReActivation', 'cpd') ?></h3>
+	<h3><span class="cpd_icon cpd_update">&nbsp;</span> <?php _e('ReActivation', 'cpd') ?></h3>
 	<div class="inside">
 		<p>
 			<?php _e('Here you can start the installation functions manually.<br/>Same as deactivate and reactivate the plugin.', 'cpd') ?>
@@ -781,7 +800,7 @@ switch($mode) {
 	
 	<!-- Reset DBs -->
 	<div class="postbox">
-	<h3><span class="cpd_icon cpd_reset"></span> <?php _e('Reset the counter', 'cpd') ?></h3>
+	<h3><span class="cpd_icon cpd_reset">&nbsp;</span> <?php _e('Reset the counter', 'cpd') ?></h3>
 	<div class="inside">
 		<p style="color: red">
 			<?php _e('You can reset the counter by empty the table. ALL TO 0!<br />Make a backup if you need the current data!', 'cpd') ?>
@@ -800,7 +819,7 @@ switch($mode) {
 	<!-- Uninstall -->
 	<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>"> 
 	<div class="postbox">
-	<h3><span class="cpd_icon cpd_uninstall"></span> <?php _e('Uninstall', 'cpd') ?></h3>
+	<h3><span class="cpd_icon cpd_uninstall">&nbsp;</span> <?php _e('Uninstall', 'cpd') ?></h3>
 	<div class="inside"> 
 		<p>
 			<?php _e('If "Count per Day" only disabled the tables in the database will be preserved.', 'cpd') ?><br/>
