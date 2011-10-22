@@ -36,7 +36,7 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 - Swedish		-  95% - Magnus Suther -		http://www.magnussuther.se
 - Portuguese BR	-  95% - Beto Ribeiro -			http://www.sevenarts.com.br
 - Uzbek			-  60% - Alisher -
-- Belarus		-  40% - Marcis Gasuns -		http://www.fatcow.com
+- Belarus		-  40% - Marcis Gasuns -		
 
 *) Rename cpd-da_DK-2.mo to cpd-da_DK.mo in "locale" directory to use the second dansk translation.
 
