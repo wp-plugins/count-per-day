@@ -82,10 +82,15 @@ function init()
 		add_action('admin_menu', array(&$this,'setAdminMenu'));
 		// column page list
 		add_action('manage_pages_custom_column', array(&$this,'cpdColumnContent'), 10, 2);
-		add_filter('manage_pages_columns', array(&$this,'cpdColumn'));
+		add_filter('manage_edit-page_columns', array(&$this,'cpdColumn'));
 		// column post list
 		add_action('manage_posts_custom_column', array(&$this,'cpdColumnContent'), 10, 2);
-		add_filter('manage_posts_columns', array(&$this,'cpdColumn'));
+//		add_filter('manage_posts_columns', array(&$this,'cpdColumn'));
+		add_filter('manage_edit-post_columns', array(&$this,'cpdColumn'));
+// 		add_filter('manage_edit-post_sortable_columns', array(&$this,'cpdSortableColumns'));
+
+// 		add_filter('request', array(&$this,'cpdReadsOrderby'));
+		
 		// adds javascript
 		add_action('admin_head', array(&$this,'addJS'));
 		// check version
@@ -135,6 +140,20 @@ function init()
 	// Session
 	add_action('init', array(&$this,'startSession'), 1);
 }
+
+function cpdReadsOrderby( $vars )
+{
+	if ( isset($vars['orderby']) && $vars['orderby'] == 'cpd_reads' )
+	{
+		$vars = array_merge( $vars, array(
+			'meta_key' => 'cpd_reads',
+			'orderby' => 'meta_value_num'
+		));
+	}
+	return $vars;
+}
+
+
 
 /**
  * starts session to provide WP variables to "addons"
@@ -265,7 +284,7 @@ function getPostID()
  */
 function isBot( $client = '', $bots = '', $ip = '' )
 {
-	if (empty($client))
+	if ( empty($client) && isset($_SERVER['HTTP_USER_AGENT']) )
 		$client = $_SERVER['HTTP_USER_AGENT'];
 	if (empty($ip))
 		$ip = $_SERVER['REMOTE_ADDR'];
@@ -443,7 +462,8 @@ function showQueries()
 		.'<b>Count per Day:</b> '.$cpd_version.'<br/>'
 		.'<b>Time for Count per Day:</b> '.date_i18n('Y-m-d H:i').'<br/>'
 		.'<b>URL:</b> '.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'].'<br/>'
-		.'<b>Referrer:</b> '.(isset($_SERVER['HTTP_REFERER']) ? htmlentities($_SERVER['HTTP_REFERER']) : '') 
+		.'<b>Referrer:</b> '.(isset($_SERVER['HTTP_REFERER']) ? htmlentities($_SERVER['HTTP_REFERER']) : '').'<br/>'
+		.'<b>PHP-Memory:</b> peak: '.$this->formatBytes(memory_get_peak_usage()).', limit: '.ini_get('memory_limit')
 		.'</li>';
 	echo "\n<li><b>POST:</b><br/>\n";
 	var_dump($_POST);
@@ -518,7 +538,7 @@ jQuery(document).ready( function($)
 		{
 			var cpd_daten = cpd_funcs[i].split('===');
 			var cpd_fields = document.getElementById('cpd_number_' + cpd_daten[0].toLowerCase());
-			cpd_fields.innerHTML = cpd_daten[1];
+			if (!cpd_fields) { cpd_fields.innerHTML = cpd_daten[1]; }
 		}
 	});
 } );
@@ -546,7 +566,7 @@ function cleanDB()
 	$bots = explode( "\n", $this->options['bots'] );
 	array_walk($bots, 'trim_value');
 	
-	$rows_before = $this->mysqlQuery('count', "SELECT COUNT(*) FROM $wpdb->cpd_counter", 'cleanDB '.__LINE__);
+	$rows_before = $this->mysqlQuery('var', "SELECT COUNT(*) FROM $wpdb->cpd_counter", 'cleanDB '.__LINE__);
 
 	// delete by ip
 	foreach( $bots as $ip )
@@ -560,7 +580,7 @@ function cleanDB()
 	// delete if a previously countered page was deleted
 	$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE page NOT IN ( SELECT id FROM $wpdb->posts) AND page > 0", 'cleanDB_delPosts'.__LINE__);
 	
-	$rows_after = $this->mysqlQuery('count', "SELECT COUNT(*) FROM $wpdb->cpd_counter", 'cleanDB '.__LINE__);
+	$rows_after = $this->mysqlQuery('var', "SELECT COUNT(*) FROM $wpdb->cpd_counter", 'cleanDB '.__LINE__);
 	return $rows_before - $rows_after;
 }
 
@@ -651,8 +671,15 @@ function dashboardWidgetSetup()
 function cpdColumn($defaults)
 {
 	if ( $this->options['show_in_lists']  )
-		$defaults['cpd_reads'] = '<img src="'.$this->img('cpd_menu.gif').'" alt="'.__('Reads', 'cpd').'" title="'.__('Reads', 'cpd').'" style="width:9px;height:12px;" />';
+		$defaults['cpd_reads'] = '<img src="'.$this->img('cpd_menu.gif').'" alt="'.__('Reads', 'cpd').'" title="'.__('Reads', 'cpd').'" style="width:12px;height:12px;" />';
 	return $defaults;
+}
+
+function cpdSortableColumns($columns)
+{
+	// meta column id => sortby value used in query
+	$custom = array('cpd_reads' => 'cpd_reads');
+	return wp_parse_args($custom, $columns);
 }
 
 /**
@@ -662,7 +689,13 @@ function cpdColumnContent($column_name, $id = 0)
 {
 	global $wpdb;
 	if( $column_name == 'cpd_reads' )
-		echo $this->mysqlQuery('count', "SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE page='$id'", 'cpdColumn_'.$id.'_'.__LINE__);
+	{
+		$c = $this->mysqlQuery('count', "SELECT 1 FROM $wpdb->cpd_counter WHERE page='$id'", 'cpdColumn_'.$id.'_'.__LINE__);
+		$coll = get_option('count_per_day_posts');
+		if ( $coll && isset($coll['p-'.$id]) )
+			$c += $coll['p-'.$id];
+		echo $c;
+	}
 }
 
 /**
@@ -913,22 +946,23 @@ function backup()
 	global $wpdb;
 	
 	$t = $wpdb->cpd_counter;
-	
-	$name = '/'.$t.'_backup_'.date_i18n('Y-m-d_H-i-s').'.sql';
-	
 	$gz = ( function_exists('gzopen') && is_writable(WP_CONTENT_DIR) ) ? 1 : 0;
-	if ($gz) $name .= '.gz';
+	$tname = $t.'_backup_'.date_i18n('Y-m-d_H-i-s').'.sql';
+	if ($gz) $tname .= '.gz';
+	$name = '/'.$tname;
 
 	// wp-content or tempdir?
-	$path = (is_writable(WP_CONTENT_DIR)) ? WP_CONTENT_DIR.$name : tempnam('', $name);
+	$path = ( empty($_POST['downloadonly']) && is_writable(WP_CONTENT_DIR) ) ? WP_CONTENT_DIR.$name : tempnam('', 'cpd');
 	
 	// open file
 	$f = ($gz) ? gzopen($path,'w9') : fopen($path,'w');
 	
+	@ob_start();
+	
 	if (!$f) :
 		echo '<div class="error"><p>'.__('Backup failed! Cannot open file', 'cpd').' '.$path.'.</p></div>';
 	else :
-		set_time_limit(600);
+		set_time_limit(300);
 		
 		// write backup to file
 		$d = "DROP TABLE IF EXISTS `$t`;\n";
@@ -947,7 +981,10 @@ function backup()
 			$part = (int) $this->options['backup_part'];
 			if (empty($part))
 				$part = 10000;
-			
+			// check free memory, save 8MB for script, 5000 entries needs ~ 10MB
+			$freeMemory = ($this->getBytes(ini_get('memory_limit')) - memory_get_usage()) - 8000000;
+			$part = min(array( round($freeMemory/1000000)*500, $part ));
+
 			// show progress
 			echo '<div id="cpd_progress" class="updated"><p>'.sprintf(__('Backup of %s entries in progress. Every point complies %s entries.', 'cpd'), $entries, $part).'<br />';
 			$this->flush_buffers();
@@ -989,6 +1026,7 @@ function backup()
 						}
 					}
 				}
+//				echo $this->formatBytes(memory_get_peak_usage());
 				echo '| ';
 				$this->flush_buffers();
 			}
@@ -1017,9 +1055,10 @@ function backup()
 		($gz) ? gzclose($f) : fclose($f);
 		
 		// save collection and options
-		$oname = '/count_per_day_options_'.date_i18n('Y-m-d_H-i-s').'.txt';
-		if ($gz) $oname .= '.gz';
-		$opath =  (is_writable(WP_CONTENT_DIR)) ? WP_CONTENT_DIR.$oname : tempnam('', $oname);
+		$toname = 'count_per_day_options_'.date_i18n('Y-m-d_H-i-s').'.txt';
+		if ($gz) $toname .= '.gz';
+		$oname = '/'.$toname;
+		$opath = ( empty($_POST['downloadonly']) && is_writable(WP_CONTENT_DIR) ) ? WP_CONTENT_DIR.$oname : tempnam('', 'cpd');
 		$f = ($gz) ? gzopen($opath,'w9') : fopen($opath,'w');
 		
 		foreach (array('count_per_day', 'count_per_day_summary', 'count_per_day_collected', 'count_per_day_posts', 'count_per_day_notes') as $o)
@@ -1034,10 +1073,15 @@ function backup()
 		echo '<div class="updated"><p>';
 		if ( strpos($path, WP_CONTENT_DIR) === false )
 		{
-			// show tempfile in textarea
-			$content = file_get_contents($path);
-			_e('Your wp-content directory is not writable. But you can copy the content of this box to a plain text file.', 'cpd');
-			echo '<textarea style="width:100%;height:200px">'.$content.'</textarea>';
+			// show download links
+			_e('Your can download the backup files here and now.', 'cpd');
+			echo '<br/>';
+			$tfile = basename($path);
+			$tofile = basename($opath);
+			echo sprintf(__('Backup of counter table saved in %s.', 'cpd'),
+				'<a href="'.$this->dir.'/download.php?f='.$tfile.'&amp;n='.$tname.'">'.$tname.'</a>').'<br/>';
+			echo sprintf(__('Backup of counter options and collection saved in %s.', 'cpd'),
+				'<a href="'.$this->dir.'/download.php?f='.$tofile.'&amp;n='.$toname.'">'.$toname.'</a>');
 		}
 		else
 		{
@@ -1051,6 +1095,8 @@ function backup()
 	endif;
 	$this->flush_buffers();
 }
+
+
 
 function addCollectionToCountries( $visitors, $limit = false )
 {
@@ -1108,17 +1154,6 @@ function addCollectionToCountries( $visitors, $limit = false )
 		$temp = array_slice($temp, 0, $limit);
 	
 	return $temp;
-}
-
-/**
- * flush buffers, the hard way ;)
- */
-function flush_buffers()
-{
-    @ob_end_flush();
-    @ob_flush();
-    @flush();
-    @ob_start();
 }
 
 /* get collected data */
@@ -1221,6 +1256,9 @@ function getTableSize( $table )
 		return $size;
 }
 
+/**
+ * formats byte integer to e.g. x.xx MB
+ */
 function formatBytes( $size )
 {
     $units = array(' B', ' KB', ' MB', ' GB', ' TB');
@@ -1229,5 +1267,35 @@ function formatBytes( $size )
     return round($size, 2).$units[$i];
 }
 
+/**
+ * flush buffers, the hard way ;)
+ */
+function flush_buffers()
+{
+	if (ob_get_length())
+	{
+		@ob_end_flush();
+		@ob_flush();
+		@flush();
+    }   
+	@ob_start();
+}
+
+/**
+ * formats e.g. 64MB to byte integer
+ */
+function getBytes($val) {
+    $val = trim($val);
+    $last = strtolower($val{strlen($val)-1});
+    switch($last) {
+        case 'g':
+            $val *= 1024;
+        case 'm':
+            $val *= 1024;
+        case 'k':
+            $val *= 1024;
+    }
+    return $val;
+}
 
 } // class
