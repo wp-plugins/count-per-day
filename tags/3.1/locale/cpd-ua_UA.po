@@ -1,0 +1,972 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Count per Day\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-11-02 12:13+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Alexandr <pixelpwnz@gmail.com>\n"
+"Language-Team: Alyona Lompar <alyona.lompar@aol.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Ukrainian\n"
+"X-Poedit-Country: UKRAINE\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: P:/xampp/htdocs/wp/wp-content/plugins/count-per-day\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: counter-options.php:49
+#@ cpd
+msgid "Options updated"
+msgstr "Налаштування збереженні"
+
+#: counter-options.php:113
+#, php-format
+#@ cpd
+msgid "Database cleaned. %s rows deleted."
+msgstr "База даних очищена. %s строк видалено."
+
+#: counter-options.php:128
+#: counter-options.php:811
+#@ cpd
+msgid "UNINSTALL Count per Day"
+msgstr "Видалити Count per Day"
+
+#: counter-options.php:133
+#: counter-options.php:134
+#: counter-options.php:135
+#, php-format
+#@ cpd
+msgid "Table %s deleted"
+msgstr "Таблиця %s видалена"
+
+#: counter-options.php:136
+#@ cpd
+msgid "Options deleted"
+msgstr "Параметри видалено"
+
+#: counter-options.php:317
+#: counter-options.php:797
+#@ cpd
+msgid "Uninstall"
+msgstr "Видалити"
+
+#: counter-options.php:318
+#@ cpd
+msgid "Click here"
+msgstr "Натисніть тут"
+
+#: counter-options.php:318
+#@ cpd
+msgid "to finish the uninstall and to deactivate \"Count per Day\"."
+msgstr "Для завершення видалення і відключення \"Count per Day\"."
+
+#: counter-options.php:356
+#@ cpd
+msgid "Online time"
+msgstr "Час з'єднання"
+
+#: counter-options.php:357
+#@ cpd
+msgid "Seconds for online counter. Used for \"Visitors online\" on dashboard page."
+msgstr "Секунд для он-лайн лічильника. Використовується для \" Відвідувачей онлайн \" на приладовій панелі сторінки."
+
+#: counter-options.php:360
+#@ cpd
+msgid "Logged on Users"
+msgstr "Зареєстрованих користувачів"
+
+#: counter-options.php:362
+#@ cpd
+msgid "count too"
+msgstr "Враховувати також"
+
+#: counter-options.php:374
+#@ cpd
+msgid "Auto counter"
+msgstr "Авто лічильник"
+
+#: counter-options.php:375
+#@ cpd
+msgid "Counts automatically single-posts and pages, no changes on template needed."
+msgstr "Рахує автоматично окремі повідомлення і сторінки, ніяких змін в шаблон не потрібно\"."
+
+#: counter-options.php:378
+#@ cpd
+msgid "Bots to ignore"
+msgstr "Ігнорувати пошукові системи"
+
+#: counter-options.php:562
+#@ cpd
+msgid "Update options"
+msgstr "Параметри оновлення"
+
+#: counter-options.php:657
+#: counter-options.php:666
+#@ cpd
+msgid "Clean the database"
+msgstr "Очистити бази даних"
+
+#: counter-options.php:660
+#@ cpd
+msgid "You can clean the counter table by delete the \"spam data\".<br />If you add new bots above the old \"spam data\" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots."
+msgstr "Ви можете очистити лічильник таблиці видаливши \"Спам\". <br />Якщо ви додаєте нових ботів над старими \"Спам\" які є в базі даних. <br />Тут ви можете запустити бот-фільтр знову і видалити візити ботів\"."
+
+#: counter-options.php:800
+#@ cpd
+msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
+msgstr "Якщо \"Count per Day\" активований, таблиці в базі даних будуть збережені."
+
+#: counter-options.php:801
+#@ cpd
+msgid "Here you can delete the tables and disable \"Count per Day\"."
+msgstr "Тут можна видалити таблиці і відключити \"Count per Day\"."
+
+#: counter-options.php:804
+#@ cpd
+msgid "WARNING"
+msgstr "УВАГА"
+
+#: counter-options.php:805
+#@ cpd
+msgid "These tables (with ALL counter data) will be deleted."
+msgstr "Ці таблиці (з усіма даними лічильника), будуть видалені."
+
+#: counter-options.php:807
+#@ cpd
+msgid "If \"Count per Day\" re-installed, the counter starts at 0."
+msgstr "Якщо \"Count per Day\" було перевстановлено, лічильник починається з 0."
+
+#: counter-options.php:787
+#: counter-options.php:810
+#@ cpd
+msgid "Yes"
+msgstr "Так"
+
+#: counter-options.php:811
+#@ cpd
+msgid "You are sure to disable Count per Day and delete all data?"
+msgstr "Ви впевнені, що хочете відключити Count per Day і видалити всі дані?"
+
+#: counter-core.php:754
+#: counter.php:1124
+#@ cpd
+msgid "Statistics"
+msgstr "Статистика"
+
+#: counter-core.php:723
+#: counter.php:160
+#: counter.php:1010
+#: counter.php:1202
+#@ cpd
+msgid "Total visitors"
+msgstr "Усього користувачів"
+
+#: counter.php:161
+#: counter.php:1208
+#@ cpd
+msgid "Visitors currently online"
+msgstr "Відвідувачі даний час в мережі"
+
+#: counter.php:162
+#: counter.php:1203
+#@ cpd
+msgid "Visitors today"
+msgstr "Відвідувачів сьогодні"
+
+#: counter.php:163
+#: counter.php:1204
+#@ cpd
+msgid "Visitors yesterday"
+msgstr "Відвідувачів вчора"
+
+#: counter.php:164
+#: counter.php:1205
+#@ cpd
+msgid "Visitors last week"
+msgstr "Відвідувачів на минулому тижні"
+
+#: counter.php:167
+#: counter.php:825
+#: counter.php:1209
+#@ cpd
+msgid "Counter starts on"
+msgstr "Лічильник починається з"
+
+#: counter-core.php:729
+#: counter.php:166
+#: counter.php:263
+#: counter.php:1012
+#: counter.php:1207
+#: userperspan.php:34
+#@ cpd
+msgid "Visitors per day"
+msgstr "Відвідувачів у день"
+
+#: counter-core.php:725
+#: counter.php:1206
+#@ cpd
+msgid "Visitors per month"
+msgstr "Відвідувачів за місяць"
+
+#: counter-core.php:727
+#: counter-options.php:439
+#@ cpd
+msgid "Visitors per post"
+msgstr "Відвідувачів повідомлення"
+
+#: counter-options.php:123
+#@ cpd
+msgid "Counter reseted."
+msgstr "Лічильник оновлено"
+
+#: counter-options.php:404
+#@ default
+msgid "Dashboard"
+msgstr "Панель"
+
+#: counter-options.php:440
+#: counter-options.php:444
+#@ cpd
+msgid "How many posts do you want to see on dashboard page?"
+msgstr "Скільки повідомлень ви хочете бачити на приладовій панелі сторінки?"
+
+#: counter-options.php:443
+#@ cpd
+msgid "Latest Counts - Posts"
+msgstr "Останні рахунки - Повідомлення"
+
+#: counter-options.php:447
+#@ cpd
+msgid "Latest Counts - Days"
+msgstr "Останні рахунки - Дні"
+
+#: counter-options.php:448
+#: counter-options.php:452
+#: counter-options.php:474
+#@ cpd
+msgid "How many days do you want look back?"
+msgstr "На скільки днів ви хочете озирнутися назад?"
+
+#: counter-options.php:451
+#@ cpd
+msgid "Chart - Days"
+msgstr "Графік - Дні"
+
+#: counter-options.php:455
+#@ cpd
+msgid "Chart - Height"
+msgstr "Графік - висота"
+
+#: counter-options.php:456
+#@ cpd
+msgid "Height of the biggest bar"
+msgstr "Висота найбільшого стовпчика"
+
+#: counter-options.php:489
+#@ cpd
+msgid "Show in lists"
+msgstr "Показувати в списках"
+
+#: counter-options.php:490
+#@ cpd
+msgid "Show \"Reads per Post\" in a new column in post management views."
+msgstr "Показати \"Читачів на повідомлення\" в новій колонці в управлінні записами."
+
+#: counter-options.php:778
+#: counter-options.php:788
+#@ cpd
+msgid "Reset the counter"
+msgstr "Скидання лічильника"
+
+#: counter-options.php:781
+#@ cpd
+msgid "You can reset the counter by empty the table. ALL TO 0!<br />Make a backup if you need the current data!"
+msgstr "Ви можете скинути лічильник шляхом очищення таблиці. ВСІ НА 0! <br />Зробіть резервну копію, якщо вам потрібні поточні дані!"
+
+#: counter.php:672
+#, php-format
+#@ cpd
+msgid "The %s most visited posts in last %s days:"
+msgstr "%s самих відвідуваних повідомлень за останні %s днів."
+
+#: counter-core.php:575
+#: counter-options.php:342
+#: counter-options.php:566
+#@ default
+msgid "Settings"
+msgstr "Настройки"
+
+#: counter.php:262
+#@ cpd
+msgid "Reads per day"
+msgstr "Читання в день"
+
+#: counter-core.php:639
+#: counter-options.php:393
+#: counter.php:159
+#: counter.php:875
+#@ cpd
+msgid "Reads"
+msgstr "Читання"
+
+#: counter.php:1196
+#@ cpd
+msgid "This post"
+msgstr "Це повідомлення"
+
+#: counter-options.php:60
+#, php-format
+#@ cpd
+msgid "Countries updated. <b>%s</b> entries in %s without country left"
+msgstr "Країни оновлені. <b>%s</b> записів в %s залишилось без країни"
+
+#: counter-options.php:63
+#@ cpd
+msgid "update next"
+msgstr "Оновити наступний"
+
+#: counter-options.php:103
+#, php-format
+#@ cpd
+msgid "Mass Bots cleaned. %s counts deleted."
+msgstr "Таблиця Пошукових систем очищена. %s записів видалено."
+
+#: counter-options.php:363
+#@ cpd
+msgid "until User Level"
+msgstr "до рівня користувача"
+
+#: counter-options.php:382
+#@ cpd
+msgid "Anonymous IP"
+msgstr "Анонімний IP"
+
+#: counter-options.php:460
+#@ cpd
+msgid "Countries"
+msgstr "Країни"
+
+#: counter-options.php:461
+#@ cpd
+msgid "How many countries do you want to see on dashboard page?"
+msgstr "Скільки країн ви хотіли б бачити на приладовій панелі сторінки?"
+
+#: counter-options.php:498
+#@ cpd
+msgid "Start Values"
+msgstr "Початкові дані"
+
+#: counter-options.php:502
+#@ cpd
+msgid "Here you can change the date of first count and add a start count."
+msgstr "Тут ви можете змінити дату першого відрахунку і задати початок відрахунку."
+
+#: counter-options.php:506
+#@ cpd
+msgid "Start date"
+msgstr "Дата початку"
+
+#: counter-options.php:507
+#@ cpd
+msgid "Your old Counter starts at?"
+msgstr "Ваш старий лічильник починався з?"
+
+#: counter-options.php:510
+#: counter-options.php:514
+#@ cpd
+msgid "Start count"
+msgstr "Почати рахувати"
+
+#: counter-options.php:511
+#@ cpd
+msgid "Add this value to \"Total visitors\"."
+msgstr "Установка цього значення в \"Усього користувачів\"."
+
+#: counter-options.php:728
+#@ cpd
+msgid "GeoIP - Countries"
+msgstr "GeoIP - Країни"
+
+#: counter-options.php:737
+#@ cpd
+msgid "Update old counter data"
+msgstr "Оновлення старих даних лічильника"
+
+#: counter-options.php:749
+#@ cpd
+msgid "Update GeoIP database"
+msgstr "Оновлення бази даних GeoIP"
+
+#: counter-options.php:744
+#@ cpd
+msgid "Download a new version of GeoIP.dat file."
+msgstr "Завантажити нову версію файла GeoIP.dat"
+
+#: counter-options.php:754
+#@ cpd
+msgid "More informations about GeoIP"
+msgstr "Більш детальна інформація про GeoIP"
+
+#: counter-options.php:581
+#: massbots.php:35
+#@ cpd
+msgid "Mass Bots"
+msgstr "Масові Пошукові системи"
+
+#: counter-options.php:585
+#, php-format
+#@ cpd
+msgid "Show all IPs with more than %s page views per day"
+msgstr "Показати всі IP-адреси з більш ніж %s переглядів сторінок на день"
+
+#: counter-options.php:586
+#: notes.php:71
+#: userperspan.php:44
+#@ cpd
+msgid "show"
+msgstr "показати"
+
+#: counter-options.php:594
+#@ cpd
+msgid "IP"
+msgstr "IP"
+
+#: counter-options.php:595
+#: notes.php:75
+#@ cpd
+#@ default
+msgid "Date"
+msgstr "Дата"
+
+#: counter-options.php:596
+#@ cpd
+msgid "Client"
+msgstr "Клієнт"
+
+#: counter-options.php:597
+#@ cpd
+msgid "Views"
+msgstr "Переглядів"
+
+#: counter-options.php:612
+#: counter-options.php:628
+#, php-format
+#@ cpd
+msgid "Delete these %s counts"
+msgstr "Видалити ц і%s лічильників"
+
+#: counter-options.php:715
+#@ cpd
+msgid "Support"
+msgstr "Підтримка"
+
+#: counter-core.php:689
+#, php-format
+#@ cpd
+msgid "Time for Count per Day: <code>%s</code>."
+msgstr "Час для Count per Day: <code>%s</code>."
+
+#: counter-core.php:690
+#@ cpd
+msgid "Bug? Problem? Question? Hint? Praise?"
+msgstr "Помилка? Проблема? Питання? Підказка? Хвала?"
+
+#: counter-core.php:691
+#, php-format
+#@ cpd
+msgid "Write a comment on the <a href=\"%s\">plugin page</a>."
+msgstr "Написати коментар на <a href=\"%s\">сторінці плагіна</a>."
+
+#: counter.php:155
+#: counter.php:1197
+#@ cpd
+msgid "Total reads"
+msgstr "Всього читаннь"
+
+#: counter.php:156
+#: counter.php:1198
+#@ cpd
+msgid "Reads today"
+msgstr "Читаннь сьогодні"
+
+#: counter.php:157
+#: counter.php:1199
+#@ cpd
+msgid "Reads yesterday"
+msgstr "Читаннь вчора"
+
+#: counter.php:788
+#: notes.php:42
+#: notes.php:76
+#@ cpd
+msgid "Notes"
+msgstr "Записки"
+
+#: counter.php:786
+#@ default
+msgid "Show"
+msgstr "Показати"
+
+#: counter.php:821
+#@ cpd
+msgid "Other"
+msgstr "Інші"
+
+#: counter.php:976
+#@ default
+msgid "Edit Post"
+msgstr "Редагувати повідомлення"
+
+#: counter.php:991
+#: massbots.php:52
+#: userperspan.php:63
+#@ default
+msgid "Front page displays"
+msgstr "Відображати на першій сторінці"
+
+#: counter-core.php:733
+#: counter-options.php:465
+#@ cpd
+msgid "Browsers"
+msgstr "Браузери"
+
+#: counter-core.php:728
+#@ cpd
+msgid "Latest Counts"
+msgstr "Останні підрахунки"
+
+#: counter-core.php:730
+#@ default
+msgid "Plugin"
+msgstr "Плагін"
+
+#: counter-core.php:738
+#@ cpd
+msgid "Reads per Country"
+msgstr "Читання по країнам"
+
+#: counter.php:353
+#: counter.php:1041
+#@ cpd
+msgid "Map"
+msgstr "Карта"
+
+#: geoip/geoip.php:93
+#@ cpd
+msgid "Sorry, necessary functions (zlib) not installed or enabled in php.ini."
+msgstr "На жаль, необхідні функції (Zlib) не встановлені або не включені в php.ini."
+
+#: geoip/geoip.php:117
+#@ cpd
+msgid "New GeoIP database installed."
+msgstr "Нова база даних GeoIP встановлена."
+
+#: geoip/geoip.php:119
+#@ cpd
+msgid "Sorry, an error occurred. Try again or check the access rights of directory \"geoip\" is 777."
+msgstr "Вибачте, сталася помилка. Спробуйте ще раз або перевірьте права доступу каталогу \"GeoIP\" є 777."
+
+#: notes.php:77
+#@ default
+msgid "Action"
+msgstr "Дія"
+
+#: notes.php:82
+#@ cpd
+msgid "add"
+msgstr "Додати"
+
+#: notes.php:98
+#@ cpd
+msgid "save"
+msgstr "Зберегти"
+
+#: notes.php:99
+#@ cpd
+msgid "delete"
+msgstr "Видалити"
+
+#: notes.php:110
+#@ cpd
+msgid "edit"
+msgstr "Змінити"
+
+#: counter-options.php:386
+#@ cpd
+msgid "Cache"
+msgstr "Кеш"
+
+#: counter-options.php:387
+#@ cpd
+msgid "I use a cache plugin. Count these visits with ajax."
+msgstr "Я використовую кеш плагінів. Рахувати ці візити за допомогою Ajax."
+
+#: counter-options.php:466
+#@ cpd
+msgid "Substring of the user agent, separated by comma"
+msgstr "Підрядок агента користувача, розділених комою"
+
+#: counter-options.php:555
+#@ cpd
+msgid "Debug mode"
+msgstr "Режим відлагодження"
+
+#: counter-options.php:557
+#@ cpd
+msgid "Show debug informations at the bottom of all pages."
+msgstr "Показати відлагоджувальну інофрмацію в нижній частині всіх сторінок."
+
+#: counter-core.php:739
+#@ cpd
+msgid "Visitors per Country"
+msgstr "Відвідувачів по країнах"
+
+#: userperspan.php:38
+#@ cpd
+msgid "Start"
+msgstr "Старт"
+
+#: userperspan.php:40
+#@ cpd
+msgid "End"
+msgstr "Кінець"
+
+#: userperspan.php:42
+#@ cpd
+msgid "PostID"
+msgstr "ID повідомлення"
+
+#: counter-options.php:515
+#@ cpd
+msgid "Add this value to \"Total reads\"."
+msgstr "Установити це значення в \"Всього читаннь\"."
+
+#: counter-options.php:731
+#@ cpd
+msgid "You can get the country data for all entries in database by checking the IP adress against the GeoIP database. This can take a while!"
+msgstr "Ви можете отримати дані по країнах для всіх записів в базі даних, перевіряючи IP-адреси по базі даних GeoIP. Це може зайняти деякий час!"
+
+#: userperspan.php:50
+#@ cpd
+msgid "no data found"
+msgstr "Нічого не знайдено"
+
+#: counter-options.php:352
+#@ cpd
+msgid "Counter"
+msgstr "Лічильник"
+
+#: counter-options.php:390
+#@ cpd
+msgid "Clients and referrers"
+msgstr "Клієнти та джерела"
+
+#: counter-options.php:393
+#@ cpd
+msgid "Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors."
+msgstr "Зберегти і показати клієнтів і джерела. <br />Потребує багато місця в базі даних, але надає більш детальну інформацію про ваших відвідувачів."
+
+#: counter-options.php:477
+#@ cpd
+msgid "Local URLs"
+msgstr "Місцеві URL"
+
+#: counter-options.php:478
+#@ cpd
+msgid "Show local referrers too."
+msgstr "Показати місцеві джерела теж."
+
+#: counter-options.php:486
+#@ default
+msgid "Posts"
+msgstr "Повідомлення"
+
+#: counter-options.php:486
+#@ default
+msgid "Pages"
+msgstr "Сторінки"
+
+#: counter.php:158
+#: counter.php:1200
+#@ cpd
+msgid "Reads last week"
+msgstr "Читаннь минулого тижня"
+
+#: counter.php:985
+#@ default
+msgid "Category"
+msgstr "Категорія"
+
+#: counter.php:988
+#@ default
+msgid "Tag"
+msgstr "Тег"
+
+#: counter-core.php:692
+#@ default
+msgid "License"
+msgstr "Ліцензія"
+
+#: counter-core.php:726
+#: counter.php:1201
+#@ cpd
+msgid "Reads per month"
+msgstr "Читаннь в місяць"
+
+#: counter-core.php:734
+#@ cpd
+msgid "Referrer"
+msgstr "Джерела"
+
+#: counter-options.php:469
+#@ cpd
+msgid "Referrers - Entries"
+msgstr "Джерела - Входження"
+
+#: counter-options.php:470
+#@ cpd
+msgid "How many referrers do you want to see on dashboard page?"
+msgstr "Скільки джерел ви хочете бачити на приладовій панелі сторінки?"
+
+#: counter-options.php:473
+#@ cpd
+msgid "Referrers - Days"
+msgstr "Джерела - Дні"
+
+#: counter.php:845
+#, php-format
+#@ cpd
+msgid "The %s referrers in last %s days:"
+msgstr "%s джерел в останні %s днів:"
+
+#: counter-core.php:724
+#@ cpd
+msgid "Visitors online"
+msgstr "Відвідувачів онлайн"
+
+#: counter.php:1220
+#@ default
+msgid "Title"
+msgstr "Назва"
+
+#: counter-core.php:186
+#, php-format
+#@ cpd
+msgid "\"Count per Day\" updated to version %s."
+msgstr ""
+
+#: counter-core.php:917
+#@ cpd
+msgid "Backup failed! Cannot open file"
+msgstr ""
+
+#: counter-core.php:940
+#, php-format
+#@ cpd
+msgid "Backup of %s entries in progress. Every point complies %s entries."
+msgstr ""
+
+#: counter-core.php:1027
+#@ cpd
+msgid "Your wp-content directory is not writable. But you can copy the content of this box to a plain text file."
+msgstr ""
+
+#: counter-core.php:1033
+#, php-format
+#@ cpd
+msgid "Backup of counter table saved in %s."
+msgstr ""
+
+#: counter-core.php:1035
+#, php-format
+#@ cpd
+msgid "Backup of counter options and collection saved in %s."
+msgstr ""
+
+#: counter-options.php:171
+#@ cpd
+msgid "Collection in progress..."
+msgstr ""
+
+#: counter-options.php:241
+#@ cpd
+msgid "Get Visitors per Post..."
+msgstr ""
+
+#: counter-options.php:262
+#@ cpd
+msgid "Delete old data..."
+msgstr ""
+
+#: counter-options.php:286
+#, php-format
+#@ cpd
+msgid "Counter entries until %s collected and counter table %s optimized (size before = %s &gt; size after = %s)."
+msgstr ""
+
+#: counter-options.php:295
+#@ cpd
+msgid "Installation of \"Count per Day\" checked"
+msgstr ""
+
+#: counter-options.php:343
+#: counter-options.php:567
+#@ default
+msgid "Tools"
+msgstr ""
+
+#: counter-options.php:395
+#@ cpd
+msgid "Save URL only, no query string."
+msgstr ""
+
+#: counter-options.php:420
+#@ cpd
+msgid "Who can see it"
+msgstr ""
+
+#: counter-options.php:429
+#@ cpd
+msgid "custom"
+msgstr ""
+
+#: counter-options.php:431
+#@ cpd
+msgid "and higher are allowed to see the statistics page."
+msgstr ""
+
+#: counter-options.php:433
+#, php-format
+#@ cpd
+msgid "Set the %s capability %s a user need:"
+msgstr ""
+
+#: counter-options.php:523
+#@ cpd
+msgid "Stylesheet"
+msgstr ""
+
+#: counter-options.php:526
+#@ cpd
+msgid "NO Stylesheet in Frontend"
+msgstr ""
+
+#: counter-options.php:527
+#@ cpd
+msgid "Do not load the stylesheet \"counter.css\" in frontend."
+msgstr ""
+
+#: counter-options.php:535
+#: counter-options.php:640
+#@ cpd
+msgid "Backup"
+msgstr ""
+
+#: counter-options.php:538
+#@ cpd
+msgid "Entries per pass"
+msgstr ""
+
+#: counter-options.php:541
+#@ cpd
+msgid "How many entries should be saved per pass? Default: 10000"
+msgstr ""
+
+#: counter-options.php:546
+#@ cpd
+msgid "If your PHP memory limit less then 50 MB and you get a white page or error messages try a smaller value."
+msgstr ""
+
+#: counter-options.php:644
+#, php-format
+#@ cpd
+msgid "Create a backup of the counter table %s in your wp-content directory (if writable)."
+msgstr ""
+
+#: counter-options.php:648
+#@ cpd
+msgid "Backup the database"
+msgstr ""
+
+#: counter-options.php:675
+#: counter-options.php:707
+#@ cpd
+msgid "Collect old data"
+msgstr ""
+
+#: counter-options.php:680
+#, php-format
+#@ cpd
+msgid "Current size of your counter table %s is %s."
+msgstr ""
+
+#: counter-options.php:682
+#@ cpd
+msgid "You can collect old data and clean up the counter table.<br/>Reads and visitors will be saved per month, per country and per post.<br/>Clients and referrers will deleted."
+msgstr ""
+
+#: counter-options.php:687
+#, php-format
+#@ cpd
+msgid "Currently your collection contains data until %s."
+msgstr ""
+
+#: counter-options.php:691
+#@ cpd
+msgid "Normally new data will be added to the collection."
+msgstr ""
+
+#: counter-options.php:697
+#@ cpd
+msgid "Delete old collection and create a new one which contains only the data currently in counter table."
+msgstr ""
+
+#: counter-options.php:698
+#, php-format
+#@ cpd
+msgid "All collected data until %s will deleted."
+msgstr ""
+
+#: counter-options.php:703
+#, php-format
+#@ cpd
+msgid "Keep entries of last %s full months + current month in counter table."
+msgstr ""
+
+#: counter-options.php:762
+#@ cpd
+msgid "ReActivation"
+msgstr ""
+
+#: counter-options.php:765
+#@ cpd
+msgid "Here you can start the installation functions manually.<br/>Same as deactivate and reactivate the plugin."
+msgstr ""
+
+#: counter-options.php:770
+#@ cpd
+msgid "ReActivate the plugin"
+msgstr ""
+
+#: counter.php:165
+#: counter.php:899
+#@ cpd
+msgid "Visitors"
+msgstr ""
+
+#: counter.php:168
+#: counter.php:169
+#@ cpd
+msgid "Most visited day"
+msgstr ""
+
+#: counter.php:1239
+#@ cpd
+msgid "drag and drop to sort"
+msgstr ""
+
