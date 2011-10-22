@@ -37,7 +37,7 @@ Visit Counter, shows reads per page, visitors today, yesterday, last week, last 
 
 - Polish 		-  85% - LeXuS -				http://intrakardial.de
 - Uzbek			-  60% - Alisher -
-- Belarus		-  40% - Marcis Gasuns -		http://www.fatcow.com
+- Belarus		-  40% - Marcis Gasuns -		
 
 *) Rename cpd-da_DK-2.mo to cpd-da_DK.mo in "locale" dir to use the second dansk translation.
 
