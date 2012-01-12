@@ -2,8 +2,8 @@
 Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
-Tested up to: 3.3
-Stable tag: 3.1
+Tested up to: 3.3.1
+Stable tag: 3.1.1
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -131,7 +131,7 @@ to check if plugin is activated.
 'count()'
 
 * only count reads, without any output
-* cpdShow call it
+* 'show' call it
 
 'getFirstCount( $return )'
 
@@ -283,6 +283,9 @@ to check if plugin is activated.
 * More information about GeoIP on http://www.maxmind.com/app/geoip_country
 
 == Changelog ==
+
+= 3.1.1 Security update =
++ Bugfix: important fixes in map.php and download.php, thanks to Pavel Komisarchuk from http://6scan.com
 
 = 3.1 =
 + New: memory check before backup to avoid "out of memory" error

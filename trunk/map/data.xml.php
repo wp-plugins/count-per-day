@@ -7,6 +7,7 @@ $geoip = new GeoIPCpD();
 $data = array();
 
 $what = (empty($_GET['map'])) ? 'reads' : $_GET['map'];
+$what = strip_tags($what);
 
 if ( $what == 'online' )
 {
