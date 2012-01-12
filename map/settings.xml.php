@@ -1,10 +1,11 @@
 <?php
 $what = (empty($_GET['map'])) ? 'Reads' : ucfirst($_GET['map']);
+$what = strip_tags($what);
 $disable = (empty($_GET['min'])) ? '' : '<enabled>false</enabled>';
 
 header("content-type: text/xml; charset=utf-8");
-echo '<?xml version="1.0" encoding="UTF-8"?>';
 ?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <settings>
 <projection>mercator</projection>
