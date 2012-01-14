@@ -285,7 +285,7 @@ to check if plugin is activated.
 == Changelog ==
 
 = 3.1.1 Security update =
-+ Bugfix: important fixes in map.php and download.php, thanks to Pavel Komisarchuk from http://6scan.com
++ Bugfix: important fixes in map.php and download.php, thanks to http://6scan.com
 
 = 3.1 =
 + New: memory check before backup to avoid "out of memory" error
