@@ -936,7 +936,7 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 			$pid = 'p'.$r->page;
 			if ( isset($p[$pid]) )
 				$p[$pid] += (int) $r->count;
-			else
+			else if ( $r->count )
 				$p[$pid] = (int) $r->count;
 		}
 		// max $limit
@@ -955,25 +955,55 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 		foreach ($p as $id=>$count)
 			$if .= " WHEN ".str_replace('p', '', $id)." THEN $count";
 
+// 		$sql = "
+// 		SELECT	CASE p.id $if ELSE 0 END AS count,	
+// 				p.id post_id,
+// 				p.post_title post,
+// 				t.name tag_cat_name,
+// 				t.slug tag_cat_slug,
+// 				x.taxonomy tax
+// 		FROM 	$wpdb->posts p,
+// 				$wpdb->terms t
+// 		LEFT	JOIN $wpdb->term_taxonomy x
+// 				ON x.term_id = t.term_id
+// 		WHERE	p.id IN ($list)
+// 		OR		-t.term_id IN ($list)
+// 		GROUP	BY p.id
+// 		ORDER	BY count DESC";
+// 			echo $sql;
+// 		$m = $this->mysqlQuery('rows', $sql, $name.' '.__LINE__);
+// 		if (!$m)
+// 			return;
+
 		$sql = "
-		SELECT	CASE p.id $if ELSE 0 END as count,	
-				p.id post_id,
-				p.post_title post,
-				t.name tag_cat_name,
-				t.slug tag_cat_slug,
-				x.taxonomy tax
-		FROM 	$wpdb->posts p,
-				$wpdb->terms t
-		LEFT	JOIN $wpdb->term_taxonomy x
-				ON x.term_id = t.term_id
-		WHERE	p.id IN ($list)
-		OR		-t.term_id IN ($list)
-		GROUP	BY p.id
-		ORDER	BY count DESC";
-				
+		        SELECT temp_outer.* FROM (
+			 		SELECT	CASE p.id $if ELSE 0 END count,	
+			 				p.id post_id,
+			 				p.post_title post,
+							'' tag_cat_name,
+							'' tag_cat_slug,
+							'' tax
+					FROM 	$wpdb->posts p
+					WHERE	p.id IN ($list)
+					GROUP	BY p.id
+			        UNION
+			        SELECT	CASE -t.term_id $if ELSE 0 END count,
+							t.term_id post_id,
+							'' post,
+			 				t.name tag_cat_name,
+			 				t.slug tag_cat_slug,
+			 				x.taxonomy tax
+					FROM 	$wpdb->terms t
+			 		LEFT	JOIN $wpdb->term_taxonomy x
+			 				ON x.term_id = t.term_id
+					WHERE	-t.term_id IN ($list)
+					GROUP	BY t.term_id
+					) temp_outer
+		 		ORDER	BY count DESC";
+// 		echo $sql;
 		$m = $this->mysqlQuery('rows', $sql, $name.' '.__LINE__);
 		if (!$m)
-			return;
+		return;
 	}	
 		
 		
@@ -993,12 +1023,22 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 		}
 		
 		$r .= '<a href="'.get_bloginfo('url');
-		if ( $row->post_id < 0 && $row->tax == 'category' )
-			//category
+// 		if ( $row->post_id < 0 && $row->tax == 'category' )
+			// category
+// 			$r .= '?cat='.abs($row->post_id).'">- '.$row->tag_cat_name.' ('.__('Category').') -';
+// 		else if ( $row->post_id < 0 )
+			// tag
+// 			$r .= '?tag='.$row->tag_cat_slug.'">- '.$row->tag_cat_name.' ('.__('Tag').') -';
+
+		if ( $row->tax == 'category' )
+			// category
 			$r .= '?cat='.abs($row->post_id).'">- '.$row->tag_cat_name.' ('.__('Category').') -';
-		else if ( $row->post_id < 0 )
+		else if ( $row->tax )
 			// tag
 			$r .= '?tag='.$row->tag_cat_slug.'">- '.$row->tag_cat_name.' ('.__('Tag').') -';
+			
+		
+		
 		else if ( $row->post_id == 0 )
 			// homepage
 			$r .= '">- '.__('Front page displays').' -';
@@ -1230,7 +1270,7 @@ class CountPerDay_Widget extends WP_Widget
 		echo '
 		<ul id="cpdwidgetlist'.$field_id.'">
 		<li class="cpd_widget_item cpd_widget_title">
-		<label for="'.$field_id.'">'.__('Title').':<label>
+		<label for="'.$field_id.'">'.__('Title').':</label>
 		<input type="text" class="widefat" id="'.$field_id.'" name="'.$field_name.'" value="'.esc_attr( $instance['title'] ).'" />
 		</li>';
 		
