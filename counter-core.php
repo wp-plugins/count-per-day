@@ -30,7 +30,7 @@ var $installed = false; // CpD installed in subblogs?
 function init()
 {
 	// variables
-	global $wpdb, $cpd_path, $cpd_dir_name;
+	global $wpdb, $path, $cpd_dir_name;
 	
 	define('CPD_METABOX', 'cpd_metaboxes');
 		
@@ -66,8 +66,11 @@ function init()
 	// javascript to count cached posts
 	if ($this->options['ajax'])
 	{
-		wp_enqueue_script('jquery');
-		add_action('wp_footer', array(&$this,'addAjaxScript'));
+// 		wp_enqueue_script('jquery');
+		add_action('wp_enqueue_scripts', array(&$this,'addJquery'));
+ 		add_action('wp_footer', array(&$this,'addAjaxScript'));
+// auch in addJQuery?
+		
 	}
 
 	if (is_admin())
@@ -88,7 +91,6 @@ function init()
 //		add_filter('manage_posts_columns', array(&$this,'cpdColumn'));
 		add_filter('manage_edit-post_columns', array(&$this,'cpdColumn'));
 // 		add_filter('manage_edit-post_sortable_columns', array(&$this,'cpdSortableColumns'));
-
 // 		add_filter('request', array(&$this,'cpdReadsOrderby'));
 		
 		// adds javascript
@@ -118,7 +120,7 @@ function init()
 		register_update_hook(ABSPATH.PLUGINDIR.'/count-per-day/counter.php', array(&$this,'checkVersion'));
 	
 	// uninstall hook
-	register_uninstall_hook($cpd_path.'counter.php', 'count_per_day_uninstall');
+	register_uninstall_hook($path.'counter.php', 'count_per_day_uninstall');
 	
 	// query times debug
 	if ($this->options['debug'])
@@ -132,13 +134,22 @@ function init()
 	
 	// thickbox in backend only
 	if (strpos($_SERVER['SCRIPT_NAME'], '/wp-admin/') !== false )
-	{
-		wp_enqueue_script('thickbox');
-		wp_enqueue_script('cpd_flot', $this->dir.'/js/jquery.flot.min.js', 'jQuery');
-	}
+		add_action('admin_enqueue_scripts', array(&$this,'addThickbox'));
 	
 	// Session
 	add_action('init', array(&$this,'startSession'), 1);
+}
+
+function addJquery()
+{
+	wp_enqueue_script('jquery');
+}
+
+function addThickbox()
+{
+	wp_enqueue_script('thickbox');
+	if (strpos($_SERVER['QUERY_STRING'], 'cpd_metaboxes') !== false)
+		wp_enqueue_script('cpd_flot', $this->dir.'/js/jquery.flot.min.js', 'jQuery');
 }
 
 function cpdReadsOrderby( $vars )
@@ -152,8 +163,6 @@ function cpdReadsOrderby( $vars )
 	}
 	return $vars;
 }
-
-
 
 /**
  * starts session to provide WP variables to "addons"
@@ -176,9 +185,8 @@ function mysqlQuery( $kind = '', $sql, $func = '' )
 	global $wpdb;
 	$t = microtime(true);
 	$con = $wpdb->dbh;
-	
 	$preparedSql = $wpdb->prepare($sql);
-
+	$r = false;
 	if ($kind == 'var')
 		$r = $wpdb->get_var( $preparedSql );
 	else if ($kind == 'count')
@@ -186,11 +194,13 @@ function mysqlQuery( $kind = '', $sql, $func = '' )
 		$sql = 'SELECT COUNT(*) FROM ('.trim($sql,';').') t';
 		$r = $wpdb->get_var( $wpdb->prepare($sql) );
 	}
-	else if ($kind = 'rows')
+	else if ($kind == 'rows')
+	{
 		$r = $wpdb->get_results( $preparedSql );
+	}
 	else
 		$wpdb->query( $preparedSql );
-		
+
 	if ( $this->options['debug'] )
 	{
 		$d = number_format( microtime(true) - $t , 5);
@@ -376,7 +386,7 @@ function createTables()
 	{
 		$queries = array (
 		"ALTER TABLE `$cpd_c` ADD `ip2` INT(10) UNSIGNED NOT NULL AFTER `ip`",
-		"UPDATE `$cpd_c` SET ip2 = INET_ATON(ip)",
+		"UPDATE `$cpd_c` SET ip2 = $this->aton(ip)",
 		"ALTER TABLE `$cpd_c` DROP `ip`",
 		"ALTER TABLE `$cpd_c` CHANGE `ip2` `ip` INT( 10 ) UNSIGNED NOT NULL",
 		"ALTER TABLE `$cpd_c` CHANGE `date` `date` date NOT NULL",
@@ -431,10 +441,7 @@ function createTables()
 	$this->mysqlQuery('', "DROP TABLE IF EXISTS `$cpd_n`", 'table notes '.__LINE__);
 	
 	// update options to array
-	$this->UpdateOptions();
-	
-	// set directory mode
-	@chmod(ABSPATH.PLUGINDIR.'/count-per-day/geoip', 0777);
+	$this->updateOptions();
 }
 
 /**
@@ -451,7 +458,7 @@ function register_widgets()
 function showQueries()
 {
 	global $wpdb, $cpd_path, $cpd_version;
-	echo '<div style="position:absolute;margin:10px;padding:10px;border:1px red solid">
+	echo '<div style="position:absolute;margin:10px;padding:10px;border:1px red solid;background:#fff;clear:both">
 		<b>Count per Day - DEBUG: '.round($this->queries[0], 3).' s</b><ol>'."\n";
 	echo '<li>'
 		.'<b>Server:</b> '.$_SERVER['SERVER_SOFTWARE'].'<br/>'
@@ -516,7 +523,8 @@ function addCss()
  */
 function addJS()
 {
-	echo '<!--[if IE]><script type="text/javascript" src="'.$this->dir.'/js/excanvas.min.js"></script><![endif]-->'."\n";
+	if (strpos($_SERVER['QUERY_STRING'], 'cpd_metaboxes') !== false )
+		echo '<!--[if IE]><script type="text/javascript" src="'.$this->dir.'/js/excanvas.min.js"></script><![endif]-->'."\n";
 }
 
 /**
@@ -525,33 +533,27 @@ function addJS()
 function addAjaxScript()
 {
 	$this->getPostID();
+	$time = time();
 	echo <<< JSEND
 <script type="text/javascript">
 // Count per Day
 //<![CDATA[
 jQuery(document).ready( function($)
 {
-	jQuery.get('{$this->dir}/ajax.php?f=count&page={$this->page}', function(text)
+	jQuery.get('{$this->dir}/ajax.php?f=count&page={$this->page}&time={$time}', function(text)
 	{
 		var cpd_funcs = text.split('|');
 		for(var i = 0; i < cpd_funcs.length; i++)
 		{
 			var cpd_daten = cpd_funcs[i].split('===');
 			var cpd_fields = document.getElementById('cpd_number_' + cpd_daten[0].toLowerCase());
-			if (!cpd_fields) { cpd_fields.innerHTML = cpd_daten[1]; }
+			if (!cpd_fields && cpd_fields != null) { cpd_fields.innerHTML = cpd_daten[1]; }
 		}
 	});
 } );
 //]]>
 </script>
 JSEND;
-
-// name not valide in span or div...
-// var cpd_fields = document.getElementsByName('cpd_number_' + cpd_daten[0].toLowerCase());
-// for(var x = 0; x < cpd_fields.length; x++)
-// {
-//		cpd_fields[x].innerHTML = cpd_daten[1];
-// }
 }
 
 /**
@@ -571,7 +573,7 @@ function cleanDB()
 	// delete by ip
 	foreach( $bots as $ip )
 		if ( ip2long($ip) !== false )
-			$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE INET_NTOA(ip) LIKE '".$ip."%%", 'clenaDB_ip'.__LINE__);
+			$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE $this->ntoa(ip) LIKE '".$ip."%%", 'clenaDB_ip'.__LINE__);
 	
 	// delete by client
 	foreach ($bots as $bot)
@@ -635,7 +637,7 @@ function updateOptions()
 	'chart_days' => 60,
 	'chart_height' => 100,
 	'countries' => 20,
-	'startdate' => '',
+	'startdate' => '2000-01-01',
 	'startcount' => '',
 	'startreads' => '',
 	'anoip' => 0,
@@ -662,7 +664,8 @@ function updateOptions()
  */
 function dashboardWidgetSetup()
 {
-	wp_add_dashboard_widget( 'cpdDashboardWidget', 'Count per Day', array(&$this,'dashboardWidget') );
+	if ( current_user_can($this->options['show_in_lists']) )
+		wp_add_dashboard_widget( 'cpdDashboardWidget', 'Count per Day', array(&$this,'dashboardWidget') );
 }
 
 /**
@@ -755,6 +758,7 @@ function getReferersMeta()				{ $this->getReferers(0, false, 0); }
 function getUserOnlineMeta()			{ $this->getUserOnline(false, true); }
 function getUserPerMonthMeta()			{ $this->getUserPerMonth(); }
 function getReadsPerMonthMeta()			{ $this->getReadsPerMonth(); }
+function getSearchesMeta()				{ $this->getSearches(); }
 
 /**
  * will be executed if wordpress core detects this page has to be rendered
@@ -775,6 +779,7 @@ function onLoadPage()
 	add_meta_box('reads_per_post', '<span class="cpd_icon cpd_post">&nbsp;</span> '.__('Visitors per post', 'cpd'), array(&$this,'getUserPerPostMeta'), $this->pagehook, 'cpdrow3', 'default');
 	add_meta_box('last_reads', '<span class="cpd_icon cpd_calendar">&nbsp;</span> '.__('Latest Counts', 'cpd'), array(&$this,'getMostVisitedPostsMeta'), $this->pagehook, 'cpdrow4', 'default');
 	add_meta_box('day_reads', '<span class="cpd_icon cpd_day">&nbsp;</span> '.__('Visitors per day', 'cpd'), array(&$this,'getVisitedPostsOnDayMeta'), $this->pagehook, 'cpdrow4', 'default');
+	add_meta_box('searches', '<span class="cpd_icon cpd_help">&nbsp;</span> '.__('Search strings', 'cpd'), array(&$this,'getSearchesMeta'), $this->pagehook, 'cpdrow1', 'default');
 	add_meta_box('cpd_info', '<span class="cpd_icon cpd_help">&nbsp;</span> '.__('Plugin'), array(&$this,'cpdInfo'), $this->pagehook, 'cpdrow1', 'low');
 	if ($this->options['referers'])
 	{
@@ -804,7 +809,7 @@ function onShowPage()
 		wp_nonce_field('cpd-metaboxes');
 		wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false);
 		wp_nonce_field('meta-box-order', 'meta-box-order-nonce', false);
-		$css = 'style="width:'.round(98 / $screen_layout_columns, 1).'%;"';
+		$css = 'style="width:'.round(100 / $screen_layout_columns, 1).'%;"';
 		$this->getFlotChart();
 		?>
 		<div id="dashboard-widgets" class="metabox-holder cpd-dashboard">
@@ -850,12 +855,14 @@ function addShortcodes()
 	add_shortcode('CPD_VISITORS_PER_MONTH', array(&$this,'shortUserPerMonth'));
 	add_shortcode('CPD_VISITORS_PER_POST', array(&$this,'shortUserPerPost'));
 	add_shortcode('CPD_COUNTRIES', array(&$this,'shortCountries'));
+	add_shortcode('CPD_COUNTRIES_USERS', array(&$this,'shortCountriesUsers'));
 	add_shortcode('CPD_MOST_VISITED_POSTS', array(&$this,'shortMostVisitedPosts'));
 	add_shortcode('CPD_REFERERS', array(&$this,'shortReferers'));
 	add_shortcode('CPD_POSTS_ON_DAY', array(&$this,'shortPostsOnDay'));
 	add_shortcode('CPD_MAP', array(&$this,'shortShowMap'));
 	add_shortcode('CPD_DAY_MOST_READS', array(&$this,'shortDayWithMostReads'));
 	add_shortcode('CPD_DAY_MOST_USERS', array(&$this,'shortDayWithMostUsers'));
+	add_shortcode('CPD_SEARCHSTRINGS', array(&$this,'shortGetSearches'));
 }
 function shortShow()			{ return $this->show('', '', false, false); }
 function shortReadsTotal()		{ return $this->getReadsAll(true); }
@@ -876,10 +883,19 @@ function shortClients()			{ return $this->getClients(true); }
 function shortUserPerMonth()	{ return $this->getUserPerMonth(true, true); }
 function shortUserPerPost()		{ return $this->getUserPerPost(0, true, true); }
 function shortCountries()		{ return $this->getCountries(0, true, false, true); }
+function shortCountriesUsers(){ return $this->getCountries(0, true, true, true); }
 function shortMostVisitedPosts(){ return $this->getMostVisitedPosts(0, 0, true, false, true); }
 function shortReferers()		{ return $this->getReferers(0, true, 0); }
 function shortDayWithMostReads(){ return $this->getDayWithMostReads(true, true); }
 function shortDayWithMostUsers(){ return $this->getDayWithMostUsers(true, true); }
+function shortGetSearches( $atts )
+{
+	extract( shortcode_atts( array(
+		'limit' => 0,
+		'days' => 0
+	), $atts) );
+	return $this->getSearches( $limit, $days, true );
+}
 function shortPostsOnDay( $atts )
 {
 	extract( shortcode_atts( array(
@@ -927,7 +943,7 @@ function getMassBots( $limit )
 {
 	global $wpdb;
 	$sql = $wpdb->prepare("
-	SELECT	t.id, t.ip AS longip, INET_NTOA(t.ip) AS ip, t.date, t.posts, c.client
+	SELECT	t.id, t.ip AS longip, $this->ntoa(t.ip) AS ip, t.date, t.posts, c.client
 	FROM (	SELECT	id, ip, date, count(*) posts
 			FROM	$wpdb->cpd_counter
 			GROUP	BY ip, date
@@ -957,15 +973,14 @@ function backup()
 	// open file
 	$f = ($gz) ? gzopen($path,'w9') : fopen($path,'w');
 	
-	@ob_start();
-	
 	if (!$f) :
 		echo '<div class="error"><p>'.__('Backup failed! Cannot open file', 'cpd').' '.$path.'.</p></div>';
 	else :
 		set_time_limit(300);
+		$this->flush_buffers();
 		
 		// write backup to file
-		$d = "DROP TABLE IF EXISTS `$t`;\n";
+		$d = '';
 		($gz) ? gzwrite($f, $d) : fwrite($f, $d);
 		if ( $res = $this->mysqlQuery('rows', "SHOW CREATE TABLE `$t`", 'backupCollect'.__LINE__) )
 		{
@@ -1026,7 +1041,6 @@ function backup()
 						}
 					}
 				}
-//				echo $this->formatBytes(memory_get_peak_usage());
 				echo '| ';
 				$this->flush_buffers();
 			}
@@ -1097,6 +1111,82 @@ function backup()
 }
 
 
+/**
+* restores backup data to the counter table or options
+*/
+function restore ()
+{
+	global $wpdb;
+	
+	if ( empty($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'cpdnonce')
+		|| ( empty($_GET['cpdrestore']) && empty($_GET['cpdadding']) ) )
+		return;
+	
+	$doadding = (isset($_GET['cpdadding'])) ? 1 : 0;
+	$path = WP_CONTENT_DIR.'/'.(($doadding) ? $_GET['cpdadding'] : $_GET['cpdrestore']);
+	
+	if ( isset($path) && preg_match('/count_per_day|cpd_counter/i', $path) && file_exists($path) )
+	{
+		$gz = (substr($path, -3) == '.gz') ? 1 : 0;
+		$f = ($gz) ? gzopen($path, 'r') : fopen($path, 'r');
+	
+		if ( strpos($path, 'counter_backup') )
+		{
+			// counter table
+			$cpd_sep = array('DROP TABLE', 'CREATE TABLE', 'INSERT INTO', 'REPAIR TABLE');
+			$sql = '';
+			while ( ($cpd_line = ($gz)?gzgets($f):fgets($f)) !== false )
+			{
+				// new query?
+				$newsql = 0;
+				foreach ( $cpd_sep as $s )
+					if ( strpos($cpd_line, $s) !== false && strpos($cpd_line, $s) < 5 )
+						$newsql = 1;
+				if ($newsql)
+				{
+					// execute query, do not recreate table while adding data
+					if (!empty($sql))
+					{
+						if ($doadding)
+							$sql = str_replace('INSERT INTO', 'REPLACE INTO', $sql);
+						if ( !$doadding || ( strpos($sql, 'DROP TABLE') === false && strpos($sql, 'CREATE TABLE')  === false ) )
+							$this->mysqlQuery('', $sql, 'restoreSql '.__LINE__);
+					}
+					$sql = $cpd_line;
+				}
+				else
+					$sql .= $cpd_line;
+			}
+			if (!feof($f)) {
+				echo '<div class="error"><p>'.__('Error while reading backup file!', 'cpd')."</p></div>\n";
+			}
+			unset($sql);
+			if ($doadding)
+				echo '<div class="updated"><p>'.sprintf(__('The backup was added to counter table %s.', 'cpd'), "<code>$wpdb->cpd_counter</code>")."</p></div>\n";
+			else
+				echo '<div class="updated"><p>'.sprintf(__('The counter table %s was restored from backup.', 'cpd'), "<code>$wpdb->cpd_counter</code>")."</p></div>\n";
+		}
+		elseif ( strpos($path, 'count_per_day_options') )
+		{
+			// options
+			$backup = ($gz) ? gzread($f, 500000) : fread($f, filesize($path));
+			$entries = array('count_per_day', 'count_per_day_summary', 'count_per_day_collected', 'count_per_day_posts', 'count_per_day_notes');
+			foreach ( $entries as $entry )
+			{
+				$s = strpos($backup, "=== begin $entry ===") + strlen($entry) + 14;
+				$e = strpos($backup, "=== end $entry ===");
+				$option = trim(substr($backup, $s, $e - $s));
+				update_option($entry, unserialize($option));
+			}
+			$this->options = get_option('count_per_day');
+			unset($backup);
+			unset($option);
+			echo '<div class="updated"><p>'.__('Options restored from backup.', 'cpd')."</p></div>\n";
+		}
+		($gz) ? gzclose($f) : fclose($f);
+	}
+
+}
 
 function addCollectionToCountries( $visitors, $limit = false )
 {
@@ -1119,6 +1209,7 @@ function addCollectionToCountries( $visitors, $limit = false )
 				ORDER	BY c DESC";
 	$res = $this->mysqlQuery('rows', $sql, 'getCountries '.__LINE__);
 
+	$temp = array();
 	foreach ( $res as $r )
 		$temp[$r->country] = $r->c;
 		
@@ -1231,7 +1322,7 @@ function updateFirstCount()
 	$s = get_option('count_per_day_summary', array());
 	if ( empty($s['firstcount']) )
 	{
-		// first day from table  ORDER BY date LIMIT 1
+		// first day from table
 		$res = $this->mysqlQuery('var', "SELECT MIN(date) FROM $wpdb->cpd_counter", 'getFirstCount'.__LINE__);
 		if ($res)
 		{
@@ -1272,12 +1363,18 @@ function formatBytes( $size )
  */
 function flush_buffers()
 {
-	if (ob_get_length())
+	echo "\n<!--".str_repeat(' ', 4100)."-->\n";
+	$levels = ob_get_level();
+	for ( $i = 0; $i < $levels; $i++ )
 	{
-		@ob_end_flush();
-		@ob_flush();
-		@flush();
-    }   
+		$b = ob_get_status();
+		if ( strpos($b['name'], 'zlib') === false )
+		{
+			@ob_end_flush();
+			@ob_flush();
+			@flush();
+		}
+	}
 	@ob_start();
 }
 
@@ -1296,6 +1393,26 @@ function getBytes($val) {
             $val *= 1024;
     }
     return $val;
+}
+
+/**
+ * try to get the search strings from referrer
+ */
+function getSearchString()
+{
+	if (empty($_SERVER['HTTP_REFERER']))
+		return false;
+	$ref = parse_url(rawurldecode($_SERVER['HTTP_REFERER']));
+	if ( empty($ref['host']) || empty($ref['query']) )
+		return false;
+	$keys = array('p','q','s','query','search','prev','qkw','qry');
+	parse_str($ref['query'], $query);
+	foreach ($keys as $key)
+		if (isset($query[$key]))
+			$search = str_ireplace(array('/search?q=','/images?q='), '', $query[$key]);
+	if (empty($search) || is_numeric($search)) // non WordPress postID
+		$search = '';
+	return $search;
 }
 
 } // class

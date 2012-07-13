@@ -11,6 +11,36 @@
 
 /* settings */
 
+h2 .cpd_icon {
+	vertical-align: top;
+	margin-top:5px;
+}
+
+.cpd_backups {
+	width: 100%;
+	border: 1px #ccc solid;
+	border-collapse: collapse;
+}
+
+.cpd_backups tr:nth-child(2n) {
+	background: #fff;
+}
+
+.cpd_backups td {
+	 border-bottom: 1px #ccc solid;
+}
+
+.cpd_backups a {
+	 text-decoration: none;
+}
+
+.cpd_green {
+	font-size: 16px;
+	font-weight: bold;
+	color: green;
+	margin-right: 3px;
+}
+
 .cpd_halfsize {
 	width: 49%;
 	float: left;
@@ -114,7 +144,11 @@
 }
 
 .cpd-dashboard .inside {
-	padding: 5px;
+	padding: 0 5px;
+}
+
+.cpd-dashboard .postbox {
+	min-width: 0 !important;
 }
 
 .cpd-dashboard .cpd_front_list {
@@ -395,3 +429,7 @@
 .cpd-flag-me{background-position:0 -1534px;}
 .cpd-flag-md{background-position:0 -1547px;}
 .cpd-flag-np{background-position:0 -1560px;}
+.cpd-flag-bs{background-position:0 -1573px;}
+.cpd-flag-cm{background-position:0 -1586px;}
+.cpd-flag-mn{background-position:0 -1599px;}
+.cpd-flag-kz{background-position:0 -1612px;}

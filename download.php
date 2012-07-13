@@ -14,7 +14,3 @@ $name = stripslashes($_GET['n']);
 (substr($name, -2) == 'gz') ? header('Content-Type: application/x-gzip') : header('Content-Type: text/plain');
 header("Content-Disposition: attachment; filename=\"$name\"");
 readfile($file);
-
-
-
-

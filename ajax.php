@@ -1,10 +1,17 @@
 <?php
 if ( $_GET['f'] == 'count' )
 {
+	// answer only for 20 seconds after calling
+	if ( empty($_GET['time']) || time() - $_GET['time'] > 20 )
+	{
+		header("HTTP/1.0 403 Forbidden");
+		die();
+	}
+	
 	if (!session_id()) session_start();
 	$cpd_wp = (!empty($_SESSION['cpd_wp'])) ? $_SESSION['cpd_wp'] : '../../../';
 	require_once($cpd_wp.'wp-load.php');
-
+	
 	$cpd_funcs = array ( 'show',
 	'getReadsAll', 'getReadsToday', 'getReadsYesterday', 'getReadsLastWeek', 'getReadsThisMonth',
 	'getUserAll', 'getUserToday', 'getUserYesterday', 'getUserLastWeek', 'getUserThisMonth',

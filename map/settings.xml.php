@@ -1,6 +1,5 @@
 <?php
-$what = (empty($_GET['map'])) ? 'Reads' : ucfirst($_GET['map']);
-$what = strip_tags($what);
+$what = (empty($_GET['map'])) ? 'Reads' : ucfirst(strip_tags($_GET['map']));
 $disable = (empty($_GET['min'])) ? '' : '<enabled>false</enabled>';
 
 header("content-type: text/xml; charset=utf-8");

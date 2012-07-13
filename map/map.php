@@ -1,6 +1,5 @@
 <?php
-$what = (empty($_GET['map'])) ? 'reads' : $_GET['map'];
-$what = strip_tags($what);
+$what = (empty($_GET['map'])) ? 'reads' : strip_tags($_GET['map']);
 if ( !in_array($what, array('visitors','reads','online')) )
 	die();
 ?>
