@@ -2,15 +2,15 @@
 /*
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
-Description: Counter, shows reads per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 3.1.1
+Description: Counter, shows reads and visitors per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
+Version: 3.2
 License: Postcardware
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '3.1.1';
+$cpd_version = '3.2';
 
 $cpd_path = str_replace('/', DIRECTORY_SEPARATOR, ABSPATH.PLUGINDIR.'/'.$cpd_dir_name.'/');
 include_once($cpd_path.'counter-core.php');
@@ -102,7 +102,16 @@ function count( $x, $page = 'x' )
 	// only count if: non bot, Logon is ok
 	if ( !$isBot && $countUser && isset($page) )
 	{
-		$userip = $this->anonymize_ip($_SERVER['REMOTE_ADDR']);
+		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+		{
+			// get real IP, not local IP
+			$ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+			$real_ip = $ips[0];
+		}
+		else
+			$real_ip = $_SERVER['REMOTE_ADDR'];
+		
+		$userip = $this->anonymize_ip($real_ip);
 		$client = ($this->options['referers']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 		$referer = ($this->options['referers'] && isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
 		if ($this->options['referers_cut'])
@@ -110,7 +119,7 @@ function count( $x, $page = 'x' )
 		$date = date_i18n('Y-m-d');
 		
 		// new visitor on page?
-		$count = $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE ip=INET_ATON(%s) AND date=%s AND page=%d", $userip, $date, $page), 'count check '.__LINE__);
+		$count = $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE ip=$this->aton(%s) AND date=%s AND page=%d", $userip, $date, $page), 'count check '.__LINE__);
 		if ( !$count )
 		{
 			// save count
@@ -120,17 +129,33 @@ function count( $x, $page = 'x' )
 				$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
 				$country = strtolower(cpd_geoip_country_code_by_addr($gi, $userip));
 				$this->mysqlQuery('', $wpdb->prepare("INSERT INTO $wpdb->cpd_counter (page, ip, client, date, country, referer)
-				VALUES (%s, INET_ATON(%s), %s, %s, %s, %s)", $page, $userip, $client, $date, $country, $referer), 'count insert '.__LINE__);
+				VALUES (%s, $this->aton(%s), %s, %s, %s, %s)", $page, $userip, $client, $date, $country, $referer), 'count insert '.__LINE__);
 			}
 			else
 				// without country
 				$this->mysqlQuery('', $wpdb->prepare("INSERT INTO $wpdb->cpd_counter (page, ip, client, date, referer)
-				VALUES (%s, INET_ATON(%s), %s, %s, %s)", $page, $userip, $client, $date, $referer), 'count insert '.__LINE__);
+				VALUES (%s, $this->aton(%s), %s, %s, %s)", $page, $userip, $client, $date, $referer), 'count insert '.__LINE__);
 		}
 		// online counter
-		$oc = get_option('count_per_day_online', array()); 
+		$oc = get_option('count_per_day_online', array());
 		$oc[$userip] = array( time(), $page );
 		update_option('count_per_day_online', $oc);
+	}
+	
+	// save searchstring if exists
+	$s = $this->getSearchString();
+	if ($s)
+	{
+		$search = get_option('count_per_day_search', array());
+		if (isset($search[$date]))
+		{
+			if (!in_array($s, $search[$date]))
+				$search[$date][] = $s;
+		}
+		else
+			$search[$date] = array($s);
+		update_option('count_per_day_search', $search);
+		unset($search);
 	}
 }
 
@@ -677,7 +702,7 @@ function getMostVisitedPosts( $days = 0, $limit = 0, $frontend = false, $postson
 		ORDER	BY count DESC
 		LIMIT	%d",
 		$date, $limit);
-	$r =  '<small>'.sprintf(__('The %s most visited posts in last %s days:', 'cpd'), $limit, $days).'<br/>&nbsp;</small>';
+	$r =  '<small>'.sprintf(__('The %s most visited posts in last %s days:', 'cpd'), $limit, $days).'</small>';
 	$r .= $this->getUserPer_SQL( $sql, 'getMostVisitedPosts', $frontend );
 	if ($return) return $r; else echo $r;
 }
@@ -818,19 +843,31 @@ function getClients( $return = false )
 		return;
 	$all = max(1, (int) $res);
 	$rest = 100;
-	$r = '<ul id="cpd_clients" class="cpd_front_list">';
 	foreach ($clients as $c)
 	{
 		$c = trim($c);
-		$count = $this->mysqlQuery('var', "SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE client like '%%".$c."%%'", 'getClients_'.$c.'_ '.__LINE__);
+		$sql = "SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE client LIKE '%%".$c."%%'";
+		if ( strtolower($c) == 'safari' ) // don't count chrome too while counting safari
+			$sql .= " AND client NOT LIKE '%%chrome%%'";
+		$count = $this->mysqlQuery('var', $sql, 'getClients_'.$c.'_ '.__LINE__);
 		$percent = number_format(100 * $count / $all, 0);
 		$rest -= $percent;
-		$r .= '<li class="cpd-client-logo cpd-client-'.strtolower($c).'">'.$c.' <b>'.$percent.' %</b></li>';
+		$cl_percent[] = $percent;
+		$cl_name[] = $c;
 	}
 	if ( $rest > 0 )
-		$r .= '<li>'.__('Other', 'cpd').' <b>'.$rest.' %</b></li>';
+	{
+		$cl_percent[] = $rest;
+		$cl_name[] = __('Other', 'cpd');
+	}
+	array_multisort($cl_percent, SORT_NUMERIC, SORT_DESC, $cl_name);
+	$r = '<ul id="cpd_clients" class="cpd_front_list">';
+	for ($i = 0; $i < count($cl_percent); $i++)
+	{
+		$r .= '<li class="cpd-client-logo cpd-client-'.strtolower($cl_name[$i]).'">'.$cl_name[$i].' <b>'.$cl_percent[$i].' %</b></li>';		
+	}
 	$r .= '</ul>';
-	
+
 	$res = $this->mysqlQuery('var', "SELECT MIN(date) FROM ".$wpdb->cpd_counter, 'getClients_date '.__LINE__);
 	$r .= '<small>'.__('Counter starts on', 'cpd').': '.mysql2date(get_option('date_format'), $res ).'</small>';
 	if ($return) return $r; else echo $r;
@@ -852,13 +889,13 @@ function getReferers( $limit = 0, $return = false, $days = 0 )
 		
 	$localref = ($this->options['localref']) ? '' : " AND referer NOT LIKE '".get_bloginfo('url')."%%' ";
 	$res = $this->mysqlQuery('rows', "SELECT COUNT(*) count, referer FROM $wpdb->cpd_counter WHERE referer > '' $dayfiltre $localref GROUP BY referer ORDER BY count DESC LIMIT $limit", 'getReferers '.__LINE__);
-	$r =  '<small>'.sprintf(__('The %s referrers in last %s days:', 'cpd'), $limit, $days).'<br/>&nbsp;</small>';
+	$r =  '<small>'.sprintf(__('The %s referrers in last %s days:', 'cpd'), $limit, $days).'</small>';
 	$r .= '<ul id="cpd_referrers" class="cpd_front_list">';
 	if ($res)
 		foreach ( $res as $row )
 		{
 			$ref =  str_replace('&', '&amp;', $row->referer);
-			$ref2 = str_replace('http://', '', $ref);
+			$ref2 = str_replace(array('http://', 'https://'), '', $ref);
 			$r .= '<li><a href="'.$ref.'">'.$ref2.'</a> <b>'.$row->count.'</b></li>';
 		}
 	$r .= '</ul>';
@@ -955,52 +992,31 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 		foreach ($p as $id=>$count)
 			$if .= " WHEN ".str_replace('p', '', $id)." THEN $count";
 
-// 		$sql = "
-// 		SELECT	CASE p.id $if ELSE 0 END AS count,	
-// 				p.id post_id,
-// 				p.post_title post,
-// 				t.name tag_cat_name,
-// 				t.slug tag_cat_slug,
-// 				x.taxonomy tax
-// 		FROM 	$wpdb->posts p,
-// 				$wpdb->terms t
-// 		LEFT	JOIN $wpdb->term_taxonomy x
-// 				ON x.term_id = t.term_id
-// 		WHERE	p.id IN ($list)
-// 		OR		-t.term_id IN ($list)
-// 		GROUP	BY p.id
-// 		ORDER	BY count DESC";
-// 			echo $sql;
-// 		$m = $this->mysqlQuery('rows', $sql, $name.' '.__LINE__);
-// 		if (!$m)
-// 			return;
-
 		$sql = "
-		        SELECT temp_outer.* FROM (
-			 		SELECT	CASE p.id $if ELSE 0 END count,	
-			 				p.id post_id,
-			 				p.post_title post,
-							'' tag_cat_name,
-							'' tag_cat_slug,
-							'' tax
-					FROM 	$wpdb->posts p
-					WHERE	p.id IN ($list)
-					GROUP	BY p.id
-			        UNION
-			        SELECT	CASE -t.term_id $if ELSE 0 END count,
-							t.term_id post_id,
-							'' post,
-			 				t.name tag_cat_name,
-			 				t.slug tag_cat_slug,
-			 				x.taxonomy tax
-					FROM 	$wpdb->terms t
-			 		LEFT	JOIN $wpdb->term_taxonomy x
-			 				ON x.term_id = t.term_id
-					WHERE	-t.term_id IN ($list)
-					GROUP	BY t.term_id
-					) temp_outer
-		 		ORDER	BY count DESC";
-// 		echo $sql;
+        SELECT temp_outer.* FROM (
+	 		SELECT	CASE p.id $if ELSE 0 END count,	
+	 				p.id post_id,
+	 				p.post_title post,
+					'' tag_cat_name,
+					'' tag_cat_slug,
+					'' tax
+			FROM 	$wpdb->posts p
+			WHERE	p.id IN ($list)
+			GROUP	BY p.id
+	        UNION
+	        SELECT	CASE -t.term_id $if ELSE 0 END count,
+					t.term_id post_id,
+					'' post,
+	 				t.name tag_cat_name,
+	 				t.slug tag_cat_slug,
+	 				x.taxonomy tax
+			FROM 	$wpdb->terms t
+	 		LEFT	JOIN $wpdb->term_taxonomy x
+	 				ON x.term_id = t.term_id
+			WHERE	-t.term_id IN ($list)
+			GROUP	BY t.term_id
+			) temp_outer
+ 		ORDER	BY count DESC";
 		$m = $this->mysqlQuery('rows', $sql, $name.' '.__LINE__);
 		if (!$m)
 		return;
@@ -1012,33 +1028,22 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 	{
 		$r .= '<li>';
 		// link only for editors in backend
-		if ( current_user_can('editor') && !$frontend )
-//		if ( isset($userdata->user_level) && (int) $userdata->user_level >= 7 && !$frontend)
+		if ( current_user_can('manage_links') && !$frontend )
 		{
 			if ( $row->post_id > 0 )
 				$r .= '<a href="post.php?action=edit&amp;post='.$row->post_id.'"><img src="'.$this->img('cpd_pen.png').'" alt="[e]" title="'.__('Edit Post').'" style="width:9px;height:12px;" /></a> '
 					.'<a href="'.$this->dir.'/userperspan.php?page='.$row->post_id.'&amp;KeepThis=true&amp;TB_iframe=true" class="thickbox" title="Count per Day"><img src="'.$this->img('cpd_calendar.png').'" alt="[v]" style="width:12px;height:12px;" /></a> ';
 			else
-				$r .= '<img src="'.$this->img('cpd_trans.png').'" alt="" style="width:25px;height:12px;" /> ';
+				$r .= '<img src="'.$this->img('cpd_trans.png').'" alt="" style="width:25px;height:12px;" />';
 		}
 		
 		$r .= '<a href="'.get_bloginfo('url');
-// 		if ( $row->post_id < 0 && $row->tax == 'category' )
-			// category
-// 			$r .= '?cat='.abs($row->post_id).'">- '.$row->tag_cat_name.' ('.__('Category').') -';
-// 		else if ( $row->post_id < 0 )
-			// tag
-// 			$r .= '?tag='.$row->tag_cat_slug.'">- '.$row->tag_cat_name.' ('.__('Tag').') -';
-
 		if ( $row->tax == 'category' )
 			// category
 			$r .= '?cat='.abs($row->post_id).'">- '.$row->tag_cat_name.' ('.__('Category').') -';
 		else if ( $row->tax )
 			// tag
 			$r .= '?tag='.$row->tag_cat_slug.'">- '.$row->tag_cat_name.' ('.__('Tag').') -';
-			
-		
-		
 		else if ( $row->post_id == 0 )
 			// homepage
 			$r .= '">- '.__('Front page displays').' -';
@@ -1051,6 +1056,51 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 	}
 	$r .= '</ul>';
 	return $r;
+}
+
+/**
+* shows searchstrings
+*/
+function getSearches( $limit = 0, $days = 0, $return = false )
+{
+	$search = get_option('count_per_day_search');
+	if (!$search)
+		return;
+	
+	if ( $limit == 0 )
+	$limit = $this->options['dashboard_referers'];
+	if ( $days == 0 )
+	$days = $this->options['referers_last_days'];
+	
+	// most searched
+	$c = array();
+	foreach ( $search as $day => $strings )
+	{
+		foreach ( $strings as $s )
+		{
+			if (isset($c[$s]))
+				$c[$s]++;
+			else
+				$c[$s] = 1;
+		} 
+	}
+	arsort($c);
+	$c = array_slice($c, 0, $limit);
+	$r = '<small>'.sprintf(__('The %s most searched strings:', 'cpd'), $limit).'</small>';
+	$r .= '<ul class="cpd_front_list">';
+	foreach ( $c as $string => $count )
+		$r .= '<li>'.$string.' <b>'.$count.'</b></li>'."\n";
+	$r .= '</ul>';
+	
+	// last days
+	krsort($search);
+	$search = array_slice($search, 0, $days);
+	$r .= '<small>'.sprintf(__('The search strings of the last %s days:', 'cpd'), $days).'</small>';
+	$r .= '<ul class="cpd_front_list">';
+	foreach ( $search as $day => $s )
+		$r .= '<li><div style="font-weight:bold">'.$day.'</div> '.implode(', ', $s).'</li>'."\n";
+	$r .= '</ul>';
+	if ($return) return $r; else echo $r;
 }
 
 /**
@@ -1341,6 +1391,8 @@ function count_per_day_uninstall()
 	delete_option('count_per_day_collected');
 	delete_option('count_per_day_online');
 	delete_option('count_per_day_notes');
+	delete_option('count_per_day_posts');
+	delete_option('count_per_day_search');
 	$wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key LIKE '%_cpd_metaboxes%';");
 }
 

@@ -3,9 +3,9 @@ if (!session_id()) session_start();
 $cpd_wp = (!empty($_SESSION['cpd_wp'])) ? $_SESSION['cpd_wp'] : '../../../';
 require_once($cpd_wp.'wp-load.php');
 
-$cpd_datemin = ( !empty($_REQUEST['datemin']) ) ? $_REQUEST['datemin'] : date_i18n('Y-m-d', time() - 86400 * 14); // 14 days
-$cpd_datemax = ( !empty($_REQUEST['datemax']) ) ? $_REQUEST['datemax'] : date_i18n('Y-m-d');
-$cpd_page = ( isset($_REQUEST['page']) ) ? $_REQUEST['page'] : 0;
+$cpd_datemin = ( !empty($_REQUEST['datemin']) ) ? wp_strip_all_tags($_REQUEST['datemin']) : date_i18n('Y-m-d', time() - 86400 * 14); // 14 days
+$cpd_datemax = ( !empty($_REQUEST['datemax']) ) ? wp_strip_all_tags($_REQUEST['datemax']) : date_i18n('Y-m-d');
+$cpd_page = ( isset($_REQUEST['page']) ) ? intval($_REQUEST['page']) : 0;
 
 $sql = "SELECT	p.post_title,
 				COUNT(*) AS count,

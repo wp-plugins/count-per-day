@@ -6,8 +6,7 @@ require_once($cpd_path.'/geoip/geoip.php');
 $geoip = new GeoIPCpD();
 $data = array();
 
-$what = (empty($_GET['map'])) ? 'reads' : $_GET['map'];
-$what = strip_tags($what);
+$what = (empty($_GET['map'])) ? 'reads' : strip_tags($_GET['map']);
 
 if ( $what == 'online' )
 {

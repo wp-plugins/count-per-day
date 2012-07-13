@@ -46,7 +46,7 @@ function updateDB()
 		$count_per_day->mysqlQuery('', "ALTER TABLE $wpdb->cpd_counter ADD `country` CHAR( 2 ) NOT NULL", 'GeoIP updateDB create column '.__LINE__);
 	
 	$limit = 20;
-	$res = $count_per_day->mysqlQuery('rows', "SELECT ip, INET_NTOA(ip) realip FROM $wpdb->cpd_counter WHERE country LIKE '' GROUP BY ip LIMIT $limit", 'GeoIP updateDB '.__LINE__);
+	$res = $count_per_day->mysqlQuery('rows', "SELECT ip, $count_per_day->ntoa(ip) realip FROM $wpdb->cpd_counter WHERE country LIKE '' GROUP BY ip LIMIT $limit", 'GeoIP updateDB '.__LINE__);
 	$gi = cpd_geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
 	
 	foreach ($res as $r)
@@ -82,9 +82,6 @@ function updateGeoIpFile()
 {
 	global $cpd_path;
 	
-	// set directory mode
-	@chmod($cpd_path.'/geoip', 0777);
-	
 	// function checks
 	if ( !ini_get('allow_url_fopen') )
 		return 'Sorry, <code>allow_url_fopen</code> is disabled!';
@@ -112,7 +109,7 @@ function updateGeoIpFile()
 	fwrite($h, $content);
 	fclose($h);
 	
-	@chmod($file, 0777);
+	@chmod($file, 0755);
 	if (is_file($file) && $del)
 		return __('New GeoIP database installed.', 'cpd');
 	else
