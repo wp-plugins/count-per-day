@@ -138,6 +138,9 @@ function init()
 	
 	// Session
 	add_action('init', array(&$this,'startSession'), 1);
+	
+	$this->aton = 'INET_ATON';
+	$this->ntoa = 'INET_NTOA';
 }
 
 function addJquery()
@@ -1414,5 +1417,6 @@ function getSearchString()
 		$search = '';
 	return $search;
 }
+
 
 } // class
