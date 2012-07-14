@@ -24,31 +24,31 @@ Visit Counter, shows reads and visitors per page, visitors today, yesterday, las
 = Languages, Translators =
 
 - up to date translations:
-- Dutch NL		- Rene -							http://wpwebshop.com
-- France		- Bjork -							http://www.habbzone.fr
 - German		- Tom -								http://www.tomsdimension.de
-- Finnish		- Jani Alha -						http://www.wysiwyg.fi
-- Hindi			- Love Chandel -					http://outshinesolutions.com
-- Italian		- Gianni Diurno -					http://gidibao.net
-- Japanese		- Juno Hayami						http://juno.main.jp/blog/
-- Norwegian		- Stein Ivar Johnsen -				http://iDyrøy.no
-- Portuguese	- Beto Ribeiro -					http://www.sevenarts.com.br
-- Romanian		- Alexander Ovsov -					http://webhostinggeeks.com
-- Russian		- Ilya Pshenichny -					http://iluhis.com
-- Turkish		- Emrullah Tahir Ekmek&ccedil;i - 	http://emrullahekmekci.com.tr
-- Ukrainian		- Iflexion design -					http://iflexion.com
 
-- older translations:
+- older, incomplete translations:
 - Azerbaijani	- Bohdan Zograf -					http://wwww.webhostingrating.com
 - Belarusian	- Alexander Alexandrov -			http://www.designcontest.com
 - Bulgarian		- joro -							http://www.joro711.com
 - Dansk			- Jonas Thomsen -					http://jonasthomsen.com
+- Dutch NL		- Rene -							http://wpwebshop.com
 - Espanol		- Juan Carlos del R&iacute;o -
+- Finnish		- Jani Alha -						http://www.wysiwyg.fi
+- France		- Bjork -							http://www.habbzone.fr
 - Greek			- Essetai_Imar -					http://www.elliniki-grothia.com
+- Hindi			- Love Chandel -					http://outshinesolutions.com
+- Italian		- Gianni Diurno -					http://gidibao.net
+- Japanese		- Juno Hayami						http://juno.main.jp/blog/
 - Lithuanian	- Nata Strazda - 					http://www.webhostinghub.com
-- Norwegian		- Tore Johnny Bråtveit -			http://www.braatveit.net/
+- Norwegian		- Stein Ivar Johnsen -				http://iDyrøy.no
 - Polish 		- LeXuS -							http://intrakardial.de
+- Portuguese	- Beto Ribeiro -					http://www.sevenarts.com.br
+- Romanian		- Alexander Ovsov -					http://webhostinggeeks.com
+- Russian		- Ilya Pshenichny -					http://iluhis.com
 - Swedish		- Magnus Suther -					http://www.magnussuther.se
+- Turkish		- Emrullah Tahir Ekmek&ccedil;i - 	http://emrullahekmekci.com.tr
+- Ukrainian		- Iflexion design -					http://iflexion.com
+
 
 == Installation ==
 
