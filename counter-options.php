@@ -99,7 +99,7 @@ if(!empty($_POST['do']))
 			$sum = 0;
 			foreach ($bots as $r)
 			{
-				$count_per_day->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE ip = $this->aton('$r->ip') AND date = '$r->date'", 'deleteMassbots '.__LINE__);
+				$count_per_day->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE ip = $count_per_day->aton('$r->ip') AND date = '$r->date'", 'deleteMassbots '.__LINE__);
 				$sum += $r->posts;
 			}
 			if ( $sum )
