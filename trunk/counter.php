@@ -146,16 +146,44 @@ function count( $x, $page = 'x' )
 	$s = $this->getSearchString();
 	if ($s)
 	{
-		$search = get_option('count_per_day_search', array());
-		if (isset($search[$date]))
+		$search = (array) get_option('count_per_day_search');
+// 		echo '<pre>';
+// 		var_dump($search);
+		if (isset($search[$date]) && is_array($search[$date]))
 		{
 			if (!in_array($s, $search[$date]))
 				$search[$date][] = $s;
 		}
 		else
 			$search[$date] = array($s);
+		
 		update_option('count_per_day_search', $search);
 		unset($search);
+// 		echo '</pre>';
+		/*
+		$search = (array) get_option('count_per_day_search');
+		$search = get_option('count_per_day_search');
+		var_dump($search);
+		
+		$search = unserialize(base64_decode($search));
+		
+		$s = '";:\'\\';
+		
+		var_dump($search);
+		if (isset($search[$date]) && is_array($search[$date]))
+		{
+			if (!in_array($s, $search[$date]))
+				$search[$date][] = $s;
+		}
+		else
+			$search[$date] = array($s);
+		
+		$search = base64_encode(serialize($search));
+		
+		update_option('count_per_day_search', $search);
+		unset($search);
+		*/
+		
 	}
 }
 
@@ -164,7 +192,7 @@ function count( $x, $page = 'x' )
  */
 function deleteOnlineCounter()
 {
-	$oc = get_option('count_per_day_online', array());
+	$oc = (array) get_option('count_per_day_online', array());
 	foreach ($oc as $k => $v)
 		if ($v[0] < time() - $this->options['onlinetime'])
 			unset($oc[$k]);
@@ -1063,8 +1091,8 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 */
 function getSearches( $limit = 0, $days = 0, $return = false )
 {
-	$search = get_option('count_per_day_search');
-	if (!$search)
+	$search = (array) get_option('count_per_day_search');
+	if (empty($search))
 		return;
 	
 	if ( $limit == 0 )

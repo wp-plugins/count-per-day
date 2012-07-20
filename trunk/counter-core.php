@@ -186,6 +186,8 @@ function startSession()
 function mysqlQuery( $kind = '', $sql, $func = '' )
 {
 	global $wpdb;
+	if (empty($sql))
+		return;
 	$t = microtime(true);
 	$con = $wpdb->dbh;
 	$preparedSql = $wpdb->prepare($sql);
