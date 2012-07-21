@@ -669,7 +669,12 @@ function updateOptions()
  */
 function dashboardWidgetSetup()
 {
-	if ( current_user_can($this->options['show_in_lists']) )
+	$can_see = str_replace(
+		// administrator, editor, author, contributor, subscriber
+		array(10, 7, 2, 1, 0),
+		array('manage_options', 'moderate_comments', 'edit_published_posts', 'edit_posts', 'read'),
+		$this->options['show_in_lists']);
+	if ( current_user_can($can_see) )
 		wp_add_dashboard_widget( 'cpdDashboardWidget', 'Count per Day', array(&$this,'dashboardWidget') );
 }
 
@@ -1295,6 +1300,21 @@ function getCollectedData( $month ) // YYYYMM
 	}
 }
 
+/**
+ * gets reads per post from collected data
+ *
+ * @param int $postID post ID
+ * @return int reads of the post
+ */
+function getCollectedPostReads( $postID = -1 )
+{
+	if ($postID < 0)
+		return 0;
+	$postID = (int) $postID;
+	$collected = (array) get_option('count_per_day_posts');
+	return (int) (isset($collected) && isset($collected['p'.$postID])) ? $collected['p'.$postID] : 0;
+}
+
 /* update if new count is bigger than collected */
 
 function updateCollectedDayMostReads( $new )
@@ -1417,7 +1437,7 @@ function getSearchString()
 			$search = str_ireplace(array('/search?q=','/images?q='), '', $query[$key]);
 	if (empty($search) || is_numeric($search)) // non WordPress postID
 		$search = '';
-	return $search;
+	return trim($search);
 }
 
 

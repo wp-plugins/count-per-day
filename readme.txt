@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 3.2
+Stable tag: 3.2.1
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -24,12 +24,15 @@ Visit Counter, shows reads and visitors per page, visitors today, yesterday, las
 = Languages, Translators =
 
 - up to date translations:
+- Bulgarian		- joro -							http://www.joro711.com
 - German		- Tom -								http://www.tomsdimension.de
+- Japanese		- Juno Hayami						http://juno.main.jp/blog/
+- Portuguese	- Beto Ribeiro -					http://www.sevenarts.com.br
+- Russian		- Ilya Pshenichny -					http://iluhis.com
 
 - older, incomplete translations:
 - Azerbaijani	- Bohdan Zograf -					http://wwww.webhostingrating.com
 - Belarusian	- Alexander Alexandrov -			http://www.designcontest.com
-- Bulgarian		- joro -							http://www.joro711.com
 - Dansk			- Jonas Thomsen -					http://jonasthomsen.com
 - Dutch NL		- Rene -							http://wpwebshop.com
 - Espanol		- Juan Carlos del R&iacute;o -
@@ -38,13 +41,10 @@ Visit Counter, shows reads and visitors per page, visitors today, yesterday, las
 - Greek			- Essetai_Imar -					http://www.elliniki-grothia.com
 - Hindi			- Love Chandel -					http://outshinesolutions.com
 - Italian		- Gianni Diurno -					http://gidibao.net
-- Japanese		- Juno Hayami						http://juno.main.jp/blog/
 - Lithuanian	- Nata Strazda - 					http://www.webhostinghub.com
 - Norwegian		- Stein Ivar Johnsen -				http://iDyrøy.no
 - Polish 		- LeXuS -							http://intrakardial.de
-- Portuguese	- Beto Ribeiro -					http://www.sevenarts.com.br
 - Romanian		- Alexander Ovsov -					http://webhostinggeeks.com
-- Russian		- Ilya Pshenichny -					http://iluhis.com
 - Swedish		- Magnus Suther -					http://www.magnussuther.se
 - Turkish		- Emrullah Tahir Ekmek&ccedil;i - 	http://emrullahekmekci.com.tr
 - Ukrainian		- Iflexion design -					http://iflexion.com
@@ -82,6 +82,7 @@ read and write comments on http://www.tomsdimension.de/wp-plugins/count-per-day
 
 You can use these shortcodes in the content of your posts to show a number or list
 or in your theme files while adding e.g. '&lt;?php echo do_shortcode("[THE_SHORTCODE]"); ?>'.
+To use the shortcodes within a textwidget you have to add 'add_filter("widget_text", "do_shortcode");' to the 'functions.php' of your theme.
 
 [CPD_READS_THIS]
 [CPD_READS_TOTAL]
@@ -291,8 +292,17 @@ to check if plugin is activated.
 
 == Changelog ==
 
+= 3.2.1 =
++ Bugfix: massbot delete error
++ Bugfix: search words array sometimes corrupt
++ Bugfix: add collected data to reads per post, thanks to http://is.gd/VWNyLq http://yumeneko.pmfan.jp
++ Language update: Japanese, thanks to Juno Hayami
++ Language update: Portuguese, thanks to Beto Ribeiro
++ Language update: Russian, thanks to Ilya Pshenichny
++ Language update: Bulgarian, thanks to joro
+
 = 3.2 =
-+ New: save search strings
++ New: save search words
 + New shortcode: CPD_COUNTRIES_USERS
 + New: flags for Bahamas, Mongolia, Cameroon and Kazakhstan
 + Bugfix: can't move widgets

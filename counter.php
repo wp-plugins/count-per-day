@@ -3,14 +3,14 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads and visitors per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 3.2
+Version: 3.2.1
 License: Postcardware
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '3.2';
+$cpd_version = '3.2.1';
 
 $cpd_path = str_replace('/', DIRECTORY_SEPARATOR, ABSPATH.PLUGINDIR.'/'.$cpd_dir_name.'/');
 include_once($cpd_path.'counter-core.php');
@@ -49,13 +49,15 @@ function show( $before='', $after=' reads', $show = true, $count = true, $page =
 		$page = get_the_ID();
 	else
 		$page = (int) $page;
-	if ($c = $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE page='$page'"), 'show '.__LINE__))
-	{
-		if ($show)
-			echo $before.$c.$after;
-		else
-			return $c;
-	}
+	
+	// get count from collection
+	$c = $this->getCollectedPostReads($page);
+	// add current data
+	$c += $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE page='$page'"), 'show '.__LINE__);
+	if ($show)
+		echo $before.$c.$after;
+	else
+		return $c;
 }
 
 /**
@@ -137,7 +139,7 @@ function count( $x, $page = 'x' )
 				VALUES (%s, $this->aton(%s), %s, %s, %s)", $page, $userip, $client, $date, $referer), 'count insert '.__LINE__);
 		}
 		// online counter
-		$oc = get_option('count_per_day_online', array());
+		$oc = (array) get_option('count_per_day_online', array());
 		$oc[$userip] = array( time(), $page );
 		update_option('count_per_day_online', $oc);
 	}
@@ -147,8 +149,6 @@ function count( $x, $page = 'x' )
 	if ($s)
 	{
 		$search = (array) get_option('count_per_day_search');
-// 		echo '<pre>';
-// 		var_dump($search);
 		if (isset($search[$date]) && is_array($search[$date]))
 		{
 			if (!in_array($s, $search[$date]))
@@ -156,34 +156,8 @@ function count( $x, $page = 'x' )
 		}
 		else
 			$search[$date] = array($s);
-		
 		update_option('count_per_day_search', $search);
 		unset($search);
-// 		echo '</pre>';
-		/*
-		$search = (array) get_option('count_per_day_search');
-		$search = get_option('count_per_day_search');
-		var_dump($search);
-		
-		$search = unserialize(base64_decode($search));
-		
-		$s = '";:\'\\';
-		
-		var_dump($search);
-		if (isset($search[$date]) && is_array($search[$date]))
-		{
-			if (!in_array($s, $search[$date]))
-				$search[$date][] = $s;
-		}
-		else
-			$search[$date] = array($s);
-		
-		$search = base64_encode(serialize($search));
-		
-		update_option('count_per_day_search', $search);
-		unset($search);
-		*/
-		
 	}
 }
 
@@ -987,8 +961,7 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 	$m = $this->mysqlQuery('rows', $sql, $name.__LINE__);
 	if (!$m)
 		return;
-		
-		
+
 	if ( strpos($name, 'getUserPerPost') !== false )
 	{
 		// get collection
