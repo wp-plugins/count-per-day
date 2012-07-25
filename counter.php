@@ -87,6 +87,8 @@ function count( $x, $page = 'x' )
 	else if (current_user_can('subscriber'))	$userlevel = 0;
 	else										$userlevel = -1;
 	
+	$date = date_i18n('Y-m-d');
+	
 	// count visitor?
 	$countUser = 1;
 	if (!$this->options['user'] && is_user_logged_in() ) $countUser = 0; // don't count loged user
@@ -118,7 +120,6 @@ function count( $x, $page = 'x' )
 		$referer = ($this->options['referers'] && isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
 		if ($this->options['referers_cut'])
 			$referer = substr( $referer, 0, strpos($referer,'?') );
-		$date = date_i18n('Y-m-d');
 		
 		// new visitor on page?
 		$count = $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE ip=$this->aton(%s) AND date=%s AND page=%d", $userip, $date, $page), 'count check '.__LINE__);
@@ -148,7 +149,10 @@ function count( $x, $page = 'x' )
 	$s = $this->getSearchString();
 	if ($s)
 	{
-		$search = (array) get_option('count_per_day_search');
+		$search = get_option('count_per_day_search');
+		// reset if array is corrupt
+		if (!is_array($search))
+			$search = array($date=>'');
 		if (isset($search[$date]) && is_array($search[$date]))
 		{
 			if (!in_array($s, $search[$date]))
@@ -1077,13 +1081,14 @@ function getSearches( $limit = 0, $days = 0, $return = false )
 	$c = array();
 	foreach ( $search as $day => $strings )
 	{
-		foreach ( $strings as $s )
-		{
-			if (isset($c[$s]))
-				$c[$s]++;
-			else
-				$c[$s] = 1;
-		} 
+		if (is_array($strings))
+			foreach ( $strings as $s )
+			{
+				if (isset($c[$s]))
+					$c[$s]++;
+				else
+					$c[$s] = 1;
+			} 
 	}
 	arsort($c);
 	$c = array_slice($c, 0, $limit);
@@ -1099,7 +1104,8 @@ function getSearches( $limit = 0, $days = 0, $return = false )
 	$r .= '<small>'.sprintf(__('The search strings of the last %s days:', 'cpd'), $days).'</small>';
 	$r .= '<ul class="cpd_front_list">';
 	foreach ( $search as $day => $s )
-		$r .= '<li><div style="font-weight:bold">'.$day.'</div> '.implode(', ', $s).'</li>'."\n";
+		if (is_array($s))
+			$r .= '<li><div style="font-weight:bold">'.$day.'</div> '.implode(', ', $s).'</li>'."\n";
 	$r .= '</ul>';
 	if ($return) return $r; else echo $r;
 }
