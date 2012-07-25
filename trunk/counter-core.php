@@ -83,15 +83,25 @@ function init()
 		add_filter('screen_layout_columns', array(&$this,'screenLayoutColumns'), 10, 2);
 		// CpD dashboard
 		add_action('admin_menu', array(&$this,'setAdminMenu'));
-		// column page list
-		add_action('manage_pages_custom_column', array(&$this,'cpdColumnContent'), 10, 2);
-		add_filter('manage_edit-page_columns', array(&$this,'cpdColumn'));
-		// column post list
-		add_action('manage_posts_custom_column', array(&$this,'cpdColumnContent'), 10, 2);
-//		add_filter('manage_posts_columns', array(&$this,'cpdColumn'));
-		add_filter('manage_edit-post_columns', array(&$this,'cpdColumn'));
-// 		add_filter('manage_edit-post_sortable_columns', array(&$this,'cpdSortableColumns'));
-// 		add_filter('request', array(&$this,'cpdReadsOrderby'));
+		// counter column posts lists
+		add_action('admin_head', array(&$this,'addPostTypesColumns'));
+
+// column page list
+// 		add_action('manage_pages_custom_column', array(&$this,'cpdColumnContent'), 10, 2);
+// 		add_filter('manage_edit-page_columns', array(&$this,'cpdColumn'));
+		
+// 		add_action('manage_posts_custom_column', array(&$this,'cpdColumnContent'), 10, 2);
+		
+		//		add_filter('manage_posts_columns', array(&$this,'cpdColumn'));
+
+// 		add_filter('manage_edit-post_columns', array(&$this,'cpdColumn'));
+		
+		// 		add_filter('manage_edit-post_sortable_columns', array(&$this,'cpdSortableColumns'));
+		// 		add_filter('request', array(&$this,'cpdReadsOrderby'));
+
+		
+		
+		
 		
 		// adds javascript
 		add_action('admin_head', array(&$this,'addJS'));
@@ -141,6 +151,20 @@ function init()
 	
 	$this->aton = 'INET_ATON';
 	$this->ntoa = 'INET_NTOA';
+}
+
+/**
+ * adds counter columns to posts list
+ */
+function addPostTypesColumns()
+{
+	$post_types = get_post_types(array('public'=>true),'objects');
+	foreach ($post_types  as $post_type )
+	{
+		$name = trim($post_type->name);
+		add_action('manage_'.trim($name).'s_custom_column', array(&$this,'cpdColumnContent'), 10, 2);
+		add_filter('manage_edit-'.trim($name).'_columns', array(&$this,'cpdColumn'));
+	}
 }
 
 function addJquery()
@@ -705,8 +729,8 @@ function cpdColumnContent($column_name, $id = 0)
 	{
 		$c = $this->mysqlQuery('count', "SELECT 1 FROM $wpdb->cpd_counter WHERE page='$id'", 'cpdColumn_'.$id.'_'.__LINE__);
 		$coll = get_option('count_per_day_posts');
-		if ( $coll && isset($coll['p-'.$id]) )
-			$c += $coll['p-'.$id];
+		if ( $coll && isset($coll['p'.$id]) )
+			$c += $coll['p'.$id];
 		echo $c;
 	}
 }

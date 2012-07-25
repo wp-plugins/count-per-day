@@ -82,7 +82,7 @@ read and write comments on http://www.tomsdimension.de/wp-plugins/count-per-day
 
 You can use these shortcodes in the content of your posts to show a number or list
 or in your theme files while adding e.g. '&lt;?php echo do_shortcode("[THE_SHORTCODE]"); ?>'.
-To use the shortcodes within a textwidget you have to add 'add_filter("widget_text", "do_shortcode");' to the 'functions.php' of your theme.
+To use the shortcodes within a text widget you have to add 'add_filter("widget_text", "do_shortcode");' to the 'functions.php' of your theme.
 
 [CPD_READS_THIS]
 [CPD_READS_TOTAL]
@@ -292,10 +292,15 @@ to check if plugin is activated.
 
 == Changelog ==
 
+= Dev =
++ New: counter column in custom post lists
++ Bugfix: errors in search words
++ Bugfix: wrong counts in posts lists
+
 = 3.2.1 =
 + Bugfix: massbot delete error
 + Bugfix: search words array sometimes corrupt
-+ Bugfix: add collected data to reads per post, thanks to http://is.gd/VWNyLq http://yumeneko.pmfan.jp
++ Bugfix: add collected data to reads per post, thanks to Suzakura Karin http://yumeneko.pmfan.jp / http://is.gd/VWNyLq 
 + Language update: Japanese, thanks to Juno Hayami
 + Language update: Portuguese, thanks to Beto Ribeiro
 + Language update: Russian, thanks to Ilya Pshenichny
