@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 3.2.1
+Stable tag: 3.2.2
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -292,7 +292,7 @@ to check if plugin is activated.
 
 == Changelog ==
 
-= Dev =
+= 3.2.2 =
 + New: counter column in custom post lists
 + Bugfix: errors in search words
 + Bugfix: wrong counts in posts lists
