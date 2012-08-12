@@ -1459,6 +1459,7 @@ function getSearchString()
 	foreach ($keys as $key)
 		if (isset($query[$key]))
 			$search = str_ireplace(array('/search?q=','/images?q='), '', $query[$key]);
+	$search = strip_tags($search);
 	if (empty($search) || is_numeric($search)) // non WordPress postID
 		$search = '';
 	return trim($search);
