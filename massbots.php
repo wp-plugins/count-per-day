@@ -3,6 +3,16 @@ if (!session_id()) session_start();
 $cpd_wp = (!empty($_SESSION['cpd_wp'])) ? $_SESSION['cpd_wp'] : '../../../';
 require_once($cpd_wp.'wp-load.php');
 
+// check user
+$o = get_option('count_per_day');
+$can_see = str_replace(
+		// administrator, editor, author, contributor, subscriber
+		array(10, 7, 2, 1, 0),
+		array('manage_options', 'moderate_comments', 'edit_published_posts', 'edit_posts', 'read'),
+		$o['show_in_lists']);
+if ( !current_user_can($can_see) )
+	die();
+
 if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 {
 	$sql = $wpdb->prepare("

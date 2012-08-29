@@ -3,6 +3,16 @@ if (!session_id()) session_start();
 $cpd_wp = (!empty($_SESSION['cpd_wp'])) ? $_SESSION['cpd_wp'] : '../../../';
 require_once($cpd_wp.'wp-load.php');
 
+// check user
+$o = get_option('count_per_day');
+$can_see = str_replace(
+	// administrator, editor, author, contributor, subscriber
+	array(10, 7, 2, 1, 0),
+	array('manage_options', 'moderate_comments', 'edit_published_posts', 'edit_posts', 'read'),
+	$o['show_in_lists']);
+if ( !current_user_can($can_see) )
+	die();
+
 $cpd_datemin = ( !empty($_REQUEST['datemin']) ) ? wp_strip_all_tags($_REQUEST['datemin']) : date_i18n('Y-m-d', time() - 86400 * 14); // 14 days
 $cpd_datemax = ( !empty($_REQUEST['datemax']) ) ? wp_strip_all_tags($_REQUEST['datemax']) : date_i18n('Y-m-d');
 $cpd_page = ( isset($_REQUEST['page']) ) ? intval($_REQUEST['page']) : 0;

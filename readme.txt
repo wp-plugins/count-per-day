@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 3.2.3
+Stable tag: 3.2.4
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -291,6 +291,9 @@ to check if plugin is activated.
 * More information about GeoIP on http://www.maxmind.com/app/geoip_country
 
 == Changelog ==
+
+= 3.2.4 =
++ Bigfix: security fix, check user permissions
 
 = 3.2.3 =
 + Bugfix: security fix, XSS in search words, thanks to http://www.n0lab.com/?p=163
