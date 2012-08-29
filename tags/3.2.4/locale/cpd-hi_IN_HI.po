@@ -1,0 +1,971 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Count Per Day v2.15\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2012-05-23 18:31+0530\n"
+"Last-Translator: shivangi <shivangi@outshinesolutions.com>\n"
+"Language-Team: Team Outshine <ash.pr@outsshinesolutions.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Hindi\n"
+"X-Poedit-Country: INDIA\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-Basepath: ../\n"
+"X-Textdomain-Support: yes\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#@ cpd
+#: counter-options.php:49
+msgid "Options updated"
+msgstr "विकल्प अद्यतन"
+
+#@ cpd
+#: counter-options.php:60
+#, php-format
+msgid "Countries updated. <b>%s</b> entries in %s without country left"
+msgstr "देश अपडेट. <b>%s </b> बिना देश%s में प्रविष्टियों को छोड़ दिया"
+
+#@ cpd
+#: counter-options.php:65
+msgid "update next"
+msgstr "अगले अद्यतन"
+
+#@ cpd
+#: counter-options.php:102
+#, php-format
+msgid "Mass Bots cleaned. %s counts deleted."
+msgstr "मास Bots साफ. %s के मायने रखता है नष्ट कर दिया."
+
+#@ cpd
+#: counter-options.php:112
+#, php-format
+msgid "Database cleaned. %s rows deleted."
+msgstr "डेटाबेस साफ. %s पंक्तियों को नष्ट कर दिया."
+
+#@ cpd
+#: counter-options.php:122
+msgid "Counter reseted."
+msgstr "Reseted का मुकाबला."
+
+#@ cpd
+#: counter-options.php:127
+#: counter-options.php:810
+msgid "UNINSTALL Count per Day"
+msgstr "दिन प्रति गणना की स्थापना रद्द"
+
+#@ cpd
+#: counter-options.php:132
+#: counter-options.php:133
+#: counter-options.php:134
+#, php-format
+msgid "Table %s deleted"
+msgstr "टेबल%s नष्ट कर दिया है"
+
+#@ cpd
+#: counter-options.php:135
+msgid "Options deleted"
+msgstr "विकल्प नष्ट कर दिया"
+
+#@ cpd
+#: counter-options.php:316
+#: counter-options.php:796
+msgid "Uninstall"
+msgstr "स्थापना रद्द करें"
+
+#@ cpd
+#: counter-options.php:317
+msgid "Click here"
+msgstr "यहाँ क्लिक करें"
+
+#@ cpd
+#: counter-options.php:317
+msgid "to finish the uninstall and to deactivate \"Count per Day\"."
+msgstr "स्थापना रद्द खत्म और \"गणना प्रति दिन \" निष्क्रिय."
+
+#@ cpd
+#: counter-options.php:351
+msgid "Counter"
+msgstr "काउंटर"
+
+#@ cpd
+#: counter-options.php:355
+msgid "Online time"
+msgstr "ऑनलाइन समय"
+
+#@ cpd
+#: counter-options.php:356
+msgid "Seconds for online counter. Used for \"Visitors online\" on dashboard page."
+msgstr "ऑनलाइन काउंटर के लिए सेकंड. डैशबोर्ड पृष्ठ पर  \"आगंतुकों ऑनलाइन \" के लिए प्रयुक्त."
+
+#@ cpd
+#: counter-options.php:359
+msgid "Logged on Users"
+msgstr "उपयोगकर्ताओं पर लॉग इन"
+
+#@ cpd
+#: counter-options.php:361
+msgid "count too"
+msgstr "गिनती"
+
+#@ cpd
+#: counter-options.php:362
+msgid "until User Level"
+msgstr "जब तक उपयोगकर्ता स्तर"
+
+#@ cpd
+#: counter-options.php:373
+msgid "Auto counter"
+msgstr "ऑटो काउंटर"
+
+#@ cpd
+#: counter-options.php:374
+msgid "Counts automatically single-posts and pages, no changes on template needed."
+msgstr "स्वचालित रूप से मायने रखता है एकल पोस्ट और पृष्ठों टेम्पलेट पर कोई परिवर्तन की जरूरत है."
+
+#@ cpd
+#: counter-options.php:377
+msgid "Bots to ignore"
+msgstr "उपेक्षा bots"
+
+#@ cpd
+#: counter-options.php:381
+msgid "Anonymous IP"
+msgstr "गुमनाम आईपी"
+
+#@ cpd
+#: counter-options.php:385
+msgid "Cache"
+msgstr "कैश"
+
+#@ cpd
+#: counter-options.php:386
+msgid "I use a cache plugin. Count these visits with ajax."
+msgstr "मैं एक कैश प्लगइन का उपयोग करें. AJAX के साथ इन यात्राओं की गणना."
+
+#@ cpd
+#: counter-options.php:389
+msgid "Clients and referrers"
+msgstr "ग्राहक और सन्दर्भदाता"
+
+#@ cpd
+#: counter-options.php:392
+msgid "Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors."
+msgstr "सहेजें और दिखाने के ग्राहकों और सन्दर्भदाता. डेटाबेस में अंतरिक्ष के एक बहुत जरूरत है.<br/> लेकिन तुम अपने आगंतुकों के और अधिक विस्तृत informations देता है."
+
+#@ cpd
+#: counter-core.php:639
+#: counter-options.php:392
+#: counter.php:159
+#: counter.php:875
+msgid "Reads"
+msgstr "पढ़ता"
+
+#@ default
+#: counter-options.php:403
+msgid "Dashboard"
+msgstr "डैशबोर्ड"
+
+#@ cpd
+#: counter-core.php:727
+#: counter-options.php:438
+msgid "Visitors per post"
+msgstr "पोस्ट प्रति आगंतुक"
+
+#@ cpd
+#: counter-options.php:439
+#: counter-options.php:443
+msgid "How many posts do you want to see on dashboard page?"
+msgstr "कितने पोस्ट आप डैशबोर्ड पृष्ठ पर देखना चाहते हैं?"
+
+#@ cpd
+#: counter-options.php:442
+msgid "Latest Counts - Posts"
+msgstr "नवीनतम गणना - डाक"
+
+#@ cpd
+#: counter-options.php:446
+msgid "Latest Counts - Days"
+msgstr "नवीनतम गणना - दिन"
+
+#@ cpd
+#: counter-options.php:447
+#: counter-options.php:451
+#: counter-options.php:473
+msgid "How many days do you want look back?"
+msgstr "कितने दिन तुम चाहते हो वापस देखो?"
+
+#@ cpd
+#: counter-options.php:450
+msgid "Chart - Days"
+msgstr "चार्ट - दिन"
+
+#@ cpd
+#: counter-options.php:454
+msgid "Chart - Height"
+msgstr "चार्ट ऊंचाई"
+
+#@ cpd
+#: counter-options.php:455
+msgid "Height of the biggest bar"
+msgstr "सबसे बड़ी पट्टी की ऊँचाई"
+
+#@ cpd
+#: counter-options.php:459
+msgid "Countries"
+msgstr "देश"
+
+#@ cpd
+#: counter-options.php:460
+msgid "How many countries do you want to see on dashboard page?"
+msgstr "आप कितने देश डैशबोर्ड पृष्ठ पर देखना चाहते हैं?"
+
+#@ cpd
+#: counter-core.php:733
+#: counter-options.php:464
+msgid "Browsers"
+msgstr "ब्राउज़र्स"
+
+#@ cpd
+#: counter-options.php:465
+msgid "Substring of the user agent, separated by comma"
+msgstr "उपयोगकर्ता एजेंट की substring, अल्पविराम के द्वारा अलग"
+
+#@ cpd
+#: counter-options.php:476
+msgid "Local URLs"
+msgstr "स्थानीय यूआरएल"
+
+#@ cpd
+#: counter-options.php:477
+msgid "Show local referrers too."
+msgstr " स्थानीय सन्दर्भदाता भी दिखाएँ."
+
+#@ default
+#: counter-options.php:485
+msgid "Posts"
+msgstr "पोस्ट"
+
+#@ default
+#: counter-options.php:485
+msgid "Pages"
+msgstr "पन्ने"
+
+#@ cpd
+#: counter-options.php:488
+msgid "Show in lists"
+msgstr "सूचियों में दिखाएँ "
+
+#@ cpd
+#: counter-options.php:489
+msgid "Show \"Reads per Post\" in a new column in post management views."
+msgstr "\"दिखाएँ पढ़ता प्रति पोस्ट \"के बाद प्रबंधन दृश्य में एक नया स्तंभ."
+
+#@ cpd
+#: counter-options.php:497
+msgid "Start Values"
+msgstr "मान प्रारंभ करें"
+
+#@ cpd
+#: counter-options.php:501
+msgid "Here you can change the date of first count and add a start count."
+msgstr "यहाँ आप पहले गिनती की तारीख बदलने के लिए और एक शुरुआत संख्या को जोड़ सकते हैं."
+
+#@ cpd
+#: counter-options.php:505
+msgid "Start date"
+msgstr "प्रारंभ दिनांक"
+
+#@ cpd
+#: counter-options.php:506
+msgid "Your old Counter starts at?"
+msgstr "अपने पुराने काउंटर पर शुरू होता है?"
+
+#@ cpd
+#: counter-options.php:509
+#: counter-options.php:513
+msgid "Start count"
+msgstr "गिनती प्रारंभ करें"
+
+#@ cpd
+#: counter-options.php:510
+msgid "Add this value to \"Total visitors\"."
+msgstr " \"कुल आगंतुकों \" इस मूल्य में जोड़ें."
+
+#@ cpd
+#: counter-options.php:514
+msgid "Add this value to \"Total reads\"."
+msgstr "\" कुल पढ़ता है\" इस मूल्य में जोड़ें."
+
+#@ cpd
+#: counter-options.php:554
+msgid "Debug mode"
+msgstr "मोड डीबग"
+
+#@ cpd
+#: counter-options.php:556
+msgid "Show debug informations at the bottom of all pages."
+msgstr "डिबग informations के सभी पृष्ठों के नीचे है."
+
+#@ cpd
+#: counter-options.php:561
+msgid "Update options"
+msgstr "विकल्प अपडेट"
+
+#@ cpd
+#: counter-options.php:727
+msgid "GeoIP - Countries"
+msgstr "GeoIP - देश"
+
+#@ cpd
+#: counter-options.php:736
+msgid "Update old counter data"
+msgstr "पुराने काउंटर डेटा अद्यतन"
+
+#@ cpd
+#: counter-options.php:730
+msgid "You can get the country data for all entries in database by checking the IP adress against the GeoIP database. This can take a while!"
+msgstr "GeoIP डेटाबेस के खिलाफ आईपी पते की जाँच करके आप डेटाबेस में सभी प्रविष्टियों के लिए देश के डेटा प्राप्त कर सकते हैं. यह एक समय लग सकता है!"
+
+#@ cpd
+#: counter-options.php:748
+msgid "Update GeoIP database"
+msgstr "अपडेट GeoIP डेटाबेस"
+
+#@ cpd
+#: counter-options.php:743
+msgid "Download a new version of GeoIP.dat file."
+msgstr "GeoIP.dat फ़ाइल का एक नया संस्करण डाउनलोड करें."
+
+#@ cpd
+#: counter-options.php:753
+msgid "More informations about GeoIP"
+msgstr "GeoIP के बारे में अधिक informations"
+
+#@ cpd
+#: counter-options.php:580
+#: massbots.php:35
+msgid "Mass Bots"
+msgstr "मास Bots"
+
+#@ cpd
+#: counter-options.php:584
+#, php-format
+msgid "Show all IPs with more than %s page views per day"
+msgstr "%s से अधिक दिन प्रति पृष्ठ विचारों के साथ सभी आईपी दिखाएँ"
+
+#@ cpd
+#: counter-options.php:585
+#: notes.php:71
+#: userperspan.php:44
+msgid "show"
+msgstr "दिखाना"
+
+#@ cpd
+#: counter-options.php:593
+msgid "IP"
+msgstr "IP"
+
+#@ cpd
+#@ default
+#: counter-options.php:594
+#: notes.php:75
+msgid "Date"
+msgstr "तारीख"
+
+#@ cpd
+#: counter-options.php:595
+msgid "Client"
+msgstr "ग्राहक"
+
+#@ cpd
+#: counter-options.php:596
+msgid "Views"
+msgstr "दृश्य"
+
+#@ cpd
+#: counter-options.php:611
+#: counter-options.php:627
+#, php-format
+msgid "Delete these %s counts"
+msgstr "%s गिना जाता है हटाएँ"
+
+#@ cpd
+#: counter-options.php:656
+#: counter-options.php:665
+msgid "Clean the database"
+msgstr "डेटाबेस साफ करें"
+
+#@ cpd
+#: counter-options.php:659
+msgid "You can clean the counter table by delete the \"spam data\".<br />If you add new bots above the old \"spam data\" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots."
+msgstr "आप द्वारा काउंटर मेज साफ कर सकते हैं \"स्पैम डेटा \" <br. यदि आप पुराने \"स्पैम डेटा \" डेटाबेस में रहता है. <br ऊपर नई बॉट /> यहाँ आप चला सकते हैं बॉट फिल्टर को हटानाफिर और bots की यात्राओं को हटा दें."
+
+#@ cpd
+#: counter-options.php:777
+#: counter-options.php:787
+msgid "Reset the counter"
+msgstr "काउंटर रीसेट करें"
+
+#@ cpd
+#: counter-options.php:780
+msgid "You can reset the counter by empty the table. ALL TO 0!<br />Make a backup if you need the current data!"
+msgstr "आप खाली मेज द्वारा काउंटर पुनर्स्थापित कर सकते हैं. सभी 0 से <br एक बैकअप अगर आप मौजूदा डेटा की जरूरत है!"
+
+#@ cpd
+#: counter-options.php:799
+msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
+msgstr "अगर \"गणना प्रति दिन \" केवल अक्षम है डेटाबेस में तालिकाओं को संरक्षित किया जाएगा."
+
+#@ cpd
+#: counter-options.php:800
+msgid "Here you can delete the tables and disable \"Count per Day\"."
+msgstr "यहाँ आप तालिका को हटा सकते हैं और अक्षम \"\" गणना प्रति दिन कर सकते हैं."
+
+#@ cpd
+#: counter-options.php:803
+msgid "WARNING"
+msgstr "चेतावनी"
+
+#@ cpd
+#: counter-options.php:804
+msgid "These tables (with ALL counter data) will be deleted."
+msgstr "इन तालिकाओं (सभी काउंटर डेटा के साथ) को हटा दिया जाएगा."
+
+#@ cpd
+#: counter-options.php:806
+msgid "If \"Count per Day\" re-installed, the counter starts at 0."
+msgstr "अगर \"गणना प्रति दिन \" फिर से स्थापित, काउंटर 0 में शुरू होता है."
+
+#@ cpd
+#: counter-options.php:786
+#: counter-options.php:809
+msgid "Yes"
+msgstr "हां"
+
+#@ cpd
+#: counter-options.php:810
+msgid "You are sure to disable Count per Day and delete all data?"
+msgstr "आप प्रति दिन अक्षम गणना और सभी डेटा को हटाने के लिए सुनिश्चित कर रहे हैं?"
+
+#@ cpd
+#: counter-options.php:714
+msgid "Support"
+msgstr "समर्थन"
+
+#@ cpd
+#: counter.php:155
+#: counter.php:1197
+msgid "Total reads"
+msgstr "कुल पढ़ता"
+
+#@ cpd
+#: counter.php:156
+#: counter.php:1198
+msgid "Reads today"
+msgstr "आज पढ़ता है"
+
+#@ cpd
+#: counter.php:157
+#: counter.php:1199
+msgid "Reads yesterday"
+msgstr "कल पढ़ता है"
+
+#@ cpd
+#: counter.php:158
+#: counter.php:1200
+msgid "Reads last week"
+msgstr "पिछले हफ्ते पढ़ता है"
+
+#@ cpd
+#: counter-core.php:723
+#: counter.php:160
+#: counter.php:1010
+#: counter.php:1202
+msgid "Total visitors"
+msgstr "कुल आगंतुकों"
+
+#@ cpd
+#: counter.php:161
+#: counter.php:1208
+msgid "Visitors currently online"
+msgstr "वर्तमान में ऑनलाइन आगंतुकों"
+
+#@ cpd
+#: counter.php:162
+#: counter.php:1203
+msgid "Visitors today"
+msgstr "आज आगंतुकों"
+
+#@ cpd
+#: counter.php:163
+#: counter.php:1204
+msgid "Visitors yesterday"
+msgstr "कल आगंतुकों"
+
+#@ cpd
+#: counter.php:164
+#: counter.php:1205
+msgid "Visitors last week"
+msgstr "पिछले सप्ताह आगंतुकों"
+
+#@ cpd
+#: counter-core.php:729
+#: counter.php:166
+#: counter.php:263
+#: counter.php:1012
+#: counter.php:1207
+#: userperspan.php:34
+msgid "Visitors per day"
+msgstr "प्रति दिन आगंतुक"
+
+#@ cpd
+#: counter.php:167
+#: counter.php:825
+#: counter.php:1209
+msgid "Counter starts on"
+msgstr "काउंटर पर शुरू होता है"
+
+#@ cpd
+#: counter.php:788
+#: notes.php:42
+#: notes.php:76
+msgid "Notes"
+msgstr "नोट्स"
+
+#@ cpd
+#: counter.php:672
+#, php-format
+msgid "The %s most visited posts in last %s days:"
+msgstr "%s के सबसे पिछले%s के दिनों में पदों का दौरा किया:"
+
+#@ default
+#: counter.php:786
+msgid "Show"
+msgstr "दिखाना"
+
+#@ cpd
+#: counter.php:821
+msgid "Other"
+msgstr "अन्य"
+
+#@ default
+#: counter.php:976
+msgid "Edit Post"
+msgstr "पोस्ट संपादित करें"
+
+#@ default
+#: counter.php:985
+msgid "Category"
+msgstr "श्रेणी"
+
+#@ default
+#: counter.php:988
+msgid "Tag"
+msgstr "टैग"
+
+#@ default
+#: counter.php:991
+#: massbots.php:52
+#: userperspan.php:63
+msgid "Front page displays"
+msgstr "सामने पृष्ठ दिखाता है"
+
+#@ default
+#: counter-core.php:575
+#: counter-options.php:341
+#: counter-options.php:565
+msgid "Settings"
+msgstr "Settings"
+
+#@ cpd
+#: counter-core.php:689
+#, php-format
+msgid "Time for Count per Day: <code>%s</code>."
+msgstr "<code>%s </code>: गणना प्रति दिवस के लिए समय."
+
+#@ cpd
+#: counter-core.php:690
+msgid "Bug? Problem? Question? Hint? Praise?"
+msgstr "बग? समस्या है? प्रश्न? सुझाव? प्रशंसा?"
+
+#@ cpd
+#: counter-core.php:691
+#, php-format
+msgid "Write a comment on the <a href=\"%s\">plugin page</a>."
+msgstr "<a Href=\"%s\"> प्लगइन पृष्ठ पर एक टिप्पणी लिखें </ a> देखें."
+
+#@ default
+#: counter-core.php:692
+msgid "License"
+msgstr "लाइसेंस"
+
+#@ cpd
+#: counter.php:262
+msgid "Reads per day"
+msgstr "प्रति दिन पढ़ता है"
+
+#@ cpd
+#: counter-core.php:725
+#: counter.php:1206
+msgid "Visitors per month"
+msgstr "प्रति माह आगंतुकों"
+
+#@ cpd
+#: counter-core.php:726
+#: counter.php:1201
+msgid "Reads per month"
+msgstr "प्रति माह पढ़ता है"
+
+#@ cpd
+#: counter-core.php:728
+msgid "Latest Counts"
+msgstr "नवीनतम गणना"
+
+#@ default
+#: counter-core.php:730
+msgid "Plugin"
+msgstr "प्लगइन"
+
+#@ cpd
+#: counter-core.php:734
+msgid "Referrer"
+msgstr "संदर्भ"
+
+#@ cpd
+#: counter-core.php:738
+msgid "Reads per Country"
+msgstr "देश के प्रति पढ़ता है"
+
+#@ cpd
+#: counter-core.php:739
+msgid "Visitors per Country"
+msgstr "देश के प्रति आगंतुक"
+
+#@ cpd
+#: counter-core.php:754
+#: counter.php:1124
+msgid "Statistics"
+msgstr "आँकड़े"
+
+#@ cpd
+#: counter.php:353
+#: counter.php:1041
+msgid "Map"
+msgstr "नक्शा"
+
+#@ cpd
+#: counter.php:1196
+msgid "This post"
+msgstr "यह पोस्ट"
+
+#@ default
+#: counter.php:1220
+msgid "Title"
+msgstr "शीर्षक"
+
+#@ cpd
+#: geoip/geoip.php:93
+msgid "Sorry, necessary functions (zlib) not installed or enabled in php.ini."
+msgstr "माफ करना, आवश्यक कार्यों (zlib) स्थापित php.ini में सक्षम है या नहीं."
+
+#@ cpd
+#: geoip/geoip.php:117
+msgid "New GeoIP database installed."
+msgstr "स्थापित नई GeoIP डेटाबेस."
+
+#@ cpd
+#: geoip/geoip.php:119
+msgid "Sorry, an error occurred. Try again or check the access rights of directory \"geoip\" is 777."
+msgstr "क्षमा करें, कोई त्रुटि हुई है. फिर से कोशिश करें या निर्देशिका के अधिकारों का उपयोग जाँच \"geoip, \" 777 है."
+
+#@ default
+#: notes.php:77
+msgid "Action"
+msgstr "कार्रवाई"
+
+#@ cpd
+#: notes.php:82
+msgid "add"
+msgstr "जोड़ना"
+
+#@ cpd
+#: notes.php:98
+msgid "save"
+msgstr "बचाना"
+
+#@ cpd
+#: notes.php:99
+msgid "delete"
+msgstr "हटाना"
+
+#@ cpd
+#: notes.php:110
+msgid "edit"
+msgstr "संपादित"
+
+#@ cpd
+#: userperspan.php:38
+msgid "Start"
+msgstr "प्रारंभ"
+
+#@ cpd
+#: userperspan.php:40
+msgid "End"
+msgstr "अंत"
+
+#@ cpd
+#: userperspan.php:42
+msgid "PostID"
+msgstr "PostID"
+
+#@ cpd
+#: userperspan.php:50
+msgid "no data found"
+msgstr "कोई डेटा नहीं मिला"
+
+#@ cpd
+#: counter-options.php:468
+msgid "Referrers - Entries"
+msgstr "सन्दर्भदाता - प्रविष्टियां"
+
+#@ cpd
+#: counter-options.php:469
+msgid "How many referrers do you want to see on dashboard page?"
+msgstr "कितने सन्दर्भदाता आपको डैशबोर्ड पृष्ठ पर देखना चाहते हैं?"
+
+#@ cpd
+#: counter-options.php:472
+msgid "Referrers - Days"
+msgstr "सन्दर्भदाता - दिन"
+
+#@ cpd
+#: counter.php:845
+#, php-format
+msgid "The %s referrers in last %s days:"
+msgstr "पिछले%s के दिनों में सन्दर्भदाता%s:"
+
+#@ cpd
+#: counter-core.php:724
+msgid "Visitors online"
+msgstr "ऑनलाइन आगंतुकों"
+
+#@ cpd
+#: counter-core.php:186
+#, php-format
+msgid "\"Count per Day\" updated to version %s."
+msgstr "\"गणना प्रति दिन \"%s  संस्करण के लिए अद्यतन."
+
+#@ cpd
+#: counter-core.php:917
+msgid "Backup failed! Cannot open file"
+msgstr "बैकअप में विफल रहा है! फ़ाइल नहीं खोल सकता"
+
+#@ cpd
+#: counter-core.php:940
+#, php-format
+msgid "Backup of %s entries in progress. Every point complies %s entries."
+msgstr "रगति में%s प्रविष्टियों का बैकअप. हर बिंदु%s प्रविष्टियों अनुरूप है."
+
+#@ cpd
+#: counter-core.php:1027
+msgid "Your wp-content directory is not writable. But you can copy the content of this box to a plain text file."
+msgstr "आपका निर्देशिका wp-सामग्री लिखने योग्य नहीं . लेकिन तुम एक सादा पाठ फ़ाइल के लिए इस बॉक्स का सामग्री को कॉपी कर सकते हैं."
+
+#@ cpd
+#: counter-core.php:1033
+#, php-format
+msgid "Backup of counter table saved in %s."
+msgstr "काउंटर तालिका का बैकअप%s में सहेजा जाता है."
+
+#@ cpd
+#: counter-core.php:1035
+#, php-format
+msgid "Backup of counter options and collection saved in %s."
+msgstr "काउंटर विकल्प और%s में सहेजा संग्रह का बैकअप."
+
+#@ cpd
+#: counter-options.php:170
+msgid "Collection in progress..."
+msgstr "संग्रह में प्रगति ..."
+
+#@ cpd
+#: counter-options.php:240
+msgid "Get Visitors per Post..."
+msgstr "डाक के प्रति आगंतुक प्राप्त करें ..."
+
+#@ cpd
+#: counter-options.php:261
+msgid "Delete old data..."
+msgstr "पुराने डेटा को हटाएँ ..."
+
+#@ cpd
+#: counter-options.php:285
+#, php-format
+msgid "Counter entries until %s collected and counter table %s optimized (size before = %s &gt; size after = %s)."
+msgstr "काउंटर प्रविष्टियों तक%s एकत्र और काउंटर तालिका%s अनुकूलित (पहले के आकार =%s> आकार बाद =%s)."
+
+#@ cpd
+#: counter-options.php:294
+msgid "Installation of \"Count per Day\" checked"
+msgstr "\"गणना प्रति दिन \"  जाँच की स्थापना"
+
+#@ default
+#: counter-options.php:342
+#: counter-options.php:566
+msgid "Tools"
+msgstr "उपकरण"
+
+#@ cpd
+#: counter-options.php:394
+msgid "Save URL only, no query string."
+msgstr "यूआरएल केवल सहेजें, कोई क्वेरी स्ट्रिंग."
+
+#@ cpd
+#: counter-options.php:419
+msgid "Who can see it"
+msgstr "यह कौन देख सकते हैं"
+
+#@ cpd
+#: counter-options.php:428
+msgid "custom"
+msgstr "रिवाज"
+
+#@ cpd
+#: counter-options.php:430
+msgid "and higher are allowed to see the statistics page."
+msgstr "और अधिक आँकड़े पृष्ठ को देखने के लिए अनुमति दी जाती है."
+
+#@ cpd
+#: counter-options.php:432
+#, php-format
+msgid "Set the %s capability %s a user need:"
+msgstr "%s%s क्षमता है एक उपयोगकर्ता की आवश्यकता सेट करें:"
+
+#@ cpd
+#: counter-options.php:522
+msgid "Stylesheet"
+msgstr "स्टाइलशीट"
+
+#@ cpd
+#: counter-options.php:525
+msgid "NO Stylesheet in Frontend"
+msgstr "दृश्यपटल में स्टाइलशीट नहीं है "
+
+#@ cpd
+#: counter-options.php:526
+msgid "Do not load the stylesheet \"counter.css\" in frontend."
+msgstr " \"Counter.css \" दृश्यपटल में लोड स्टाइलशीट नहीं है."
+
+#@ cpd
+#: counter-options.php:534
+#: counter-options.php:639
+msgid "Backup"
+msgstr "बैकअप"
+
+#@ cpd
+#: counter-options.php:537
+msgid "Entries per pass"
+msgstr "पास प्रति प्रविष्टियां"
+
+#@ cpd
+#: counter-options.php:540
+msgid "How many entries should be saved per pass? Default: 10000"
+msgstr "कितनी प्रविष्टियों पास प्रति बचाया जाना चाहिए? डिफ़ॉल्ट: 10000"
+
+#@ cpd
+#: counter-options.php:545
+msgid "If your PHP memory limit less then 50 MB and you get a white page or error messages try a smaller value."
+msgstr "यदि आपके PHP स्मृति सीमा से कम 50 एमबी और फिर आपको एक सफेद पृष्ठ या त्रुटि संदेश मिलता है एक छोटे मूल्य का प्रयास करें"
+
+#@ cpd
+#: counter-options.php:643
+#, php-format
+msgid "Create a backup of the counter table %s in your wp-content directory (if writable)."
+msgstr " आपका निर्देशिका wp-सामग्री में काउंटर तालिका% s (अगर लिखने योग्य) का एक बैकअप बनाएँ."
+
+#@ cpd
+#: counter-options.php:647
+msgid "Backup the database"
+msgstr "डेटाबेस बैकअप"
+
+#@ cpd
+#: counter-options.php:674
+#: counter-options.php:706
+msgid "Collect old data"
+msgstr "पुराने डेटा लीजिए"
+
+#@ cpd
+#: counter-options.php:679
+#, php-format
+msgid "Current size of your counter table %s is %s."
+msgstr "अपने काउंटर तालिका%s के वर्तमान आकार%s है."
+
+#@ cpd
+#: counter-options.php:681
+msgid "You can collect old data and clean up the counter table.<br/>Reads and visitors will be saved per month, per country and per post.<br/>Clients and referrers will deleted."
+msgstr "आप पुराने आंकड़ों को इकट्ठा करने और काउंटर मेज साफ कर सकते हैं करें <br/>. पुस्तकें और आगंतुकों प्रति माह बचाया किया जाएगा, देश के प्रति और पोस्ट प्रति. ग्राहक करें <br/> और सन्दर्भदाता हटा दिया जाएगा."
+
+#@ cpd
+#: counter-options.php:686
+#, php-format
+msgid "Currently your collection contains data until %s."
+msgstr "वर्तमान में अपने संग्रह%s जब तक डेटा शामिल हैं."
+
+#@ cpd
+#: counter-options.php:690
+msgid "Normally new data will be added to the collection."
+msgstr "आम तौर पर नया डेटा संग्रह करने के लिए जोड़ दिया जाएगा."
+
+#@ cpd
+#: counter-options.php:696
+msgid "Delete old collection and create a new one which contains only the data currently in counter table."
+msgstr "पुराने संग्रह हटाएँ और एक नया है जो केवल डेटा काउंटर तालिका में वर्तमान में होता है."
+
+#@ cpd
+#: counter-options.php:697
+#, php-format
+msgid "All collected data until %s will deleted."
+msgstr "%s जब तक सभी एकत्र आंकड़ों को नष्ट कर दिया जाएगा."
+
+#@ cpd
+#: counter-options.php:702
+#, php-format
+msgid "Keep entries of last %s full months + current month in counter table."
+msgstr "पिछले%s पूर्ण महीने की प्रविष्टियों + काउंटर तालिका में वर्तमान माह रखें."
+
+#@ cpd
+#: counter-options.php:761
+msgid "ReActivation"
+msgstr "पुनः सक्रियण"
+
+#@ cpd
+#: counter-options.php:764
+msgid "Here you can start the installation functions manually.<br/>Same as deactivate and reactivate the plugin."
+msgstr "पिछले%s पूर्ण महीने की प्रविष्टियों + काउंटर तालिका में वर्तमान माह रखें."
+
+#@ cpd
+#: counter-options.php:769
+msgid "ReActivate the plugin"
+msgstr "प्लगइन को पुन: सक्रिय"
+
+#@ cpd
+#: counter.php:165
+#: counter.php:899
+msgid "Visitors"
+msgstr "आगंतुक"
+
+#@ cpd
+#: counter.php:168
+#: counter.php:169
+msgid "Most visited day"
+msgstr "दौरा किया दिन"
+
+#@ cpd
+#: counter.php:1239
+msgid "drag and drop to sort"
+msgstr "खींचें और ड्रॉप सॉर्ट"
+
