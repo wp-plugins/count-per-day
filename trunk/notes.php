@@ -3,6 +3,16 @@ if (!session_id()) session_start();
 $cpd_wp = (!empty($_SESSION['cpd_wp'])) ? $_SESSION['cpd_wp'] : '../../../';
 require_once($cpd_wp.'wp-load.php');
 
+// check user
+$o = get_option('count_per_day');
+$can_see = str_replace(
+	// administrator, editor, author, contributor, subscriber
+	array(10, 7, 2, 1, 0),
+	array('manage_options', 'moderate_comments', 'edit_published_posts', 'edit_posts', 'read'),
+	$o['show_in_lists']);
+if ( !current_user_can($can_see) )
+	die();
+
 // set default values
 if ( isset($_POST['month']) )
 	$month = (int) $_POST['month'];
@@ -18,14 +28,17 @@ else if ( isset($_GET['year']) )
 else	
 	$year = date_i18n('Y');
 
+$date = strip_tags($_POST['date']);
+$note = strip_tags($_POST['note']);
+
 // load notes
-$n = get_option('count_per_day_notes', array());
+$n = (array) get_option('count_per_day_notes');
 
 // save changes
 if ( isset($_POST['new']) )
-	$n[] = array( $_POST['date'], $_POST['note'] );
+	$n[] = array( $date, $note );
 else if ( isset($_POST['edit']) )
-	$n[$_POST['id']] = array( $_POST['date'], $_POST['note'] );
+	$n[$_POST['id']] = array( $date, $note );
 else if ( isset($_POST['delete']) )
 	unset($n[$_POST['id']]);
 update_option('count_per_day_notes', $n);
