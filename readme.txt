@@ -2,8 +2,8 @@
 Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
-Tested up to: 3.4.1
-Stable tag: 3.2.4
+Tested up to: 3.5
+Stable tag: 3.2.5
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -128,7 +128,7 @@ if(method_exists($count_per_day,"show")) echo $count_per_day->getReadsAll(true);
 ?></code>
 to check if plugin is activated.
 
-'show( $before, $after, $show, $count, $page )'
+show( $before, $after, $show, $count, $page )'
 
 * $before = text before number e.g. '&lt;p&gt;' (default "")
 * $after = text after number e.g. 'reads&lt;/p&gt;' (default " reads")
@@ -292,8 +292,11 @@ to check if plugin is activated.
 
 == Changelog ==
 
+= 3.2.5 =
++ Bugfix: compatibility fix for WordPress 3.5
+
 = 3.2.4 =
-+ Bigfix: security fix, check user permissions
++ Bugfix: security fix, check user permissions
 
 = 3.2.3 =
 + Bugfix: security fix, XSS in search words, thanks to http://www.n0lab.com/?p=163

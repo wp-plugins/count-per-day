@@ -3,14 +3,14 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads and visitors per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 3.2.4
+Version: 3.2.5
 License: Postcardware
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '3.2.4';
+$cpd_version = '3.2.5';
 
 $cpd_path = str_replace('/', DIRECTORY_SEPARATOR, ABSPATH.PLUGINDIR.'/'.$cpd_dir_name.'/');
 include_once($cpd_path.'counter-core.php');
@@ -53,7 +53,7 @@ function show( $before='', $after=' reads', $show = true, $count = true, $page =
 	// get count from collection
 	$c = $this->getCollectedPostReads($page);
 	// add current data
-	$c += $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE page='$page'"), 'show '.__LINE__);
+	$c += $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE page='$page'", null), 'show '.__LINE__);
 	if ($show)
 		echo $before.$c.$after;
 	else
