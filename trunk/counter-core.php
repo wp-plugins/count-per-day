@@ -214,14 +214,14 @@ function mysqlQuery( $kind = '', $sql, $func = '' )
 		return;
 	$t = microtime(true);
 	$con = $wpdb->dbh;
-	$preparedSql = $wpdb->prepare($sql);
+	$preparedSql = $wpdb->prepare($sql, null);
 	$r = false;
 	if ($kind == 'var')
 		$r = $wpdb->get_var( $preparedSql );
 	else if ($kind == 'count')
 	{
 		$sql = 'SELECT COUNT(*) FROM ('.trim($sql,';').') t';
-		$r = $wpdb->get_var( $wpdb->prepare($sql) );
+		$r = $wpdb->get_var( $wpdb->prepare($sql, null) );
 	}
 	else if ($kind == 'rows')
 	{
@@ -360,7 +360,7 @@ function checkVersion()
 		if (!empty($_GET['networkwide']))
 		{
 			$old_blog = $wpdb->blogid;
-			$blogids = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM $wpdb->blogs"));
+			$blogids = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM $wpdb->blogs", null));
 			foreach ($blogids as $blog_id)
 			{
 				// create tables in all sub blogs
