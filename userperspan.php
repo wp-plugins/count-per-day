@@ -17,25 +17,27 @@ $cpd_datemin = ( !empty($_REQUEST['datemin']) ) ? wp_strip_all_tags($_REQUEST['d
 $cpd_datemax = ( !empty($_REQUEST['datemax']) ) ? wp_strip_all_tags($_REQUEST['datemax']) : date_i18n('Y-m-d');
 $cpd_page = ( isset($_REQUEST['page']) ) ? intval($_REQUEST['page']) : 0;
 
-$sql = "SELECT	p.post_title,
+$sql = $wpdb->prepare(
+		"SELECT	p.post_title,
 				COUNT(*) AS count,
 				c.page,
 				c.date
 		FROM	$wpdb->cpd_counter c
 		LEFT	JOIN $wpdb->posts p
 				ON p.ID = c.page
-		WHERE	c.page = '$cpd_page'
-		AND		c.date >= '$cpd_datemin'
-		AND		c.date <= '$cpd_datemax'
+		WHERE	c.page = %s
+		AND		c.date >= %s
+		AND		c.date <= %s
 		GROUP	BY c.date
-		ORDER	BY c.date desc";
+		ORDER	BY c.date desc",
+		$cpd_page, $cpd_datemin, $cpd_datemax);
 $cpd_visits = $count_per_day->mysqlQuery('rows', $sql, 'getUserPerPostSpan '.__LINE__);
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de-DE">
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta charset="UTF-8" />
 <title>Count per Day</title>
 <link rel="stylesheet" type="text/css" href="counter.css" />
 </head>

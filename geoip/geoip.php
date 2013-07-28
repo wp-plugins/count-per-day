@@ -21,15 +21,18 @@ function getCountry( $ip )
 {
 	global $cpd_path;
 	
+	// IPv4 > IPv6
+	if( strpos($ip,'.') !== false )
+		$ip = "::$ip";
+	
 	$gi = cpd_geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
-	$c = strtolower(cpd_geoip_country_code_by_addr($gi, $ip));
+	$c = strtolower(cpd_geoip_country_code_by_addr_v6($gi, $ip));
 	
 	if ( empty($c) )
 		$c = 'unknown';
-	$cname = cpd_geoip_country_name_by_addr($gi, $ip);
-	$country = array( $c, '<div class="cpd-flag cpd-flag-'.$c.'" title="'.$cname.'"></div>', $cname );
+	$cname = cpd_geoip_country_name_by_addr_v6($gi, $ip);
 	cpd_geoip_close($gi);
-	
+	$country = array( $c, '<div class="cpd-flag cpd-flag-'.$c.'" title="'.$cname.'"></div>', $cname );
 	return $country;
 }
 
@@ -52,17 +55,33 @@ function updateDB()
 	foreach ($res as $r)
 	{
 		$c = '';
-		$ip = explode('.', $r->realip);
-		if ( $ip[0] == 10
-			|| $ip[0] == 127
-			|| ($ip[0] == 169 && $ip[1] == 254)
-			|| ($ip[0] == 172 && $ip[1] >= 16 && $ip[1] <= 31)
-			|| ($ip[0] == 192 && $ip[1] == 168) )
-			// set local IPs to '-'
-			$c = '-';
+		if ( strpos($r->realip,'.') !== false && strpos($r->realip,':') === false)
+		{
+			// IPv4
+			$ip = explode('.', $r->realip);
+			if ( $ip[0] == 10
+				|| $ip[0] == 127
+				|| ($ip[0] == 169 && $ip[1] == 254)
+				|| ($ip[0] == 172 && $ip[1] >= 16 && $ip[1] <= 31)
+				|| ($ip[0] == 192 && $ip[1] == 168) )
+				// set local IPs to '-'
+				$c = '-';
+			else
+				// get country
+				$c = strtolower(cpd_geoip_country_code_by_addr_v6($gi, '::'.$r->realip));
+		}
 		else
-			// get country
-			$c = strtolower(cpd_geoip_country_code_by_addr($gi, $r->realip));
+		{
+			// IPv6
+			if ( strpos($r->realip, '::1') === 0
+				|| strpos($r->realip, 'fc00::') === 0
+					)
+				// set local IPs to '-'
+				$c = '-';
+			else
+				// get country
+				$c = strtolower(cpd_geoip_country_code_by_addr_v6($gi, $r->realip));
+		}
 		
 		if ( !empty($c) )
 			$count_per_day->mysqlQuery('', "UPDATE $wpdb->cpd_counter SET country = '$c' WHERE ip = '$r->ip'", 'GeoIP updateDB '.__LINE__);
@@ -89,7 +108,8 @@ function updateGeoIpFile()
 	if ( !function_exists('gzopen') )
 		return __('Sorry, necessary functions (zlib) not installed or enabled in php.ini.', 'cpd');
 	
-	$gzfile = 'http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz';
+//	$gzfile = 'http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz';
+	$gzfile = 'http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz';
 	$file = $cpd_path.'/geoip/GeoIP.dat';
 
 	// get remote file
@@ -118,4 +138,3 @@ function updateGeoIpFile()
 
 
 }
-?>

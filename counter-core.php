@@ -147,7 +147,8 @@ function init()
 		add_action('admin_enqueue_scripts', array(&$this,'addThickbox'));
 	
 	// Session
-	add_action('init', array(&$this,'startSession'), 1);
+	if (strpos($_SERVER['SCRIPT_NAME'], '/wp-admin/') !== false )
+		add_action('init', array(&$this,'startSession'), 1);
 	
 	$this->aton = 'INET_ATON';
 	$this->ntoa = 'INET_NTOA';
@@ -159,11 +160,11 @@ function init()
 function addPostTypesColumns()
 {
 	$post_types = get_post_types(array('public'=>true),'objects');
-	foreach ($post_types  as $post_type )
+	foreach ($post_types as $post_type )
 	{
 		$name = trim($post_type->name);
-		add_action('manage_'.trim($name).'s_custom_column', array(&$this,'cpdColumnContent'), 10, 2);
-		add_filter('manage_edit-'.trim($name).'_columns', array(&$this,'cpdColumn'));
+		add_action('manage_'.$name.'s_custom_column', array(&$this,'cpdColumnContent'), 10, 2);
+		add_filter('manage_edit-'.$name.'_columns', array(&$this,'cpdColumn'));
 	}
 }
 
@@ -179,17 +180,6 @@ function addThickbox()
 		wp_enqueue_script('cpd_flot', $this->dir.'/js/jquery.flot.min.js', 'jQuery');
 }
 
-function cpdReadsOrderby( $vars )
-{
-	if ( isset($vars['orderby']) && $vars['orderby'] == 'cpd_reads' )
-	{
-		$vars = array_merge( $vars, array(
-			'meta_key' => 'cpd_reads',
-			'orderby' => 'meta_value_num'
-		));
-	}
-	return $vars;
-}
 
 /**
  * starts session to provide WP variables to "addons"
@@ -204,7 +194,7 @@ function startSession()
 /**
  * get result from database
  * @param string $kind kind of result
- * @param string $sql sql query
+ * @param string|array $sql sql query [and args]
  * @param string $func name for debug info
  */
 function mysqlQuery( $kind = '', $sql, $func = '' )
@@ -214,14 +204,26 @@ function mysqlQuery( $kind = '', $sql, $func = '' )
 		return;
 	$t = microtime(true);
 	$con = $wpdb->dbh;
-	$preparedSql = $wpdb->prepare($sql, null);
+	
+	if ( is_array($sql) )
+	{
+		$sql = array_shift($sql);
+		$args = $sql;
+		$preparedSql = $wpdb->prepare($sql, $args);
+	}
+	else
+		$preparedSql = $sql;
+	
+	if (empty($preparedSql))
+		return;
+	
 	$r = false;
 	if ($kind == 'var')
 		$r = $wpdb->get_var( $preparedSql );
 	else if ($kind == 'count')
 	{
-		$sql = 'SELECT COUNT(*) FROM ('.trim($sql,';').') t';
-		$r = $wpdb->get_var( $wpdb->prepare($sql, null) );
+// 		$sql = 'SELECT COUNT(*) FROM ('.trim($sql,';').') t';
+		$r = $wpdb->get_var('SELECT COUNT(*) FROM ('.trim($preparedSql,';').') t');
 	}
 	else if ($kind == 'rows')
 	{
@@ -262,6 +264,10 @@ function checkInstalledVersion()
  */
 function anonymize_ip( $ip )
 {
+	// not on IPv6
+	if (strpos($ip,':'))
+		return $ip;
+	
 	if ( $this->options['debug'] )
 		$this->queries[] = 'called Function: <b style="color:blue">anonymize_ip</b> IP: <code>'.$ip.'</code>';
 	if ($this->options['anoip'])
@@ -360,7 +366,7 @@ function checkVersion()
 		if (!empty($_GET['networkwide']))
 		{
 			$old_blog = $wpdb->blogid;
-			$blogids = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM $wpdb->blogs", null));
+			$blogids = $wpdb->get_col($wpdb->prepare("SELECT blog_id FROM %s", $wpdb->blogs));
 			foreach ($blogids as $blog_id)
 			{
 				// create tables in all sub blogs
@@ -401,11 +407,12 @@ function createTables()
 	`client` varchar(150) NOT NULL,
 	`date` date NOT NULL,
 	`page` mediumint(9) NOT NULL,
+	`country` CHAR(2) NOT NULL,
 	`referer` varchar(100) NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `idx_page` (`page`),
 	KEY `idx_dateip` (`date`,`ip`) )
-	$charset_collate;";
+	$charset_collate";
 	$this->mysqlQuery('', $sql, 'createTables '.__LINE__);
 	
 	// update fields in old table
@@ -438,15 +445,12 @@ function createTables()
 	$sql .= 'ADD KEY `idx_dateip` (`date`,`ip`), ADD KEY `idx_page` (`page`)';
 	$this->mysqlQuery('', $sql, 'make keys '.__LINE__);
 	
-	// if GeoIP installed we need row "country"
-	if ( class_exists('CpdGeoIp') )
-	{
-		$this->mysqlQuery('', "SELECT country FROM `$cpd_c` LIMIT 1", 'check country '.__LINE__);
-		if ((int) mysql_errno() == 1054)
-			$this->mysqlQuery('', "ALTER TABLE `$cpd_c` ADD `country` CHAR(2) NOT NULL", 'make country '.__LINE__);
-	}
+	// column country
+	$this->mysqlQuery('', "SELECT country FROM `$cpd_c` LIMIT 1", 'check country '.__LINE__);
+	if ((int) mysql_errno() == 1054)
+		$this->mysqlQuery('', "ALTER TABLE `$cpd_c` ADD `country` CHAR(2) NOT NULL", 'make country '.__LINE__);
 	
-	// referrer
+	// column referrer
 	$this->mysqlQuery('', "SELECT referer FROM `$cpd_c` LIMIT 1", 'check referer '.__LINE__);
 		if ((int) mysql_errno() == 1054)
 			$this->mysqlQuery('', "ALTER TABLE `$cpd_c` ADD `referer` VARCHAR(100) NOT NULL", 'make referer '.__LINE__);
@@ -567,7 +571,7 @@ function addAjaxScript()
 <script type="text/javascript">
 // Count per Day
 //<![CDATA[
-jQuery(document).ready( function($)
+jQuery(document).ready( function()
 {
 	jQuery.get('{$this->dir}/ajax.php?f=count&page={$this->page}&time={$time}', function(text)
 	{
@@ -664,9 +668,9 @@ function updateOptions()
 	'dashboard_last_days' => 7,
 	'show_in_lists' => 1,
 	'chart_days' => 60,
-	'chart_height' => 100,
+	'chart_height' => 200,
 	'countries' => 20,
-	'startdate' => '2000-01-01',
+	'startdate' => '',
 	'startcount' => '',
 	'startreads' => '',
 	'anoip' => 0,
@@ -703,39 +707,6 @@ function dashboardWidgetSetup()
 }
 
 /**
- * add counter column to page/post lists
- */
-function cpdColumn($defaults)
-{
-	if ( $this->options['show_in_lists']  )
-		$defaults['cpd_reads'] = '<img src="'.$this->img('cpd_menu.gif').'" alt="'.__('Reads', 'cpd').'" title="'.__('Reads', 'cpd').'" style="width:12px;height:12px;" />';
-	return $defaults;
-}
-
-function cpdSortableColumns($columns)
-{
-	// meta column id => sortby value used in query
-	$custom = array('cpd_reads' => 'cpd_reads');
-	return wp_parse_args($custom, $columns);
-}
-
-/**
- * adds content to the counter column
- */
-function cpdColumnContent($column_name, $id = 0)
-{
-	global $wpdb;
-	if( $column_name == 'cpd_reads' )
-	{
-		$c = $this->mysqlQuery('count', "SELECT 1 FROM $wpdb->cpd_counter WHERE page='$id'", 'cpdColumn_'.$id.'_'.__LINE__);
-		$coll = get_option('count_per_day_posts');
-		if ( $coll && isset($coll['p'.$id]) )
-			$c += $coll['p'.$id];
-		echo $c;
-	}
-}
-
-/**
  * gets image recource with given name
  */
 function img( $r )
@@ -748,7 +719,7 @@ function img( $r )
  */ 
 function screenLayoutColumns($columns, $screen)
 {
-	if ($screen == $this->pagehook)
+	if ( isset($this->pagehook) && $screen == $this->pagehook )
 		$columns[$this->pagehook] = 4;
 	return $columns;
 }
@@ -856,8 +827,8 @@ function onShowPage()
 	</div>
 	<script type="text/javascript">
 	//<![CDATA[
-	jQuery(document).ready( function($) {
-		$('.if-js-closed').removeClass('if-js-closed').addClass('closed');
+	jQuery(document).ready( function() {
+		jQuery('.if-js-closed').removeClass('if-js-closed').addClass('closed');
 		postboxes.add_postbox_toggles('<?php echo $this->pagehook; ?>');
 	});
 	//]]>
@@ -918,10 +889,20 @@ function shortUserPerMonth()	{ return $this->getUserPerMonth(true, true); }
 function shortUserPerPost()		{ return $this->getUserPerPost(0, true, true); }
 function shortCountries()		{ return $this->getCountries(0, true, false, true); }
 function shortCountriesUsers(){ return $this->getCountries(0, true, true, true); }
-function shortMostVisitedPosts(){ return $this->getMostVisitedPosts(0, 0, true, false, true); }
+// function shortMostVisitedPosts(){ return $this->getMostVisitedPosts(0, 0, true, false, true); }
 function shortReferers()		{ return $this->getReferers(0, true, 0); }
 function shortDayWithMostReads(){ return $this->getDayWithMostReads(true, true); }
 function shortDayWithMostUsers(){ return $this->getDayWithMostUsers(true, true); }
+function shortMostVisitedPosts( $atts )
+{
+	extract( shortcode_atts( array(
+			'days' => 0,
+			'limit' => 0,
+			'postsonly' => 0,
+			'posttypes' => ''
+	), $atts) );
+	return $this->getMostVisitedPosts( $days, $limit, true, $postsonly, false, $posttypes );
+}
 function shortGetSearches( $atts )
 {
 	extract( shortcode_atts( array(
@@ -1451,7 +1432,7 @@ function getSearchString()
 {
 	if (empty($_SERVER['HTTP_REFERER']))
 		return false;
-	$ref = parse_url(rawurldecode($_SERVER['HTTP_REFERER']));
+	$ref = parse_url(rawurldecode(wp_strip_all_tags($_SERVER['HTTP_REFERER'])));
 	if ( empty($ref['host']) || empty($ref['query']) )
 		return false;
 	$keys = array('p','q','s','query','search','prev','qkw','qry');
@@ -1459,11 +1440,37 @@ function getSearchString()
 	foreach ($keys as $key)
 		if (isset($query[$key]))
 			$search = str_ireplace(array('/search?q=','/images?q='), '', $query[$key]);
-	$search = strip_tags($search);
+	if (isset($search))
+		$search = wp_strip_all_tags($search);
 	if (empty($search) || is_numeric($search)) // non WordPress postID
 		$search = '';
 	return trim($search);
 }
 
+/**
+ * add counter column to page/post lists
+ */
+function cpdColumn($defaults)
+{
+	if ( $this->options['show_in_lists']  )
+		$defaults['cpd_reads'] = '<img src="'.$this->img('cpd_menu.gif').'" alt="'.__('Reads', 'cpd').'" title="'.__('Reads', 'cpd').'" style="width:12px;height:12px;" />';
+	return $defaults;
+}
+
+/**
+ * adds content to the counter column
+ */
+function cpdColumnContent($column_name, $id = 0)
+{
+	global $wpdb;
+	if( $column_name == 'cpd_reads' )
+	{
+		$c = $this->mysqlQuery('count', "SELECT 1 FROM $wpdb->cpd_counter WHERE page='$id'", 'cpdColumn_'.$id.'_'.__LINE__);
+		$coll = get_option('count_per_day_posts');
+		if ( $coll && isset($coll['p'.$id]) )
+			$c += $coll['p'.$id];
+		echo $c;
+	}
+}
 
 } // class

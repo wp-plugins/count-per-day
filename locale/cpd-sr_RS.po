@@ -1,0 +1,1119 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Count Per Day\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-11-02 12:13+0100\n"
+"PO-Revision-Date: 2013-04-13 12:52+0100\n"
+"Last-Translator: Diana <diana@wpdiscounts.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-Basepath: P:/xampp/htdocs/wp/wp-content/plugins/count-per-day\n"
+"X-Textdomain-Support: yes\n"
+"Language: sr_RS\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-SearchPath-0: .\n"
+
+# @ cpd
+#: Copy of counter-options.php:50 counter-options.php:52
+msgid "Options updated"
+msgstr "Opcije azurirane "
+
+# @ cpd
+#: Copy of counter-options.php:111 counter-options.php:113
+#, php-format
+msgid "Database cleaned. %s rows deleted."
+msgstr "Baza podataka ociscena. %s redova izbrisano"
+
+# @ cpd
+#: Copy of counter-options.php:126 counter-options.php:839
+#: counter-options.php:128 counter-options.php:693
+msgid "UNINSTALL Count per Day"
+msgstr "DEINSTALIRANJE broj po danu"
+
+# @ cpd
+#: Copy of counter-options.php:131 counter-options.php:132
+#: counter-options.php:133 counter-options.php:134 counter-options.php:135
+#, php-format
+msgid "Table %s deleted"
+msgstr "Tabla %s izbrisana"
+
+# @ cpd
+#: Copy of counter-options.php:134 counter-options.php:136
+msgid "Options deleted"
+msgstr "Opcije izbrisane"
+
+# @ cpd
+#: Copy of counter-options.php:321 counter-options.php:825
+#: counter-options.php:362 counter-options.php:679
+msgid "Uninstall"
+msgstr "Deinstalirati"
+
+# @ cpd
+#: Copy of counter-options.php:322 counter-options.php:363
+msgid "Click here"
+msgstr "Kliknite ovde"
+
+# @ cpd
+#: Copy of counter-options.php:322 counter-options.php:363
+msgid "to finish the uninstall and to deactivate \"Count per Day\"."
+msgstr "Da bi zavrsili deinstaliranje i aktivirali \"Brojanje po danu\"."
+
+# @ cpd
+#: Copy of counter-options.php:359 counter-options.php:726
+msgid "Online time"
+msgstr "Vreme online"
+
+# @ cpd
+#: Copy of counter-options.php:360 counter-options.php:727
+msgid ""
+"Seconds for online counter. Used for \"Visitors online\" on dashboard page."
+msgstr ""
+"Sekunde online kauntera. Koricseno za  \"Posetioci online\" na strani "
+"kontrolna tabla "
+
+# @ cpd
+#: Copy of counter-options.php:363 counter-options.php:730
+msgid "Logged on Users"
+msgstr "Ulogovani korisnici"
+
+# @ cpd
+#: Copy of counter-options.php:365 counter-options.php:732
+msgid "count too"
+msgstr "Brojanje takodje"
+
+# @ cpd
+#: Copy of counter-options.php:377 counter-options.php:744
+msgid "Auto counter"
+msgstr "Auto brojanje"
+
+# @ cpd
+#: Copy of counter-options.php:378 counter-options.php:745
+msgid ""
+"Counts automatically single-posts and pages, no changes on template needed."
+msgstr ""
+"Broji automatski samostalne postove i stranice, nisu potrebne izmene sablona"
+
+# @ cpd
+#: Copy of counter-options.php:381 counter-options.php:748
+msgid "Bots to ignore"
+msgstr "Botovi za ignorisanje"
+
+# @ cpd
+#: Copy of counter-options.php:559 counter-options.php:926
+msgid "Update options"
+msgstr "Azuriraj opcije "
+
+# @ cpd
+#: Copy of counter-options.php:685 counter-options.php:694
+#: counter-options.php:540 counter-options.php:548
+msgid "Clean the database"
+msgstr "Ocisti bazu podataka"
+
+# @ cpd
+#: Copy of counter-options.php:688 counter-options.php:543
+msgid ""
+"You can clean the counter table by delete the \"spam data\".<br />If you add "
+"new bots above the old \"spam data\" keeps in the database.<br />Here you "
+"can run the bot filter again and delete the visits of the bots."
+msgstr ""
+"Mozete izbrisati tablu brojaca brisanjem e \"spam data\".<br />Ukoliko "
+"dodate nove botoce izned starih \"spam data\" se zadrzava u bazi podataka.  "
+"<br /> Ovde mozete pokrenuti bot filter ponovo i izbrisati posete botova"
+
+# @ cpd
+#: Copy of counter-options.php:828 counter-options.php:682
+msgid ""
+"If \"Count per Day\" only disabled the tables in the database will be "
+"preserved."
+msgstr ""
+"Ukoliko \"Brojac po danu\"  bude samo onesposobljen table u bazi podataka ce "
+"biti sacuvane "
+
+# @ cpd
+#: Copy of counter-options.php:829 counter-options.php:683
+msgid "Here you can delete the tables and disable \"Count per Day\"."
+msgstr "Ovde mozete izbrisati table i onesposobiti \"Brojac po danu\"."
+
+# @ cpd
+#: Copy of counter-options.php:832 counter-options.php:686
+msgid "WARNING"
+msgstr "UPOZORENJE"
+
+# @ cpd
+#: Copy of counter-options.php:833 counter-options.php:687
+msgid "These tables (with ALL counter data) will be deleted."
+msgstr "Ove table (sa svim podacima brojanja) bice izbrisane"
+
+# @ cpd
+#: Copy of counter-options.php:835 counter-options.php:689
+msgid "If \"Count per Day\" re-installed, the counter starts at 0."
+msgstr "Ako je \"brojac po danu\" reinstaliran, brojac pocinje od 0. "
+
+# @ cpd
+#: Copy of counter-options.php:815 counter-options.php:838
+#: counter-options.php:669 counter-options.php:692
+msgid "Yes"
+msgstr "Da"
+
+# @ cpd
+#: Copy of counter-options.php:839 counter-options.php:693
+msgid "You are sure to disable Count per Day and delete all data?"
+msgstr ""
+"Sigurni ste da zelite da onesposobiti Brojac po danu i izbrisete sve "
+"podatke? "
+
+# @ cpd
+#: counter-core.php:844 counter.php:1232
+msgid "Statistics"
+msgstr "Statistike "
+
+# @ cpd
+#: counter-core.php:812 counter.php:190 counter.php:1118 counter.php:1310
+msgid "Total visitors"
+msgstr "Ukupno poseta"
+
+# @ cpd
+#: counter.php:191 counter.php:1316
+msgid "Visitors currently online"
+msgstr "Posetioci trenutno online"
+
+# @ cpd
+#: counter.php:192 counter.php:1311
+msgid "Visitors today"
+msgstr "Posetioci danas"
+
+# @ cpd
+#: counter.php:193 counter.php:1312
+msgid "Visitors yesterday"
+msgstr "Posetioci juce"
+
+# @ cpd
+#: counter.php:194 counter.php:1313
+msgid "Visitors last week"
+msgstr "Posetioci prosle nedelje"
+
+# @ cpd
+#: counter.php:197 counter.php:877 counter.php:1317
+msgid "Counter starts on"
+msgstr "Projac pocinje"
+
+# @ cpd
+#: counter-core.php:818 counter.php:196 counter.php:295 counter.php:1120
+#: counter.php:1315 userperspan.php:34
+msgid "Visitors per day"
+msgstr "Posetioca po danu"
+
+# @ cpd
+#: counter-core.php:814 counter.php:1314
+msgid "Visitors per month"
+msgstr "Posetioca po mesecu "
+
+# @ cpd
+#: Copy of counter-options.php:441 counter-core.php:816
+#: counter-options.php:808
+msgid "Visitors per post"
+msgstr "Posetioca po postu "
+
+# @ cpd
+#: Copy of counter-options.php:121 counter-options.php:123
+msgid "Counter reseted."
+msgstr "Brojac resetovan "
+
+# @ cpd
+#: Copy of counter-options.php:442 counter-options.php:446
+#: counter-options.php:809 counter-options.php:813
+msgid "How many posts do you want to see on dashboard page?"
+msgstr "Koliko postova zelite da vidite na kontrolnoj tabli? "
+
+# @ cpd
+#: Copy of counter-options.php:445 counter-options.php:812
+msgid "Latest Counts - Posts"
+msgstr "Najnoviji brojaci - Postovi "
+
+# @ cpd
+#: Copy of counter-options.php:449 counter-options.php:816
+msgid "Latest Counts - Days"
+msgstr "Najnoviji brojaci - Dani"
+
+# @ cpd
+#: Copy of counter-options.php:450 counter-options.php:454
+#: counter-options.php:476 counter-options.php:817 counter-options.php:821
+#: counter-options.php:843
+msgid "How many days do you want look back?"
+msgstr "Koliko dana unazad zelite da pogledate? "
+
+# @ cpd
+#: Copy of counter-options.php:490 counter-options.php:857
+msgid "Show in lists"
+msgstr "POkazi u listama"
+
+# @ cpd
+#: Copy of counter-options.php:491 counter-options.php:858
+msgid "Show \"Reads per Post\" in a new column in post management views."
+msgstr ""
+"Pokazi \"Citanja po Postu\"  u novoj koloni u upravljanju pogleda posta"
+
+# @ cpd
+#: Copy of counter-options.php:806 counter-options.php:816
+#: counter-options.php:660 counter-options.php:670
+msgid "Reset the counter"
+msgstr "Resetuj brojac"
+
+# @ cpd
+#: Copy of counter-options.php:809 counter-options.php:663
+msgid ""
+"You can reset the counter by empty the table. ALL TO 0!<br />Make a backup "
+"if you need the current data!"
+msgstr ""
+"Mozete resetovati brojac praznjenjem table. SVE ZA 0!<br /> Napravite "
+"rezervnu kopiju ukoliko vam trebaju trenutni podaci "
+
+# @ cpd
+#: counter.php:708
+#, php-format
+msgid "The %s most visited posts in last %s days:"
+msgstr "%s najposeceniji postovi u poslednjih %s dana"
+
+# @ default
+#: Copy of counter-options.php:346 counter-options.php:563
+#: counter-core.php:649 counter-options.php:386 counter-options.php:714
+msgid "Settings"
+msgstr "Podesavanja"
+
+# @ cpd
+#: Copy of counter-options.php:396 counter-core.php:714
+#: counter-options.php:763 counter.php:189 counter.php:927
+msgid "Reads"
+msgstr "Citanja"
+
+# @ cpd
+#: counter-core.php:817
+msgid "Latest Counts"
+msgstr "Poslednji brojaci "
+
+# @ cpd
+#: Copy of counter-options.php:453 counter-options.php:820
+msgid "Chart - Days"
+msgstr "Grafikon - Dani"
+
+# @ cpd
+#: Copy of counter-options.php:457 counter-options.php:824
+msgid "Chart - Height"
+msgstr "Grafikon - Visina"
+
+# @ cpd
+#: Copy of counter-options.php:458 counter-options.php:825
+msgid "Height of the biggest bar"
+msgstr "Visina najviseg bara"
+
+# @ cpd
+#: counter.php:1304
+msgid "This post"
+msgstr "Ovaj post"
+
+# @ default
+#: Copy of counter-options.php:406 counter-options.php:773
+msgid "Dashboard"
+msgstr "KOntrolna tabla"
+
+# @ cpd
+#: counter.php:294
+msgid "Reads per day"
+msgstr "Citanja po danu "
+
+# @ cpd
+#: Copy of counter-options.php:61 counter-options.php:63
+#, php-format
+msgid "Countries updated. <b>%s</b> entries in %s without country left"
+msgstr "Zemlje azurirane. <b>%s</b> unosa u %s bez ostale zemlje "
+
+# @ cpd
+#: Copy of counter-options.php:64 counter-options.php:66
+msgid "update next"
+msgstr "Azuriraj sledece"
+
+# @ cpd
+#: Copy of counter-options.php:756 counter-options.php:610
+msgid "GeoIP - Countries"
+msgstr "GeoIP - Zemlje "
+
+# @ cpd
+#: Copy of counter-options.php:765 counter-options.php:619
+msgid "Update old counter data"
+msgstr "Azuriraj stare podatke brojaca"
+
+# @ cpd
+#: Copy of counter-options.php:777 counter-options.php:631
+msgid "Update GeoIP database"
+msgstr "Azuriraj GeoIP bazu podataka"
+
+# @ cpd
+#: Copy of counter-options.php:772 counter-options.php:626
+msgid "Download a new version of GeoIP.dat file."
+msgstr "SKini novu verziju GeoIP.dat fajla"
+
+# @ cpd
+#: Copy of counter-options.php:782 counter-options.php:636
+msgid "More informations about GeoIP"
+msgstr "Vise informacija o GeoIP"
+
+# @ cpd
+#: counter-core.php:828
+msgid "Reads per Country"
+msgstr "Citanja po zemlji "
+
+# @ cpd
+#: geoip/geoip.php:114
+msgid "New GeoIP database installed."
+msgstr "Nova GeoIP baza podataka instalirana"
+
+# @ cpd
+#: geoip/geoip.php:116
+msgid ""
+"Sorry, an error occurred. Try again or check the access rights of directory "
+"\"geoip\" is 777."
+msgstr ""
+"Izvinite, doslo je do greske. Pokusajte ponovo ili proverite prava pristupa "
+"direktorijumu \"geoip\"  je 777."
+
+# @ cpd
+#: geoip/geoip.php:90
+msgid "Sorry, necessary functions (zlib) not installed or enabled in php.ini."
+msgstr ""
+"Izvinite, neophodne funkcije (zlib) nisu instalirate ili omogucene u php.ini"
+
+# @ cpd
+#: Copy of counter-options.php:462 counter-options.php:829
+msgid "Countries"
+msgstr "Zemlje"
+
+# @ cpd
+#: Copy of counter-options.php:463 counter-options.php:830
+msgid "How many countries do you want to see on dashboard page?"
+msgstr "Koliko zemalja zelite da vidite na kontrolnoj tabli? "
+
+# @ cpd
+#: Copy of counter-options.php:104 counter-options.php:106
+#, php-format
+msgid "Mass Bots cleaned. %s counts deleted."
+msgstr "Mass Botoci ocisceni. %s zemlje izbrisane"
+
+# @ cpd
+#: Copy of counter-options.php:578 counter-options.php:402 massbots.php:36
+msgid "Mass Bots"
+msgstr "Mass botovi "
+
+# @ cpd
+#: Copy of counter-options.php:582 counter-options.php:406
+#, php-format
+msgid "Show all IPs with more than %s page views per day"
+msgstr "Pokazi sve IP sa vise od %s pogleda po danu "
+
+# @ cpd
+#: Copy of counter-options.php:583 counter-options.php:407 notes.php:71
+#: userperspan.php:44
+msgid "show"
+msgstr "pokazi "
+
+# @ cpd
+#: Copy of counter-options.php:609 counter-options.php:625
+#: counter-options.php:433 counter-options.php:449
+#, php-format
+msgid "Delete these %s counts"
+msgstr "Izbrisi ove %s brojace"
+
+# @ cpd
+#: counter.php:865
+msgid "Other"
+msgstr "druge"
+
+# @ default
+#: counter.php:1054 massbots.php:53 userperspan.php:63
+msgid "Front page displays"
+msgstr "Displej naslovne stranice "
+
+# @ cpd
+#: Copy of counter-options.php:467 counter-core.php:823
+#: counter-options.php:834
+msgid "Browsers"
+msgstr "Pretrazivaci "
+
+# @ cpd
+#: Copy of counter-options.php:591 counter-options.php:415
+msgid "IP"
+msgstr "IP"
+
+# @ cpd
+# @ default
+#: Copy of counter-options.php:592 counter-options.php:416 notes.php:75
+msgid "Date"
+msgstr "Datum"
+
+# @ cpd
+#: Copy of counter-options.php:593 counter-options.php:417
+msgid "Client"
+msgstr "Klijent"
+
+# @ cpd
+#: Copy of counter-options.php:594 counter-options.php:418
+msgid "Views"
+msgstr "Pogledi "
+
+# @ cpd
+#: Copy of counter-options.php:498 counter-options.php:865
+msgid "Start Values"
+msgstr "Pocetne vrednosti "
+
+# @ cpd
+#: Copy of counter-options.php:502 counter-options.php:869
+msgid "Here you can change the date of first count and add a start count."
+msgstr "Ovde mozete promeniti datum prvog brojanja i dodati startno brojanje"
+
+# @ cpd
+#: Copy of counter-options.php:506 counter-options.php:873
+msgid "Start date"
+msgstr "Pocetni datum"
+
+# @ cpd
+#: Copy of counter-options.php:507 counter-options.php:874
+msgid "Your old Counter starts at?"
+msgstr "Vas stari brojac pocinje na? "
+
+# @ cpd
+#: Copy of counter-options.php:510 counter-options.php:514
+#: counter-options.php:877 counter-options.php:881
+msgid "Start count"
+msgstr "Pocni brojanje"
+
+# @ cpd
+#: Copy of counter-options.php:511 counter-options.php:878
+msgid "Add this value to \"Total visitors\"."
+msgstr "Dodaj ovu vrednost u \"Ukupni posetioci\""
+
+# @ cpd
+#: Copy of counter-options.php:743 counter-options.php:701
+msgid "Support"
+msgstr "Podrska"
+
+# @ cpd
+#: counter-core.php:778
+msgid "Bug? Problem? Question? Hint? Praise?"
+msgstr "Bag? Problem? Pitanje? Savet? Pohvala?"
+
+# @ cpd
+#: counter-core.php:779
+#, php-format
+msgid "Write a comment on the <a href=\"%s\">plugin page</a>."
+msgstr "Napisite komentar o <a href=\"%s\">plagin strana</a>."
+
+# @ default
+#: counter.php:824
+msgid "Show"
+msgstr "Pokazi "
+
+# @ default
+#: counter.php:1039
+msgid "Edit Post"
+msgstr "Izmeni postove "
+
+# @ cpd
+#: counter-core.php:777
+#, php-format
+msgid "Time for Count per Day: <code>%s</code>."
+msgstr "Vreme za brojac po danu: <code>%s</code>."
+
+# @ cpd
+#: Copy of counter-options.php:366 counter-options.php:733
+msgid "until User Level"
+msgstr "Jedinica nivoa korisnika "
+
+# @ default
+#: counter-core.php:820
+msgid "Plugin"
+msgstr "Plagin"
+
+# @ cpd
+#: counter.php:826 notes.php:42 notes.php:76
+msgid "Notes"
+msgstr "Beleske"
+
+# @ default
+#: notes.php:77
+msgid "Action"
+msgstr "Akcija"
+
+# @ cpd
+#: notes.php:82
+msgid "add"
+msgstr "Dodaj"
+
+# @ cpd
+#: notes.php:98
+msgid "save"
+msgstr "sacuvaj"
+
+# @ cpd
+#: notes.php:99
+msgid "delete"
+msgstr "izbrisi "
+
+# @ cpd
+#: notes.php:110
+msgid "edit"
+msgstr "izmeni"
+
+# @ cpd
+#: Copy of counter-options.php:515 counter-options.php:882
+msgid "Add this value to \"Total reads\"."
+msgstr "Dodaj ovu vrednost u  \"Ukupni pregledi\"."
+
+# @ cpd
+#: counter.php:185 counter.php:1305
+msgid "Total reads"
+msgstr "Ukupni pregledi "
+
+# @ cpd
+#: counter.php:186 counter.php:1306
+msgid "Reads today"
+msgstr "Pregledi danas"
+
+# @ cpd
+#: counter.php:187 counter.php:1307
+msgid "Reads yesterday"
+msgstr "Pregledi juce"
+
+# @ cpd
+#: counter.php:385 counter.php:1149
+msgid "Map"
+msgstr "Mapa"
+
+# @ cpd
+#: Copy of counter-options.php:385 counter-options.php:752
+msgid "Anonymous IP"
+msgstr "Anonimni IP"
+
+# @ cpd
+#: Copy of counter-options.php:389 counter-options.php:756
+msgid "Cache"
+msgstr "Kes"
+
+# @ cpd
+#: Copy of counter-options.php:390 counter-options.php:757
+msgid "I use a cache plugin. Count these visits with ajax."
+msgstr "Koristim plagin za kes. Prebroj ove posete uz pomoc ajaxa."
+
+# @ cpd
+#: Copy of counter-options.php:468 counter-options.php:835
+msgid "Substring of the user agent, separated by comma"
+msgstr "Podred agenta korisnika, razdvojen zapetom "
+
+# @ cpd
+#: counter-core.php:829
+msgid "Visitors per Country"
+msgstr "Posetioca po zemlji "
+
+# @ cpd
+#: Copy of counter-options.php:552 counter-options.php:919
+msgid "Debug mode"
+msgstr "Debug mod"
+
+# @ cpd
+#: Copy of counter-options.php:554 counter-options.php:921
+msgid "Show debug informations at the bottom of all pages."
+msgstr "Pokazi debug informacije na dnu ove strane "
+
+# @ cpd
+#: userperspan.php:38
+msgid "Start"
+msgstr "Start"
+
+# @ cpd
+#: userperspan.php:40
+msgid "End"
+msgstr "Kraj"
+
+# @ cpd
+#: userperspan.php:42
+msgid "PostID"
+msgstr "PostID "
+
+# @ cpd
+#: userperspan.php:50
+msgid "no data found"
+msgstr "Nema pronadjenih podataka"
+
+# @ cpd
+#: Copy of counter-options.php:759 counter-options.php:613
+msgid ""
+"You can get the country data for all entries in database by checking the IP "
+"adress against the GeoIP database. This can take a while!"
+msgstr ""
+"Mozete dobiti podatke o zemlji za sve unose u bazi podataka proveravanjem IP "
+"adrese iz GeoIP baze podataka. Ovo moze malo potrajati. "
+
+# @ cpd
+#: Copy of counter-options.php:355 counter-options.php:722
+msgid "Counter"
+msgstr "Brojac"
+
+# @ cpd
+#: Copy of counter-options.php:479 counter-options.php:846
+msgid "Local URLs"
+msgstr "Lokalno URL"
+
+# @ cpd
+#: Copy of counter-options.php:480 counter-options.php:847
+msgid "Show local referrers too."
+msgstr "Pokazi lokalne reference takodje"
+
+# @ default
+#: Copy of counter-options.php:487 counter-options.php:854
+msgid "Posts"
+msgstr "Postovi "
+
+# @ default
+#: Copy of counter-options.php:487 counter-options.php:854
+msgid "Pages"
+msgstr "Stranice"
+
+# @ default
+#: counter.php:1048
+msgid "Category"
+msgstr "Kategorije"
+
+# @ default
+#: counter.php:1051
+msgid "Tag"
+msgstr "Tagovi"
+
+# @ default
+#: counter-core.php:780
+msgid "License"
+msgstr "Dozvole "
+
+# @ cpd
+#: counter-core.php:824
+msgid "Referrer"
+msgstr "Reference "
+
+# @ default
+#: counter.php:1328
+msgid "Title"
+msgstr "Naslov"
+
+# @ cpd
+#: Copy of counter-options.php:396 counter-options.php:763
+msgid ""
+"Save and show clients and referrers.<br />Needs a lot of space in the "
+"database but gives you more detailed informations of your visitors."
+msgstr ""
+"Sacuvaj i pokazi klijente i reference. <br /> Treba puno mesta u bazi "
+"podataka ali dobijate mnogo detaljnije informacije o vasim posetiocima "
+
+# @ cpd
+#: Copy of counter-options.php:393 counter-options.php:760
+msgid "Clients and referrers"
+msgstr "Klijenti i reference"
+
+# @ cpd
+#: counter.php:188 counter.php:1308
+msgid "Reads last week"
+msgstr "Citanja prosle nedelje"
+
+# @ cpd
+#: counter-core.php:815 counter.php:1309
+msgid "Reads per month"
+msgstr "Citanja po mesecu "
+
+# @ cpd
+#: Copy of counter-options.php:471 counter-options.php:838
+msgid "Referrers - Entries"
+msgstr "Reference - unosi"
+
+# @ cpd
+#: Copy of counter-options.php:472 counter-options.php:839
+msgid "How many referrers do you want to see on dashboard page?"
+msgstr "Koliko referenci zelite videti na kontrolnoj tabli?"
+
+# @ cpd
+#: Copy of counter-options.php:475 counter-options.php:842
+msgid "Referrers - Days"
+msgstr "Reference - Dani "
+
+# @ cpd
+#: counter.php:897
+#, php-format
+msgid "The %s referrers in last %s days:"
+msgstr "%s reference u zadnjih %s dana "
+
+# @ cpd
+#: counter-core.php:813
+msgid "Visitors online"
+msgstr "Posetioci online"
+
+# @ cpd
+#: Copy of counter-options.php:522 counter-options.php:889
+msgid "Stylesheet"
+msgstr "Stil prikaza"
+
+# @ cpd
+#: Copy of counter-options.php:525 counter-options.php:892
+msgid "NO Stylesheet in Frontend"
+msgstr "Nema stila prikaza u Frontendu"
+
+# @ cpd
+#: Copy of counter-options.php:526 counter-options.php:893
+msgid "Do not load the stylesheet \"counter.css\" in frontend."
+msgstr "nemojte ucitavati stil prikaza \"counter.css\" u frontendu "
+
+# @ cpd
+#: Copy of counter-options.php:422 counter-options.php:789
+msgid "Who can see it"
+msgstr "Ko moze videti "
+
+# @ cpd
+#: Copy of counter-options.php:431 counter-options.php:798
+msgid "custom"
+msgstr "prilagodjen"
+
+# @ cpd
+#: Copy of counter-options.php:433 counter-options.php:800
+msgid "and higher are allowed to see the statistics page."
+msgstr "i vise mogu videti stranicu sa statistikama"
+
+# @ cpd
+#: Copy of counter-options.php:435 counter-options.php:802
+#, php-format
+msgid "Set the %s capability %s a user need:"
+msgstr "Podesi %s sposobnost %s posetiocu treba:"
+
+# @ cpd
+#: counter-core.php:252
+#, php-format
+msgid "\"Count per Day\" updated to version %s."
+msgstr "\"brojac po danu\" azuriran na verziju %s"
+
+# @ cpd
+#: counter-core.php:1016
+msgid "Backup failed! Cannot open file"
+msgstr "Bekap neuspesan! Ne mogu otvoriti fajl"
+
+# @ cpd
+#: counter-core.php:1042
+#, php-format
+msgid "Backup of %s entries in progress. Every point complies %s entries."
+msgstr "Bekap %s unosa je u toku. Svaka tacka oznacava %s unos"
+
+# @ cpd
+#: counter-core.php:1133 counter-core.php:1141
+#, php-format
+msgid "Backup of counter table saved in %s."
+msgstr "Bekap table brojaca sacuvan na %s"
+
+# @ cpd
+#: counter-core.php:1135 counter-core.php:1143
+#, php-format
+msgid "Backup of counter options and collection saved in %s."
+msgstr "Bekap opcija brojaca i kolekcije sacuvan na %s."
+
+# @ cpd
+#: Copy of counter-options.php:169
+msgid "Collection in progress..."
+msgstr "Kolekcija u toku..."
+
+# @ cpd
+#: Copy of counter-options.php:245 counter-options.php:263
+msgid "Get Visitors per Post..."
+msgstr "Dobijte posetioce po postu"
+
+# @ cpd
+#: Copy of counter-options.php:266 counter-options.php:284
+msgid "Delete old data..."
+msgstr "Izbirsi stare podatke"
+
+# @ cpd
+#: Copy of counter-options.php:290 counter-options.php:308
+#, php-format
+msgid ""
+"Counter entries until %s collected and counter table %s optimized (size "
+"before = %s &gt; size after = %s)."
+msgstr ""
+"Unosi brojaca do %s sakupljeni i tabla brojaca %s optimizirana (velicina "
+"pre  = %s &gt; velicina posle= %s)."
+
+# @ cpd
+#: Copy of counter-options.php:299 counter-options.php:317
+msgid "Installation of \"Count per Day\" checked"
+msgstr "Instalacija  \"Brojac po Danu\" proverena"
+
+# @ default
+#: Copy of counter-options.php:347 counter-options.php:564
+#: counter-options.php:385 counter-options.php:713
+msgid "Tools"
+msgstr "Alati"
+
+# @ cpd
+#: Copy of counter-options.php:398 counter-options.php:765
+msgid "Save URL only, no query string."
+msgstr "Sacuvaj samo URL bez reda za ispitivanje"
+
+# @ cpd
+#: Copy of counter-options.php:533 counter-options.php:637
+#: counter-options.php:461 counter-options.php:900
+msgid "Backup"
+msgstr "Bekap"
+
+# @ cpd
+#: Copy of counter-options.php:536 counter-options.php:903
+msgid "Entries per pass"
+msgstr "Unosi po pass-u"
+
+# @ cpd
+#: Copy of counter-options.php:539 counter-options.php:906
+msgid "How many entries should be saved per pass? Default: 10000"
+msgstr ""
+"Koliko unosa bi trebalo da bude sacuvano po pass-u? Predodredjeno: 10000"
+
+# @ cpd
+#: Copy of counter-options.php:544 counter-options.php:911
+msgid ""
+"If your PHP memory limit less then 50 MB and you get a white page or error "
+"messages try a smaller value."
+msgstr ""
+"Ako je limit vase PHP memorije manji od 50MB i dobijete belu stranicu ili "
+"poruke s greskom probajte manju vrednost"
+
+# @ cpd
+#: Copy of counter-options.php:641 counter-options.php:465
+#, php-format
+msgid ""
+"Create a backup of the counter table %s in your wp-content directory (if "
+"writable)."
+msgstr ""
+"Kreirajte bekap table brojaca %s u vasem wp-sadrzaj direktorijumu (ukoliko "
+"je upisiv)"
+
+# @ cpd
+#: Copy of counter-options.php:648 counter-options.php:472
+msgid "Backup the database"
+msgstr "Kreiraj bekap baze podataka"
+
+# @ cpd
+#: Copy of counter-options.php:703 counter-options.php:735
+#: counter-options.php:565 counter-options.php:597
+msgid "Collect old data"
+msgstr "Sakupi stare podatke"
+
+# @ cpd
+#: Copy of counter-options.php:708 counter-options.php:570
+#, php-format
+msgid "Current size of your counter table %s is %s."
+msgstr "Trenutna velicine vase table brojaca %s je %s"
+
+# @ cpd
+#: Copy of counter-options.php:710 counter-options.php:572
+msgid ""
+"You can collect old data and clean up the counter table.<br/>Reads and "
+"visitors will be saved per month, per country and per post.<br/>Clients and "
+"referrers will deleted."
+msgstr ""
+"Mozete da sakupite podatke i ocistite tablu brojaca. <br/> Citanja i "
+"posetioci ce biti sacuvani po mesecu, po zemlji i po postu. <br/> Klijenti i "
+"reference ce biti izbrisane"
+
+# @ cpd
+#: Copy of counter-options.php:715 counter-options.php:577
+#, php-format
+msgid "Currently your collection contains data until %s."
+msgstr "Trenutno vasa kolekcija sadrzi podatke do %s"
+
+# @ cpd
+#: Copy of counter-options.php:719 counter-options.php:581
+msgid "Normally new data will be added to the collection."
+msgstr "Normalno novi podaci bice dodati kolekciji "
+
+# @ cpd
+#: Copy of counter-options.php:725 counter-options.php:587
+msgid ""
+"Delete old collection and create a new one which contains only the data "
+"currently in counter table."
+msgstr ""
+"Izbrisi staru kolekciju i kreiraj novu koja sadrzi samo podatke koji su "
+"trenutno na tabli brojaca"
+
+# @ cpd
+#: Copy of counter-options.php:726 counter-options.php:588
+#, php-format
+msgid "All collected data until %s will deleted."
+msgstr "Svi prikupljeni podaci do %s ce biti izbrisani "
+
+# @ cpd
+#: Copy of counter-options.php:731 counter-options.php:593
+#, php-format
+msgid "Keep entries of last %s full months + current month in counter table."
+msgstr "Sacuvaj unose od zadnjih %s meseci + tekuci mesec u tabli brojaca"
+
+# @ cpd
+#: Copy of counter-options.php:790 counter-options.php:644
+msgid "ReActivation"
+msgstr "Reaktivacija"
+
+# @ cpd
+#: Copy of counter-options.php:793 counter-options.php:647
+msgid ""
+"Here you can start the installation functions manually.<br/>Same as "
+"deactivate and reactivate the plugin."
+msgstr ""
+"Ovde mozete poceti instalaciju funckija rucno. <br/> Isto kao akticiranje i "
+"deaktiviranje plagina"
+
+# @ cpd
+#: Copy of counter-options.php:798 counter-options.php:652
+msgid "ReActivate the plugin"
+msgstr "Reaktivirajte plagin"
+
+# @ cpd
+#: counter.php:195 counter.php:951
+msgid "Visitors"
+msgstr "Posetioci"
+
+# @ cpd
+#: counter.php:198 counter.php:199
+msgid "Most visited day"
+msgstr "Najposeceniji dan"
+
+# @ cpd
+#: counter.php:1347
+msgid "drag and drop to sort"
+msgstr "POvuci i spusti da bi sortirali "
+
+# @ cpd
+#: counter-core.php:1129
+msgid "Your can download the backup files here and now."
+msgstr "Mozete skinuti bekap fajlove ovde i sada."
+
+# @ cpd
+#: Copy of counter-options.php:644 counter-options.php:468
+msgid "Download only"
+msgstr "Samo download"
+
+# @ default
+#: Copy of counter-options.php:673 counter-options.php:519
+msgid "Delete"
+msgstr "Izbrisi "
+
+# @ cpd
+#: Copy of counter-options.php:674 counter-options.php:520
+#, php-format
+msgid "Delete the backup file %s ?"
+msgstr "Izbrisati bekap fajl %s?"
+
+# @ cpd
+#: counter-core.php:819 counter-options.php:838 counter-options.php:842
+msgid "Search strings"
+msgstr "Trazi redove"
+
+# @ cpd
+#: counter-core.php:1199
+msgid "Error while reading backup file!"
+msgstr "Greska u citanju bekap fajla!"
+
+# @ cpd
+#: counter-core.php:1203
+#, php-format
+msgid "The backup was added to counter table %s."
+msgstr "Bekap je dodat tabli brojaca %s."
+
+# @ cpd
+#: counter-core.php:1205
+#, php-format
+msgid "The counter table %s was restored from backup."
+msgstr "Tabla brojaca %s je povracena s bekapa"
+
+# @ cpd
+#: counter-core.php:1222
+msgid "Options restored from backup."
+msgstr "Opcije povracene s bekapa"
+
+# @ cpd
+#: counter-options.php:501
+msgid "Settings and collections"
+msgstr "Podesavanja i kolekcije"
+
+# @ cpd
+#: counter-options.php:506
+#, php-format
+msgid "Counter table %s"
+msgstr "Tabla brojaca %s"
+
+# @ cpd
+#: counter-options.php:513
+#, php-format
+msgid "Add data from the backup file %s to existing counter table?"
+msgstr "Dodati podatke s bekap fajla %s postojecoj tabli brojaca? "
+
+# @ cpd
+#: counter-options.php:517
+#, php-format
+msgid "Restore data from the backup file %s ?"
+msgstr "POvratiti podatke s bekap fajla %s?"
+
+# @ default
+#: counter-options.php:517
+msgid "Restore"
+msgstr "Povrati "
+
+# @ cpd
+#: counter-options.php:526
+msgid "add backup to current counter table"
+msgstr "dodaj bekap trenutnoj tabli brojaca"
+
+# @ cpd
+#: counter-options.php:527
+msgid "replace current counter table with with backup"
+msgstr "Zameni trenutnu tablu brojaca s bekapom"
+
+# @ cpd
+#: counter-options.php:528
+msgid "delete backup file"
+msgstr "izbrisi bekap fajl"
+
+# @ cpd
+#: counter.php:1094
+#, php-format
+msgid "The %s most searched strings:"
+msgstr "%s najtrazeniji redovi "
+
+# @ cpd
+#: counter.php:1103
+#, php-format
+msgid "The search strings of the last %s days:"
+msgstr "Trazeni redovi u poslednjih %s dana"
+
+# @ cpd
+#: counter-options.php:332
+msgid "Old search strings deleted"
+msgstr "Stari trazeni redovi izbrisani "
+
+# @ cpd
+#: counter-options.php:554
+#, php-format
+msgid "Delete search strings older than %s days."
+msgstr "Izbrisi trazene redove starije od %s dana"
+
+# @ cpd
+#: counter-options.php:556
+msgid "Delete search strings"
+msgstr "Izbrisi trazene redove"
+
+# @ cpd
+#: counter-options.php:513
+msgid "Add"
+msgstr "Dodaj "

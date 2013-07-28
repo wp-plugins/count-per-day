@@ -3,16 +3,19 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads and visitors per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 3.2.5
+Version: 3.2.6
 License: Postcardware
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '3.2.5';
+$cpd_version = '3.2.6';
 
-$cpd_path = str_replace('/', DIRECTORY_SEPARATOR, ABSPATH.PLUGINDIR.'/'.$cpd_dir_name.'/');
+if (strpos($_SERVER['SERVER_NAME'], '.test'))
+	$cpd_path = str_replace('/', DIRECTORY_SEPARATOR, ABSPATH.PLUGINDIR.'/'.$cpd_dir_name.'/');
+else
+	$cpd_path = dirname(__FILE__).'/';
 include_once($cpd_path.'counter-core.php');
 
 /**
@@ -53,7 +56,7 @@ function show( $before='', $after=' reads', $show = true, $count = true, $page =
 	// get count from collection
 	$c = $this->getCollectedPostReads($page);
 	// add current data
-	$c += $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE page='$page'", null), 'show '.__LINE__);
+	$c += $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE page = %d", $page), 'show '.__LINE__);
 	if ($show)
 		echo $before.$c.$after;
 	else
@@ -103,8 +106,8 @@ function count( $x, $page = 'x' )
 			.'page: <code>'.$page.'</code> '
 			.'userlevel: <code>'.$userlevel.'</code>';
 	
-	// only count if: non bot, Logon is ok
-	if ( !$isBot && $countUser && isset($page) )
+	// only count if: non bot, Logon is ok, no password required or ok
+	if ( !$isBot && $countUser && isset($page) && !post_password_required($page) )
 	{
 		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
 		{
@@ -116,8 +119,8 @@ function count( $x, $page = 'x' )
 			$real_ip = $_SERVER['REMOTE_ADDR'];
 		
 		$userip = $this->anonymize_ip($real_ip);
-		$client = ($this->options['referers']) ? $_SERVER['HTTP_USER_AGENT'] : '';
-		$referer = ($this->options['referers'] && isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
+		$client = ($this->options['referers']) ? wp_strip_all_tags($_SERVER['HTTP_USER_AGENT']) : '';
+		$referer = ($this->options['referers'] && isset($_SERVER['HTTP_REFERER'])) ? wp_strip_all_tags($_SERVER['HTTP_REFERER']) : '';
 		if ($this->options['referers_cut'])
 			$referer = substr( $referer, 0, strpos($referer,'?') );
 		
@@ -130,7 +133,7 @@ function count( $x, $page = 'x' )
 			{
 				// with GeoIP addon save country
 				$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
-				$country = strtolower(cpd_geoip_country_code_by_addr($gi, $userip));
+				$country = strtolower(cpd_geoip_country_code_by_addr_v6($gi, $userip));
 				$this->mysqlQuery('', $wpdb->prepare("INSERT INTO $wpdb->cpd_counter (page, ip, client, date, country, referer)
 				VALUES (%s, $this->aton(%s), %s, %s, %s, %s)", $page, $userip, $client, $date, $country, $referer), 'count insert '.__LINE__);
 			}
@@ -665,7 +668,7 @@ function getUserPerDay( $days = 0, $return = false )
  * @param integer $limit count of posts (last posts)
  * @param boolean $postsonly don't show categories and taxonomies
  */
-function getMostVisitedPosts( $days = 0, $limit = 0, $frontend = false, $postsonly = false, $return = false )
+function getMostVisitedPosts( $days = 0, $limit = 0, $frontend = false, $postsonly = false, $return = false, $posttypes = '' )
 {
 	global $wpdb;
 	if ( $days == 0 )
@@ -673,6 +676,15 @@ function getMostVisitedPosts( $days = 0, $limit = 0, $frontend = false, $postson
 	if ( $limit == 0 )
 		$limit = $this->options['dashboard_last_posts'];
 	$date = date_i18n('Y-m-d', current_time('timestamp') - 86400 * $days);
+	
+	if ($posttypes)
+	{
+		$types = str_replace(' ', '', $posttypes);
+		$types = str_replace(',', "','", $types);
+		$postsonly = 1;
+	}
+	else
+		$types = false;
 	
 	if ($postsonly)
 		$sql = $wpdb->prepare("
@@ -684,6 +696,7 @@ function getMostVisitedPosts( $days = 0, $limit = 0, $frontend = false, $postson
 				ON p.id = c.page
 		WHERE	c.date >= %s
 		AND		c.page > 0
+		".( ($types) ? "AND p.post_type IN ('$types')" : '' )."
 		GROUP	BY c.page
 		ORDER	BY count DESC
 		LIMIT	%d",
@@ -790,6 +803,7 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0, $show_form = true, $show_n
 		$date = $_GET['daytoshow'];
 	else if ( $date == 0 )
 		$date = date_i18n('Y-m-d');
+	$date = wp_strip_all_tags($date);
 	if ( $limit == 0 )
 		$limit = $this->options['dashboard_last_posts'];
 
@@ -1258,12 +1272,12 @@ class CountPerDay_Widget extends WP_Widget
 						echo '<span id="cpd_number_'.$k.'" class="cpd-r">';
 						// parameters only for special functions
 						if ( $f == 'getUserPerDay' )
-							eval('echo $count_per_day->getUserPerDay('.$count_per_day->options['dashboard_last_days'].');');
+							echo $count_per_day->getUserPerDay($count_per_day->options['dashboard_last_days']);
 						else if ( $f == 'show' )
-							eval('echo $count_per_day->show("","",false,false);');
+							echo $count_per_day->show('', '', false, false);
 						else
-							eval('echo $count_per_day->'.$f.'();');
-						echo '</span>'.$instance[$k.'_name'].':</li>';
+							echo call_user_func( array(&$count_per_day, $f) );
+						echo '</span>'.__($instance[$k.'_name']).':</li>';
 					}
 				}
 			}
@@ -1318,7 +1332,8 @@ class CountPerDay_Widget extends WP_Widget
 			'getuseronline_name' => __('Visitors currently online', 'cpd'),
 			'getfirstcount_name' => __('Counter starts on', 'cpd')
 		);
-		$instance = wp_parse_args( (array) $instance, $default );
+		if (empty($instance['order']))
+			$instance = array_merge( (array) $instance, $default );
 		
 		// title field
 		$field_id = $this->get_field_id('title');
@@ -1362,7 +1377,6 @@ class CountPerDay_Widget extends WP_Widget
 		?>
 		<script type="text/javascript">
 		//<![CDATA[
-		jQuery.noConflict();
 		jQuery(document).ready(function(){
   			jQuery('#cpdwidgetlist<?php echo $field_id ?>').sortable({
   				items: 'li:not(.cpd_widget_title)',

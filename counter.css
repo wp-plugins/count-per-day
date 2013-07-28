@@ -85,26 +85,26 @@ h2 .cpd_icon {
 	vertical-align: text-bottom;
 	padding: 0 !important;
 }
-.cpd_backup{background-position: 0 0} 
-.cpd_clean{background-position: 0 -46px} 
-.cpd_collection{background-position: 0 -92px} 
-.cpd_computer{background-position: 0 -138px} 
-.cpd_calendar{background-position: 0 -184px} 
-.cpd_day{background-position: 0 -230px} 
-.cpd_geoip{background-position: 0 -276px} 
-.cpd_help{background-position: 0 -322px} 
-.cpd_massbots{background-position: 0 -368px} 
-.cpd_online{background-position: 0 -414px} 
-.cpd_post{background-position: 0 -460px} 
-.cpd_reads{background-position: 0 -506px} 
-.cpd_referrer{background-position: 0 -552px} 
-.cpd_reset{background-position: 0 -598px} 
-.cpd_settings{background-position: 0 -644px} 
-.cpd_summary{background-position: 0 -690px} 
-.cpd_tools{background-position: 0 -736px} 
-.cpd_uninstall{background-position: 0 -782px} 
-.cpd_update{background-position: 0 -828px} 
-.cpd_user{background-position: 0 -874px} 
+.cpd_backup{background-position: 0 0}
+.cpd_clean{background-position: 0 -46px}
+.cpd_collection{background-position: 0 -92px}
+.cpd_computer{background-position: 0 -138px}
+.cpd_calendar{background-position: 0 -184px}
+.cpd_day{background-position: 0 -230px}
+.cpd_geoip{background-position: 0 -276px}
+.cpd_help{background-position: 0 -322px}
+.cpd_massbots{background-position: 0 -368px}
+.cpd_online{background-position: 0 -414px}
+.cpd_post{background-position: 0 -460px}
+.cpd_reads{background-position: 0 -506px}
+.cpd_referrer{background-position: 0 -552px}
+.cpd_reset{background-position: 0 -598px}
+.cpd_settings{background-position: 0 -644px}
+.cpd_summary{background-position: 0 -690px}
+.cpd_tools{background-position: 0 -736px}
+.cpd_uninstall{background-position: 0 -782px}
+.cpd_update{background-position: 0 -828px}
+.cpd_user{background-position: 0 -874px}
 
 /* dashboard */
 
@@ -121,7 +121,9 @@ h2 .cpd_icon {
 }
 
 #cpd-flot {
+	clear: both;
 	overflow: hidden;
+	margin-top: 5px;
 }
 
 #cpd-tooltip {
@@ -209,7 +211,7 @@ h2 .cpd_icon {
 .cpd_widget_item .widefat {
 	width: 235px !important;
 	margin-left: 15px;
-	
+
 }
 
 /* thickbox */
@@ -268,7 +270,7 @@ h2 .cpd_icon {
 	color: #ff0;
 }
 
-.cpd-notes input { 
+.cpd-notes input {
  	width: 97%;
 	font: 12px Verdana, Arial, Helvetica, sans-serif;
 }
@@ -433,3 +435,10 @@ h2 .cpd_icon {
 .cpd-flag-cm{background-position:0 -1586px;}
 .cpd-flag-mn{background-position:0 -1599px;}
 .cpd-flag-kz{background-position:0 -1612px;}
+.cpd-flag-ng{background-position:0 -1625px;}
+.cpd-flag-kh{background-position:0 -1638px;}
+.cpd-flag-sd{background-position:0 -1651px;}
+
+
+
+

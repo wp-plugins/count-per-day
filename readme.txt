@@ -2,12 +2,14 @@
 Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
-Tested up to: 3.5
-Stable tag: 3.2.5
+Tested up to: 3.6
+Stable tag: 3.2.6
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
 Visit Counter, shows reads and visitors per page, visitors today, yesterday, last week, last months and other statistics.
+
+
 
 == Description ==
 
@@ -24,30 +26,31 @@ Visit Counter, shows reads and visitors per page, visitors today, yesterday, las
 = Languages, Translators =
 
 - up to date translations:
-- Bulgarian		- joro -							http://www.joro711.com
-- German		- Tom -								http://www.tomsdimension.de
-- Japanese		- Juno Hayami						http://juno.main.jp/blog/
-- Portuguese	- Beto Ribeiro -					http://www.sevenarts.com.br
-- Russian		- Ilya Pshenichny -					http://iluhis.com
+- Bulgarian     - joro -                            http://www.joro711.com
+- German        - Tom -                             http://www.tomsdimension.de
+- Japanese      - Juno Hayami -                     http://juno.main.jp/blog/
+- Portuguese    - Beto Ribeiro -                    http://www.sevenarts.com.br
+- Russian       - Ilya Pshenichny -                 http://iluhis.com
+- Serbian       - Diana -                           http://wpdiscounts.com
 
 - older, incomplete translations:
-- Azerbaijani	- Bohdan Zograf -					http://wwww.webhostingrating.com
-- Belarusian	- Alexander Alexandrov -			http://www.designcontest.com
-- Dansk			- Jonas Thomsen -					http://jonasthomsen.com
-- Dutch NL		- Rene -							http://wpwebshop.com
-- Espanol		- Juan Carlos del R&iacute;o -
-- Finnish		- Jani Alha -						http://www.wysiwyg.fi
-- France		- Bjork -							http://www.habbzone.fr
-- Greek			- Essetai_Imar -					http://www.elliniki-grothia.com
-- Hindi			- Love Chandel -					http://outshinesolutions.com
-- Italian		- Gianni Diurno -					http://gidibao.net
-- Lithuanian	- Nata Strazda - 					http://www.webhostinghub.com
-- Norwegian		- Stein Ivar Johnsen -				http://iDyrøy.no
-- Polish 		- LeXuS -							http://intrakardial.de
-- Romanian		- Alexander Ovsov -					http://webhostinggeeks.com
-- Swedish		- Magnus Suther -					http://www.magnussuther.se
-- Turkish		- Emrullah Tahir Ekmek&ccedil;i - 	http://emrullahekmekci.com.tr
-- Ukrainian		- Iflexion design -					http://iflexion.com
+- Azerbaijani   - Bohdan Zograf -                   http://wwww.webhostingrating.com
+- Belarusian    - Alexander Alexandrov -            http://www.designcontest.com
+- Dansk         - Jonas Thomsen -                   http://jonasthomsen.com
+- Dutch NL      - Rene -                            http://wpwebshop.com
+- Espanol       - Juan Carlos del R&iacute;o -
+- Finnish       - Jani Alha -                       http://www.wysiwyg.fi
+- France        - Bjork -                           http://www.habbzone.fr
+- Greek         - Essetai_Imar -                    http://www.elliniki-grothia.com
+- Hindi         - Love Chandel -                    http://outshinesolutions.com
+- Italian       - Gianni Diurno -                   http://gidibao.net
+- Lithuanian    - Nata Strazda -                    http://www.webhostinghub.com
+- Norwegian     - Stein Ivar Johnsen -              http://iDyrøy.no
+- Polish        - LeXuS -                           http://intrakardial.de
+- Romanian      - Alexander Ovsov -                 http://webhostinggeeks.com
+- Swedish       - Magnus Suther -                   http://www.magnussuther.se
+- Turkish       - Emrullah Tahir Ekmek&ccedil;i -   http://emrullahekmekci.com.tr
+- Ukrainian     - Iflexion design -                 http://iflexion.com
 
 
 == Installation ==
@@ -70,11 +73,15 @@ See the Options Page and check the default values.
 
 read and write comments on http://www.tomsdimension.de/wp-plugins/count-per-day
 
+
+
 == Screenshots ==
 
 1. Statistics on Count-per-Day Dashboard
 2. Options
 3. Widget sample
+
+
 
 == Arbitrary section ==
 
@@ -101,22 +108,26 @@ To use the shortcodes within a text widget you have to add 'add_filter("widget_t
 [CPD_VISITORS_PER_DAY]
 [CPD_VISITORS_PER_POST]
 [CPD_FIRST_COUNT]
-[CPD_MOST_VISITED_POSTS]
 [CPD_POSTS_ON_DAY]
 [CPD_CLIENTS]
 [CPD_COUNTRIES]
 [CPD_COUNTRIES_USERS]
 [CPD_REFERERS]
+[CPD_MOST_VISITED_POSTS limit="5" days="30" postsonly="1" posttypes="posts,pages"]
+- limit (optional): max records to show, default = all
+- days (optional), show last x days
+- postsonly (optional), 1 = don't show index pages
+- posttypes (optional), show this posttypes only, sets postsonly to 1
 [CPD_POSTS_ON_DAY date="2010-10-06" limit="3"]
 - date (optional), format: year-month-day, default = today
-- limit (optional): max records to show, default = all 
+- limit (optional): max records to show, default = all
 [CPD_MAP width="500" height="340" what="reads" min=1]
 - width and height: size, default 500x340 px
 - what: map content - reads|visitors|online, default reads
 - min: 1 (disable title, legend and zoombar), default 0
 [CPD_SEARCHES days="14" limit="20"]
 - days (optional), show last x days
-- limit (optional): show x most searched strings 
+- limit (optional): show x most searched strings
 
 **Functions**
 
@@ -153,7 +164,7 @@ show( $before, $after, $show, $count, $page )'
 * $return: 0 echo, 1 return output
 
 'getReadsAll( $return )'
- 
+
 * shows number of total reads
 * $return: 0 echo, 1 return output
 
@@ -163,7 +174,7 @@ show( $before, $after, $show, $count, $page )'
 * $return: 0 echo, 1 return output
 
 'getReadsYesterday( $return )'
- 
+
 * shows number of reads yesterday
 * $return: 0 echo, 1 return output
 
@@ -200,7 +211,7 @@ show( $before, $after, $show, $count, $page )'
 * $return: 0 echo, 1 return output
 
 'getUserYesterday( $return )'
- 
+
 * shows number of visitors yesterday
 * $return: 0 echo, 1 return output
 
@@ -226,7 +237,7 @@ show( $before, $after, $show, $count, $page )'
 * $frontend: 1 no links
 * $return: 0 echo, 1 return output
 
-'getMostVisitedPosts( $days, $limits, $frontend, $postsonly, $return )'
+'getMostVisitedPosts( $days, $limits, $frontend, $postsonly, $return, $posttypes )'
 
 * shows a list with the most visited posts in the last days
 * $days = days to calc (last days), 0: get option from DB
@@ -234,6 +245,7 @@ show( $before, $after, $show, $count, $page )'
 * $frontend: 1 no links
 * $postsonly: 0 show, 1 don't show categories and taxonomies
 * $return: 0 echo, 1 return output
+* $posttypes: comma separated list of post types, default: empty to show all
 
 'getVisitedPostsOnDay( $date, $limit, $show_form, $show_notes, $frontend, $return )'
 
@@ -290,7 +302,20 @@ show( $before, $after, $show, $count, $page )'
 * If the automatically update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz">GeoIP.dat.gz</a> and extract it to the "geoip" directory.
 * More information about GeoIP on http://www.maxmind.com/app/geoip_country
 
+
+
 == Changelog ==
+
+= 3.2.6 =
++ New: posts only parameters for [CPD_MOST_VISITED_POSTS]
++ New: don't count password protected posts without password
++ New: translate widget titles if possible
++ New: flags of Cambodia, Nigeria and Sudan
++ Bugfix: massbot post list has not show all post
++ Bugfix: security fix, XSS
++ Bugfix: problems while adding widgets
++ Bugfix: start session only in backend
++ Bugfix: empty database query
 
 = 3.2.5 =
 + Bugfix: compatibility fix for WordPress 3.5
@@ -309,7 +334,7 @@ show( $before, $after, $show, $count, $page )'
 = 3.2.1 =
 + Bugfix: massbot delete error
 + Bugfix: search words array sometimes corrupt
-+ Bugfix: add collected data to reads per post, thanks to Suzakura Karin http://yumeneko.pmfan.jp / http://is.gd/VWNyLq 
++ Bugfix: add collected data to reads per post, thanks to Suzakura Karin http://yumeneko.pmfan.jp / http://is.gd/VWNyLq
 + Language update: Japanese, thanks to Juno Hayami
 + Language update: Portuguese, thanks to Beto Ribeiro
 + Language update: Russian, thanks to Ilya Pshenichny

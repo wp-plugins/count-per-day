@@ -6,10 +6,10 @@ require_once($cpd_wp.'wp-load.php');
 // check user
 $o = get_option('count_per_day');
 $can_see = str_replace(
-		// administrator, editor, author, contributor, subscriber
-		array(10, 7, 2, 1, 0),
-		array('manage_options', 'moderate_comments', 'edit_published_posts', 'edit_posts', 'read'),
-		$o['show_in_lists']);
+	// administrator, editor, author, contributor, subscriber
+	array(10, 7, 2, 1, 0),
+	array('manage_options', 'moderate_comments', 'edit_published_posts', 'edit_posts', 'read'),
+	$o['show_in_lists']);
 if ( !current_user_can($can_see) )
 	die();
 
@@ -27,7 +27,7 @@ if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 			ON t.term_id = 0 - c.page
 	LEFT	JOIN $wpdb->term_taxonomy x
 			ON x.term_id = t.term_id
-	WHERE	c.ip = %d
+	WHERE	c.ip = %s
 	AND		c.date = %s
 	ORDER	BY p.ID",
 	$_GET['dmbip'], $_GET['dmbdate'] );
@@ -35,10 +35,10 @@ if ( isset($_GET['dmbip']) && isset($_GET['dmbdate']) )
 }
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de-DE">
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta charset="UTF-8" />
 <title>Count per Day</title>
 <link rel="stylesheet" type="text/css" href="counter.css" />
 </head>

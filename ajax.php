@@ -5,7 +5,7 @@ if ( $_GET['f'] == 'count' )
 	if ( empty($_GET['time']) || time() - $_GET['time'] > 20 )
 	{
 		header("HTTP/1.0 403 Forbidden");
-		die();
+		die('wrong request');
 	}
 	
 	if (!session_id()) session_start();
@@ -27,11 +27,11 @@ if ( $_GET['f'] == 'count' )
 			{
 				echo $f.'===';
 				if ( $f == 'getUserPerDay' )
-					eval('echo $count_per_day->getUserPerDay('.$count_per_day->options['dashboard_last_days'].');');
+					echo $count_per_day->getUserPerDay($count_per_day->options['dashboard_last_days']);
 				else if ( $f == 'show' )
-					eval('echo $count_per_day->show("", "", false, false, '.$page.');');
+					echo $count_per_day->show("", "", false, false, '.$page.');
 				else
-					eval('echo $count_per_day->'.$f.'();');
+					echo call_user_func('$count_per_day->'.$f);
 				echo '|';
 			}
 		}
