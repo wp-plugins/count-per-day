@@ -632,7 +632,7 @@ switch($mode) {
 		<?php }	?>
 		<p>
 			<span class="cpd-r"><?php _e('More informations about GeoIP', 'cpd') ?>:
-			<a href="http://www.maxmind.com/app/geoip_country">www.maxmind.com</a></span>&nbsp;
+			<a href="https://www.maxmind.com">www.maxmind.com</a></span>&nbsp;
 		</p>
 	</div>
 	</div>

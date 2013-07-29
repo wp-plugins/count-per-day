@@ -22,7 +22,7 @@ function getCountry( $ip )
 	global $cpd_path;
 	
 	// IPv4 > IPv6
-	if( strpos($ip,'.') !== false )
+	if ( strpos($ip,'.') !== false && strpos($ip,':') === false)
 		$ip = "::$ip";
 	
 	$gi = cpd_geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);

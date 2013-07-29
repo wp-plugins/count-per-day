@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
 Tested up to: 3.6
-Stable tag: 3.2.6
+Stable tag: 3.2.7
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -299,12 +299,15 @@ show( $before, $after, $show, $count, $page )'
 * On options page you can update you current visits. This take a while! The Script checks 100 IP addresses at once an reload itself until less then 100 addresses left. Click the update button to check the rest.
 * If the rest remains greater than 0 the IP address is not in GeoIP database (accuracy 99.5%).
 * You can update the GeoIP database from time to time to get new IP data. This necessitates write rights to geoip directory (e.g. chmod 777).
-* If the automatically update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz">GeoIP.dat.gz</a> and extract it to the "geoip" directory.
-* More information about GeoIP on http://www.maxmind.com/app/geoip_country
+* If the automatically update don't work download <a href="http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz">GeoIPv6.dat.gz</a>, extract and rename it to GeoIP.dat and load it to the "geoip" directory.
+* More information about GeoIP on https://www.maxmind.com
 
 
 
 == Changelog ==
+
+= 3.2.7 =
++ Bugfix: GeoIP functionality
 
 = 3.2.6 =
 + New: posts only parameters for [CPD_MOST_VISITED_POSTS]
