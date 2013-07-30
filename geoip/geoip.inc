@@ -256,7 +256,7 @@ function cpd_geoip_load_shared_mem ($file) {
   shmop_close ($shmid);
 }
 
-function _setup_segments($gi){
+function _cpd_setup_segments($gi){
   $gi->databaseType = GEOIP_COUNTRY_EDITION;
   $gi->record_length = STANDARD_RECORD_LENGTH;
   if ($gi->flags & GEOIP_SHARED_MEMORY) {
@@ -390,7 +390,7 @@ function cpd_geoip_open($filename, $flags) {
     }
   }
 
-  $gi = _setup_segments($gi);
+  $gi = _cpd_setup_segments($gi);
   return $gi;
 }
 
