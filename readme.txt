@@ -45,7 +45,7 @@ Visit Counter, shows reads and visitors per page, visitors today, yesterday, las
 - Hindi         - Love Chandel -                    http://outshinesolutions.com
 - Italian       - Gianni Diurno -                   http://gidibao.net
 - Lithuanian    - Nata Strazda -                    http://www.webhostinghub.com
-- Norwegian     - Stein Ivar Johnsen -              http://iDyrÃ¸y.no
+- Norwegian     - Stein Ivar Johnsen -              http://iDyrøy.no
 - Polish        - LeXuS -                           http://intrakardial.de
 - Romanian      - Alexander Ovsov -                 http://webhostinggeeks.com
 - Swedish       - Magnus Suther -                   http://www.magnussuther.se

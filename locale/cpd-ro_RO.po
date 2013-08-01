@@ -959,4 +959,3 @@ msgstr "Cele mai vizitate de zi"
 #: counter.php:1239
 msgid "drag and drop to sort"
 msgstr "Glisaţi şi fixaţi pentru a sorta"
-

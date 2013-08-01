@@ -969,4 +969,3 @@ msgstr "Найбільш відвідуваних день"
 #: counter.php:1239
 msgid "drag and drop to sort"
 msgstr "перетягування для сортування"
-

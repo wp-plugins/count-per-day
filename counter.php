@@ -150,7 +150,7 @@ function count( $x, $page = 'x' )
 				VALUES (%s, $this->aton(%s), %s, %s, %s)", $page, $userip, $client, $date, $referer), 'count insert '.__LINE__);
 		}
 		// online counter
-		$oc = (array) get_option('count_per_day_online', array());
+		$oc = (array) get_option('count_per_day_online');
 		$oc[$userip] = array( time(), $page );
 		update_option('count_per_day_online', $oc);
 	}
@@ -404,7 +404,12 @@ function getUserOnline( $frontend = false, $country = false, $return = false )
 		$vo = array();
 		foreach ( $oc as $ip=>$x )
 		{
-			$country = strtolower(cpd_geoip_country_code_by_addr($gi, $ip));
+			if ( strpos($ip,'.') !== false && strpos($ip,':') === false)
+				// IPv4
+				$country = strtolower(cpd_geoip_country_code_by_addr_v6($gi, '::'.$ip));
+			else
+				// IPv6
+				$country = strtolower(cpd_geoip_country_code_by_addr_v6($gi, $ip));
 			$id = $geoip->GEOIP_COUNTRY_CODE_TO_NUMBER[strtoupper($country)];
 			if ( empty($id) )
 			{

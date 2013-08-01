@@ -15,8 +15,13 @@ if ( $what == 'online' )
 	$vo = array();
 	foreach ($oc as $ip => $x)
 	{
-		$country = cpd_geoip_country_code_by_addr($gi, $ip);
-		$id = $geoip->GEOIP_COUNTRY_CODE_TO_NUMBER[$country];
+		if ( strpos($ip,'.') !== false && strpos($ip,':') === false)
+			// IPv4
+			$country = cpd_geoip_country_code_by_addr_v6($gi, '::'.$ip);
+		else
+			// IPv6
+			$country = cpd_geoip_country_code_by_addr_v6($gi, $ip);
+		$id = $geoip->GEOIP_COUNTRY_CODE_TO_NUMBER[strtoupper($country)];
 		if ( !empty($id) )
 		{
 			$name = $geoip->GEOIP_COUNTRY_NAMES[$id];
