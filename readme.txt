@@ -306,6 +306,11 @@ show( $before, $after, $show, $count, $page )'
 
 == Changelog ==
 
+= Dev =
+
++ Bugfix: inet_pton for windows php < 5.3
++ Bugfix: geoip support for online worldmap
+
 = 3.2.7 =
 + Bugfix: GeoIP functionality
 

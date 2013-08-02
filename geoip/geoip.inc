@@ -513,7 +513,10 @@ function _cpd_geoip_seek_country_v6($gi, $ipnum) {
   # arrays from unpack start with offset 1
   # yet another php mystery. array_merge work around 
   # this broken behaviour
-  $v6vec = array_merge(unpack( "C16", $ipnum));
+  if (strlen($ipnum) === 4) // IPv4 
+    $v6vec = array_pad(unpack( "C4", $ipnum), -16, 0);
+  else
+  	$v6vec = array_merge(unpack( "C16", $ipnum));
 
   $offset = 0;
   for ($depth = 127; $depth >= 0; --$depth) {

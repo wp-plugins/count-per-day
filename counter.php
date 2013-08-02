@@ -134,20 +134,35 @@ function count( $x, $page = 'x' )
 				// with GeoIP addon save country
 				$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
 				if ( strpos($userip,'.') !== false && strpos($userip,':') === false)
+				{
 					// IPv4
 					$country = strtolower(cpd_geoip_country_code_by_addr_v6($gi, '::'.$userip));
+					$userip2 = $userip;
+				}
 				else
+				{
 					// IPv6
 					$country = strtolower(cpd_geoip_country_code_by_addr_v6($gi, $userip));
+
+					// store dummy ipv4 until we can handle ipv6
+					$packed = inet_pton($userip);
+					if (strlen($packed) === 4)
+						$unpacked = array_pad(unpack( "C4", $packed), -16, 0);
+					else
+						$unpacked = array_merge(unpack( "C16", $packed));
+					$unpacked = array_slice($unpacked, 12);
+					$userip2 = implode('.', $unpacked);
+				}
 				if (empty($country))
 					$country = '-';
+				
 				$this->mysqlQuery('', $wpdb->prepare("INSERT INTO $wpdb->cpd_counter (page, ip, client, date, country, referer)
-				VALUES (%s, $this->aton(%s), %s, %s, %s, %s)", $page, $userip, $client, $date, $country, $referer), 'count insert '.__LINE__);
+				VALUES (%s, $this->aton(%s), %s, %s, %s, %s)", $page, $userip2, $client, $date, $country, $referer), 'count insert '.__LINE__);
 			}
 			else
 				// without country
 				$this->mysqlQuery('', $wpdb->prepare("INSERT INTO $wpdb->cpd_counter (page, ip, client, date, referer)
-				VALUES (%s, $this->aton(%s), %s, %s, %s)", $page, $userip, $client, $date, $referer), 'count insert '.__LINE__);
+				VALUES (%s, $this->aton(%s), %s, %s, %s)", $page, $userip2, $client, $date, $referer), 'count insert '.__LINE__);
 		}
 		// online counter
 		$oc = (array) get_option('count_per_day_online');
