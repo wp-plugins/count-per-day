@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
 Tested up to: 3.6
-Stable tag: 3.2.7
+Stable tag: 3.2.8
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -306,10 +306,9 @@ show( $before, $after, $show, $count, $page )'
 
 == Changelog ==
 
-= Dev =
-
+= 3.2.8 =
 + Bugfix: inet_pton for windows php < 5.3
-+ Bugfix: geoip support for online worldmap
++ Bugfix: GeoIP support for online world map
 
 = 3.2.7 =
 + Bugfix: GeoIP functionality
