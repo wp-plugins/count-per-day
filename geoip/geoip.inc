@@ -455,7 +455,7 @@ function cpd_geoip_country_name_by_name($gi, $name) {
 }
 
 function cpd_geoip_country_id_by_addr_v6($gi, $addr) {
-  $ipnum = inet_pton($addr);
+  $ipnum = cpd_inet_pton($addr);
   return _cpd_geoip_seek_country_v6($gi, $ipnum) - GEOIP_COUNTRY_BEGIN;
 }
 
@@ -650,7 +650,7 @@ function cpd_geoip_name_by_addr_v6 ($gi,$addr) {
   if ($addr == NULL) {
     return 0;
   }
-  $ipnum = inet_pton($addr);
+  $ipnum = cpd_inet_pton($addr);
   return _cpd_get_org_v6($gi, $ipnum);
 }
 
@@ -715,41 +715,39 @@ function cpd_getdnsattributes ($l,$ip){
 }
 
 // Windows server < PHP 5.3
-if ( !function_exists('inet_pton') )
+// PHP without IPv6 support 
+function cpd_inet_pton($ip)
 {
-	function inet_pton($ip)
+	# ipv4
+	if (strpos($ip, '.') !== FALSE)
 	{
-		# ipv4
-		if (strpos($ip, '.') !== FALSE)
+		if (strpos($ip, ':') === FALSE)
+			$ip = pack('N',ip2long($ip));
+		else
 		{
-			if (strpos($ip, ':') === FALSE)
-				$ip = pack('N',ip2long($ip));
-			else
-			{
-				$ip = explode(':',$ip);
-				$ip = pack('N',ip2long($ip[count($ip)-1]));
-			}
+			$ip = explode(':',$ip);
+			$ip = pack('N',ip2long($ip[count($ip)-1]));
 		}
-		# ipv6
-		elseif (strpos($ip, ':') !== FALSE)
-		{
-			$ip = explode(':', $ip);
-			$parts=8-count($ip);
-			$res='';$replaced=0;
-			foreach ($ip as $seg)
-			{
-				if ($seg!='')
-					$res .= str_pad($seg, 4, '0', STR_PAD_LEFT);
-				elseif ($replaced==0)
-				{
-					for ($i=0;$i<=$parts;$i++)
-						$res.='0000';
-					$replaced=1;
-				} elseif ($replaced==1)
-					$res.='0000';
-			}
-			$ip = pack('H'.strlen($res), $res);
-		}
-		return $ip;
 	}
+	# ipv6
+	elseif (strpos($ip, ':') !== FALSE)
+	{
+		$ip = explode(':', $ip);
+		$parts=8-count($ip);
+		$res='';$replaced=0;
+		foreach ($ip as $seg)
+		{
+			if ($seg!='')
+				$res .= str_pad($seg, 4, '0', STR_PAD_LEFT);
+			elseif ($replaced==0)
+			{
+				for ($i=0;$i<=$parts;$i++)
+					$res.='0000';
+				$replaced=1;
+			} elseif ($replaced==1)
+				$res.='0000';
+		}
+		$ip = pack('H'.strlen($res), $res);
+	}
+	return $ip;
 }

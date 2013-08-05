@@ -306,6 +306,9 @@ show( $before, $after, $show, $count, $page )'
 
 == Changelog ==
 
+= Dev =
++ Bugfix: PHP without IPv6 support
+
 = 3.2.8 =
 + Bugfix: inet_pton for windows php < 5.3
 + Bugfix: GeoIP support for online world map

@@ -145,7 +145,7 @@ function count( $x, $page = 'x' )
 					$country = strtolower(cpd_geoip_country_code_by_addr_v6($gi, $userip));
 
 					// store dummy ipv4 until we can handle ipv6
-					$packed = inet_pton($userip);
+					$packed = cpd_inet_pton($userip);
 					if (strlen($packed) === 4)
 						$unpacked = array_pad(unpack( "C4", $packed), -16, 0);
 					else
