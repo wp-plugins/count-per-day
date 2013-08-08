@@ -1201,6 +1201,8 @@ function getCountries( $limit = 0, $frontend = false, $visitors = false, $return
 			// get country names
 			if ($country != '-')
 				$id = $geoip->GEOIP_COUNTRY_CODE_TO_NUMBER[strtoupper($country)];
+			else
+				$id = 0;
 			if ( empty($id) )
 			{
 				$name = '???';
@@ -1208,7 +1210,7 @@ function getCountries( $limit = 0, $frontend = false, $visitors = false, $return
 			}
 			else
 				$name = $geoip->GEOIP_COUNTRY_NAMES[$id];
-			$c .= '<li><div class="cpd-flag cpd-flag-'.$country.'"></div> '.$name.' <b>'.$value.'</b></li>'."\n";
+			$c .= '<li><div class="cpd-flag cpd-flag-'.$country.'" title="'.$country.'"></div> '.$name.' <b>'.$value.'</b></li>'."\n";
 		}
 		$c .= '</ul>';
 	}
