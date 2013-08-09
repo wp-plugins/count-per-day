@@ -3,7 +3,7 @@ Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
 Tested up to: 3.6
-Stable tag: 3.2.8
+Stable tag: 3.2.9
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -30,10 +30,10 @@ Visit Counter, shows reads and visitors per page, visitors today, yesterday, las
 - Finnish       - Jani Alha -                       http://www.wysiwyg.fi
 - German        - Tom -                             http://www.tomsdimension.de
 - Japanese      - Juno Hayami -                     http://juno.main.jp/blog/
+- Persian       - Mahmoud Zooroofchi -              www.zooroofchi.ir
 - Portuguese    - Beto Ribeiro -                    http://www.sevenarts.com.br
 - Russian       - Ilya Pshenichny -                 http://iluhis.com
 - Serbian       - Diana -                           http://wpdiscounts.com
-- Persian       - Mahmoud Zooroofchi -              www.zooroofchi.ir
 
 - older, incomplete translations:
 - Azerbaijani   - Bohdan Zograf -                   http://wwww.webhostingrating.com
