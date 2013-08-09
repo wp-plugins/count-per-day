@@ -27,11 +27,13 @@ Visit Counter, shows reads and visitors per page, visitors today, yesterday, las
 
 - up to date translations:
 - Bulgarian     - joro -                            http://www.joro711.com
+- Finnish       - Jani Alha -                       http://www.wysiwyg.fi
 - German        - Tom -                             http://www.tomsdimension.de
 - Japanese      - Juno Hayami -                     http://juno.main.jp/blog/
 - Portuguese    - Beto Ribeiro -                    http://www.sevenarts.com.br
 - Russian       - Ilya Pshenichny -                 http://iluhis.com
 - Serbian       - Diana -                           http://wpdiscounts.com
+- Persian       - Mahmoud Zooroofchi -              www.zooroofchi.ir
 
 - older, incomplete translations:
 - Azerbaijani   - Bohdan Zograf -                   http://wwww.webhostingrating.com
@@ -39,7 +41,6 @@ Visit Counter, shows reads and visitors per page, visitors today, yesterday, las
 - Dansk         - Jonas Thomsen -                   http://jonasthomsen.com
 - Dutch NL      - Rene -                            http://wpwebshop.com
 - Espanol       - Juan Carlos del R&iacute;o -
-- Finnish       - Jani Alha -                       http://www.wysiwyg.fi
 - France        - Bjork -                           http://www.habbzone.fr
 - Greek         - Essetai_Imar -                    http://www.elliniki-grothia.com
 - Hindi         - Love Chandel -                    http://outshinesolutions.com
@@ -306,8 +307,10 @@ show( $before, $after, $show, $count, $page )'
 
 == Changelog ==
 
-= Dev =
+= 3.2.9 =
 + Bugfix: PHP without IPv6 support
++ New Language: Persian, thanks to Mahmoud Zooroofchi
++ Hint: use "update old counter data" to repair the unknown countries
 
 = 3.2.8 =
 + Bugfix: inet_pton for windows php < 5.3
