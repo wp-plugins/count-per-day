@@ -169,8 +169,7 @@ h2 .cpd_icon {
 .cpd-dashboard li b {
 	float: right;
 	text-align: right;
-	font-family: Georgia,"Times New Roman",Times,serif;
-	font-size: 18px;
+	font-size: 1.2em;
 	color: #2583ad;
 }
 
@@ -194,6 +193,12 @@ h2 .cpd_icon {
 	float: right;
 	text-align: right;
 }
+
+/* otherwise hidden on little displays */
+.columns-prefs .columns-prefs-3, .columns-prefs .columns-prefs-4 {
+    display: inline-block !important;
+}
+
 
 /* widget */
 

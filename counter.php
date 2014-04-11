@@ -119,6 +119,7 @@ function count( $x, $page = 'x' )
 			$real_ip = $_SERVER['REMOTE_ADDR'];
 		
 		$userip = $this->anonymize_ip($real_ip);
+		
 		$client = ($this->options['referers']) ? wp_strip_all_tags($_SERVER['HTTP_USER_AGENT']) : '';
 		$referer = ($this->options['referers'] && isset($_SERVER['HTTP_REFERER'])) ? wp_strip_all_tags($_SERVER['HTTP_REFERER']) : '';
 		if ($this->options['referers_cut'])
@@ -133,6 +134,10 @@ function count( $x, $page = 'x' )
 			{
 				// with GeoIP addon save country
 				$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
+				
+				if (!filter_var($userip, FILTER_VALIDATE_IP))
+					$userip = ' 127.0.0.1';
+				
 				if ( strpos($userip,'.') !== false && strpos($userip,':') === false)
 				{
 					// IPv4
@@ -872,7 +877,7 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0, $show_form = true, $show_n
 	}
 	if (isset($note))
 		echo '<p style="background:#eee; padding:2px;">'.implode(', ', $note).'</p>';
-	$r = $this->getUserPer_SQL( $sql, 'getVisitedPostsOnDay', $frontend );
+	$r = $this->getUserPer_SQL( $sql, 'getVisitedPostsOnDay', $frontend, $limit );
 	if ($return) return $r; else echo $r;
 }
 
@@ -933,7 +938,7 @@ function getReferers( $limit = 0, $return = false, $days = 0 )
 	
 	// local url filter 
 	$dayfiltre = "AND date > DATE_SUB('".date_i18n('Y-m-d')."', INTERVAL $days DAY)";
-		
+	
 	$localref = ($this->options['localref']) ? '' : " AND referer NOT LIKE '".get_bloginfo('url')."%%' ";
 	$res = $this->mysqlQuery('rows', "SELECT COUNT(*) count, referer FROM $wpdb->cpd_counter WHERE referer > '' $dayfiltre $localref GROUP BY referer ORDER BY count DESC LIMIT $limit", 'getReferers '.__LINE__);
 	$r =  '<small>'.sprintf(__('The %s referrers in last %s days:', 'cpd'), $limit, $days).'</small>';
@@ -1086,16 +1091,16 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 		$r .= '<a href="'.get_bloginfo('url');
 		if ( $row->tax == 'category' )
 			// category
-			$r .= '?cat='.abs($row->post_id).'">- '.$row->tag_cat_name.' ('.__('Category').') -';
+			$r .= '?cat='.abs($row->post_id).'">- '.__($row->tag_cat_name).' ('.__('Category').') -';
 		else if ( $row->tax )
 			// tag
-			$r .= '?tag='.$row->tag_cat_slug.'">- '.$row->tag_cat_name.' ('.__('Tag').') -';
+			$r .= '?tag='.$row->tag_cat_slug.'">- '.__($row->tag_cat_name).' ('.__('Tag').') -';
 		else if ( $row->post_id == 0 )
 			// homepage
-			$r .= '">- '.__('Front page displays').' -';
+			$r .= '">- '.__('Front page').' -';
 		else
 			// post/page
-			$r .= '?p='.$row->post_id.'">'.($row->post ? $row->post : '---');
+			$r .= '?p='.$row->post_id.'">'.($row->post ? __($row->post) : '---');
 		$r .= '</a>';
 
 		$r .= ' <b>'.$row->count.'</b></li>'."\n";
@@ -1125,6 +1130,7 @@ function getSearches( $limit = 0, $days = 0, $return = false )
 		if (is_array($strings))
 			foreach ( $strings as $s )
 			{
+				$s = strtolower($s);
 				if (isset($c[$s]))
 					$c[$s]++;
 				else

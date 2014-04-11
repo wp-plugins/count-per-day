@@ -330,6 +330,21 @@ if(!empty($_POST['do']))
 		update_option('count_per_day_search', $searches);
 		unset($searches);
 		echo '<div class="updated"><p>'.__('Old search strings deleted', 'cpd').'</p></div>';
+	
+		
+	// delete clients and referers
+	case 'cpd_clientsclean' :
+		$days = intval($_POST['cpd_keepclients']);
+		$deldate = date('Y-m-d', time() - $days * 86400);
+		
+		$cpd_sql = "
+		UPDATE	$wpdb->cpd_counter
+		SET		client = '',
+				referer = ''
+		WHERE	date < '$deldate'";
+		$count_per_day->mysqlQuery('', $cpd_sql, 'deleteClients '.__LINE__);
+		
+		echo '<div class="updated"><p>'.__('Clients and referers deleted', 'cpd').'</p></div>';
 		
 	default:
 		break;
@@ -537,10 +552,10 @@ switch($mode) {
 		<div class="postbox">
 		<h3><span class="cpd_icon cpd_clean">&nbsp;</span> <?php _e('Clean the database', 'cpd') ?></h3>
 		<div class="inside">
+			<form method="post" action="<?php echo $mysiteurl ?>">
 			<p>
 				<?php _e('You can clean the counter table by delete the "spam data".<br />If you add new bots above the old "spam data" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots.', 'cpd') ?>
 			</p>
-			<form method="post" action="<?php echo $mysiteurl ?>">
 			<p>
 				<input type="hidden" name="do" value="cpd_clean" />
 				<input type="submit" name="clean" value="<?php _e('Clean the database', 'cpd') ?>" class="button" />
@@ -548,10 +563,23 @@ switch($mode) {
 			</form>
 			
 			<form method="post" action="<?php echo $mysiteurl ?>">
+			<p style="border-top:1px #ddd solid; padding-top:10px">
+				<?php printf(__('Delete search strings older than %s days.', 'cpd'), '<input type="text" size="2" name="cpd_keepsearch" value="14" class="code" />') ?>
+			</p>
 			<p>
-				<?php printf(__('Delete search strings older than %s days.', 'cpd'), '<input type="text" size="2" name="cpd_keepsearch" value="14" class="code" />') ?><br/>
 				<input type="hidden" name="do" value="cpd_searchclean" />
 				<input type="submit" name="clean" value="<?php _e('Delete search strings', 'cpd') ?>" class="button" />
+			</p>
+			</form>
+			
+			<form method="post" action="<?php echo $mysiteurl ?>">
+			<p style="border-top:1px #ddd solid; padding-top:10px">
+				<?php printf(__('Current size of your counter table %s is %s.', 'cpd'), '<code>'.$wpdb->cpd_counter.'</code>', $count_per_day->getTableSize($wpdb->cpd_counter));?><br/>
+				<?php printf(__('Delete clients and referers older than %s days to reduce the size of the counter table.', 'cpd'), '<input type="text" size="2" name="cpd_keepclients" value="90" class="code" />') ?>
+			</p>
+			<p>
+				<input type="hidden" name="do" value="cpd_clientsclean" />
+				<input type="submit" name="clean" value="<?php _e('Delete clients and referers', 'cpd') ?>" class="button" />
 			</p>
 			</form>
 		</div>

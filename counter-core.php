@@ -49,8 +49,11 @@ function init()
 	// manual debug mode
 	if (!empty($_GET['debug']) && WP_DEBUG )
 		$this->options['debug'] = 1;
+// 	$this->dir = get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.$cpd_dir_name;
+	$this->dir = plugins_url('/'.$cpd_dir_name);
+// 	var_dump($this->dir);
+// 	content_url()
 	
-	$this->dir = get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.$cpd_dir_name;
 	$this->queries[0] = 0;
 
 	// update online counter
@@ -326,13 +329,16 @@ function getPostID()
  * @param string $client USER_AGENT
  * @param array $bots strings to check
  * @param string $ip IP adress
+ * @param string $ref referrer
  */
-function isBot( $client = '', $bots = '', $ip = '' )
+function isBot( $client = '', $bots = '', $ip = '', $ref = '' )
 {
 	if ( empty($client) && isset($_SERVER['HTTP_USER_AGENT']) )
 		$client = $_SERVER['HTTP_USER_AGENT'];
 	if (empty($ip))
 		$ip = $_SERVER['REMOTE_ADDR'];
+	if ( empty($ref) && isset($_SERVER['HTTP_REFERER']) )
+		$ref = $_SERVER['HTTP_REFERER'];
 		
 	// empty/short client -> not normal browser -> bot
 	if ( empty($client) || strlen($client) < 20 )
@@ -347,7 +353,7 @@ function isBot( $client = '', $bots = '', $ip = '' )
 		if (!$isBot) // loop until first bot was found only
 		{
 			$b = trim($bot);
-			if ( !empty($b) && ( $ip == $b || strpos( strtolower($client), strtolower($b) ) !== false ) )
+			if ( !empty($b) && ( $ip == $b || strpos( strtolower($client), strtolower($b) ) !== false || strpos( strtolower($ref), strtolower($b) ) !== false ) )
 				$isBot = true;
 		}
 	}
@@ -579,8 +585,8 @@ jQuery(document).ready( function()
 		for(var i = 0; i < cpd_funcs.length; i++)
 		{
 			var cpd_daten = cpd_funcs[i].split('===');
-			var cpd_fields = document.getElementById('cpd_number_' + cpd_daten[0].toLowerCase());
-			if (!cpd_fields && cpd_fields != null) { cpd_fields.innerHTML = cpd_daten[1]; }
+			var cpd_field = document.getElementById('cpd_number_' + cpd_daten[0].toLowerCase());
+			if (cpd_field != null) { cpd_field.innerHTML = cpd_daten[1]; }
 		}
 	});
 } );
@@ -628,7 +634,8 @@ function menu($content)
 	global $cpd_dir_name;
 	if (function_exists('add_options_page'))
 	{
-		$menutitle = '<img src="'.$this->img('cpd_menu.gif').'" alt="/" style="width:9px;height:12px;" /> Count per Day';
+// 		$menutitle = '<img src="'.$this->img('cpd_menu.gif').'" alt="/" style="width:9px;height:12px;" /> Count per Day';
+		$menutitle = 'Count per Day';
 		add_options_page('CountPerDay', $menutitle, 'manage_options', $cpd_dir_name.'/counter-options.php') ;
 	}
 }
@@ -729,7 +736,8 @@ function screenLayoutColumns($columns, $screen)
  */
 function setAdminMenu()
 {
-	$menutitle = '<img src="'.$this->img('cpd_menu.gif').'" alt="" style="width:12px;height:12px;" /> Count per Day';
+// 	$menutitle = '<img src="'.$this->img('cpd_menu.gif').'" alt="" style="width:12px;height:12px;" /> Count per Day';
+	$menutitle = 'Count per Day';
 	$this->pagehook = add_submenu_page('index.php', 'CountPerDay', $menutitle, $this->options['whocansee'], CPD_METABOX, array(&$this, 'onShowPage'));
 	add_action('load-'.$this->pagehook, array(&$this, 'onLoadPage'));
 }

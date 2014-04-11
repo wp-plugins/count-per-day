@@ -26,11 +26,19 @@ function getCountry( $ip )
 		$ip = "::$ip";
 	
 	$gi = cpd_geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
-	$c = strtolower(cpd_geoip_country_code_by_addr_v6($gi, $ip));
+	
+// 	if ( strpos($ip, 'u') !== false ) // 'unknow...'
+	if (filter_var($ip, FILTER_VALIDATE_IP))
+	{
+		$c = strtolower(cpd_geoip_country_code_by_addr_v6($gi, $ip));
+		$cname = cpd_geoip_country_name_by_addr_v6($gi, $ip);
+	}
 	
 	if ( empty($c) )
+	{
 		$c = 'unknown';
-	$cname = cpd_geoip_country_name_by_addr_v6($gi, $ip);
+		$cname = '';
+	}
 	cpd_geoip_close($gi);
 	$country = array( $c, '<div class="cpd-flag cpd-flag-'.$c.'" title="'.$cname.'"></div>', $cname );
 	return $country;

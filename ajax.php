@@ -29,9 +29,9 @@ if ( $_GET['f'] == 'count' )
 				if ( $f == 'getUserPerDay' )
 					echo $count_per_day->getUserPerDay($count_per_day->options['dashboard_last_days']);
 				else if ( $f == 'show' )
-					echo $count_per_day->show("", "", false, false, '.$page.');
+					echo $count_per_day->show('', '', false, false, $page);
 				else
-					echo call_user_func('$count_per_day->'.$f);
+					echo $count_per_day->{$f}();
 				echo '|';
 			}
 		}
