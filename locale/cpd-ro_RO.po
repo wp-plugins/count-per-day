@@ -1,961 +1,1122 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Count per Day v3.0\n"
+"Project-Id-Version: Count Per Day v3.2.10\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-02 12:13+0100\n"
-"PO-Revision-Date: \n"
-"X-Poedit-Language: Romanian\n"
-"X-Poedit-Country: Romania\n"
-"Language-Team: Web Geeks\n"
+"PO-Revision-Date: 2014-05-08 08:18:32+0000\n"
 "Last-Translator: \n"
+"Language-Team: Web Geeks\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: Romanian\n"
+"X-Poedit-Country: Romania\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
 "X-Poedit-Basepath: P:/xampp/htdocs/wp/wp-content/plugins/count-per-day\n"
-"X-Textdomain-Support: yes\n"
+"X-Poedit-Bookmarks: \n"
 "X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
 
+#: counter-options.php:52
 #@ cpd
-#: counter-options.php:49
 msgid "Options updated"
 msgstr "Opţiuni actualizate"
 
-#@ cpd
-#: counter-options.php:112
+#: counter-options.php:113
 #, php-format
+#@ cpd
 msgid "Database cleaned. %s rows deleted."
 msgstr "Baza de date curăţate. %s rânduri şterse."
 
+#: counter-options.php:128
+#: counter-options.php:719
 #@ cpd
-#: counter-options.php:127
-#: counter-options.php:810
 msgid "UNINSTALL Count per Day"
 msgstr "DEZINSTALAŢI conta pe zi"
 
-#@ cpd
-#: counter-options.php:132
 #: counter-options.php:133
 #: counter-options.php:134
+#: counter-options.php:135
 #, php-format
+#@ cpd
 msgid "Table %s deleted"
 msgstr "Tabelul %s elimină"
 
+#: counter-options.php:136
 #@ cpd
-#: counter-options.php:135
 msgid "Options deleted"
 msgstr "Opţiuni elimină"
 
+#: counter-options.php:377
+#: counter-options.php:705
 #@ cpd
-#: counter-options.php:316
-#: counter-options.php:796
 msgid "Uninstall"
 msgstr "Dezinstalare"
 
+#: counter-options.php:378
 #@ cpd
-#: counter-options.php:317
 msgid "Click here"
 msgstr "Faceţi clic aici"
 
+#: counter-options.php:378
 #@ cpd
-#: counter-options.php:317
 msgid "to finish the uninstall and to deactivate \"Count per Day\"."
 msgstr "."
 
+#: counter-options.php:752
 #@ cpd
-#: counter-options.php:355
 msgid "Online time"
 msgstr "Timp online"
 
+#: counter-options.php:753
 #@ cpd
-#: counter-options.php:356
 msgid "Seconds for online counter. Used for \"Visitors online\" on dashboard page."
 msgstr " pagina tabloul de bord."
 
+#: counter-options.php:756
 #@ cpd
-#: counter-options.php:359
 msgid "Logged on Users"
 msgstr "Logon utilizatori"
 
+#: counter-options.php:758
 #@ cpd
-#: counter-options.php:361
 msgid "count too"
 msgstr "conta prea"
 
+#: counter-options.php:770
 #@ cpd
-#: counter-options.php:373
 msgid "Auto counter"
 msgstr "Auto counter"
 
+#: counter-options.php:771
 #@ cpd
-#: counter-options.php:374
 msgid "Counts automatically single-posts and pages, no changes on template needed."
 msgstr "Contează automat single-posturi şi paginile, nici o modificare pe şablon necesare."
 
+#: counter-options.php:774
 #@ cpd
-#: counter-options.php:377
 msgid "Bots to ignore"
 msgstr "Roboţii să ignore"
 
+#: counter-options.php:952
 #@ cpd
-#: counter-options.php:561
 msgid "Update options"
 msgstr "Opţiuni de actualizare"
 
+#: counter-options.php:553
+#: counter-options.php:561
 #@ cpd
-#: counter-options.php:656
-#: counter-options.php:665
 msgid "Clean the database"
 msgstr "Curăţaţi baza de date"
 
+#: counter-options.php:557
 #@ cpd
-#: counter-options.php:659
 msgid "You can clean the counter table by delete the \"spam data\".<br />If you add new bots above the old \"spam data\" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots."
 msgstr "Puteţi curăţa tabelul de contorul de a şterge \"spam-ul de date\". <br /> Dacă adăugaţi noi boti de mai sus vechi \"de date de spam\" păstrează în baza de date. <br /> Aici puteţi rula filtrul bot din nou şi să ştergeţi vizitele de boti."
 
+#: counter-options.php:708
 #@ cpd
-#: counter-options.php:799
 msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
 msgstr " numai persoanele cu handicap tabelele din baza de date vor fi păstrate."
 
+#: counter-options.php:709
 #@ cpd
-#: counter-options.php:800
 msgid "Here you can delete the tables and disable \"Count per Day\"."
 msgstr ".Aici aveţi posibilitatea să ştergeţi tabele şi dezactiva \"Numărătoarea pe zi\"."
 
+#: counter-options.php:712
 #@ cpd
-#: counter-options.php:803
 msgid "WARNING"
 msgstr "AVERTISMENT"
 
+#: counter-options.php:713
 #@ cpd
-#: counter-options.php:804
 msgid "These tables (with ALL counter data) will be deleted."
 msgstr "Aceste tabele (cu toate Contor date) vor fi şterse."
 
+#: counter-options.php:715
 #@ cpd
-#: counter-options.php:806
 msgid "If \"Count per Day\" re-installed, the counter starts at 0."
 msgstr " re-a instala, contorul începe la 0."
 
+#: counter-options.php:695
+#: counter-options.php:718
 #@ cpd
-#: counter-options.php:786
-#: counter-options.php:809
 msgid "Yes"
 msgstr "da"
 
+#: counter-options.php:719
 #@ cpd
-#: counter-options.php:810
 msgid "You are sure to disable Count per Day and delete all data?"
 msgstr "Sunteţi sigur de a nu fi de acord conta pe zi şi a şterge toate datele?"
 
+#: counter-core.php:820
+#: counter.php:1283
 #@ cpd
-#: counter-core.php:754
-#: counter.php:1124
 msgid "Statistics"
 msgstr "Statistici"
 
+#: counter-core.php:788
+#: counter.php:223
+#: counter.php:1167
+#: counter.php:1361
 #@ cpd
-#: counter-core.php:723
-#: counter.php:160
-#: counter.php:1010
-#: counter.php:1202
 msgid "Total visitors"
 msgstr "Total vizitatori"
 
+#: counter.php:224
+#: counter.php:1367
 #@ cpd
-#: counter.php:161
-#: counter.php:1208
 msgid "Visitors currently online"
 msgstr "Vizitatori online"
 
+#: counter.php:225
+#: counter.php:1362
 #@ cpd
-#: counter.php:162
-#: counter.php:1203
 msgid "Visitors today"
 msgstr "Vizitatori astăzi"
 
+#: counter.php:226
+#: counter.php:1363
 #@ cpd
-#: counter.php:163
-#: counter.php:1204
 msgid "Visitors yesterday"
 msgstr "Vizitatori ieri"
 
+#: counter-core.php:790
+#: counter.php:1365
 #@ cpd
-#@ cpd
-#@ cpd
-#@ cpd
-#: counter.php:164
-#: counter.php:1205
-#: counter.php:167
-#: counter.php:825
-#: counter.php:1209
-#: counter-core.php:729
-#: counter.php:166
-#: counter.php:263
-#: counter.php:1012
-#: counter.php:1207
-#: userperspan.php:34
-#: counter-core.php:725
-#: counter.php:1206
 msgid "Visitors per month"
 msgstr "Vizitatori pe lună"
 
+#: counter-core.php:792
+#: counter-options.php:834
 #@ cpd
-#: counter-core.php:727
-#: counter-options.php:438
 msgid "Visitors per post"
 msgstr "Vizitatori pe post"
 
+#: counter-options.php:123
 #@ cpd
-#: counter-options.php:122
 msgid "Counter reseted."
 msgstr "Contor resetat."
 
+#: counter-options.php:835
+#: counter-options.php:839
 #@ cpd
-#: counter-options.php:439
-#: counter-options.php:443
 msgid "How many posts do you want to see on dashboard page?"
 msgstr "Cât de multe posturi doriţi pentru a vedea pagina tabloul de bord?"
 
+#: counter-options.php:838
 #@ cpd
-#: counter-options.php:442
 msgid "Latest Counts - Posts"
 msgstr "Contează ultimele - posturi"
 
+#: counter-options.php:842
 #@ cpd
-#: counter-options.php:446
 msgid "Latest Counts - Days"
 msgstr "Contează ultimele - zile"
 
+#: counter-options.php:843
+#: counter-options.php:847
+#: counter-options.php:869
 #@ cpd
-#: counter-options.php:447
-#: counter-options.php:451
-#: counter-options.php:473
 msgid "How many days do you want look back?"
 msgstr "Câte zile se va privi înapoi?"
 
+#: counter-options.php:883
 #@ cpd
-#: counter-options.php:488
 msgid "Show in lists"
 msgstr "Arată în liste"
 
+#: counter-options.php:884
 #@ cpd
-#: counter-options.php:489
 msgid "Show \"Reads per Post\" in a new column in post management views."
 msgstr " într-o coloană nouă în post gestionare vizualizări."
 
+#: counter-options.php:686
+#: counter-options.php:696
 #@ cpd
-#: counter-options.php:777
-#: counter-options.php:787
 msgid "Reset the counter"
 msgstr "Resetarea contorului de"
 
+#: counter-options.php:689
 #@ cpd
-#: counter-options.php:780
 msgid "You can reset the counter by empty the table. ALL TO 0!<br />Make a backup if you need the current data!"
 msgstr "Puteţi reseta contorul de gol tabelul. TOATE la 0! < br / > face o copie de rezervă, dacă aveţi nevoie de datele curente!"
 
-#@ cpd
-#: counter.php:672
+#: counter.php:756
 #, php-format
+#@ cpd
 msgid "The %s most visited posts in last %s days:"
 msgstr "Posturi în ultimele zile de %s %s cel mai vizitat:"
 
+#: counter-core.php:652
+#: counter-options.php:401
+#: counter-options.php:740
 #@ default
-#: counter-core.php:575
-#: counter-options.php:341
-#: counter-options.php:565
 msgid "Settings"
 msgstr "Setări"
 
+#: counter-core.php:1464
+#: counter-options.php:789
+#: counter.php:222
+#: counter.php:974
 #@ cpd
-#: counter-core.php:639
-#: counter-options.php:392
-#: counter.php:159
-#: counter.php:875
 msgid "Reads"
 msgstr "Citeşte"
 
+#: counter-core.php:793
 #@ cpd
-#: counter-core.php:728
 msgid "Latest Counts"
 msgstr "Contează mai recente"
 
+#: counter-options.php:846
 #@ cpd
-#: counter-options.php:450
 msgid "Chart - Days"
 msgstr "Diagramă - zile"
 
+#: counter-options.php:850
 #@ cpd
-#: counter-options.php:454
 msgid "Chart - Height"
 msgstr "Diagramă - înălţime"
 
+#: counter-options.php:851
 #@ cpd
-#: counter-options.php:455
 msgid "Height of the biggest bar"
 msgstr "Înălțimea de la bar mai mare"
 
+#: counter.php:1355
 #@ cpd
-#: counter.php:1196
 msgid "This post"
 msgstr "Acest post"
 
+#: counter-options.php:799
 #@ default
-#: counter-options.php:403
 msgid "Dashboard"
 msgstr "Tabloul de bord"
 
+#: counter.php:327
 #@ cpd
-#: counter.php:262
 msgid "Reads per day"
 msgstr "Citeşte pe zi"
 
-#@ cpd
-#: counter-options.php:60
+#: counter-options.php:63
 #, php-format
+#@ cpd
 msgid "Countries updated. <b>%s</b> entries in %s without country left"
 msgstr "Ţări actualizate. intrările <b>%s</b> în %s fără ţară stânga"
 
+#: counter-options.php:66
 #@ cpd
-#: counter-options.php:65
 msgid "update next"
 msgstr "actualizaţi următorul"
 
+#: counter-options.php:636
 #@ cpd
-#: counter-options.php:727
 msgid "GeoIP - Countries"
 msgstr "GeoIP - ţări"
 
+#: counter-options.php:645
 #@ cpd
-#: counter-options.php:736
 msgid "Update old counter data"
 msgstr "Actualizaţi datele contor vechi"
 
+#: counter-options.php:657
 #@ cpd
-#: counter-options.php:748
 msgid "Update GeoIP database"
 msgstr "Actualizare GeoIP database"
 
+#: counter-options.php:652
 #@ cpd
-#: counter-options.php:743
 msgid "Download a new version of GeoIP.dat file."
 msgstr "Descărcaţi o nouă versiune de dosar GeoIP.dat."
 
+#: counter-options.php:662
 #@ cpd
-#: counter-options.php:753
 msgid "More informations about GeoIP"
 msgstr "Mai multe informatii despre GeoIP"
 
+#: counter-core.php:804
 #@ cpd
-#: counter-core.php:738
 msgid "Reads per Country"
 msgstr "Citeşte per tara"
 
+#: geoip/geoip.php:142
 #@ cpd
-#: geoip/geoip.php:117
 msgid "New GeoIP database installed."
 msgstr "Noi GeoIP database instalat."
 
+#: geoip/geoip.php:144
 #@ cpd
-#: geoip/geoip.php:119
 msgid "Sorry, an error occurred. Try again or check the access rights of directory \"geoip\" is 777."
 msgstr "Ne pare rau, a aparut o eroare. Încercaţi din nou sau de a verifica drepturile de acces ale director \"GeoIP\" este de 777."
 
+#: geoip/geoip.php:117
 #@ cpd
-#: geoip/geoip.php:93
 msgid "Sorry, necessary functions (zlib) not installed or enabled in php.ini."
 msgstr "Ne pare rău, funcţiile necesare (zlib) nu instalat sau activat în php.ini."
 
+#: counter-options.php:855
 #@ cpd
-#: counter-options.php:459
 msgid "Countries"
 msgstr "Ţări"
 
+#: counter-options.php:856
 #@ cpd
-#: counter-options.php:460
 msgid "How many countries do you want to see on dashboard page?"
 msgstr "Cât de multe ţări doriţi pentru a vedea pagina tabloul de bord?"
 
-#@ cpd
-#: counter-options.php:102
+#: counter-options.php:106
 #, php-format
+#@ cpd
 msgid "Mass Bots cleaned. %s counts deleted."
 msgstr "Masa roboţii curăţate. %s contează elimină."
 
+#: counter-options.php:417
+#: massbots.php:46
 #@ cpd
-#: counter-options.php:580
-#: massbots.php:35
 msgid "Mass Bots"
 msgstr "Roboţii de masă"
 
-#@ cpd
-#: counter-options.php:584
+#: counter-options.php:421
 #, php-format
+#@ cpd
 msgid "Show all IPs with more than %s page views per day"
 msgstr "Arată toate IP-uri cu mai mult de %s de vizualizări de pagină pe zi"
 
+#: counter-options.php:422
+#: notes.php:84
+#: userperspan.php:56
 #@ cpd
-#: counter-options.php:585
-#: notes.php:71
-#: userperspan.php:44
 msgid "show"
 msgstr "Arată"
 
-#@ cpd
-#: counter-options.php:611
-#: counter-options.php:627
+#: counter-options.php:448
+#: counter-options.php:464
 #, php-format
+#@ cpd
 msgid "Delete these %s counts"
 msgstr "Ştergeţi aceste contează %s"
 
+#: counter.php:913
 #@ cpd
-#: counter.php:821
 msgid "Other"
 msgstr "Alte"
 
+#: massbots.php:63
+#: userperspan.php:75
 #@ default
-#: counter.php:991
-#: massbots.php:52
-#: userperspan.php:63
 msgid "Front page displays"
 msgstr "Afişează prima pagină"
 
+#: counter-core.php:799
+#: counter-options.php:860
 #@ cpd
-#: counter-core.php:733
-#: counter-options.php:464
 msgid "Browsers"
 msgstr "Browsere"
 
+#: counter-options.php:430
 #@ cpd
-#: counter-options.php:593
 msgid "IP"
 msgstr "IP"
 
+#: counter-options.php:431
+#: notes.php:88
 #@ cpd
 #@ default
-#: counter-options.php:594
-#: notes.php:75
 msgid "Date"
 msgstr "Data"
 
+#: counter-options.php:432
 #@ cpd
-#: counter-options.php:595
 msgid "Client"
 msgstr "Client"
 
+#: counter-options.php:433
 #@ cpd
-#: counter-options.php:596
 msgid "Views"
 msgstr "Vizualizări"
 
+#: counter-options.php:891
 #@ cpd
-#: counter-options.php:497
 msgid "Start Values"
 msgstr "Valorile de început"
 
+#: counter-options.php:895
 #@ cpd
-#: counter-options.php:501
 msgid "Here you can change the date of first count and add a start count."
 msgstr "Aici aveţi posibilitatea să modificaţi data primul conta şi adaugă un număr de început."
 
+#: counter-options.php:899
 #@ cpd
-#: counter-options.php:505
 msgid "Start date"
 msgstr "Data inceperii"
 
+#: counter-options.php:900
 #@ cpd
-#: counter-options.php:506
 msgid "Your old Counter starts at?"
 msgstr "Dumneavoastră contor vechi începe la?"
 
+#: counter-options.php:903
+#: counter-options.php:907
 #@ cpd
-#: counter-options.php:509
-#: counter-options.php:513
 msgid "Start count"
 msgstr "Contele de start"
 
+#: counter-options.php:904
 #@ cpd
-#: counter-options.php:510
 msgid "Add this value to \"Total visitors\"."
 msgstr "Adaugă această valoare la \"Total vizitatori\"."
 
+#: counter-options.php:727
 #@ cpd
-#: counter-options.php:714
 msgid "Support"
 msgstr "Suport"
 
+#: counter-core.php:754
 #@ cpd
-#: counter-core.php:690
 msgid "Bug? Problem? Question? Hint? Praise?"
 msgstr "Bug? Problema? Întrebare? Indiciu? Laudă?"
 
-#@ cpd
-#: counter-core.php:691
+#: counter-core.php:755
 #, php-format
+#@ cpd
 msgid "Write a comment on the <a href=\"%s\">plugin page</a>."
 msgstr "Scrie un comentariu pe pagina de <a href=\"%s\"> plugin-ul </a>."
 
+#: counter.php:873
 #@ default
-#: counter.php:786
 msgid "Show"
 msgstr "Arată"
 
+#: counter.php:1085
 #@ default
-#: counter.php:976
 msgid "Edit Post"
 msgstr "Editare Post"
 
-#@ cpd
-#: counter-core.php:689
+#: counter-core.php:753
 #, php-format
+#@ cpd
 msgid "Time for Count per Day: <code>%s</code>."
 msgstr "Timp pentru conta pe zi: <code>%s</code>."
 
+#: counter-options.php:759
 #@ cpd
-#: counter-options.php:362
 msgid "until User Level"
 msgstr "până la nivel de utilizator"
 
+#: counter-core.php:796
 #@ default
-#: counter-core.php:730
 msgid "Plugin"
 msgstr "Plugin-ul"
 
+#: counter.php:875
+#: notes.php:55
+#: notes.php:89
 #@ cpd
-#: counter.php:788
-#: notes.php:42
-#: notes.php:76
 msgid "Notes"
 msgstr "Note"
 
+#: notes.php:90
 #@ default
-#: notes.php:77
 msgid "Action"
 msgstr "Acţiune"
 
+#: notes.php:95
 #@ cpd
-#: notes.php:82
 msgid "add"
 msgstr "adăuga"
 
+#: notes.php:111
 #@ cpd
-#: notes.php:98
 msgid "save"
 msgstr "salvare"
 
+#: notes.php:112
 #@ cpd
-#: notes.php:99
 msgid "delete"
 msgstr "Ştergere"
 
+#: notes.php:123
 #@ cpd
-#: notes.php:110
 msgid "edit"
 msgstr "Editare"
 
+#: counter-options.php:908
 #@ cpd
-#: counter-options.php:514
 msgid "Add this value to \"Total reads\"."
 msgstr "."
 
+#: counter.php:218
+#: counter.php:1356
 #@ cpd
-#: counter.php:155
-#: counter.php:1197
 msgid "Total reads"
 msgstr "Total Citeşte"
 
+#: counter.php:219
+#: counter.php:1357
 #@ cpd
-#: counter.php:156
-#: counter.php:1198
 msgid "Reads today"
 msgstr "Citeşte astăzi"
 
+#: counter.php:220
+#: counter.php:1358
 #@ cpd
-#: counter.php:157
-#: counter.php:1199
 msgid "Reads yesterday"
 msgstr "Citeşte ieri"
 
+#: counter-options.php:778
 #@ cpd
-#: counter-options.php:381
 msgid "Anonymous IP"
 msgstr "IP anonim"
 
+#: counter-options.php:782
 #@ cpd
-#: counter-options.php:385
 msgid "Cache"
 msgstr "Cache-ul"
 
+#: counter-options.php:783
 #@ cpd
-#: counter-options.php:386
 msgid "I use a cache plugin. Count these visits with ajax."
 msgstr "I folos un cache dop. Conta aceste vizite cu ajax."
 
+#: counter-options.php:861
 #@ cpd
-#: counter-options.php:465
 msgid "Substring of the user agent, separated by comma"
 msgstr "Subşir al agentului utilizator, separate prin virgulă"
 
+#: counter-options.php:945
 #@ cpd
-#: counter-options.php:554
 msgid "Debug mode"
 msgstr "Modul Debug"
 
+#: counter-options.php:947
 #@ cpd
-#: counter-options.php:556
 msgid "Show debug informations at the bottom of all pages."
 msgstr "Arata informatii de debug la partea de jos a tuturor paginilor."
 
+#: counter-core.php:805
 #@ cpd
-#: counter-core.php:739
 msgid "Visitors per Country"
 msgstr "Vizitatori pe ţară"
 
+#: counter.php:418
+#: counter.php:1198
 #@ cpd
-#: counter.php:353
-#: counter.php:1041
 msgid "Map"
 msgstr "Hartă"
 
+#: userperspan.php:50
 #@ cpd
-#: userperspan.php:38
 msgid "Start"
 msgstr "Start"
 
+#: userperspan.php:52
 #@ cpd
-#: userperspan.php:40
 msgid "End"
 msgstr "Scop"
 
+#: userperspan.php:54
 #@ cpd
-#: userperspan.php:42
 msgid "PostID"
 msgstr "PostID"
 
+#: userperspan.php:62
 #@ cpd
-#: userperspan.php:50
 msgid "no data found"
 msgstr "nu există date găsit"
 
+#: counter-options.php:639
 #@ cpd
-#: counter-options.php:730
 msgid "You can get the country data for all entries in database by checking the IP adress against the GeoIP database. This can take a while!"
 msgstr "Puteţi obţine datele ţară pentru toate intrările din baza de date de verificare adresa de IP împotriva GeoIP bazei de date. Acest lucru poate dura un timp!"
 
+#: counter-options.php:748
 #@ cpd
-#: counter-options.php:351
 msgid "Counter"
 msgstr "Counter"
 
+#: counter-options.php:786
 #@ cpd
-#: counter-options.php:389
 msgid "Clients and referrers"
 msgstr "Clienti si au venit"
 
+#: counter-options.php:789
 #@ cpd
-#: counter-options.php:392
 msgid "Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors."
 msgstr "Salvaţi şi arată clienti si referrers. < br / > are nevoie de o mulţime de spaţiu în baza de date, dar vă oferă informaţii mai detaliate de vizitatori."
 
+#: counter-options.php:872
 #@ cpd
-#: counter-options.php:476
 msgid "Local URLs"
 msgstr "URL-uri locale"
 
+#: counter-options.php:873
 #@ cpd
-#: counter-options.php:477
 msgid "Show local referrers too."
 msgstr "Arată locale au venit prea."
 
+#: counter-options.php:880
 #@ default
-#: counter-options.php:485
 msgid "Posts"
 msgstr "Posturi"
 
+#: counter-options.php:880
 #@ default
-#: counter-options.php:485
 msgid "Pages"
 msgstr "Pagini"
 
+#: counter.php:221
+#: counter.php:1359
 #@ cpd
-#: counter.php:158
-#: counter.php:1200
 msgid "Reads last week"
 msgstr "Citeşte săptămâna trecută"
 
+#: counter.php:1094
 #@ default
-#: counter.php:985
 msgid "Category"
 msgstr "Categoria"
 
+#: counter.php:1097
 #@ default
-#: counter.php:988
 msgid "Tag"
 msgstr "Tag-ul"
 
+#: counter-core.php:756
 #@ default
-#: counter-core.php:692
 msgid "License"
 msgstr "A da un permis"
 
+#: counter-core.php:791
+#: counter.php:1360
 #@ cpd
-#: counter-core.php:726
-#: counter.php:1201
 msgid "Reads per month"
 msgstr "Afişări pe lună"
 
+#: counter-core.php:800
 #@ cpd
-#: counter-core.php:734
 msgid "Referrer"
 msgstr "Referrer"
 
+#: counter.php:1380
 #@ default
-#: counter.php:1220
 msgid "Title"
 msgstr "Titlul"
 
+#: counter-options.php:864
 #@ cpd
-#: counter-options.php:468
 msgid "Referrers - Entries"
 msgstr "Venit - intrări"
 
+#: counter-options.php:865
 #@ cpd
-#: counter-options.php:469
 msgid "How many referrers do you want to see on dashboard page?"
 msgstr "Cât de multe au venit doriţi pentru a vedea pagina tabloul de bord?"
 
+#: counter-options.php:868
 #@ cpd
-#: counter-options.php:472
 msgid "Referrers - Days"
 msgstr "Venit - zile"
 
-#@ cpd
-#: counter.php:845
+#: counter.php:944
 #, php-format
+#@ cpd
 msgid "The %s referrers in last %s days:"
 msgstr "%s au venit în ultimele %s zile:"
 
+#: counter-core.php:789
 #@ cpd
-#: counter-core.php:724
 msgid "Visitors online"
 msgstr "Vizitatori online"
 
-#@ cpd
-#: counter-core.php:186
+#: counter-core.php:259
 #, php-format
+#@ cpd
 msgid "\"Count per Day\" updated to version %s."
 msgstr "\"Numărătoarea pe zi\" actualizat la versiunea %s."
 
+#: counter-core.php:1000
 #@ cpd
-#: counter-core.php:917
 msgid "Backup failed! Cannot open file"
 msgstr "Copie de rezervă nu a reușit! Imposibil de deschis fişierul"
 
-#@ cpd
-#: counter-core.php:940
+#: counter-core.php:1027
 #, php-format
+#@ cpd
 msgid "Backup of %s entries in progress. Every point complies %s entries."
 msgstr "Copie de rezervă a %s intrările în curs de desfăşurare. Fiecare punct respectă %s intrări."
 
-#@ cpd
-#: counter-core.php:1027
-msgid "Your wp-content directory is not writable. But you can copy the content of this box to a plain text file."
-msgstr "Directorul wp-content nu este inscriptibil. Dar se pot copia conţinutul de această casetă într-un fişier text simplu."
-
-#@ cpd
-#: counter-core.php:1033
+#: counter-core.php:1118
+#: counter-core.php:1126
 #, php-format
+#@ cpd
 msgid "Backup of counter table saved in %s."
 msgstr "Copie de rezervă a contracara tabel salvate în % s."
 
-#@ cpd
-#: counter-core.php:1035
+#: counter-core.php:1120
+#: counter-core.php:1128
 #, php-format
+#@ cpd
 msgid "Backup of counter options and collection saved in %s."
 msgstr "Copie de rezervă a counter opţiuni şi colectarea salvate în % s."
 
+#: counter-options.php:169
 #@ cpd
-#: counter-options.php:170
 msgid "Collection in progress..."
 msgstr "Colectare în desfăşurare..."
 
+#: counter-options.php:263
 #@ cpd
-#: counter-options.php:240
 msgid "Get Visitors per Post..."
 msgstr "Obţineţi de vizitatori pe Post..."
 
+#: counter-options.php:284
 #@ cpd
-#: counter-options.php:261
 msgid "Delete old data..."
 msgstr "Ştergere date vechi..."
 
+#: counter-options.php:317
 #@ cpd
-#: counter-options.php:285
-#, php-format
-msgid "Counter entries until %s collected and counter table %s optimized (size before = %s > size after = %s)."
-msgstr "Contor intrări până la %s colectate şi contra tabelul %s optimizat (dimensiunea înainte = %s > dimensiune după = % s)."
-
-#@ cpd
-#: counter-options.php:294
 msgid "Installation of \"Count per Day\" checked"
 msgstr "Instalarea de \"Numărătoarea pe zi\" verificat"
 
+#: counter-options.php:400
+#: counter-options.php:739
 #@ default
-#: counter-options.php:342
-#: counter-options.php:566
 msgid "Tools"
 msgstr "Instrumente"
 
+#: counter-options.php:791
 #@ cpd
-#: counter-options.php:394
 msgid "Save URL only, no query string."
 msgstr "Salva URL-ul doar, nici un şir de interogare."
 
+#: counter-options.php:815
 #@ cpd
-#: counter-options.php:419
 msgid "Who can see it"
 msgstr "Cine poate vedea it"
 
+#: counter-options.php:824
 #@ cpd
-#: counter-options.php:428
 msgid "custom"
 msgstr "personalizat"
 
+#: counter-options.php:826
 #@ cpd
-#: counter-options.php:430
 msgid "and higher are allowed to see the statistics page."
 msgstr "şi mai sunt permise pentru a vedea pagina de statistici."
 
-#@ cpd
-#: counter-options.php:432
+#: counter-options.php:828
 #, php-format
+#@ cpd
 msgid "Set the %s capability %s a user need:"
 msgstr "Setaţi capacitatea de %s %s nevoie de un utilizator:"
 
+#: counter-options.php:915
 #@ cpd
-#: counter-options.php:522
 msgid "Stylesheet"
 msgstr "StyleSheet"
 
+#: counter-options.php:918
 #@ cpd
-#: counter-options.php:525
 msgid "NO Stylesheet in Frontend"
 msgstr "Nici un stil în Frontend"
 
+#: counter-options.php:919
 #@ cpd
-#: counter-options.php:526
 msgid "Do not load the stylesheet \"counter.css\" in frontend."
 msgstr "Nu încărcaţi stil \"counter.css\" din interfaţă."
 
+#: counter-options.php:476
+#: counter-options.php:926
 #@ cpd
-#: counter-options.php:534
-#: counter-options.php:639
 msgid "Backup"
 msgstr "Copie de rezervă"
 
+#: counter-options.php:929
 #@ cpd
-#: counter-options.php:537
 msgid "Entries per pass"
 msgstr "Intrările pe pass"
 
+#: counter-options.php:932
 #@ cpd
-#: counter-options.php:540
 msgid "How many entries should be saved per pass? Default: 10000"
 msgstr "Intrările cât de multe ar trebui să fie salvate trece? Implicit: 10000"
 
+#: counter-options.php:937
 #@ cpd
-#: counter-options.php:545
 msgid "If your PHP memory limit less then 50 MB and you get a white page or error messages try a smaller value."
 msgstr "Dacă PHP memorie limită mai apoi 50 MB şi tu a lua o pagină alb sau mesaje de eroare încercaţi o valoare mai mică."
 
-#@ cpd
-#: counter-options.php:643
+#: counter-options.php:480
 #, php-format
+#@ cpd
 msgid "Create a backup of the counter table %s in your wp-content directory (if writable)."
 msgstr "Creaţi o copie de rezervă a tabelului contor %s în directorul wp-content (dacă este inscriptibil)."
 
+#: counter-options.php:487
 #@ cpd
-#: counter-options.php:647
 msgid "Backup the database"
 msgstr "Backup baza de date"
 
+#: counter-options.php:591
+#: counter-options.php:623
 #@ cpd
-#: counter-options.php:674
-#: counter-options.php:706
 msgid "Collect old data"
 msgstr "Colectarea de date vechi"
 
-#@ cpd
-#: counter-options.php:679
+#: counter-options.php:577
+#: counter-options.php:596
 #, php-format
+#@ cpd
 msgid "Current size of your counter table %s is %s."
 msgstr "Dimensiunea actuală a contracara tabel %s este % s."
 
+#: counter-options.php:598
 #@ cpd
-#: counter-options.php:681
 msgid "You can collect old data and clean up the counter table.<br/>Reads and visitors will be saved per month, per country and per post.<br/>Clients and referrers will deleted."
 msgstr "Puteţi colecta date vechi şi clean up tabelul contor. <br/>Citeşte şi vizitatorii vor fi salvate pe lună, pe ţări şi pe post. <br/>Clienti si au venit se vor şterge."
 
-#@ cpd
-#: counter-options.php:686
+#: counter-options.php:603
 #, php-format
+#@ cpd
 msgid "Currently your collection contains data until %s."
 msgstr "Colecţia conţine în prezent date până la % s."
 
+#: counter-options.php:607
 #@ cpd
-#: counter-options.php:690
 msgid "Normally new data will be added to the collection."
 msgstr "Date noi în mod normal va fi adăugate la colecţie."
 
+#: counter-options.php:613
 #@ cpd
-#: counter-options.php:696
 msgid "Delete old collection and create a new one which contains only the data currently in counter table."
 msgstr "Şterge colecţie vechi şi de a crea unul nou, care conţine numai datele în prezent în tabelul contor."
 
-#@ cpd
-#: counter-options.php:697
+#: counter-options.php:614
 #, php-format
+#@ cpd
 msgid "All collected data until %s will deleted."
 msgstr "Toate datele colectate până când %s va şterge."
 
-#@ cpd
-#: counter-options.php:702
+#: counter-options.php:619
 #, php-format
+#@ cpd
 msgid "Keep entries of last %s full months + current month in counter table."
 msgstr "Păstraţi intrările din ultimele luni complete %s + luna curentă în tabelul de contor."
 
+#: counter-options.php:670
 #@ cpd
-#: counter-options.php:761
 msgid "ReActivation"
 msgstr "Reactivare"
 
+#: counter-options.php:673
 #@ cpd
-#: counter-options.php:764
 msgid "Here you can start the installation functions manually.<br/>Same as deactivate and reactivate the plugin."
 msgstr "Aici aveţi posibilitatea să porniţi funcţiile de instalare manuală. <br/>Fel ca deactivati si reactivati pluginul."
 
+#: counter-options.php:678
 #@ cpd
-#: counter-options.php:769
 msgid "ReActivate the plugin"
 msgstr "Reactiva plugin-ul"
 
+#: counter.php:228
+#: counter.php:998
 #@ cpd
-#: counter.php:165
-#: counter.php:899
 msgid "Visitors"
 msgstr "Vizitatori"
 
+#: counter.php:231
+#: counter.php:232
 #@ cpd
-#: counter.php:168
-#: counter.php:169
 msgid "Most visited day"
 msgstr "Cele mai vizitate de zi"
 
+#: counter.php:1399
 #@ cpd
-#: counter.php:1239
 msgid "drag and drop to sort"
 msgstr "Glisaţi şi fixaţi pentru a sorta"
+
+#: counter-core.php:794
+#: counter.php:229
+#: counter.php:328
+#: counter.php:1169
+#: counter.php:1366
+#: userperspan.php:46
+#@ cpd
+msgid "Visitors per day"
+msgstr ""
+
+#: counter-core.php:795
+#: counter-options.php:864
+#: counter-options.php:868
+#@ cpd
+msgid "Search strings"
+msgstr ""
+
+#: counter-core.php:1114
+#@ cpd
+msgid "Your can download the backup files here and now."
+msgstr ""
+
+#: counter-core.php:1184
+#@ cpd
+msgid "Error while reading backup file!"
+msgstr ""
+
+#: counter-core.php:1188
+#, php-format
+#@ cpd
+msgid "The backup was added to counter table %s."
+msgstr ""
+
+#: counter-core.php:1190
+#, php-format
+#@ cpd
+msgid "The counter table %s was restored from backup."
+msgstr ""
+
+#: counter-core.php:1207
+#@ cpd
+msgid "Options restored from backup."
+msgstr ""
+
+#: counter-options.php:308
+#, php-format
+#@ cpd
+msgid "Counter entries until %s collected and counter table %s optimized (size before = %s &gt; size after = %s)."
+msgstr ""
+
+#: counter-options.php:332
+#@ cpd
+msgid "Old search strings deleted"
+msgstr ""
+
+#: counter-options.php:347
+#@ cpd
+msgid "Clients and referers deleted"
+msgstr ""
+
+#: counter-options.php:483
+#@ cpd
+msgid "Download only"
+msgstr ""
+
+#: counter-options.php:515
+#@ cpd
+msgid "Settings and collections"
+msgstr ""
+
+#: counter-options.php:520
+#, php-format
+#@ cpd
+msgid "Counter table %s"
+msgstr ""
+
+#: counter-options.php:527
+#, php-format
+#@ cpd
+msgid "Add data from the backup file %s to existing counter table?"
+msgstr ""
+
+#: counter-options.php:527
+#@ cpd
+msgid "Add"
+msgstr ""
+
+#: counter-options.php:531
+#, php-format
+#@ cpd
+msgid "Restore data from the backup file %s ?"
+msgstr ""
+
+#: counter-options.php:531
+#@ default
+msgid "Restore"
+msgstr ""
+
+#: counter-options.php:533
+#@ default
+msgid "Delete"
+msgstr ""
+
+#: counter-options.php:534
+#, php-format
+#@ cpd
+msgid "Delete the backup file %s ?"
+msgstr ""
+
+#: counter-options.php:540
+#@ cpd
+msgid "add backup to current counter table"
+msgstr ""
+
+#: counter-options.php:541
+#@ cpd
+msgid "replace current counter table with with backup"
+msgstr ""
+
+#: counter-options.php:542
+#@ cpd
+msgid "delete backup file"
+msgstr ""
+
+#: counter-options.php:567
+#, php-format
+#@ cpd
+msgid "Delete search strings older than %s days."
+msgstr ""
+
+#: counter-options.php:571
+#@ cpd
+msgid "Delete search strings"
+msgstr ""
+
+#: counter-options.php:578
+#, php-format
+#@ cpd
+msgid "Delete clients and referers older than %s days to reduce the size of the counter table."
+msgstr ""
+
+#: counter-options.php:582
+#@ cpd
+msgid "Delete clients and referers"
+msgstr ""
+
+#: counter.php:227
+#: counter.php:1364
+#@ cpd
+msgid "Visitors last week"
+msgstr ""
+
+#: counter.php:230
+#: counter.php:924
+#: counter.php:1368
+#@ cpd
+msgid "Counter starts on"
+msgstr ""
+
+#: counter.php:1100
+#@ default
+msgid "Front page"
+msgstr ""
+
+#: counter.php:1142
+#, php-format
+#@ cpd
+msgid "The %s most searched strings:"
+msgstr ""
+
+#: counter.php:1151
+#, php-format
+#@ cpd
+msgid "The search strings of the last %s days:"
+msgstr ""
+
+#: counter.php:1315
+#@ default
+msgid "_name"
+msgstr ""
+

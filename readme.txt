@@ -2,8 +2,8 @@
 Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
-Tested up to: 3.6
-Stable tag: 3.2.9
+Tested up to: 3.9
+Stable tag: 3.2.10
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -306,6 +306,15 @@ show( $before, $after, $show, $count, $page )'
 
 
 == Changelog ==
+
+= 3.2.10 =
++ Bugfix: Plugin dir path fixed
++ Bugfix: CSS path fixed
++ Bugfix: search word now case insensitive
++ Bugfix: Translation of widget titles
++ New: world map of current visitors
++ New: check referer agains bot list
++ New: delete clients and referers of older entries
 
 = 3.2.9 =
 + Bugfix: PHP without IPv6 support
