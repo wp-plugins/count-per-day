@@ -1,0 +1,922 @@
+# Copyright (C) 2014 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/count-per-day\n"
+"POT-Creation-Date: 2014-09-11 08:47:50+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: counter-core.php:232
+msgid "\"Count per Day\" updated to version %s."
+msgstr ""
+
+#: counter-core.php:641 counter-options.php:409
+msgid "Settings"
+msgstr ""
+
+#: counter-core.php:742
+msgid "Time for Count per Day: <code>%s</code>."
+msgstr ""
+
+#: counter-core.php:743
+msgid "Bug? Problem? Question? Hint? Praise?"
+msgstr ""
+
+#: counter-core.php:744
+msgid "Write a comment on the <a href=\"%s\">plugin page</a>."
+msgstr ""
+
+#: counter-core.php:745
+msgid "License"
+msgstr ""
+
+#: counter-core.php:777 counter.php:236 counter.php:1218 counter.php:1412
+msgid "Total visitors"
+msgstr ""
+
+#: counter-core.php:778
+msgid "Visitors online"
+msgstr ""
+
+#: counter-core.php:779 counter.php:1416
+msgid "Visitors per month"
+msgstr ""
+
+#: counter-core.php:780 counter.php:1411
+msgid "Reads per month"
+msgstr ""
+
+#: counter-core.php:781 counter-options.php:924
+msgid "Visitors per post"
+msgstr ""
+
+#: counter-core.php:782
+msgid "Latest Counts"
+msgstr ""
+
+#: counter-core.php:783 counter.php:242 counter.php:343 counter.php:1220
+#: counter.php:1417 userperspan.php:46
+msgid "Visitors per day"
+msgstr ""
+
+#: counter-core.php:784 counter-options.php:954 counter-options.php:958
+msgid "Search strings"
+msgstr ""
+
+#: counter-core.php:785
+msgid "Plugin"
+msgstr ""
+
+#: counter-core.php:788 counter-options.php:950
+msgid "Browsers"
+msgstr ""
+
+#: counter-core.php:789
+msgid "Referrer"
+msgstr ""
+
+#: counter-core.php:793
+msgid "Reads per Country"
+msgstr ""
+
+#: counter-core.php:794
+msgid "Visitors per Country"
+msgstr ""
+
+#: counter-core.php:809 counter.php:1334
+msgid "Statistics"
+msgstr ""
+
+#: counter-core.php:986
+msgid "Export failed! Cannot open file."
+msgstr ""
+
+#: counter-core.php:1034
+msgid "Download the export file:"
+msgstr ""
+
+#: counter-core.php:1062
+msgid "Backup failed! Cannot open file"
+msgstr ""
+
+#: counter-core.php:1089
+msgid "Backup of %s entries in progress. Every point comprises %s entries."
+msgstr ""
+
+#: counter-core.php:1176
+msgid "Your can download the backup files here and now."
+msgstr ""
+
+#: counter-core.php:1180 counter-core.php:1188
+msgid "Backup of counter table saved in %s."
+msgstr ""
+
+#: counter-core.php:1182 counter-core.php:1190
+msgid "Backup of counter options and collection saved in %s."
+msgstr ""
+
+#: counter-core.php:1246
+msgid "Error while reading backup file!"
+msgstr ""
+
+#: counter-core.php:1250
+msgid "The backup was added to counter table %s."
+msgstr ""
+
+#: counter-core.php:1252
+msgid "The counter table %s was restored from backup."
+msgstr ""
+
+#: counter-core.php:1269
+msgid "Options restored from backup."
+msgstr ""
+
+#: counter-core.php:1526 counter-options.php:869 counter.php:235
+#: counter.php:1019
+msgid "Reads"
+msgstr ""
+
+#: counter-options.php:52
+msgid "Options updated"
+msgstr ""
+
+#: counter-options.php:63
+msgid "Countries updated. <b>%s</b> entries in %s without country left"
+msgstr ""
+
+#: counter-options.php:66
+msgid "update next"
+msgstr ""
+
+#: counter-options.php:106
+msgid "Mass Bots cleaned. %s counts deleted."
+msgstr ""
+
+#: counter-options.php:118
+msgid "Database cleaned. %s rows deleted."
+msgstr ""
+
+#: counter-options.php:128
+msgid "Counter reseted."
+msgstr ""
+
+#: counter-options.php:133 counter-options.php:803
+msgid "UNINSTALL Count per Day"
+msgstr ""
+
+#: counter-options.php:138 counter-options.php:139 counter-options.php:140
+msgid "Table %s deleted"
+msgstr ""
+
+#: counter-options.php:141
+msgid "Options deleted"
+msgstr ""
+
+#: counter-options.php:174
+msgid "Collection in progress..."
+msgstr ""
+
+#: counter-options.php:268
+msgid "Get Visitors per Post..."
+msgstr ""
+
+#: counter-options.php:289
+msgid "Deleting old data..."
+msgstr ""
+
+#: counter-options.php:313
+msgid ""
+"Counter entries until %s collected and counter table %s optimized (size "
+"before = %s &gt; size after = %s)."
+msgstr ""
+
+#: counter-options.php:322
+msgid "Installation of \"Count per Day\" checked"
+msgstr ""
+
+#: counter-options.php:337
+msgid "Old search strings deleted"
+msgstr ""
+
+#: counter-options.php:352
+msgid "Clients and referers deleted"
+msgstr ""
+
+#: counter-options.php:382 counter-options.php:789
+msgid "Uninstall"
+msgstr ""
+
+#: counter-options.php:383
+msgid "Click here"
+msgstr ""
+
+#: counter-options.php:383
+msgid "to finish the uninstall and to deactivate \"Count per Day\"."
+msgstr ""
+
+#: counter-options.php:408
+msgid "Tools"
+msgstr ""
+
+#: counter-options.php:429 massbots.php:46
+msgid "Mass Bots"
+msgstr ""
+
+#: counter-options.php:433
+msgid "Show all IPs with more than %s page views per day"
+msgstr ""
+
+#: counter-options.php:434 counter-options.php:498 notes.php:84
+#: userperspan.php:56
+msgid "show"
+msgstr ""
+
+#: counter-options.php:442 counter-options.php:506
+msgid "IP"
+msgstr ""
+
+#: counter-options.php:443 counter-options.php:507 notes.php:88
+msgid "Date"
+msgstr ""
+
+#: counter-options.php:444 counter-options.php:508
+msgid "Client"
+msgstr ""
+
+#: counter-options.php:445 counter-options.php:509
+msgid "Views"
+msgstr ""
+
+#: counter-options.php:460 counter-options.php:476 counter-options.php:523
+msgid "Delete these %s counts"
+msgstr ""
+
+#: counter-options.php:493
+msgid "Most Industrious Visitors"
+msgstr ""
+
+#: counter-options.php:497
+msgid "Show the %s most industrious visitors of the last %s days"
+msgstr ""
+
+#: counter-options.php:544
+msgid "Export"
+msgstr ""
+
+#: counter-options.php:548
+msgid "Export the last %s days as CSV-File"
+msgstr ""
+
+#: counter-options.php:552
+msgid "Export entries"
+msgstr ""
+
+#: counter-options.php:560 counter-options.php:1016
+msgid "Backup"
+msgstr ""
+
+#: counter-options.php:564
+msgid ""
+"Create a backup of the counter table %s in your wp-content directory (if "
+"writable)."
+msgstr ""
+
+#: counter-options.php:567
+msgid "Download only"
+msgstr ""
+
+#: counter-options.php:571
+msgid "Backup the database"
+msgstr ""
+
+#: counter-options.php:599
+msgid "Settings and collections"
+msgstr ""
+
+#: counter-options.php:604
+msgid "Counter table %s"
+msgstr ""
+
+#: counter-options.php:611
+msgid "Add data from the backup file %s to existing counter table?"
+msgstr ""
+
+#: counter-options.php:611
+msgid "Add"
+msgstr ""
+
+#: counter-options.php:615
+msgid "Restore data from the backup file %s ?"
+msgstr ""
+
+#: counter-options.php:615
+msgid "Restore"
+msgstr ""
+
+#: counter-options.php:617
+msgid "Delete"
+msgstr ""
+
+#: counter-options.php:618
+msgid "Delete the backup file %s ?"
+msgstr ""
+
+#: counter-options.php:624
+msgid "add backup to current counter table"
+msgstr ""
+
+#: counter-options.php:625
+msgid "replace current counter table with with backup"
+msgstr ""
+
+#: counter-options.php:626
+msgid "delete backup file"
+msgstr ""
+
+#: counter-options.php:637 counter-options.php:645
+msgid "Clean the database"
+msgstr ""
+
+#: counter-options.php:641
+msgid ""
+"You can clean the counter table by delete the \"spam data\".<br />If you add "
+"new bots above the old \"spam data\" keeps in the database.<br />Here you "
+"can run the bot filter again and delete the visits of the bots."
+msgstr ""
+
+#: counter-options.php:651
+msgid "Delete search strings older than %s days."
+msgstr ""
+
+#: counter-options.php:655
+msgid "Delete search strings"
+msgstr ""
+
+#: counter-options.php:661 counter-options.php:680
+msgid "Current size of your counter table %s is %s."
+msgstr ""
+
+#: counter-options.php:662
+msgid ""
+"Delete clients and referers older than %s days to reduce the size of the "
+"counter table."
+msgstr ""
+
+#: counter-options.php:666
+msgid "Delete clients and referers"
+msgstr ""
+
+#: counter-options.php:675 counter-options.php:707
+msgid "Collect old data"
+msgstr ""
+
+#: counter-options.php:682
+msgid ""
+"You can collect old data and clean up the counter table.<br/>Reads and "
+"visitors will be saved per month, per country and per post.<br/>Clients and "
+"referrers will deleted."
+msgstr ""
+
+#: counter-options.php:687
+msgid "Currently your collection contains data until %s."
+msgstr ""
+
+#: counter-options.php:691
+msgid "Normally new data will be added to the collection."
+msgstr ""
+
+#: counter-options.php:697
+msgid ""
+"Delete old collection and create a new one which contains only the data "
+"currently in counter table."
+msgstr ""
+
+#: counter-options.php:698
+msgid "All collected data until %s will deleted."
+msgstr ""
+
+#: counter-options.php:703
+msgid "Keep entries of last %s full months + current month in counter table."
+msgstr ""
+
+#: counter-options.php:720
+msgid "GeoIP - Countries"
+msgstr ""
+
+#: counter-options.php:723
+msgid ""
+"You can get the country data for all entries in database by checking the IP "
+"adress against the GeoIP database. This can take a while!"
+msgstr ""
+
+#: counter-options.php:729
+msgid "Update old counter data"
+msgstr ""
+
+#: counter-options.php:736
+msgid "Download a new version of GeoIP.dat file."
+msgstr ""
+
+#: counter-options.php:741
+msgid "Update GeoIP database"
+msgstr ""
+
+#: counter-options.php:746
+msgid "More informations about GeoIP"
+msgstr ""
+
+#: counter-options.php:754
+msgid "ReActivation"
+msgstr ""
+
+#: counter-options.php:757
+msgid ""
+"Here you can start the installation functions manually.<br/>Same as "
+"deactivate and reactivate the plugin."
+msgstr ""
+
+#: counter-options.php:762
+msgid "ReActivate the plugin"
+msgstr ""
+
+#: counter-options.php:770 counter-options.php:780
+msgid "Reset the counter"
+msgstr ""
+
+#: counter-options.php:773
+msgid ""
+"You can reset the counter by empty the table. ALL TO 0!<br />Make a backup "
+"if you need the current data!"
+msgstr ""
+
+#: counter-options.php:779 counter-options.php:802
+msgid "Yes"
+msgstr ""
+
+#: counter-options.php:792
+msgid ""
+"If \"Count per Day\" only disabled the tables in the database will be "
+"preserved."
+msgstr ""
+
+#: counter-options.php:793
+msgid "Here you can delete the tables and disable \"Count per Day\"."
+msgstr ""
+
+#: counter-options.php:796
+msgid "WARNING"
+msgstr ""
+
+#: counter-options.php:797
+msgid "These tables (with ALL counter data) will be deleted."
+msgstr ""
+
+#: counter-options.php:799
+msgid "If \"Count per Day\" re-installed, the counter starts at 0."
+msgstr ""
+
+#: counter-options.php:803
+msgid "You are sure to disable Count per Day and delete all data?"
+msgstr ""
+
+#: counter-options.php:811
+msgid "Support"
+msgstr ""
+
+#: counter-options.php:828
+msgid "Counter"
+msgstr ""
+
+#: counter-options.php:832
+msgid "Online time"
+msgstr ""
+
+#: counter-options.php:833
+msgid ""
+"Seconds for online counter. Used for \"Visitors online\" on dashboard page."
+msgstr ""
+
+#: counter-options.php:836
+msgid "Logged on Users"
+msgstr ""
+
+#: counter-options.php:838
+msgid "count too"
+msgstr ""
+
+#: counter-options.php:839
+msgid "until User Level"
+msgstr ""
+
+#: counter-options.php:850
+msgid "Auto counter"
+msgstr ""
+
+#: counter-options.php:851
+msgid ""
+"Counts automatically single-posts and pages, no changes on template needed."
+msgstr ""
+
+#: counter-options.php:854
+msgid "Bots to ignore"
+msgstr ""
+
+#: counter-options.php:858
+msgid "Anonymous IP"
+msgstr ""
+
+#: counter-options.php:862
+msgid "Cache"
+msgstr ""
+
+#: counter-options.php:863
+msgid "I use a cache plugin. Count these visits with ajax."
+msgstr ""
+
+#: counter-options.php:866
+msgid "Clients and referrers"
+msgstr ""
+
+#: counter-options.php:869
+msgid ""
+"Save and show clients and referrers.<br />Needs a lot of space in the "
+"database but gives you more detailed informations of your visitors."
+msgstr ""
+
+#: counter-options.php:871
+msgid "Save URL only, no query string."
+msgstr ""
+
+#: counter-options.php:875
+msgid "Post types"
+msgstr ""
+
+#: counter-options.php:878
+msgid "Only count these post types. Leave empty to count them all."
+msgstr ""
+
+#: counter-options.php:879
+msgid "Current post types: %s"
+msgstr ""
+
+#: counter-options.php:889
+msgid "Dashboard"
+msgstr ""
+
+#: counter-options.php:905
+msgid "Who can see it"
+msgstr ""
+
+#: counter-options.php:914
+msgid "custom"
+msgstr ""
+
+#: counter-options.php:916
+msgid "and higher are allowed to see the statistics page."
+msgstr ""
+
+#: counter-options.php:918
+msgid "Set the %s capability %s a user need:"
+msgstr ""
+
+#: counter-options.php:925 counter-options.php:929
+msgid "How many posts do you want to see on dashboard page?"
+msgstr ""
+
+#: counter-options.php:928
+msgid "Latest Counts - Posts"
+msgstr ""
+
+#: counter-options.php:932
+msgid "Latest Counts - Days"
+msgstr ""
+
+#: counter-options.php:933 counter-options.php:937 counter-options.php:959
+msgid "How many days do you want look back?"
+msgstr ""
+
+#: counter-options.php:936
+msgid "Chart - Days"
+msgstr ""
+
+#: counter-options.php:940
+msgid "Chart - Height"
+msgstr ""
+
+#: counter-options.php:941
+msgid "Height of the biggest bar"
+msgstr ""
+
+#: counter-options.php:945
+msgid "Countries"
+msgstr ""
+
+#: counter-options.php:946
+msgid "How many countries do you want to see on dashboard page?"
+msgstr ""
+
+#: counter-options.php:951
+msgid "Substring of the user agent, separated by comma"
+msgstr ""
+
+#: counter-options.php:954
+msgid "Referrers - Entries"
+msgstr ""
+
+#: counter-options.php:955
+msgid "How many referrers do you want to see on dashboard page?"
+msgstr ""
+
+#: counter-options.php:958
+msgid "Referrers - Days"
+msgstr ""
+
+#: counter-options.php:962
+msgid "Local URLs"
+msgstr ""
+
+#: counter-options.php:963
+msgid "Show local referrers too."
+msgstr ""
+
+#: counter-options.php:970
+msgid "Posts"
+msgstr ""
+
+#: counter-options.php:970
+msgid "Pages"
+msgstr ""
+
+#: counter-options.php:973
+msgid "Show in lists"
+msgstr ""
+
+#: counter-options.php:974
+msgid "Show \"Reads per Post\" in a new column in post management views."
+msgstr ""
+
+#: counter-options.php:981
+msgid "Start Values"
+msgstr ""
+
+#: counter-options.php:985
+msgid "Here you can change the date of first count and add a start count."
+msgstr ""
+
+#: counter-options.php:989
+msgid "Start date"
+msgstr ""
+
+#: counter-options.php:990
+msgid "Your old Counter starts at?"
+msgstr ""
+
+#: counter-options.php:993 counter-options.php:997
+msgid "Start count"
+msgstr ""
+
+#: counter-options.php:994
+msgid "Add this value to \"Total visitors\"."
+msgstr ""
+
+#: counter-options.php:998
+msgid "Add this value to \"Total reads\"."
+msgstr ""
+
+#: counter-options.php:1005
+msgid "Stylesheet"
+msgstr ""
+
+#: counter-options.php:1008
+msgid "NO Stylesheet in Frontend"
+msgstr ""
+
+#: counter-options.php:1009
+msgid "Do not load the stylesheet \"counter.css\" in frontend."
+msgstr ""
+
+#: counter-options.php:1019
+msgid "Entries per pass"
+msgstr ""
+
+#: counter-options.php:1022
+msgid "How many entries should be saved per pass? Default: 10000"
+msgstr ""
+
+#: counter-options.php:1027
+msgid ""
+"If your PHP memory limit less then 50 MB and you get a white page or error "
+"messages try a smaller value."
+msgstr ""
+
+#: counter-options.php:1035
+msgid "Debug mode"
+msgstr ""
+
+#: counter-options.php:1037
+msgid "Show debug informations at the bottom of all pages."
+msgstr ""
+
+#: counter-options.php:1042
+msgid "Update options"
+msgstr ""
+
+#: counter.php:231 counter.php:1407
+msgid "Total reads"
+msgstr ""
+
+#: counter.php:232 counter.php:1408
+msgid "Reads today"
+msgstr ""
+
+#: counter.php:233 counter.php:1409
+msgid "Reads yesterday"
+msgstr ""
+
+#: counter.php:234 counter.php:1410
+msgid "Reads last week"
+msgstr ""
+
+#: counter.php:237 counter.php:1418
+msgid "Visitors currently online"
+msgstr ""
+
+#: counter.php:238 counter.php:1413
+msgid "Visitors today"
+msgstr ""
+
+#: counter.php:239 counter.php:1414
+msgid "Visitors yesterday"
+msgstr ""
+
+#: counter.php:240 counter.php:1415
+msgid "Visitors last week"
+msgstr ""
+
+#: counter.php:241 counter.php:1043
+msgid "Visitors"
+msgstr ""
+
+#: counter.php:243
+msgid "Since"
+msgstr ""
+
+#: counter.php:244 counter.php:245
+msgid "Most visited day"
+msgstr ""
+
+#: counter.php:342
+msgid "Reads per day"
+msgstr ""
+
+#: counter.php:433 counter.php:1249
+msgid "Map"
+msgstr ""
+
+#: counter.php:771
+msgid "The %s most visited posts in last %s days:"
+msgstr ""
+
+#: counter.php:888
+msgid "Show"
+msgstr ""
+
+#: counter.php:890 notes.php:55 notes.php:89
+msgid "Notes"
+msgstr ""
+
+#: counter.php:958
+msgid "Other"
+msgstr ""
+
+#: counter.php:969 counter.php:1419
+msgid "Counter starts on"
+msgstr ""
+
+#: counter.php:989
+msgid "The %s referrers in last %s days:"
+msgstr ""
+
+#: counter.php:1130
+msgid "Edit Post"
+msgstr ""
+
+#: counter.php:1139
+msgid "Category"
+msgstr ""
+
+#: counter.php:1142
+msgid "Tag"
+msgstr ""
+
+#: counter.php:1145
+msgid "Front page"
+msgstr ""
+
+#: counter.php:1193
+msgid "The %s most searched strings:"
+msgstr ""
+
+#: counter.php:1202
+msgid "The search strings of the last %s days:"
+msgstr ""
+
+#: counter.php:1406
+msgid "This post"
+msgstr ""
+
+#: counter.php:1431
+msgid "Title"
+msgstr ""
+
+#: counter.php:1450
+msgid "drag and drop to sort"
+msgstr ""
+
+#: counter.php:1502 counter.php:1534
+msgid "Popular Posts"
+msgstr ""
+
+#: counter.php:1504
+msgid "List of Popular Posts"
+msgstr ""
+
+#: counter.php:1542
+msgid "Title:"
+msgstr ""
+
+#: counter.php:1546
+msgid "Days:"
+msgstr ""
+
+#: counter.php:1550
+msgid "Limit:"
+msgstr ""
+
+#: counter.php:1554
+msgid "Show header:"
+msgstr ""
+
+#: counter.php:1558
+msgid "Show counters:"
+msgstr ""
+
+#: geoip/geoip.php:117
+msgid "Sorry, necessary functions (zlib) not installed or enabled in php.ini."
+msgstr ""
+
+#: geoip/geoip.php:142
+msgid "New GeoIP database installed."
+msgstr ""
+
+#: geoip/geoip.php:144
+msgid ""
+"Sorry, an error occurred. Try again or check the access rights of directory "
+"\"geoip\" is 777."
+msgstr ""
+
+#: massbots.php:63 userperspan.php:75
+msgid "Front page displays"
+msgstr ""
+
+#: notes.php:90
+msgid "Action"
+msgstr ""
+
+#: notes.php:95
+msgid "add"
+msgstr ""
+
+#: notes.php:111
+msgid "save"
+msgstr ""
+
+#: notes.php:112
+msgid "delete"
+msgstr ""
+
+#: notes.php:123
+msgid "edit"
+msgstr ""
+
+#: userperspan.php:50
+msgid "Start"
+msgstr ""
+
+#: userperspan.php:52
+msgid "End"
+msgstr ""
+
+#: userperspan.php:54
+msgid "PostID"
+msgstr ""
+
+#: userperspan.php:62
+msgid "no data found"
+msgstr ""
