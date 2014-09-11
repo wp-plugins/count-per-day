@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Count Per Day v3.2.10\n"
+"Project-Id-Version: Count Per Day v3.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-02 12:13+0100\n"
-"PO-Revision-Date: 2014-05-08 08:17:56+0000\n"
+"PO-Revision-Date: 2014-09-11 07:26:31+0000\n"
 "Last-Translator: Madat <translator.baku@gmail.com>\n"
 "Language-Team: Webmestre <translator.baku@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -25,297 +25,295 @@ msgstr ""
 msgid "Options updated"
 msgstr "تنظیمات بروز شد"
 
-#: counter-options.php:113
+#: counter-options.php:118
 #, php-format
 #@ cpd
 msgid "Database cleaned. %s rows deleted."
 msgstr "بانک اطلاعات پاک شد. %s سطر پاک شد."
 
-#: counter-options.php:128
-#: counter-options.php:719
+#: counter-options.php:133
+#: counter-options.php:803
 #@ cpd
 msgid "UNINSTALL Count per Day"
 msgstr "حذف Count per Day"
 
-#: counter-options.php:133
-#: counter-options.php:134
-#: counter-options.php:135
+#: counter-options.php:138
+#: counter-options.php:139
+#: counter-options.php:140
 #, php-format
 #@ cpd
 msgid "Table %s deleted"
 msgstr "جدول %s حذف شد"
 
-#: counter-options.php:136
+#: counter-options.php:141
 #@ cpd
 msgid "Options deleted"
 msgstr "تنظیمات حذف شد"
 
-#: counter-options.php:377
-#: counter-options.php:705
+#: counter-options.php:382
+#: counter-options.php:789
 #@ cpd
 msgid "Uninstall"
 msgstr "حذف نصب"
 
-#: counter-options.php:378
+#: counter-options.php:383
 #@ cpd
 msgid "Click here"
 msgstr "اینجا کلیک کنید"
 
-#: counter-options.php:378
+#: counter-options.php:383
 #@ cpd
 msgid "to finish the uninstall and to deactivate \"Count per Day\"."
 msgstr "به اتمام نصب و غیرفعالسازی \"Count per Day\"."
 
-#: counter-options.php:752
+#: counter-options.php:832
 #@ cpd
 msgid "Online time"
 msgstr "زمان آنلاین"
 
-#: counter-options.php:753
+#: counter-options.php:833
 #@ cpd
 msgid "Seconds for online counter. Used for \"Visitors online\" on dashboard page."
 msgstr "ثانیه برای شمارنده آنلاین. برای \"بازدیدکنندگان آنلاین\" در صفحه ی پیشخوان مورد استفاده قرار می گیرد."
 
-#: counter-options.php:756
+#: counter-options.php:836
 #@ cpd
 msgid "Logged on Users"
 msgstr ""
 
-#: counter-options.php:758
+#: counter-options.php:838
 #@ cpd
 msgid "count too"
 msgstr ""
 
-#: counter-options.php:770
+#: counter-options.php:850
 #@ cpd
 msgid "Auto counter"
 msgstr "شمارش خودکار"
 
-#: counter-options.php:771
+#: counter-options.php:851
 #@ cpd
 msgid "Counts automatically single-posts and pages, no changes on template needed."
 msgstr "شمارش خودکار تک نوشته ها و صفحات، تغییری بر روی پوسته مورد نیاز نیست."
 
-#: counter-options.php:774
+#: counter-options.php:854
 #@ cpd
 msgid "Bots to ignore"
 msgstr "نادیده گرفتن ربوتها"
 
-#: counter-options.php:952
+#: counter-options.php:1042
 #@ cpd
 msgid "Update options"
 msgstr "بروزرسانی تنظیمات"
 
-#: counter-options.php:553
-#: counter-options.php:561
+#: counter-options.php:637
+#: counter-options.php:645
 #@ cpd
 msgid "Clean the database"
 msgstr "پاک کردن بانک اطلاعات"
 
-#: counter-options.php:557
+#: counter-options.php:641
 #@ cpd
 msgid "You can clean the counter table by delete the \"spam data\".<br />If you add new bots above the old \"spam data\" keeps in the database.<br />Here you can run the bot filter again and delete the visits of the bots."
 msgstr "شما می توانید جدول شمارنده را طبق  \"spam data\" پاک کنید.<br />اگر شما رباتهای برتر قدیمی را اضافه کرده اید، \"spam data\" آنها را در پایگاه داده نگه می دارد.<br />در اینجا شما می توانید فیلتر ربات را دوباره اجرا و بازدید رباتها را حذف کنید."
 
-#: counter-options.php:708
+#: counter-options.php:792
 #@ cpd
 msgid "If \"Count per Day\" only disabled the tables in the database will be preserved."
 msgstr "اگر شما فقط \"Count per Day\" را غیرفعال کنید، جداول در پایگاه داده حفظ خواهد شد."
 
-#: counter-options.php:709
+#: counter-options.php:793
 #@ cpd
 msgid "Here you can delete the tables and disable \"Count per Day\"."
 msgstr "در اینجا شما می توانید جداول \"Count per Day\" را حذف و غیرفعال کنید."
 
-#: counter-options.php:712
+#: counter-options.php:796
 #@ cpd
 msgid "WARNING"
 msgstr "هشدار"
 
-#: counter-options.php:713
+#: counter-options.php:797
 #@ cpd
 msgid "These tables (with ALL counter data) will be deleted."
 msgstr "این جداول (با تمام اطلاعات شمارنده) حذف خواهد شد."
 
-#: counter-options.php:715
+#: counter-options.php:799
 #@ cpd
 msgid "If \"Count per Day\" re-installed, the counter starts at 0."
 msgstr "اگر \"Count per Day\" دوباره نصب شود، شمارشگر 0 می شود."
 
-#: counter-options.php:695
-#: counter-options.php:718
+#: counter-options.php:779
+#: counter-options.php:802
 #@ cpd
 msgid "Yes"
 msgstr "بله"
 
-#: counter-options.php:719
+#: counter-options.php:803
 #@ cpd
 msgid "You are sure to disable Count per Day and delete all data?"
 msgstr "شما مطمئن هستید که میخواهید Count per Day ا غیرفعال و اطلاعات آن را پاک کنید؟"
 
-#: counter-core.php:820
-#: counter.php:1283
+#: counter-core.php:809
+#: counter.php:1334
 #@ cpd
 msgid "Statistics"
 msgstr "آمار"
 
-#: counter-core.php:788
-#: counter.php:223
-#: counter.php:1167
-#: counter.php:1361
+#: counter-core.php:777
+#: counter.php:236
+#: counter.php:1218
+#: counter.php:1412
 #@ cpd
 msgid "Total visitors"
 msgstr "تمام بازدیدکنندگان"
 
-#: counter.php:224
-#: counter.php:1367
+#: counter.php:237
+#: counter.php:1418
 #@ cpd
 msgid "Visitors currently online"
 msgstr "بازدیدکنندگان حاضر"
 
-#: counter.php:225
-#: counter.php:1362
+#: counter.php:238
+#: counter.php:1413
 #@ cpd
 msgid "Visitors today"
 msgstr "بازدیدکنندگان امروز"
 
-#: counter.php:226
-#: counter.php:1363
+#: counter.php:239
+#: counter.php:1414
 #@ cpd
 msgid "Visitors yesterday"
 msgstr "بازدیدکنندگان دیروز"
 
-#: counter.php:227
-#: counter.php:1364
+#: counter.php:240
+#: counter.php:1415
 #@ cpd
 msgid "Visitors last week"
 msgstr "بازدیدکنندگان هفته"
 
-#: counter.php:230
-#: counter.php:924
-#: counter.php:1368
+#: counter.php:969
+#: counter.php:1419
 #@ cpd
 msgid "Counter starts on"
 msgstr "آغاز شمارش در"
 
-#: counter-core.php:794
-#: counter.php:229
-#: counter.php:328
-#: counter.php:1169
-#: counter.php:1366
+#: counter-core.php:783
+#: counter.php:242
+#: counter.php:343
+#: counter.php:1220
+#: counter.php:1417
 #: userperspan.php:46
 #@ cpd
 msgid "Visitors per day"
 msgstr "بازدیدکننده در روز"
 
-#: counter-core.php:790
-#: counter.php:1365
+#: counter-core.php:779
+#: counter.php:1416
 #@ cpd
 msgid "Visitors per month"
 msgstr "بازدیدکننده در ماه"
 
-#: counter-core.php:792
-#: counter-options.php:834
+#: counter-core.php:781
+#: counter-options.php:924
 #@ cpd
 msgid "Visitors per post"
 msgstr "بازدیدکننده نوشته"
 
-#: counter-options.php:123
+#: counter-options.php:128
 #@ cpd
 msgid "Counter reseted."
 msgstr "شمارش تنظیم شد."
 
-#: counter-options.php:799
+#: counter-options.php:889
 #@ default
 msgid "Dashboard"
 msgstr "پیشخوان"
 
-#: counter-options.php:835
-#: counter-options.php:839
+#: counter-options.php:925
+#: counter-options.php:929
 #@ cpd
 msgid "How many posts do you want to see on dashboard page?"
 msgstr "میخواهید چه تعداد از نوشته ها را در پیشخوان خود مشاهده کنید؟"
 
-#: counter-options.php:838
+#: counter-options.php:928
 #@ cpd
 msgid "Latest Counts - Posts"
 msgstr "آخرین شمارش - نوشته ها"
 
-#: counter-options.php:842
+#: counter-options.php:932
 #@ cpd
 msgid "Latest Counts - Days"
 msgstr "آخرین شمارش - روزها"
 
-#: counter-options.php:843
-#: counter-options.php:847
-#: counter-options.php:869
+#: counter-options.php:933
+#: counter-options.php:937
+#: counter-options.php:959
 #@ cpd
 msgid "How many days do you want look back?"
 msgstr "میخواهید اطلاعات چند روز قبل را مشاهده کنید؟"
 
-#: counter-options.php:846
+#: counter-options.php:936
 #@ cpd
 msgid "Chart - Days"
 msgstr "نمودار - روزها"
 
-#: counter-options.php:850
+#: counter-options.php:940
 #@ cpd
 msgid "Chart - Height"
 msgstr "نمودار - ارتفاع"
 
-#: counter-options.php:851
+#: counter-options.php:941
 #@ cpd
 msgid "Height of the biggest bar"
 msgstr "ارتفاع از بزرگترین نوار"
 
-#: counter-options.php:883
+#: counter-options.php:973
 #@ cpd
 msgid "Show in lists"
 msgstr "نمایش در لیستها"
 
-#: counter-options.php:884
+#: counter-options.php:974
 #@ cpd
 msgid "Show \"Reads per Post\" in a new column in post management views."
 msgstr "نمایش شمارنده ی هر نوشته در در یک ستون جدید در قسمت نوشته ها"
 
-#: counter-options.php:686
-#: counter-options.php:696
+#: counter-options.php:770
+#: counter-options.php:780
 #@ cpd
 msgid "Reset the counter"
 msgstr "تنظیم مجدد شمارنده"
 
-#: counter-options.php:689
+#: counter-options.php:773
 #@ cpd
 msgid "You can reset the counter by empty the table. ALL TO 0!<br />Make a backup if you need the current data!"
 msgstr "شما می توانید شمارنده را با استفاده از جدول خالی تنظیم مجدد کنید. همه به 0!<br />اگر نیازی به اطلاعات فعلی دارید، پشتیبان تهیه کنید!"
 
-#: counter.php:756
+#: counter.php:771
 #, php-format
 #@ cpd
 msgid "The %s most visited posts in last %s days:"
 msgstr "%s پربازدیدترین نوشته در %s روز گذشته:"
 
-#: counter-core.php:652
-#: counter-options.php:401
-#: counter-options.php:740
+#: counter-core.php:641
+#: counter-options.php:409
 #@ default
 msgid "Settings"
 msgstr "تنظیمات"
 
-#: counter.php:327
+#: counter.php:342
 #@ cpd
 msgid "Reads per day"
 msgstr "خوانده شده در روز"
 
-#: counter-core.php:1464
-#: counter-options.php:789
-#: counter.php:222
-#: counter.php:974
+#: counter-core.php:1526
+#: counter-options.php:869
+#: counter.php:235
+#: counter.php:1019
 #@ cpd
 msgid "Reads"
 msgstr "خوانده شده در"
 
-#: counter.php:1355
+#: counter.php:1406
 #@ cpd
 msgid "This post"
 msgstr "این نوشته"
@@ -337,188 +335,194 @@ msgstr "بروزرسانی بعدی"
 msgid "Mass Bots cleaned. %s counts deleted."
 msgstr "انبوه رباتها پاک شده اند. %s شماره حذف شده است."
 
-#: counter-options.php:759
+#: counter-options.php:839
 #@ cpd
 msgid "until User Level"
 msgstr ""
 
-#: counter-options.php:778
+#: counter-options.php:858
 #@ cpd
 msgid "Anonymous IP"
 msgstr "آی پی ناشناس"
 
-#: counter-options.php:855
+#: counter-options.php:945
 #@ cpd
 msgid "Countries"
 msgstr "کشورها"
 
-#: counter-options.php:856
+#: counter-options.php:946
 #@ cpd
 msgid "How many countries do you want to see on dashboard page?"
 msgstr "میخواهید چه تعداد از کشورها را در صفحه ی پیشخوان خود مشاهده کنید؟"
 
-#: counter-options.php:891
+#: counter-options.php:981
 #@ cpd
 msgid "Start Values"
 msgstr "شروع مقادیر"
 
-#: counter-options.php:895
+#: counter-options.php:985
 #@ cpd
 msgid "Here you can change the date of first count and add a start count."
 msgstr "شما در اینجا می توانید تاریخ شروع شمارش و مقادیر دیگر را تغییر دهید."
 
-#: counter-options.php:899
+#: counter-options.php:989
 #@ cpd
 msgid "Start date"
 msgstr "شروع روز"
 
-#: counter-options.php:900
+#: counter-options.php:990
 #@ cpd
 msgid "Your old Counter starts at?"
 msgstr "شمارشگر قدیمی شما شروع می شود در؟"
 
-#: counter-options.php:903
-#: counter-options.php:907
+#: counter-options.php:993
+#: counter-options.php:997
 #@ cpd
 msgid "Start count"
 msgstr "شروع شمارش"
 
-#: counter-options.php:904
+#: counter-options.php:994
 #@ cpd
 msgid "Add this value to \"Total visitors\"."
 msgstr "اضافه کردن این مقدار به \"مجموع بازدیدکنندگان\""
 
-#: counter-options.php:636
+#: counter-options.php:720
 #@ cpd
 msgid "GeoIP - Countries"
 msgstr "GeoIP - کشورها"
 
-#: counter-options.php:645
+#: counter-options.php:729
 #@ cpd
 msgid "Update old counter data"
 msgstr "بروزرسانی اطلاعات شمارش قدیمی"
 
-#: counter-options.php:657
+#: counter-options.php:741
 #@ cpd
 msgid "Update GeoIP database"
 msgstr "بروزرسانی بانک اطلاعات GeoIP"
 
-#: counter-options.php:652
+#: counter-options.php:736
 #@ cpd
 msgid "Download a new version of GeoIP.dat file."
 msgstr "دانلود نسخه جدید GeoIP. فایل DAT"
 
-#: counter-options.php:662
+#: counter-options.php:746
 #@ cpd
 msgid "More informations about GeoIP"
 msgstr "اطلاعات دیگر در مورد GeoIP"
 
-#: counter-options.php:417
+#: counter-options.php:429
 #: massbots.php:46
 #@ cpd
 msgid "Mass Bots"
 msgstr "انبوه روبوتها"
 
-#: counter-options.php:421
+#: counter-options.php:433
 #, php-format
 #@ cpd
 msgid "Show all IPs with more than %s page views per day"
 msgstr "نمایش تمام IPها با بیش از %s بازدید از صفحه در روز"
 
-#: counter-options.php:422
+#: counter-options.php:434
+#: counter-options.php:498
 #: notes.php:84
 #: userperspan.php:56
 #@ cpd
 msgid "show"
 msgstr "نمایش"
 
-#: counter-options.php:430
+#: counter-options.php:442
+#: counter-options.php:506
 #@ cpd
 msgid "IP"
 msgstr "آی پی"
 
-#: counter-options.php:431
+#: counter-options.php:443
+#: counter-options.php:507
 #: notes.php:88
 #@ cpd
 #@ default
 msgid "Date"
 msgstr "روز"
 
-#: counter-options.php:432
+#: counter-options.php:444
+#: counter-options.php:508
 #@ cpd
 msgid "Client"
 msgstr "مشتری"
 
-#: counter-options.php:433
+#: counter-options.php:445
+#: counter-options.php:509
 #@ cpd
 msgid "Views"
 msgstr "بازدیدها"
 
-#: counter-options.php:448
-#: counter-options.php:464
+#: counter-options.php:460
+#: counter-options.php:476
+#: counter-options.php:523
 #, php-format
 #@ cpd
 msgid "Delete these %s counts"
 msgstr "حذف %s شمارش"
 
-#: counter-options.php:727
+#: counter-options.php:811
 #@ cpd
 msgid "Support"
 msgstr "پشتیبانی"
 
-#: counter-core.php:753
+#: counter-core.php:742
 #, php-format
 #@ cpd
 msgid "Time for Count per Day: <code>%s</code>."
 msgstr "زمان برای Count per Day: <code>%s</code>."
 
-#: counter-core.php:754
+#: counter-core.php:743
 #@ cpd
 msgid "Bug? Problem? Question? Hint? Praise?"
 msgstr "باگ؟ مشکل؟ سوال؟ راهنمایی؟ تحسین؟"
 
-#: counter-core.php:755
+#: counter-core.php:744
 #, php-format
 #@ cpd
 msgid "Write a comment on the <a href=\"%s\">plugin page</a>."
 msgstr "نظر خود را در <a href=\"%s\">صفحه ی افزونه</a> بنویسید."
 
-#: counter.php:218
-#: counter.php:1356
+#: counter.php:231
+#: counter.php:1407
 #@ cpd
 msgid "Total reads"
 msgstr "مجموع خوانده شده ها"
 
-#: counter.php:219
-#: counter.php:1357
+#: counter.php:232
+#: counter.php:1408
 #@ cpd
 msgid "Reads today"
 msgstr "خوانده شده های امروز"
 
-#: counter.php:220
-#: counter.php:1358
+#: counter.php:233
+#: counter.php:1409
 #@ cpd
 msgid "Reads yesterday"
 msgstr "خوانده شده ی دیروز"
 
-#: counter.php:875
+#: counter.php:890
 #: notes.php:55
 #: notes.php:89
 #@ cpd
 msgid "Notes"
 msgstr "یادداشت ها"
 
-#: counter.php:873
+#: counter.php:888
 #@ default
 msgid "Show"
 msgstr "نمایش"
 
-#: counter.php:913
+#: counter.php:958
 #@ cpd
 msgid "Other"
 msgstr "دیگر"
 
-#: counter.php:1085
+#: counter.php:1130
 #@ default
 msgid "Edit Post"
 msgstr "ویرایش نوشته"
@@ -529,29 +533,29 @@ msgstr "ویرایش نوشته"
 msgid "Front page displays"
 msgstr "نمایش های اولین صفحه"
 
-#: counter-core.php:799
-#: counter-options.php:860
+#: counter-core.php:788
+#: counter-options.php:950
 #@ cpd
 msgid "Browsers"
 msgstr "مرورگرها"
 
-#: counter-core.php:793
+#: counter-core.php:782
 #@ cpd
 msgid "Latest Counts"
 msgstr "جدیدترین شمارش"
 
-#: counter-core.php:796
+#: counter-core.php:785
 #@ default
 msgid "Plugin"
 msgstr "افزونه"
 
-#: counter-core.php:804
+#: counter-core.php:793
 #@ cpd
 msgid "Reads per Country"
 msgstr "خوانندگان هر کشور"
 
-#: counter.php:418
-#: counter.php:1198
+#: counter.php:433
+#: counter.php:1249
 #@ cpd
 msgid "Map"
 msgstr "نقشه"
@@ -596,32 +600,32 @@ msgstr "حذف"
 msgid "edit"
 msgstr "ویرایش"
 
-#: counter-options.php:782
+#: counter-options.php:862
 #@ cpd
 msgid "Cache"
 msgstr "نهانگاه(کش)"
 
-#: counter-options.php:783
+#: counter-options.php:863
 #@ cpd
 msgid "I use a cache plugin. Count these visits with ajax."
 msgstr "من از نهانگاه افزونه استفاده می کنم. شمارش بازدیدها با استفاده از آجاکس."
 
-#: counter-options.php:861
+#: counter-options.php:951
 #@ cpd
 msgid "Substring of the user agent, separated by comma"
 msgstr "نام مرورگرها را با کاما (,) از هم جدا کنید"
 
-#: counter-options.php:945
+#: counter-options.php:1035
 #@ cpd
 msgid "Debug mode"
 msgstr "حالت رفع اشکال"
 
-#: counter-options.php:947
+#: counter-options.php:1037
 #@ cpd
 msgid "Show debug informations at the bottom of all pages."
 msgstr "نمایش اطلاعات اشکال زدایی در پایین تمام صفحات."
 
-#: counter-core.php:805
+#: counter-core.php:794
 #@ cpd
 msgid "Visitors per Country"
 msgstr "بازدیدکنندگان هر کشور"
@@ -641,12 +645,12 @@ msgstr "پایان"
 msgid "PostID"
 msgstr "آی دی نوشته"
 
-#: counter-options.php:908
+#: counter-options.php:998
 #@ cpd
 msgid "Add this value to \"Total reads\"."
 msgstr "اضافه کردن این مقدار به \"مجموع خوانده شده ها\""
 
-#: counter-options.php:639
+#: counter-options.php:723
 #@ cpd
 msgid "You can get the country data for all entries in database by checking the IP adress against the GeoIP database. This can take a while!"
 msgstr "شما می توانید داده ی کشورها را برای تمام ورودی ها در پایگاه داده از طریق چک کردن IP در مقابل پایگاه داده GeoIP دریافت کنید. این کار ممکن است مدتی طول بکشد!"
@@ -656,467 +660,560 @@ msgstr "شما می توانید داده ی کشورها را برای تمام
 msgid "no data found"
 msgstr "اطلاعاتی یافت نشد"
 
-#: counter-options.php:748
+#: counter-options.php:828
 #@ cpd
 msgid "Counter"
 msgstr "شمارشگر"
 
-#: counter-options.php:786
+#: counter-options.php:866
 #@ cpd
 msgid "Clients and referrers"
 msgstr "مشتریان و مراجعه کنندگان"
 
-#: counter-options.php:789
+#: counter-options.php:869
 #@ cpd
 msgid "Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors."
 msgstr "ذخیره و مشاهده ی مشتریان و مراجعه کنندگان.<br />به فضای زیادی در پایگاه داده نیاز دارد، اما اطلاعات کاملی از بازدیدکنندگان به شما می دهد."
 
-#: counter-options.php:872
+#: counter-options.php:962
 #@ cpd
 msgid "Local URLs"
 msgstr "لینکهای محلی"
 
-#: counter-options.php:873
+#: counter-options.php:963
 #@ cpd
 msgid "Show local referrers too."
 msgstr "نمایش ارجاعات محلی"
 
-#: counter-options.php:880
+#: counter-options.php:970
 #@ default
 msgid "Posts"
 msgstr "نوشته ها"
 
-#: counter-options.php:880
+#: counter-options.php:970
 #@ default
 msgid "Pages"
 msgstr "صفحات"
 
-#: counter.php:221
-#: counter.php:1359
+#: counter.php:234
+#: counter.php:1410
 #@ cpd
 msgid "Reads last week"
 msgstr "خوانده شده ی هفته"
 
-#: counter.php:1094
+#: counter.php:1139
 #@ default
 msgid "Category"
 msgstr "دسته ها"
 
-#: counter.php:1097
+#: counter.php:1142
 #@ default
 msgid "Tag"
 msgstr "برچسب"
 
-#: counter-core.php:756
+#: counter-core.php:745
 #@ default
 msgid "License"
 msgstr "مجوز"
 
-#: counter-core.php:791
-#: counter.php:1360
+#: counter-core.php:780
+#: counter.php:1411
 #@ cpd
 msgid "Reads per month"
 msgstr "خوانده شده در ماه"
 
-#: counter-core.php:800
+#: counter-core.php:789
 #@ cpd
 msgid "Referrer"
 msgstr "ارجاع دهنده"
 
-#: counter-options.php:864
+#: counter-options.php:954
 #@ cpd
 msgid "Referrers - Entries"
 msgstr "ارجاع دهنده - مطالب"
 
-#: counter-options.php:865
+#: counter-options.php:955
 #@ cpd
 msgid "How many referrers do you want to see on dashboard page?"
 msgstr "میخواهید چه تعداد از ارجاعات را در صفحه ی پیشخوان خود مشاهده کنید؟"
 
-#: counter-options.php:868
+#: counter-options.php:958
 #@ cpd
 msgid "Referrers - Days"
 msgstr "ارجاع دهنده ها - روزها"
 
-#: counter.php:944
+#: counter.php:989
 #, php-format
 #@ cpd
 msgid "The %s referrers in last %s days:"
 msgstr "%s مراجعه کننده در %s روز پیش:"
 
-#: counter-core.php:789
+#: counter-core.php:778
 #@ cpd
 msgid "Visitors online"
 msgstr "بازدیدکنندگان آنلاین"
 
-#: counter.php:1380
+#: counter.php:1431
 #@ default
 msgid "Title"
 msgstr "عنوان"
 
-#: counter-core.php:259
+#: counter-core.php:232
 #, php-format
 #@ cpd
 msgid "\"Count per Day\" updated to version %s."
 msgstr "\"Count per Day\" بروزرسانی شد به نسخه ی %s."
 
-#: counter-core.php:1000
+#: counter-core.php:1062
 #@ cpd
 msgid "Backup failed! Cannot open file"
 msgstr "پشتیبان گیری با مشکل مواجه شد! نمیتوانم فایل را باز کرد"
 
-#: counter-core.php:1027
-#, php-format
-#@ cpd
-msgid "Backup of %s entries in progress. Every point complies %s entries."
-msgstr "پشتیبان گیری از %s ورودی ها در حال پیشرفت است. هر نقطه مطابق %s ورودی است"
-
-#: counter-core.php:1118
-#: counter-core.php:1126
+#: counter-core.php:1180
+#: counter-core.php:1188
 #, php-format
 #@ cpd
 msgid "Backup of counter table saved in %s."
 msgstr "پشتیبان از جدول شمارنده ذخیره شد در %s."
 
-#: counter-core.php:1120
-#: counter-core.php:1128
+#: counter-core.php:1182
+#: counter-core.php:1190
 #, php-format
 #@ cpd
 msgid "Backup of counter options and collection saved in %s."
 msgstr "پشتیبان گیری از تنظیمات شمارشگر و مجموعه ذخیره شد در %s."
 
-#: counter-options.php:169
+#: counter-options.php:174
 #@ cpd
 msgid "Collection in progress..."
 msgstr "در حال انجام جمع آوری"
 
-#: counter-options.php:263
+#: counter-options.php:268
 #@ cpd
 msgid "Get Visitors per Post..."
 msgstr "بازدید کننده در هر پست ..."
 
-#: counter-options.php:284
-#@ cpd
-msgid "Delete old data..."
-msgstr "پاک کرده اطلاعات قدیمی"
-
-#: counter-options.php:308
+#: counter-options.php:313
 #, php-format
 #@ cpd
 msgid "Counter entries until %s collected and counter table %s optimized (size before = %s &gt; size after = %s)."
 msgstr "ورودی های شمارشگر تا %s جمع آوری شد و جدول شمارشگر %s بهینه سازی شد.  (حجم قبل = %s &gt; حجم بعد = %s)."
 
-#: counter-options.php:317
+#: counter-options.php:322
 #@ cpd
 msgid "Installation of \"Count per Day\" checked"
 msgstr "مراحل نصب \"Count per Day\" چک شد"
 
-#: counter-options.php:400
-#: counter-options.php:739
+#: counter-options.php:408
 #@ default
 msgid "Tools"
 msgstr "ابزار"
 
-#: counter-options.php:791
+#: counter-options.php:871
 #@ cpd
 msgid "Save URL only, no query string."
 msgstr "تنها ذخیره ی URL، بدون متغیر رشته درخواست."
 
-#: counter-options.php:815
+#: counter-options.php:905
 #@ cpd
 msgid "Who can see it"
 msgstr "چه کسی می تواند پیشخوان را ببیند"
 
-#: counter-options.php:824
+#: counter-options.php:914
 #@ cpd
 msgid "custom"
 msgstr "سفارشی"
 
-#: counter-options.php:826
+#: counter-options.php:916
 #@ cpd
 msgid "and higher are allowed to see the statistics page."
 msgstr "بالاتر از کدام گروه قادر به مشاهده ی صفحه ی آمار هستند."
 
-#: counter-options.php:828
+#: counter-options.php:918
 #, php-format
 #@ cpd
 msgid "Set the %s capability %s a user need:"
 msgstr "تنظیم %s قابلیت %s که یک کاربر نیازدارد"
 
-#: counter-options.php:915
+#: counter-options.php:1005
 #@ cpd
 msgid "Stylesheet"
 msgstr "شیوه نامه"
 
-#: counter-options.php:918
+#: counter-options.php:1008
 #@ cpd
 msgid "NO Stylesheet in Frontend"
 msgstr "بدون شیوه نامه"
 
-#: counter-options.php:919
+#: counter-options.php:1009
 #@ cpd
 msgid "Do not load the stylesheet \"counter.css\" in frontend."
 msgstr "بارگذاری نشدن شیوه نامه ی \"counter.css\" "
 
-#: counter-options.php:476
-#: counter-options.php:926
+#: counter-options.php:560
+#: counter-options.php:1016
 #@ cpd
 msgid "Backup"
 msgstr "پشتیبان"
 
-#: counter-options.php:929
+#: counter-options.php:1019
 #@ cpd
 msgid "Entries per pass"
 msgstr ""
 
-#: counter-options.php:932
+#: counter-options.php:1022
 #@ cpd
 msgid "How many entries should be saved per pass? Default: 10000"
 msgstr "چه تعداد ورودی باید در هر گذر ذخیره شود؟ پیشفرض: 1000"
 
-#: counter-options.php:937
+#: counter-options.php:1027
 #@ cpd
 msgid "If your PHP memory limit less then 50 MB and you get a white page or error messages try a smaller value."
 msgstr "اگر حافظه ی PHP شما کمتر از 50 MB است و به صفحه ی سفید و یا خطا مواجه می شوید، از مقدار کوچکتر استفاده کنید."
 
-#: counter-options.php:480
+#: counter-options.php:564
 #, php-format
 #@ cpd
 msgid "Create a backup of the counter table %s in your wp-content directory (if writable)."
 msgstr "ایجاد نسخه ی پشتیبان از جدول شمارشگر %s در دایرکتوری wp-content (اگر قابل نوشتن باشد)"
 
-#: counter-options.php:487
+#: counter-options.php:571
 #@ cpd
 msgid "Backup the database"
 msgstr "پشتیبان از بانک اطلاعات"
 
-#: counter-options.php:591
-#: counter-options.php:623
+#: counter-options.php:675
+#: counter-options.php:707
 #@ cpd
 msgid "Collect old data"
 msgstr "جمع آوری داده های قدیمی"
 
-#: counter-options.php:577
-#: counter-options.php:596
+#: counter-options.php:661
+#: counter-options.php:680
 #, php-format
 #@ cpd
 msgid "Current size of your counter table %s is %s."
 msgstr "اندازه ی فعلی جدول شمارنده ی شما %s است %s."
 
-#: counter-options.php:598
+#: counter-options.php:682
 #@ cpd
 msgid "You can collect old data and clean up the counter table.<br/>Reads and visitors will be saved per month, per country and per post.<br/>Clients and referrers will deleted."
 msgstr "شما می توانید اطلاعات قدیمی و پاکسازی جدول را جمع آوری کنید.<br/>خوانده ها و بازدیدکنندگان به ازای ماه، کشور و نوشته ذخیره خواهند شد.<br/>مشتریان و مراجعه کنندگان حذف خواهند شد."
 
-#: counter-options.php:603
+#: counter-options.php:687
 #, php-format
 #@ cpd
 msgid "Currently your collection contains data until %s."
 msgstr "در حال حاضر مجموعه ی شما شامل داده تا %s."
 
-#: counter-options.php:607
+#: counter-options.php:691
 #@ cpd
 msgid "Normally new data will be added to the collection."
 msgstr "به صورت معمول داده های جدید به مجموعه اضافه خواهد شد."
 
-#: counter-options.php:613
+#: counter-options.php:697
 #@ cpd
 msgid "Delete old collection and create a new one which contains only the data currently in counter table."
 msgstr "مجموعه قدیمی حذف و یک مجموعه ی جدید که تنها حاوی اطلاعات فعلی شمارنده است ایجاد می شود."
 
-#: counter-options.php:614
+#: counter-options.php:698
 #, php-format
 #@ cpd
 msgid "All collected data until %s will deleted."
 msgstr "همه ی داده های جمع آوری شده تا %s حذف خواهد شد."
 
-#: counter-options.php:619
+#: counter-options.php:703
 #, php-format
 #@ cpd
 msgid "Keep entries of last %s full months + current month in counter table."
 msgstr "حفظ ورودی های کامل %s ماه پیش + ماه فعلی در جدول شمارنده"
 
-#: counter-options.php:670
+#: counter-options.php:754
 #@ cpd
 msgid "ReActivation"
 msgstr "فعالسازی مجدد"
 
-#: counter-options.php:673
+#: counter-options.php:757
 #@ cpd
 msgid "Here you can start the installation functions manually.<br/>Same as deactivate and reactivate the plugin."
 msgstr "در اینجا شما می توانید توابع نصب دستی را اجرا کنید.<br />مانند فعال و غیرفعال کردن افزونه."
 
-#: counter-options.php:678
+#: counter-options.php:762
 #@ cpd
 msgid "ReActivate the plugin"
 msgstr "فعالسازی مجدد افزونه"
 
-#: counter.php:228
-#: counter.php:998
+#: counter.php:241
+#: counter.php:1043
 #@ cpd
 msgid "Visitors"
 msgstr "بازدیدکنندگان"
 
-#: counter.php:231
-#: counter.php:232
+#: counter.php:244
+#: counter.php:245
 #@ cpd
 msgid "Most visited day"
 msgstr "بیشترین بازدید در روز"
 
-#: counter.php:1399
+#: counter.php:1450
 #@ cpd
 msgid "drag and drop to sort"
 msgstr "کشیدن و رها کردن برای مرتب سازی"
 
-#: counter-core.php:795
-#: counter-options.php:864
-#: counter-options.php:868
+#: counter-core.php:784
+#: counter-options.php:954
+#: counter-options.php:958
 #@ cpd
 msgid "Search strings"
 msgstr ""
 
-#: counter-core.php:1114
+#: counter-core.php:1176
 #@ cpd
 msgid "Your can download the backup files here and now."
 msgstr ""
 
-#: counter-core.php:1184
+#: counter-core.php:1246
 #@ cpd
 msgid "Error while reading backup file!"
 msgstr ""
 
-#: counter-core.php:1188
+#: counter-core.php:1250
 #, php-format
 #@ cpd
 msgid "The backup was added to counter table %s."
 msgstr ""
 
-#: counter-core.php:1190
+#: counter-core.php:1252
 #, php-format
 #@ cpd
 msgid "The counter table %s was restored from backup."
 msgstr ""
 
-#: counter-core.php:1207
+#: counter-core.php:1269
 #@ cpd
 msgid "Options restored from backup."
 msgstr ""
 
-#: counter-options.php:332
+#: counter-options.php:337
 #@ cpd
 msgid "Old search strings deleted"
 msgstr ""
 
-#: counter-options.php:347
+#: counter-options.php:352
 #@ cpd
 msgid "Clients and referers deleted"
 msgstr ""
 
-#: counter-options.php:483
+#: counter-options.php:567
 #@ cpd
 msgid "Download only"
 msgstr ""
 
-#: counter-options.php:515
+#: counter-options.php:599
 #@ cpd
 msgid "Settings and collections"
 msgstr ""
 
-#: counter-options.php:520
+#: counter-options.php:604
 #, php-format
 #@ cpd
 msgid "Counter table %s"
 msgstr ""
 
-#: counter-options.php:527
+#: counter-options.php:611
 #, php-format
 #@ cpd
 msgid "Add data from the backup file %s to existing counter table?"
 msgstr ""
 
-#: counter-options.php:527
+#: counter-options.php:611
 #@ cpd
 msgid "Add"
 msgstr ""
 
-#: counter-options.php:531
+#: counter-options.php:615
 #, php-format
 #@ cpd
 msgid "Restore data from the backup file %s ?"
 msgstr ""
 
-#: counter-options.php:531
+#: counter-options.php:615
 #@ default
 msgid "Restore"
 msgstr ""
 
-#: counter-options.php:533
+#: counter-options.php:617
 #@ default
 msgid "Delete"
 msgstr ""
 
-#: counter-options.php:534
+#: counter-options.php:618
 #, php-format
 #@ cpd
 msgid "Delete the backup file %s ?"
 msgstr ""
 
-#: counter-options.php:540
+#: counter-options.php:624
 #@ cpd
 msgid "add backup to current counter table"
 msgstr ""
 
-#: counter-options.php:541
+#: counter-options.php:625
 #@ cpd
 msgid "replace current counter table with with backup"
 msgstr ""
 
-#: counter-options.php:542
+#: counter-options.php:626
 #@ cpd
 msgid "delete backup file"
 msgstr ""
 
-#: counter-options.php:567
+#: counter-options.php:651
 #, php-format
 #@ cpd
 msgid "Delete search strings older than %s days."
 msgstr ""
 
-#: counter-options.php:571
+#: counter-options.php:655
 #@ cpd
 msgid "Delete search strings"
 msgstr ""
 
-#: counter-options.php:578
+#: counter-options.php:662
 #, php-format
 #@ cpd
 msgid "Delete clients and referers older than %s days to reduce the size of the counter table."
 msgstr ""
 
-#: counter-options.php:582
+#: counter-options.php:666
 #@ cpd
 msgid "Delete clients and referers"
 msgstr ""
 
-#: counter.php:1100
+#: counter.php:1145
 #@ default
 msgid "Front page"
 msgstr ""
 
-#: counter.php:1142
+#: counter.php:1193
 #, php-format
 #@ cpd
 msgid "The %s most searched strings:"
 msgstr ""
 
-#: counter.php:1151
+#: counter.php:1202
 #, php-format
 #@ cpd
 msgid "The search strings of the last %s days:"
 msgstr ""
 
-#: counter.php:1315
+#: counter.php:1366
 #@ default
 msgid "_name"
+msgstr ""
+
+#: counter-core.php:986
+#@ cpd
+msgid "Export failed! Cannot open file."
+msgstr ""
+
+#: counter-core.php:1034
+#@ cpd
+msgid "Download the export file:"
+msgstr ""
+
+#: counter-core.php:1089
+#, php-format
+#@ cpd
+msgid "Backup of %s entries in progress. Every point comprises %s entries."
+msgstr ""
+
+#: counter-options.php:289
+#@ cpd
+msgid "Deleting old data..."
+msgstr ""
+
+#: counter-options.php:493
+#@ cpd
+msgid "Most Industrious Visitors"
+msgstr ""
+
+#: counter-options.php:497
+#, php-format
+#@ cpd
+msgid "Show the %s most industrious visitors of the last %s days"
+msgstr ""
+
+#: counter-options.php:544
+#@ cpd
+msgid "Export"
+msgstr ""
+
+#: counter-options.php:548
+#, php-format
+#@ cpd
+msgid "Export the last %s days as CSV-File"
+msgstr ""
+
+#: counter-options.php:552
+#@ cpd
+msgid "Export entries"
+msgstr ""
+
+#: counter-options.php:875
+#@ cpd
+msgid "Post types"
+msgstr ""
+
+#: counter-options.php:878
+#@ cpd
+msgid "Only count these post types. Leave empty to count them all."
+msgstr ""
+
+#: counter-options.php:879
+#, php-format
+#@ cpd
+msgid "Current post types: %s"
+msgstr ""
+
+#: counter.php:243
+#@ cpd
+msgid "Since"
+msgstr ""
+
+#: counter.php:1502
+#: counter.php:1534
+#@ cpd
+msgid "Popular Posts"
+msgstr ""
+
+#: counter.php:1504
+#@ cpd
+msgid "List of Popular Posts"
+msgstr ""
+
+#: counter.php:1542
+#@ cpd
+msgid "Title:"
+msgstr ""
+
+#: counter.php:1546
+#@ cpd
+msgid "Days:"
+msgstr ""
+
+#: counter.php:1550
+#@ cpd
+msgid "Limit:"
+msgstr ""
+
+#: counter.php:1554
+#@ cpd
+msgid "Show header:"
+msgstr ""
+
+#: counter.php:1558
+#@ cpd
+msgid "Show counters:"
 msgstr ""
 

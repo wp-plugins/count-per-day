@@ -49,10 +49,7 @@ function init()
 	// manual debug mode
 	if (!empty($_GET['debug']) && WP_DEBUG )
 		$this->options['debug'] = 1;
-// 	$this->dir = get_bloginfo('wpurl').'/'.PLUGINDIR.'/'.$cpd_dir_name;
 	$this->dir = plugins_url('/'.$cpd_dir_name);
-// 	var_dump($this->dir);
-// 	content_url()
 	
 	$this->queries[0] = 0;
 
@@ -69,11 +66,8 @@ function init()
 	// javascript to count cached posts
 	if ($this->options['ajax'])
 	{
-// 		wp_enqueue_script('jquery');
 		add_action('wp_enqueue_scripts', array(&$this,'addJquery'));
  		add_action('wp_footer', array(&$this,'addAjaxScript'));
-// auch in addJQuery?
-		
 	}
 
 	if (is_admin())
@@ -88,24 +82,6 @@ function init()
 		add_action('admin_menu', array(&$this,'setAdminMenu'));
 		// counter column posts lists
 		add_action('admin_head', array(&$this,'addPostTypesColumns'));
-
-// column page list
-// 		add_action('manage_pages_custom_column', array(&$this,'cpdColumnContent'), 10, 2);
-// 		add_filter('manage_edit-page_columns', array(&$this,'cpdColumn'));
-		
-// 		add_action('manage_posts_custom_column', array(&$this,'cpdColumnContent'), 10, 2);
-		
-		//		add_filter('manage_posts_columns', array(&$this,'cpdColumn'));
-
-// 		add_filter('manage_edit-post_columns', array(&$this,'cpdColumn'));
-		
-		// 		add_filter('manage_edit-post_sortable_columns', array(&$this,'cpdSortableColumns'));
-		// 		add_filter('request', array(&$this,'cpdReadsOrderby'));
-
-		
-		
-		
-		
 		// adds javascript
 		add_action('admin_head', array(&$this,'addJS'));
 		// check version
@@ -179,8 +155,8 @@ function addJquery()
 function addThickbox()
 {
 	wp_enqueue_script('thickbox');
-	if (strpos($_SERVER['QUERY_STRING'], 'cpd_metaboxes') !== false)
-		wp_enqueue_script('cpd_flot', $this->dir.'/js/jquery.flot.min.js', 'jQuery');
+// 	if (strpos($_SERVER['QUERY_STRING'], 'cpd_metaboxes') !== false)
+// 		wp_enqueue_script('cpd_flot', $this->dir.'/js/jquery.flot.min.js', 'jQuery');
 }
 
 
@@ -200,13 +176,12 @@ function startSession()
  * @param string|array $sql sql query [and args]
  * @param string $func name for debug info
  */
-function mysqlQuery( $kind = '', $sql, $func = '' )
+function mysqlQuery( $kind = '', $sql = '', $func = '' )
 {
 	global $wpdb;
 	if (empty($sql))
 		return;
 	$t = microtime(true);
-	$con = $wpdb->dbh;
 	
 	if ( is_array($sql) )
 	{
@@ -224,22 +199,20 @@ function mysqlQuery( $kind = '', $sql, $func = '' )
 	if ($kind == 'var')
 		$r = $wpdb->get_var( $preparedSql );
 	else if ($kind == 'count')
-	{
-// 		$sql = 'SELECT COUNT(*) FROM ('.trim($sql,';').') t';
 		$r = $wpdb->get_var('SELECT COUNT(*) FROM ('.trim($preparedSql,';').') t');
-	}
 	else if ($kind == 'rows')
-	{
 		$r = $wpdb->get_results( $preparedSql );
-	}
 	else
 		$wpdb->query( $preparedSql );
 
 	if ( $this->options['debug'] )
 	{
+		$con = $wpdb->dbh;
+		$errno = (isset($con->errno)) ? $con->errno : mysql_errno($con);
+		$error = (isset($con->error)) ? $con->error : mysql_error($con);
 		$d = number_format( microtime(true) - $t , 5);
 		$m = sprintf("%.2f", memory_get_usage()/1048576).' MB';
-		$error = (!$r && mysql_errno($con)) ? '<b style="color:red">ERROR:</b> '.mysql_errno($con).' - '.mysql_error($con).' - ' : '';
+		$error = (!$r && $errno) ? '<b style="color:red">ERROR:</b> '.$errno.' - '.$error.' - ' : '';
 		$this->queries[] = $func." : <b>$d</b> - $m<br/><code>$preparedSql</code><br/>$error";
 		$this->queries[0] += $d;
 	}
@@ -339,7 +312,7 @@ function isBot( $client = '', $bots = '', $ip = '', $ref = '' )
 		$ip = $_SERVER['REMOTE_ADDR'];
 	if ( empty($ref) && isset($_SERVER['HTTP_REFERER']) )
 		$ref = $_SERVER['HTTP_REFERER'];
-		
+
 	// empty/short client -> not normal browser -> bot
 	if ( empty($client) || strlen($client) < 20 )
 		return true;
@@ -353,7 +326,14 @@ function isBot( $client = '', $bots = '', $ip = '', $ref = '' )
 		if (!$isBot) // loop until first bot was found only
 		{
 			$b = trim($bot);
-			if ( !empty($b) && ( $ip == $b || strpos( strtolower($client), strtolower($b) ) !== false || strpos( strtolower($ref), strtolower($b) ) !== false ) )
+			if ( !empty($b)
+				&& (
+					$ip == $b
+					|| strpos( $ip, $b ) === 0
+					|| strpos( strtolower($client), strtolower($b) ) !== false
+					|| strpos( strtolower($ref), strtolower($b) ) !== false 
+				)
+			)
 				$isBot = true;
 		}
 	}
@@ -489,6 +469,8 @@ function createTables()
 function register_widgets()
 {
 	register_widget('CountPerDay_Widget');
+	register_widget('CountPerDay_PopularPostsWidget');
+	
 }
 
 /**
@@ -497,13 +479,18 @@ function register_widgets()
 function showQueries()
 {
 	global $wpdb, $cpd_path, $cpd_version;
+	
+	$serverinfo = (isset($wpdb->dbh->server_info)) ? $wpdb->dbh->server_info : mysql_get_server_info($wpdb->dbh);
+	$clientinfo = (isset($wpdb->dbh->client_info)) ? $wpdb->dbh->client_info : mysql_get_client_info();
+	
 	echo '<div style="position:absolute;margin:10px;padding:10px;border:1px red solid;background:#fff;clear:both">
 		<b>Count per Day - DEBUG: '.round($this->queries[0], 3).' s</b><ol>'."\n";
+// 	var_dump($wpdb->dbh);
 	echo '<li>'
 		.'<b>Server:</b> '.$_SERVER['SERVER_SOFTWARE'].'<br/>'
 		.'<b>PHP:</b> '.phpversion().'<br/>'
-		.'<b>mySQL Server:</b> '.mysql_get_server_info($wpdb->dbh).'<br/>'
-		.'<b>mySQL Client:</b> '.mysql_get_client_info().'<br/>'
+		.'<b>mySQL Server:</b> '.$serverinfo.'<br/>'
+		.'<b>mySQL Client:</b> '.$clientinfo.'<br/>'
 		.'<b>WordPress:</b> '.get_bloginfo('version').'<br/>'
 		.'<b>Count per Day:</b> '.$cpd_version.'<br/>'
 		.'<b>Time for Count per Day:</b> '.date_i18n('Y-m-d H:i').'<br/>'
@@ -577,9 +564,10 @@ function addAjaxScript()
 <script type="text/javascript">
 // Count per Day
 //<![CDATA[
+var cpdTime = new Date().getTime() / 1000;
 jQuery(document).ready( function()
 {
-	jQuery.get('{$this->dir}/ajax.php?f=count&page={$this->page}&time={$time}', function(text)
+	jQuery.get('{$this->dir}/ajax.php?f=count&page={$this->page}&time='+cpdTime, function(text)
 	{
 		var cpd_funcs = text.split('|');
 		for(var i = 0; i < cpd_funcs.length; i++)
@@ -611,15 +599,16 @@ function cleanDB()
 
 	// delete by ip
 	foreach( $bots as $ip )
-		if ( ip2long($ip) !== false )
-			$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE $this->ntoa(ip) LIKE '".$ip."%%", 'clenaDB_ip'.__LINE__);
+		if ( intval($ip) > 0 )
+			$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE {$this->ntoa}(ip) LIKE '".$ip."%'", 'clenaDB_ip '.__LINE__);
 	
 	// delete by client
 	foreach ($bots as $bot)
-		$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE client LIKE '%%".$bot."%%'", 'cleanDB_client'.__LINE__);
+		if ( intval($bot) == 0 )
+			$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE client LIKE '%".$bot."%'", 'cleanDB_client '.__LINE__);
 	
 	// delete if a previously countered page was deleted
-	$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE page NOT IN ( SELECT id FROM $wpdb->posts) AND page > 0", 'cleanDB_delPosts'.__LINE__);
+	$this->mysqlQuery('', "DELETE FROM $wpdb->cpd_counter WHERE page NOT IN ( SELECT id FROM $wpdb->posts) AND page > 0", 'cleanDB_delPosts '.__LINE__);
 	
 	$rows_after = $this->mysqlQuery('var', "SELECT COUNT(*) FROM $wpdb->cpd_counter", 'cleanDB '.__LINE__);
 	return $rows_before - $rows_after;
@@ -817,7 +806,7 @@ function onShowPage()
 	$data = '';
 	?>
 	<div id="cpd-metaboxes" class="wrap">
-		<h2><img src="<?php echo $this->img('cpd_menu.gif') ?>" alt="" style="width:24px;height:24px" /> Count per Day - <?php _e('Statistics', 'cpd') ?></h2>
+		<h2><img src="<?php echo $count_per_day->img('cpd_logo.png') ?>" alt="Logo" class="cpd_logo" style="margin-left:8px" /> Count per Day - <?php _e('Statistics', 'cpd') ?></h2>
 		<?php
 		wp_nonce_field('cpd-metaboxes');
 		wp_nonce_field('closedpostboxes', 'closedpostboxesnonce', false);
@@ -876,6 +865,7 @@ function addShortcodes()
 	add_shortcode('CPD_DAY_MOST_READS', array(&$this,'shortDayWithMostReads'));
 	add_shortcode('CPD_DAY_MOST_USERS', array(&$this,'shortDayWithMostUsers'));
 	add_shortcode('CPD_SEARCHSTRINGS', array(&$this,'shortGetSearches'));
+	add_shortcode('CPD_FLOTCHART', array(&$this,'shortFlotChart'));
 }
 function shortShow()			{ return $this->show('', '', false, false); }
 function shortReadsTotal()		{ return $this->getReadsAll(true); }
@@ -901,6 +891,7 @@ function shortCountriesUsers(){ return $this->getCountries(0, true, true, true);
 function shortReferers()		{ return $this->getReferers(0, true, 0); }
 function shortDayWithMostReads(){ return $this->getDayWithMostReads(true, true); }
 function shortDayWithMostUsers(){ return $this->getDayWithMostUsers(true, true); }
+function shortFlotChart()			{ return $this->getFlotChart(); }
 function shortMostVisitedPosts( $atts )
 {
 	extract( shortcode_atts( array(
@@ -977,6 +968,77 @@ function getMassBots( $limit )
 	return $this->mysqlQuery('rows', $sql, 'getMassBots '.__LINE__);
 }
 
+
+/**
+ * backup the counter table to wp-content dir, gz-compressed if possible
+ */
+function export( $days = 180 )
+{
+	global $wpdb;
+	$t = $wpdb->cpd_counter;
+	$tname = $t.'_last_'.$days.'_days_'.date_i18n('Y-m-d_H-i-s').'.csv';
+	$path = tempnam('', 'cpdexport');
+	
+	// open file
+	$f = fopen($path,'w');
+	
+	if (!$f) :
+		echo '<div class="error"><p>'.__('Export failed! Cannot open file.', 'cpd').' '.$path.'.</p></div>';
+	else :
+		$part = (int) $this->options['backup_part'];
+		if (empty($part))
+			$part = 10000;
+		// check free memory, save 8MB for script, 5000 entries needs ~ 10MB
+		$freeMemory = ($this->getBytes(ini_get('memory_limit')) - memory_get_usage()) - 8000000;
+		$part = min(array( round($freeMemory/1000000)*500, $part ));
+		$start = 0;
+		
+		fwrite($f, "date;ip;country;client;referer;post_cat_id;post_name;cat_tax_name;tax\r\n");
+		
+		do
+		{
+			$sql = "SELECT	c.*,
+							c.page post_id,
+							p.post_title post,
+							t.name tag_cat_name,
+							x.taxonomy tax
+					FROM	`$t` c
+					LEFT	JOIN $wpdb->posts p
+							ON p.id = c.page
+					LEFT	JOIN $wpdb->terms t
+							ON t.term_id = 0 - c.page
+					LEFT	JOIN $wpdb->term_taxonomy x
+							ON x.term_id = t.term_id
+					WHERE	c.date >= DATE_SUB('".date_i18n('Y-m-d')."', INTERVAL $days DAY)
+					GROUP	BY c.id
+					ORDER	BY c.date
+					LIMIT	$start, $part";
+			$rows = $this->mysqlQuery('rows', $sql, 'export '.__LINE__);
+			foreach ($rows as $row)
+			{
+				$row = (array) $row;
+				$line = '"'.$row['date'].'";"'.long2ip($row['ip']).'";"'.$row['country'].'";"'
+					.str_replace('"', ' ', $row['client']).'";"'.str_replace('"', ' ', $row['referer']).'";"'
+					.abs($row['page']).'";"'.str_replace('"', ' ', $row['post']).'";"'.str_replace('"', ' ', $row['tag_cat_name']).'";"'.$row['tax'].'"'."\r\n";
+				fwrite($f, $line);
+			}
+			$start += $part;
+		}
+		while (count($rows) == $part);
+		
+		fclose($f);		
+		
+		// show download link
+		$tfile = basename($path);
+		echo '<div class="updated"><p>';
+		_e('Download the export file:', 'cpd');
+		echo ' <a href="'.$this->dir.'/download.php?f='.$tfile.'&amp;n='.$tname.'">'.$tname.'</a><br/>';
+		echo '</p></div>';
+		
+	endif;
+}
+
+
 /**
  * backup the counter table to wp-content dir, gz-compressed if possible
  */
@@ -991,7 +1053,7 @@ function backup()
 	$name = '/'.$tname;
 
 	// wp-content or tempdir?
-	$path = ( empty($_POST['downloadonly']) && is_writable(WP_CONTENT_DIR) ) ? WP_CONTENT_DIR.$name : tempnam('', 'cpd');
+	$path = ( empty($_POST['downloadonly']) && is_writable(WP_CONTENT_DIR) ) ? WP_CONTENT_DIR.$name : tempnam('', 'cpdbackup');
 	
 	// open file
 	$f = ($gz) ? gzopen($path,'w9') : fopen($path,'w');
@@ -1024,7 +1086,7 @@ function backup()
 			$part = min(array( round($freeMemory/1000000)*500, $part ));
 
 			// show progress
-			echo '<div id="cpd_progress" class="updated"><p>'.sprintf(__('Backup of %s entries in progress. Every point complies %s entries.', 'cpd'), $entries, $part).'<br />';
+			echo '<div id="cpd_progress" class="updated"><p>'.sprintf(__('Backup of %s entries in progress. Every point comprises %s entries.', 'cpd'), $entries, $part).'<br />';
 			$this->flush_buffers();
 			
 			// get data
@@ -1095,7 +1157,7 @@ function backup()
 		$toname = 'count_per_day_options_'.date_i18n('Y-m-d_H-i-s').'.txt';
 		if ($gz) $toname .= '.gz';
 		$oname = '/'.$toname;
-		$opath = ( empty($_POST['downloadonly']) && is_writable(WP_CONTENT_DIR) ) ? WP_CONTENT_DIR.$oname : tempnam('', 'cpd');
+		$opath = ( empty($_POST['downloadonly']) && is_writable(WP_CONTENT_DIR) ) ? WP_CONTENT_DIR.$oname : tempnam('', 'cpdbackup');
 		$f = ($gz) ? gzopen($opath,'w9') : fopen($opath,'w');
 		
 		foreach (array('count_per_day', 'count_per_day_summary', 'count_per_day_collected', 'count_per_day_posts', 'count_per_day_notes') as $o)
@@ -1461,7 +1523,7 @@ function getSearchString()
 function cpdColumn($defaults)
 {
 	if ( $this->options['show_in_lists']  )
-		$defaults['cpd_reads'] = '<img src="'.$this->img('cpd_menu.gif').'" alt="'.__('Reads', 'cpd').'" title="'.__('Reads', 'cpd').'" style="width:12px;height:12px;" />';
+		$defaults['cpd_reads'] = '<img src="'.$this->img('cpd_logo.png').'" alt="'.__('Reads', 'cpd').'" title="'.__('Reads', 'cpd').'" style="width:16px;height:16px;" />';
 	return $defaults;
 }
 

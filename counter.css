@@ -47,26 +47,19 @@ h2 .cpd_icon {
 }
 
 .cpd_settings fieldset {
-	margin: 5px 5px 10px;
+	margin: 5px 5px 20px;
 	padding: 0 10px 0px;
 	border: 1px solid #dfdfdf;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
 	background: #fafafa;
 }
 
 .cpd_settings legend {
     background: #eee;
 	border: 1px solid #dfdfdf;
-	border-radius: 3px;
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
     margin: 0 10px;
     padding: 1px 7px 2px;
     text-shadow: 0 1px 0 #fff;
-	font-family: Georgia,"Times New Roman","Bitstream Charter",Times,serif;
-    font-size: 15px;
+    font-size:15px;
 }
 
 .cpd_settings .form-table {
@@ -82,7 +75,7 @@ h2 .cpd_icon {
 	background: url(img/cpd_sprites.png) no-repeat top left;
 	width: 16px;
 	height: 16px;
-	vertical-align: text-bottom;
+	vertical-align: middle;
 	padding: 0 !important;
 }
 .cpd_backup{background-position: 0 0}
@@ -106,13 +99,25 @@ h2 .cpd_icon {
 .cpd_update{background-position: 0 -828px}
 .cpd_user{background-position: 0 -874px}
 
+.cpd_logo {
+ 	width: 32px;
+ 	height: 32px;
+ 	vertical-align: middle;
+}
+
 /* dashboard */
 
 #cpd-flot-place {
 	padding: 5px;
 	background: #fff;
-	border-radius: 3px;
 	border: 1px #ccc solid;
+	margin: 5px 8px;
+}
+
+#cpd-flot-place .button {
+	padding: 2px 10px;
+	height: 20px;
+	line-height: 14px;
 }
 
 #cpd-flot-choice {
@@ -133,7 +138,6 @@ h2 .cpd_icon {
 	text-align: center;
 	padding: 2px 4px;
 	border: 1px solid #ddd;
-	border-radius: 4px;
 	background-color: #fff;
 	box-shadow: 3px 3px 4px rgba(0, 0, 0, 0.4);
 }

@@ -3,14 +3,14 @@
 Plugin Name: Count Per Day
 Plugin URI: http://www.tomsdimension.de/wp-plugins/count-per-day
 Description: Counter, shows reads and visitors per page; today, yesterday, last week, last months ... on dashboard, per shortcode or in widget.
-Version: 3.2.10
+Version: 3.3
 License: Postcardware
 Author: Tom Braider
 Author URI: http://www.tomsdimension.de
 */
 
 $cpd_dir_name = 'count-per-day';
-$cpd_version = '3.2.10';
+$cpd_version = '3.3';
 
 if (strpos($_SERVER['SERVER_NAME'], '.test'))
 	$cpd_path = str_replace('/', DIRECTORY_SEPARATOR, ABSPATH.PLUGINDIR.'/'.$cpd_dir_name.'/');
@@ -82,6 +82,19 @@ function count( $x, $page = 'x' )
 		// ajax counter on cached pages
 		$page = (int) $page;
 	
+	$pt = get_post_type($page);
+	
+	// don't count these post type
+	if ( !empty($this->options['posttypes']) && !in_array($pt, explode(',', $this->options['posttypes'])) )
+	{
+		if ($this->options['debug'])
+			$this->queries[] = "Post Type: $pt - don't count it";
+		return;
+	}
+	
+	if ($this->options['debug'])
+		$this->queries[] = "Post Type: $pt - count it";
+	
 	// get userlevel from role
 	if (current_user_can('administrator'))		$userlevel = 10;
 	else if (current_user_can('editor'))		$userlevel = 7;
@@ -136,7 +149,7 @@ function count( $x, $page = 'x' )
 				$gi = cpd_geoip_open($cpd_path.'geoip/GeoIP.dat', GEOIP_STANDARD);
 				
 				if (!filter_var($userip, FILTER_VALIDATE_IP))
-					$userip = ' 127.0.0.1';
+					$userip = '127.0.0.1';
 				
 				if ( strpos($userip,'.') !== false && strpos($userip,':') === false)
 				{
@@ -227,7 +240,7 @@ function dashboardReadsAtAll()
 		<li><?php _e('Visitors last week', 'cpd') ?>: <b><?php $this->getUserLastWeek() ?></b></li>
 		<li><?php _e('Visitors', 'cpd') ?> <?php echo $thisMonth ?>: <b><?php $this->getUserThisMonth() ?></b></li>
 		<li>&Oslash; <?php _e('Visitors per day', 'cpd') ?>: <b><?php $this->getUserPerDay($this->options['dashboard_last_days']) ?></b></li>
-		<li><?php _e('Counter starts on', 'cpd') ?>: <b><?php $this->getFirstCount() ?></b></li>
+		<li><?php _e('Since', 'cpd') ?>: <b><?php $this->getFirstCount() ?></b></li>
 		<li><?php _e('Most visited day', 'cpd') ?>: <b class="cpd-r"><?php $this->getDayWithMostReads(1) ?></b></li>
 		<li><?php _e('Most visited day', 'cpd') ?>: <b class="cpd-r"><?php $this->getDayWithMostUsers(1) ?></b></li>
 	</ul>
@@ -240,6 +253,8 @@ function dashboardReadsAtAll()
  */
 function getFlotChart( $limit = 0 )
 {
+	wp_enqueue_script('cpd_flot', $this->dir.'/js/jquery.flot.min.js', 'jQuery');
+		
 	global $wpdb;
 	if ( $limit == 0 )
 		$limit = (!empty($this->options['chart_days'])) ? $this->options['chart_days'] : 30;
@@ -882,6 +897,36 @@ function getVisitedPostsOnDay( $date = 0, $limit = 0, $show_form = true, $show_n
 }
 
 /**
+ * shows most visited pages in last days
+ * @param integer $days days to calc (last days)
+ * @param integer $limit count of visitors (last posts)
+ */
+function getLastVisitors( $days = 0, $limit = 0 )
+{
+	global $wpdb;
+	if ( $days == 0 )
+		$days = $this->options['dashboard_last_days'];
+	if ( $limit == 0 )
+		$limit = $this->options['dashboard_last_posts'];
+	$date = date_i18n('Y-m-d', current_time('timestamp') - 86400 * $days);
+	
+	$sql = $wpdb->prepare("
+	SELECT	COUNT(id) posts,
+			ip AS longip,
+			$this->ntoa(ip) AS ip,
+			date,
+			country,
+			client
+	FROM	$wpdb->cpd_counter c
+	WHERE	c.date >= %s
+	GROUP	BY ip, date, client
+	ORDER	BY posts DESC, date DESC
+	LIMIT	%d",
+	$date, $limit);
+	return $this->mysqlQuery('rows', $sql, 'getLastVisitors '.__LINE__);
+}
+
+/**
  * shows little browser statistics
  */
 function getClients( $return = false )
@@ -1089,10 +1134,10 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 		}
 		
 		$r .= '<a href="'.get_bloginfo('url');
-		if ( $row->tax == 'category' )
+		if ( !empty($row->tax) && $row->tax == 'category' )
 			// category
 			$r .= '?cat='.abs($row->post_id).'">- '.__($row->tag_cat_name).' ('.__('Category').') -';
-		else if ( $row->tax )
+		else if ( !empty($row->tax) )
 			// tag
 			$r .= '?tag='.$row->tag_cat_slug.'">- '.__($row->tag_cat_name).' ('.__('Tag').') -';
 		else if ( $row->post_id == 0 )
@@ -1108,6 +1153,12 @@ function getUserPer_SQL( $sql, $name = '', $frontend = false, $limit = 0 )
 	$r .= '</ul>';
 	return $r;
 }
+
+
+/**
+ * shows visitors of the last days
+ */
+
 
 /**
 * shows searchstrings
@@ -1152,7 +1203,7 @@ function getSearches( $limit = 0, $days = 0, $return = false )
 	$r .= '<ul class="cpd_front_list">';
 	foreach ( $search as $day => $s )
 		if (is_array($s))
-			$r .= '<li><div style="font-weight:bold">'.$day.'</div> '.implode(', ', $s).'</li>'."\n";
+			$r .= '<li><div style="font-weight:bold">'.mysql2date(get_option('date_format'), $day).'</div> '.implode(', ', $s).'</li>'."\n";
 	$r .= '</ul>';
 	if ($return) return $r; else echo $r;
 }
@@ -1256,7 +1307,7 @@ function getMap( $what = 'visitors', $width = 500, $height = 340, $min = 0 )
 
 
 /**
-  widget class
+ * widget class
  */
 class CountPerDay_Widget extends WP_Widget
 {
@@ -1432,6 +1483,96 @@ class CountPerDay_Widget extends WP_Widget
 		<?php
 	}
 } // widget class
+
+
+
+/*
+ * Popular Posts Widget
+ * @url http://www.leaseweblabs.com/2014/01/popular-posts-count-per-day-wordpress-plugin/
+ */
+class CountPerDay_PopularPostsWidget extends WP_Widget
+{
+
+	function __construct()
+	{
+		parent::__construct(
+			// Base ID of your widget
+			'countperday_popular_posts_widget',
+			// Widget name will appear in UI
+			'Count per Day - '.__('Popular Posts', 'cpd'),
+			// Widget description
+			array( 'description' => __('List of Popular Posts', 'cpd') )
+		);
+	}
+
+	// Creating widget front-end
+	// This is where the action happens
+	public function widget( $args, $instance )
+	{
+		$title = apply_filters( 'widget_title', $instance['title'] );
+		$days  = $instance['days' ] + 0;
+		$limit = $instance['limit'] + 0;
+		$head  = $instance['head' ] ? true : false;
+		$count = $instance['count'] ? true : false;
+		// before and after widget arguments are defined by themes
+		echo $args['before_widget'];
+		if ( ! empty( $title ) ) {
+			echo $args['before_title'].$title.$args['after_title'];
+		}
+		// This is where you run the code and display the output
+		global $count_per_day;
+		$html = $count_per_day->getMostVisitedPosts($days, $limit, 1, 1, 1);
+		if (!$head ) $html = preg_replace('/<small>[^<]*<\/small>/','',$html);
+		if (!$count) $html = preg_replace('/<b>[^<]*<\/b>/','',$html);
+		echo $html;
+		echo $args['after_widget'];
+	}
+
+	// Widget Backend
+	public function form( $instance )
+	{
+		$title = isset($instance['title']) ? $instance['title'] : __('Popular Posts', 'cpd');
+		$days  = isset($instance['days' ]) ? $instance['days' ] : '7';
+		$limit = isset($instance['limit']) ? $instance['limit'] : '10';
+		$head  = isset($instance['head' ]) ? $instance['head' ] : false;
+		$count = isset($instance['count']) ? $instance['count'] : false;
+		// Widget admin form
+		?>
+		<p>
+		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'cpd' ); ?></label>
+		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+		</p>
+		<p>
+		<label for="<?php echo $this->get_field_id( 'days' ); ?>"><?php _e( 'Days:', 'cpd' ); ?></label>
+		<input class="widefat" id="<?php echo $this->get_field_id( 'days' ); ?>" name="<?php echo $this->get_field_name( 'days' ); ?>" type="text" value="<?php echo esc_attr( $days ); ?>" />
+		</p>
+		<p>
+		<label for="<?php echo $this->get_field_id( 'limit' ); ?>"><?php _e( 'Limit:', 'cpd' ); ?></label>
+		<input class="widefat" id="<?php echo $this->get_field_id( 'limit' ); ?>" name="<?php echo $this->get_field_name( 'limit' ); ?>" type="text" value="<?php echo esc_attr( $limit ); ?>" />
+		</p>
+		<p>
+		<label for="<?php echo $this->get_field_id( 'head' ); ?>"><?php _e( 'Show header:', 'cpd' ); ?></label>
+		<input class="widefat" id="<?php echo $this->get_field_id( 'head' ); ?>" name="<?php echo $this->get_field_name( 'head' ); ?>" type="checkbox" <?php echo $head?'checked="checked"':'' ?> />
+		</p>
+		<p>
+		<label for="<?php echo $this->get_field_id( 'count' ); ?>"><?php _e( 'Show counters:', 'cpd' ); ?></label>
+		<input class="widefat" id="<?php echo $this->get_field_id( 'count' ); ?>" name="<?php echo $this->get_field_name( 'count' ); ?>" type="checkbox" <?php echo $count?'checked="checked"':'' ?> />
+		</p>
+		<?php
+	}
+ 
+	// Updating widget replacing old instances with new
+	public function update( $new_instance, $old_instance ) {
+		$instance = array();
+		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+		$instance['days' ] = ( ! empty( $new_instance['days' ] ) ) ? strip_tags( $new_instance['days' ] ) : '';
+		$instance['limit'] = ( ! empty( $new_instance['limit'] ) ) ? strip_tags( $new_instance['limit'] ) : '';
+		$instance['head' ] = ( ! empty( $new_instance['head' ] ) ) ? strip_tags( $new_instance['head' ] ) : '';
+		$instance['count'] = ( ! empty( $new_instance['count'] ) ) ? strip_tags( $new_instance['count'] ) : '';
+		return $instance;
+	}
+} // CountPerDay_PopularPostsWidget
+ 
 
 /**
  * uninstall function, deletes tables and options

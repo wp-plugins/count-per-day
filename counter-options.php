@@ -4,8 +4,6 @@
  * Count Per Day - Options and Administration
  */
 
-$mysiteurl = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], 'counter-options.php') + 19);
-
 // check form 
 if(!empty($_POST['do']))
 {
@@ -13,11 +11,13 @@ if(!empty($_POST['do']))
 	{
 		// update options
 		case 'cpd_update' :
+			$_POST['cpd_bots'] = preg_replace('/\r\n\r\n/', '', $_POST['cpd_bots']);
 			$count_per_day->options['onlinetime'] = $_POST['cpd_onlinetime'];
 			$count_per_day->options['user'] = empty( $_POST['cpd_user'] ) ? 0 : 1 ;
 			$count_per_day->options['user_level'] = $_POST['cpd_user_level'];
 			$count_per_day->options['autocount'] = empty( $_POST['cpd_autocount'] ) ? 0 : 1 ;
 			$count_per_day->options['bots'] = $_POST['cpd_bots'];
+			$count_per_day->options['posttypes'] = str_replace(' ', '', $_POST['cpd_posttypes']);
 			$count_per_day->options['dashboard_posts'] = $_POST['cpd_dashboard_posts'];
 			$count_per_day->options['dashboard_last_posts'] = $_POST['cpd_dashboard_last_posts'];
 			$count_per_day->options['dashboard_last_days'] = $_POST['cpd_dashboard_last_days'];
@@ -105,6 +105,11 @@ if(!empty($_POST['do']))
 			if ( $sum )
 				echo '<div class="updated"><p>'.sprintf(__('Mass Bots cleaned. %s counts deleted.', 'cpd'), $sum).'</p></div>';
 		}	
+		break;
+
+	// clean database
+	case 'cpd_export' :
+		$count_per_day->export($_POST['cpd_exportdays']);
 		break;
 		
 	// clean database
@@ -281,7 +286,7 @@ if(!empty($_POST['do']))
 		}
 		
 		// save collection
-		echo "<br />".__('Delete old data...', 'cpd')."\n";
+		echo "<br />".__('Deleting old data...', 'cpd')."\n";
 		$count_per_day->flush_buffers();
 		
 		update_option('count_per_day_summary', $s);
@@ -391,24 +396,31 @@ switch($mode) {
 		$o['massbotlimit'] = (int) $_POST['limit'];
 		update_option('count_per_day', $o);
 	}
+	
+	$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'tools';
 	?>
-	<div id="cpdtools" style="position:absolute;top:-31px;height:0x;"></div>
+	
 	<div id="cpdtoolccs" class="wrap">
 	
- 	<h2 class="nav-tab-wrapper" style="padding-bottom:0;margin-bottom:20px;">
-	 	<img src="<?php echo $count_per_day->img('cpd_menu.gif') ?>" alt="" style="width:24px;height:24px" /> Count per Day
-		<a class="nav-tab nav-tab-active" href="#cpdtools"><span class="cpd_icon cpd_tools">&nbsp;</span> <?php _e('Tools') ?></a>
-		<a class="nav-tab" href="#cpdsettings"><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Settings') ?></a>
+	<h2><img src="<?php echo $count_per_day->img('cpd_logo.png') ?>" alt="Logo" class="cpd_logo" /> Count per Day</h2>
+	
+	<h2 class="nav-tab-wrapper">
+		<a href="?page=count-per-day/counter-options.php&amp;tab=tools" class="nav-tab <?php echo $active_tab == 'tools' ? 'nav-tab-active' : ''; ?>"><span class="cpd_icon cpd_tools">&nbsp;</span> <?php _e('Tools') ?></a>
+		<a href="?page=count-per-day/counter-options.php&amp;tab=options" class="nav-tab <?php echo $active_tab == 'options' ? 'nav-tab-active' : ''; ?>"><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Settings') ?></a>
 	</h2>
-
+	
  	<div id="poststuff" class="cpd_settings">
-
+	
+	<?php if( $active_tab == 'tools' ) : ?>
+	
+	<?php $mysiteurl = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], 'counter-options.php') + 19).'&amp;tab=tools'; ?>
+	
 	<?php // mass bots ?>
 	<div class="postbox">
 	<?php
 	$limit = (isset($o['massbotlimit'])) ? $o['massbotlimit'] : 25;
 	$limit = (isset($_POST['limit'])) ? $_POST['limit'] : $limit;
-	$limit_input = '<input type="text" size="3" name="limit" value="'.$limit.'" />';
+	$limit_input = '<input type="text" size="3" name="limit" value="'.$limit.'" style="text-align:center" />';
 	
 	if ( $limit == 0 )
 		$limit = 50;
@@ -416,7 +428,7 @@ switch($mode) {
 	?>
 	<h3><span class="cpd_icon cpd_massbots">&nbsp;</span> <?php _e('Mass Bots', 'cpd') ?></h3>
 	<div class="inside">
-		<form method="post" action="<?php echo $mysiteurl ?>#cpdtools">
+		<form method="post" action="<?php echo $mysiteurl ?>">
 		<p>
 			<?php printf(__('Show all IPs with more than %s page views per day', 'cpd'), $limit_input) ?>
 			<input type="submit" name="showmassbots" value="<?php _e('show', 'cpd') ?>" class="button" />
@@ -468,8 +480,80 @@ switch($mode) {
 	</div>
 	</div>
 	
+	
+	<?php // industrious visitors ?>
+	<div class="postbox">
+	<?php
+	$limit = (!empty($_POST['vislimit'])) ? intval($_POST['vislimit']) : 10;
+	$limit_input = '<input type="text" size="3" name="vislimit" value="'.$limit.'" style="text-align:center" />';
+	$days = (!empty($_POST['visdays'])) ? intval($_POST['visdays']) : 7;
+	$days_input = '<input type="text" size="3" name="visdays" value="'.$days.'" style="text-align:center" />';
+	$list = $count_per_day->getLastVisitors( $days, $limit );
+	?>
+	<h3><span class="cpd_icon cpd_massbots">&nbsp;</span> <?php _e('Most Industrious Visitors', 'cpd') ?></h3>
+	<div class="inside">
+		<form method="post" action="<?php echo $mysiteurl ?>#cpdtools">
+		<p>
+			<?php printf(__('Show the %s most industrious visitors of the last %s days', 'cpd'), $limit_input, $days_input) ?>
+			<input type="submit" name="showlastvisitors" value="<?php _e('show', 'cpd') ?>" class="button" />
+		</p>
+		</form>
+		
+		<form method="post" action="<?php echo $mysiteurl ?>">
+		<table class="widefat post">
+		<thead>
+		<tr>
+			<th><?php _e('IP', 'cpd') ?></th>
+			<th><?php _e('Date', 'cpd') ?></th>
+			<th><?php _e('Client', 'cpd') ?></th>
+			<th style="text-align:right"><?php _e('Views', 'cpd') ?></th>
+		</tr>
+		</thead>
+		<?php
+		foreach ($list as $row)
+		{
+			$ip = $row->ip;
+			echo '<tr><td style="white-space:nowrap">';
+			if ( $cpd_geoip )
+			{
+				$c = CpdGeoIp::getCountry($ip);
+				echo $c[1].' &nbsp;';
+			}
+			echo '<a href="?page=count-per-day/counter-options.php&amp;dmbip='.$row->longip.'&amp;dmbdate='.$row->date.'"
+				title="'.sprintf(__('Delete these %s counts', 'cpd'), $row->posts).'"
+				style="color:red; font-weight: bold;">X</a> &nbsp;';
+			echo '<a href="http://www.utrace.de/?query='.$ip.'">'.$ip.'</a></td>'
+				.'<td style="white-space:nowrap;">'.mysql2date(get_option('date_format'), $row->date).'</td>'
+				.'<td>'.htmlentities($row->client).'</td>'
+				.'<td style="text-align:right;"><a href="'.$count_per_day->dir.'/massbots.php?dmbip='.$row->longip.'&amp;dmbdate='.$row->date.'&amp;KeepThis=true&amp;TB_iframe=true" title="Count per Day" class="thickbox">'
+					.$row->posts.'</a></td>'
+				.'</tr>';
+			$sum += $row->posts;
+		}
+		?>	
+		</table>
+		</form>
+	</div>
+	</div>
+	
 	<!-- left column -->
 	<div class="cpd_halfsize" style="margin-right: 2%;">
+	
+	<!-- Export -->
+	<div class="postbox">
+	<h3><span class="cpd_icon cpd_backup">&nbsp;</span> <?php _e('Export', 'cpd') ?></h3>
+	<div class="inside">
+		<form method="post" action="<?php echo $mysiteurl ?>">
+		<p>
+			<?php printf(__('Export the last %s days as CSV-File', 'cpd'), '<input type="text" size="4" name="cpd_exportdays" value="180" class="code" style="text-align:center" />'); ?>
+		</p>
+		<p>
+			<input type="hidden" name="do" value="cpd_export" />
+			<input type="submit" name="cpd_export" value="<?php _e('Export entries', 'cpd') ?>" class="button" />
+		</p>
+		</form>
+	</div>
+	</div>
 	
 	<!-- Backup -->
 	<div class="postbox">
@@ -732,15 +816,11 @@ switch($mode) {
 
 	</div> <!-- right column -->
 	
-	<div class="clear" id="cpdsettings" style="margin-bottom:41px"></div>
-
- 	<h2 class="nav-tab-wrapper" style="padding-bottom:0;font-size:23px;">
-	 	<img src="<?php echo $count_per_day->img('cpd_menu.gif') ?>" alt="" style="width:24px;height:24px" /> Count per Day
-		<a class="nav-tab" href="#cpdtools"><span class="cpd_icon cpd_tools">&nbsp;</span> <?php _e('Tools') ?></a>
-		<a class="nav-tab nav-tab-active" href="#cpdsettings"><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Settings') ?></a>
-	</h2>
-
-
+	
+	<?php else : // tools tab ?>
+	
+	<?php $mysiteurl = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], 'counter-options.php') + 19).'&amp;tab=options'; ?>
+	
 	<form method="post" action="<?php echo $mysiteurl ?>">
 		
 	<?php // counter ?>
@@ -749,11 +829,11 @@ switch($mode) {
 	
 	<table class="form-table">
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Online time', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Online time', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_onlinetime" size="3" value="<?php echo $o['onlinetime']; ?>" /> <?php _e('Seconds for online counter. Used for "Visitors online" on dashboard page.', 'cpd') ?></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Logged on Users', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Logged on Users', 'cpd') ?>:</th>
 		<td>
 			<label for="cpd_user"><input type="checkbox" name="cpd_user" id="cpd_user" <?php if($o['user']==1) echo 'checked="checked"'; ?> /> <?php _e('count too', 'cpd') ?></label>
 			- <?php _e('until User Level', 'cpd') ?>
@@ -767,23 +847,23 @@ switch($mode) {
 		</td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Auto counter', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Auto counter', 'cpd') ?>:</th>
 		<td><label for="cpd_autocount"><input type="checkbox" name="cpd_autocount" id="cpd_autocount" <?php checked($o['autocount'], 1) ?> /> <?php _e('Counts automatically single-posts and pages, no changes on template needed.', 'cpd') ?></label></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Bots to ignore', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Bots to ignore', 'cpd') ?>:</th>
 		<td><textarea name="cpd_bots" cols="50" rows="10"><?php echo $o['bots']; ?></textarea></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Anonymous IP', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Anonymous IP', 'cpd') ?>:</th>
 		<td><label for="cpd_anoip"><input type="checkbox" name="cpd_anoip" id="cpd_anoip" <?php checked($o['anoip'], 1) ?> /> a.b.c.d &gt; a.b.c.x</label></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Cache', 'cpd') ?> (beta):</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Cache', 'cpd') ?> (beta):</th>
 		<td><label for="cpd_ajax"><input type="checkbox" name="cpd_ajax" id="cpd_ajax" <?php checked($o['ajax'], 1) ?> /> <?php _e('I use a cache plugin. Count these visits with ajax.', 'cpd') ?></label></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Clients and referrers', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Clients and referrers', 'cpd') ?>:</th>
 		<td>
 			<label for="cpd_referers"><input type="checkbox" name="cpd_referers" id="cpd_referers" <?php checked($o['referers'], 1) ?> />
 			<?php _e('Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors.', 'cpd') ?> (1000000 <?php _e('Reads', 'cpd') ?> ~ 130 MB)</label><br/>
@@ -791,6 +871,16 @@ switch($mode) {
 			<?php _e('Save URL only, no query string.', 'cpd') ?> <code>http://example.com/webhp?hl=de#sclient=psy&amp;hl=de...</code> &gt; <code>http://example.com/webhp</code></label>
 		</td>
 	</tr>
+	<tr>
+		<th scope="row" style="white-space:nowrap"><?php _e('Post types', 'cpd') ?>:</th>
+		<td>
+			<input class="code" type="text" name="cpd_posttypes" size="50" value="<?php echo str_replace(',', ', ', $o['posttypes']); ?>" /><br/>
+			<?php _e('Only count these post types. Leave empty to count them all.', 'cpd') ?><br/>
+			<?php printf(__('Current post types: %s', 'cpd'), '<code>'.implode(', ', get_post_types()).'</code>'); ?>
+		</td>
+	</tr>
+	
+	
 	</table>
 	</fieldset>
 	
@@ -812,7 +902,7 @@ switch($mode) {
 	
 	<table class="form-table">
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Who can see it', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Who can see it', 'cpd') ?>:</th>
 		<td>
 			<?php $cus = (in_array($o['whocansee'], array('manage_options','manage_links','publish_posts','edit_posts','read'))) ? 0 : 1 ?> 
 			<select id="cpd_whocansee" name="cpd_whocansee" onchange="checkcustom()">
@@ -831,45 +921,45 @@ switch($mode) {
 		</td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Visitors per post', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Visitors per post', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_dashboard_posts" size="3" value="<?php echo $o['dashboard_posts']; ?>" /> <?php _e('How many posts do you want to see on dashboard page?', 'cpd') ?></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Latest Counts - Posts', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Latest Counts - Posts', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_dashboard_last_posts" size="3" value="<?php echo $o['dashboard_last_posts']; ?>" /> <?php _e('How many posts do you want to see on dashboard page?', 'cpd') ?></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Latest Counts - Days', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Latest Counts - Days', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_dashboard_last_days" size="3" value="<?php echo $o['dashboard_last_days']; ?>" /> <?php _e('How many days do you want look back?', 'cpd') ?></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Chart - Days', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Chart - Days', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_chart_days" size="3" value="<?php echo $o['chart_days']; ?>" /> <?php _e('How many days do you want look back?', 'cpd') ?></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Chart - Height', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Chart - Height', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_chart_height" size="3" value="<?php echo $o['chart_height']; ?>" /> px - <?php _e('Height of the biggest bar', 'cpd') ?></td>
 	</tr>
 	<?php if ($cpd_geoip) { ?>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Countries', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Countries', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_countries" size="3" value="<?php echo $o['countries']; ?>" /> <?php _e('How many countries do you want to see on dashboard page?', 'cpd') ?></td>
 	</tr>
 	<?php } ?>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Browsers', 'cpd') ?>:</th>
-		<td><input class="code" type="text" name="cpd_clients" size="50" value="<?php echo $o['clients']; ?>" /> <?php _e('Substring of the user agent, separated by comma', 'cpd') ?></td>
+		<th scope="row" style="white-space:nowrap"><?php _e('Browsers', 'cpd') ?>:</th>
+		<td><input class="code" type="text" name="cpd_clients" size="50" value="<?php echo $o['clients']; ?>" /><br/><?php _e('Substring of the user agent, separated by comma', 'cpd') ?></td>
 	</tr>		
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Search strings', 'cpd') ?>/<?php _e('Referrers - Entries', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Search strings', 'cpd') ?>/<?php _e('Referrers - Entries', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_dashboard_referers" size="3" value="<?php echo $o['dashboard_referers']; ?>" /> <?php _e('How many referrers do you want to see on dashboard page?', 'cpd') ?></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Search strings', 'cpd') ?>/<?php _e('Referrers - Days', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Search strings', 'cpd') ?>/<?php _e('Referrers - Days', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_referers_last_days" size="3" value="<?php echo $o['referers_last_days']; ?>" /> <?php _e('How many days do you want look back?', 'cpd') ?></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Local URLs', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Local URLs', 'cpd') ?>:</th>
 		<td><label for="cpd_localref"><input type="checkbox" name="cpd_localref" id="cpd_localref" <?php checked($o['localref'], 1) ?> />  <?php _e('Show local referrers too.', 'cpd') ?> (<?php echo bloginfo('url') ?>/...)</label></td>
 	</tr>
 	</table>
@@ -880,7 +970,7 @@ switch($mode) {
 	<legend><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Posts') ?> / <?php _e('Pages') ?></legend>
 	<table class="form-table">
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Show in lists', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Show in lists', 'cpd') ?>:</th>
 		<td><label for="cpd_show_in_lists"><input type="checkbox" name="cpd_show_in_lists" id="cpd_show_in_lists" <?php checked($o['show_in_lists'], 1) ?> /> <?php _e('Show "Reads per Post" in a new column in post management views.', 'cpd') ?></label></td>
 	</tr>
 	</table>
@@ -896,15 +986,15 @@ switch($mode) {
 		</th>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Start date', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Start date', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_startdate" size="10" value="<?php echo $o['startdate']; ?>" /> <?php _e('Your old Counter starts at?', 'cpd') ?> [yyyy-mm-dd]</td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Start count', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Start count', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_startcount" size="10" value="<?php echo $o['startcount']; ?>" /> <?php _e('Add this value to "Total visitors".', 'cpd') ?></td>
 	</tr>
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Start count', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Start count', 'cpd') ?>:</th>
 		<td><input class="code" type="text" name="cpd_startreads" size="10" value="<?php echo $o['startreads']; ?>" /> <?php _e('Add this value to "Total reads".', 'cpd') ?></td>
 	</tr>
 	</table>
@@ -915,7 +1005,7 @@ switch($mode) {
 	<legend><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Stylesheet', 'cpd') ?></legend>
 	<table class="form-table">
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('NO Stylesheet in Frontend', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('NO Stylesheet in Frontend', 'cpd') ?>:</th>
 		<td><label for="cpd_no_front_css"><input type="checkbox" name="cpd_no_front_css" id="cpd_no_front_css" <?php checked($o['no_front_css'], 1) ?> /> <?php _e('Do not load the stylesheet "counter.css" in frontend.', 'cpd') ?></label></td>
 	</tr>
 	</table>
@@ -926,7 +1016,7 @@ switch($mode) {
 	<legend><span class="cpd_icon cpd_settings">&nbsp;</span> <?php _e('Backup', 'cpd') ?></legend>
 	<table class="form-table">
 	<tr>
-		<th scope="row" style="vertical-align:middle;white-space:nowrap"><?php _e('Entries per pass', 'cpd') ?>:</th>
+		<th scope="row" style="white-space:nowrap"><?php _e('Entries per pass', 'cpd') ?>:</th>
 		<td>
 			<input class="code" type="text" name="cpd_backup_part" size="10" value="<?php echo $o['backup_part']; ?>" />
 			<?php _e('How many entries should be saved per pass? Default: 10000', 'cpd') ?><br/>
@@ -953,6 +1043,9 @@ switch($mode) {
 	</form>
 	
 	</div><!-- poststuff -->
+	
+	<?php endif; // tabs ?>
+	
 	</div><!-- wrap -->
 
 <?php } // End switch($mode)

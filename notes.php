@@ -28,8 +28,8 @@ else if ( isset($_GET['year']) )
 else	
 	$year = date_i18n('Y');
 
-$date = strip_tags($_POST['date']);
-$note = strip_tags($_POST['note']);
+$date = isset($_POST['date']) ? strip_tags($_POST['date']) : '';
+$note = isset($_POST['note']) ? strip_tags($_POST['note']) : '';
 
 // load notes
 $n = (array) get_option('count_per_day_notes');
