@@ -2,8 +2,8 @@
 Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
-Tested up to: 4.0
-Stable tag: 3.2.10
+Tested up to: 4.1
+Stable tag: 3.3
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -25,12 +25,13 @@ Visit Counter, shows reads and visitors per page, visitors today, yesterday, las
 
 = Languages, Translators =
 
-- up to date translations:
+- nearly up to date translations:
 - Bulgarian     - joro -                            http://www.joro711.com
+- Chinese		- Siyuan Tang -						http://mopbear.com
 - Finnish       - Jani Alha -                       http://www.wysiwyg.fi
 - German        - Tom -                             http://www.tomsdimension.de
 - Japanese      - Juno Hayami -                     http://juno.main.jp/blog/
-- Persian       - Mahmoud Zooroofchi -              www.zooroofchi.ir
+- Persian       - Mahmoud Zooroofchi -              http://www.zooroofchi.ir
 - Portuguese    - Beto Ribeiro -                    http://www.sevenarts.com.br
 - Russian       - Ilya Pshenichny -                 http://iluhis.com
 - Serbian       - Diana -                           http://wpdiscounts.com
@@ -58,7 +59,6 @@ Visit Counter, shows reads and visitors per page, visitors today, yesterday, las
 
 1. unzip plugin directory into the '/wp-content/plugins/' directory
 1. activate the plugin through the 'Plugins' menu in WordPress
-1. on every update you have to deactivate and reactivate the plugin to update some settings!
 
 The activation will create or update a table wp_cpd_counter.
 
@@ -67,6 +67,8 @@ The Visitors-per-Day function use 7 days as default. So don't surprise about a w
 **Configuration**
 
 See the Options Page and check the default values.
+
+
 
 == Frequently Asked Questions ==
 
@@ -114,6 +116,7 @@ To use the shortcodes within a text widget you have to add 'add_filter("widget_t
 [CPD_COUNTRIES]
 [CPD_COUNTRIES_USERS]
 [CPD_REFERERS]
+[CPD_FLOTCHART]
 [CPD_MOST_VISITED_POSTS limit="5" days="30" postsonly="1" posttypes="posts,pages"]
 - limit (optional): max records to show, default = all
 - days (optional), show last x days
@@ -306,6 +309,18 @@ show( $before, $after, $show, $count, $page )'
 
 
 == Changelog ==
+
+= 3.3 =
++ New: List of most industrious Visitors
++ New: Export data as CSV file
++ New: count given post types only
++ New: Shortcode CPD_FLOTCHART to show the big chart
++ New: Popular Posts Widget, thanks to Maurits van der Schee http://www.leaseweblabs.com/2014/01/popular-posts-count-per-day-wordpress-plugin
++ New: Part of IP adresses in Bot List, '192.168' will block all visitors from '192.168.x.x'
++ New language: Chinese, thanks to Siyuan Tang
++ Bugfix: counting of cached pages
++ Bugfix: cleaning database, delete entries per IP in bot list
++ some little fixes
 
 = 3.2.10 =
 + Bugfix: Plugin dir path fixed
