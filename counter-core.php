@@ -89,8 +89,8 @@ function init()
 	}
 	
 	// locale support
-	if (defined('WPLANG') && function_exists('load_plugin_textdomain'))
-		load_plugin_textdomain('cpd', false, $cpd_dir_name.'/locale');
+// 	if (defined('WPLANG') && function_exists('load_plugin_textdomain'))
+	load_plugin_textdomain('cpd', false, $cpd_dir_name.'/locale');
 		 
 	// adds stylesheet
 	if (is_admin())
@@ -249,9 +249,12 @@ function anonymize_ip( $ip )
 	if ($this->options['anoip'])
 	{
 		$i = explode('.', $ip);
-		$i[3] += round( array_sum($i) / 4 + date_i18n('d') );
-		if ( $i[3] > 255 )
-			$i[3] -= 255;
+		if (isset($i[3]))
+		{
+			$i[3] += round( array_sum($i) / 4 + date_i18n('d') );
+			if ( $i[3] > 255 )
+				$i[3] -= 255;
+		}
 		return implode('.', $i);	
 	}
 	else
@@ -281,7 +284,7 @@ function getPostID()
 		else if (is_singular())
 			// single page with template tag show() or count()
 			$p = get_the_ID();
-		// "index" pages only with autocount	
+		// "index" pages only with autocount
 		else if ( is_category() || is_tag() )
 			// category or tag => negativ ID in CpD DB
 			$p = 0 - $wp_query->get_queried_object_id();
@@ -390,11 +393,11 @@ function createTables()
 	$sql = "CREATE TABLE IF NOT EXISTS `$cpd_c` (
 	`id` int(10) NOT NULL auto_increment,
 	`ip` int(10) unsigned NOT NULL,
-	`client` varchar(150) NOT NULL,
+	`client` varchar(250) NOT NULL,
 	`date` date NOT NULL,
 	`page` mediumint(9) NOT NULL,
 	`country` CHAR(2) NOT NULL,
-	`referer` varchar(100) NOT NULL,
+	`referer` varchar(250) NOT NULL,
 	PRIMARY KEY (`id`),
 	KEY `idx_page` (`page`),
 	KEY `idx_dateip` (`date`,`ip`) )
@@ -412,10 +415,19 @@ function createTables()
 		"ALTER TABLE `$cpd_c` DROP `ip`",
 		"ALTER TABLE `$cpd_c` CHANGE `ip2` `ip` INT( 10 ) UNSIGNED NOT NULL",
 		"ALTER TABLE `$cpd_c` CHANGE `date` `date` date NOT NULL",
-		"ALTER TABLE `$cpd_c` CHANGE `page` `page` mediumint(9) NOT NULL");
+		"ALTER TABLE `$cpd_c` CHANGE `page` `page` mediumint(9) NOT NULL",
+		"ALTER TABLE `$cpd_c` CHANGE `client` `client` VARCHAR( 250 ) NOT NULL",
+		"ALTER TABLE `$cpd_c` CHANGE `referer` `referer` VARCHAR( 250 ) NOT NULL"
+		);
 		foreach ($queries as $sql)
 			$this->mysqlQuery('', $sql, 'update old fields '.__LINE__);
 	}
+	
+	// change textfield limit
+	$sql = "ALTER TABLE `$cpd_c`
+		CHANGE `client` `client` VARCHAR( 500 ) NOT NULL ,
+		CHANGE `referer` `referer` VARCHAR( 500 ) NOT NULL;";
+	$this->mysqlQuery('', $sql, 'change textfield limit '.__LINE__);
 	
 	// make new keys
 	$keys = $this->mysqlQuery('rows', "SHOW KEYS FROM `$cpd_c`", 'make keys '.__LINE__);
@@ -666,6 +678,7 @@ function updateOptions()
 	'chart_days' => 60,
 	'chart_height' => 200,
 	'countries' => 20,
+	'exclude_countries' => '',
 	'startdate' => '',
 	'startcount' => '',
 	'startreads' => '',
@@ -676,6 +689,7 @@ function updateOptions()
 	'debug' => 0,
 	'referers' => 1,
 	'referers_cut' => 0,
+	'fieldlen' => 150,
 	'localref' => 1,
 	'dashboard_referers' => 20,
 	'referers_last_days' => 7,
@@ -977,7 +991,7 @@ function export( $days = 180 )
 	global $wpdb;
 	$t = $wpdb->cpd_counter;
 	$tname = $t.'_last_'.$days.'_days_'.date_i18n('Y-m-d_H-i-s').'.csv';
-	$path = tempnam('', 'cpdexport');
+	$path = tempnam(sys_get_temp_dir(), 'cpdexport');
 	
 	// open file
 	$f = fopen($path,'w');
@@ -1053,7 +1067,7 @@ function backup()
 	$name = '/'.$tname;
 
 	// wp-content or tempdir?
-	$path = ( empty($_POST['downloadonly']) && is_writable(WP_CONTENT_DIR) ) ? WP_CONTENT_DIR.$name : tempnam('', 'cpdbackup');
+	$path = ( empty($_POST['downloadonly']) && is_writable(WP_CONTENT_DIR) ) ? WP_CONTENT_DIR.$name : tempnam(sys_get_temp_dir(), 'cpdbackup');
 	
 	// open file
 	$f = ($gz) ? gzopen($path,'w9') : fopen($path,'w');
@@ -1113,7 +1127,8 @@ function backup()
 						// add values
 						$v = '';
 						foreach ($row as $val)
-							$v .= "'".mysql_real_escape_string($val)."',";
+// 							$v .= "'".mysql_real_escape_string($val)."',";
+							$v .= "'".esc_sql($val)."',";
 						$v = '('.substr($v,0,-1).'),';
 						
 						if ( strlen($line) < 50000 - strlen($v) )
@@ -1157,7 +1172,7 @@ function backup()
 		$toname = 'count_per_day_options_'.date_i18n('Y-m-d_H-i-s').'.txt';
 		if ($gz) $toname .= '.gz';
 		$oname = '/'.$toname;
-		$opath = ( empty($_POST['downloadonly']) && is_writable(WP_CONTENT_DIR) ) ? WP_CONTENT_DIR.$oname : tempnam('', 'cpdbackup');
+		$opath = ( empty($_POST['downloadonly']) && is_writable(WP_CONTENT_DIR) ) ? WP_CONTENT_DIR.$oname : tempnam(sys_get_temp_dir(), 'cpdbackup');
 		$f = ($gz) ? gzopen($opath,'w9') : fopen($opath,'w');
 		
 		foreach (array('count_per_day', 'count_per_day_summary', 'count_per_day_collected', 'count_per_day_posts', 'count_per_day_notes') as $o)

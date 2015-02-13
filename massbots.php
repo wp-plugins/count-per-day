@@ -50,7 +50,7 @@ foreach ( $massbots as $r )
 {
 	if ( $r->post_id < 0 && $r->tax == 'category' )
 	{
-		$name = '- '.$row->tag_cat_name.' -';
+		$name = '- '.$r->tag_cat_name.' -';
 		$link = get_bloginfo('url').'?cat='.abs($r->post_id);
 	}
 	else if ( $r->post_id < 0 )

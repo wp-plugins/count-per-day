@@ -134,9 +134,12 @@ function count( $x, $page = 'x' )
 		$userip = $this->anonymize_ip($real_ip);
 		
 		$client = ($this->options['referers']) ? wp_strip_all_tags($_SERVER['HTTP_USER_AGENT']) : '';
+		$client = substr( $client, 0, $this->options['fieldlen'] );
+		
 		$referer = ($this->options['referers'] && isset($_SERVER['HTTP_REFERER'])) ? wp_strip_all_tags($_SERVER['HTTP_REFERER']) : '';
 		if ($this->options['referers_cut'])
 			$referer = substr( $referer, 0, strpos($referer,'?') );
+		$referer = substr( $referer, 0, $this->options['fieldlen'] );
 		
 		// new visitor on page?
 		$count = $this->mysqlQuery('var', $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->cpd_counter WHERE ip=$this->aton(%s) AND date=%s AND page=%d", $userip, $date, $page), 'count check '.__LINE__);
@@ -174,13 +177,15 @@ function count( $x, $page = 'x' )
 				if (empty($country))
 					$country = '-';
 				
-				$this->mysqlQuery('', $wpdb->prepare("INSERT INTO $wpdb->cpd_counter (page, ip, client, date, country, referer)
-				VALUES (%s, $this->aton(%s), %s, %s, %s, %s)", $page, $userip2, $client, $date, $country, $referer), 'count insert '.__LINE__);
+				// insert if not an excluded country
+				if ( !in_array($country, explode(',', $this->options['exclude_countries'])) )
+					$this->mysqlQuery('', $wpdb->prepare("INSERT INTO $wpdb->cpd_counter (page, ip, client, date, country, referer)
+					VALUES (%d, $this->aton(%s), %s, %s, %s, %s)", $page, $userip2, $client, $date, $country, $referer), 'count insert '.__LINE__);
 			}
 			else
 				// without country
 				$this->mysqlQuery('', $wpdb->prepare("INSERT INTO $wpdb->cpd_counter (page, ip, client, date, referer)
-				VALUES (%s, $this->aton(%s), %s, %s, %s)", $page, $userip2, $client, $date, $referer), 'count insert '.__LINE__);
+				VALUES (%d, $this->aton(%s), %s, %s, %s)", $page, $userip2, $client, $date, $referer), 'count insert '.__LINE__);
 		}
 		// online counter
 		$oc = (array) get_option('count_per_day_online');

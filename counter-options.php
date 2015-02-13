@@ -29,11 +29,13 @@ if(!empty($_POST['do']))
 			$count_per_day->options['startreads'] = $_POST['cpd_startreads'];
 			$count_per_day->options['anoip'] = empty( $_POST['cpd_anoip'] ) ? 0 : 1 ;
 			$count_per_day->options['clients'] = $_POST['cpd_clients'];
+			$count_per_day->options['exclude_countries'] = strtolower(str_replace(' ', '', $_POST['cpd_exclude_countries']));
 			$count_per_day->options['ajax'] = empty( $_POST['cpd_ajax'] ) ? 0 : 1 ;
 			$count_per_day->options['debug'] = empty( $_POST['cpd_debug'] ) ? 0 : 1 ;
 			$count_per_day->options['localref'] = empty( $_POST['cpd_localref'] ) ? 0 : 1 ;
 			$count_per_day->options['referers'] = empty( $_POST['cpd_referers'] ) ? 0 : 1 ;
 			$count_per_day->options['referers_cut'] = empty( $_POST['cpd_referers_cut'] ) ? 0 : 1 ;
+			$count_per_day->options['fieldlen'] = min( array(intval($_POST['cpd_fieldlen']), 500) );
 			$count_per_day->options['dashboard_referers'] = $_POST['cpd_dashboard_referers'];
 			$count_per_day->options['referers_last_days'] = $_POST['cpd_referers_last_days'];
 			$count_per_day->options['chart_old'] = empty( $_POST['cpd_chart_old'] ) ? 0 : 1 ;
@@ -58,6 +60,7 @@ if(!empty($_POST['do']))
 		{
 			$count_per_day->queries[] = 'cpd_countries - class "CpdGeoIp" exists'; 
 			$rest = CpdGeoIp::updateDB();
+			$mysiteurl = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], 'counter-options.php') + 19).'&amp;tab=tools';
 			echo '<div class="updated">
 				<form name="cpdcountries" method="post" action="'.$mysiteurl.'">
 				<p>'.sprintf(__('Countries updated. <b>%s</b> entries in %s without country left', 'cpd'), $rest, $wpdb->cpd_counter);
@@ -855,6 +858,13 @@ switch($mode) {
 		<td><textarea name="cpd_bots" cols="50" rows="10"><?php echo $o['bots']; ?></textarea></td>
 	</tr>
 	<tr>
+		<th scope="row" style="white-space:nowrap"><?php _e('Exclude Countries', 'cpd') ?>:</th>
+		<td>
+			<input class="code" type="text" name="cpd_exclude_countries" size="50" value="<?php echo str_replace(',', ', ', $o['exclude_countries']); ?>" /><br/>
+			<?php _e('Do not count visitors from these countries. Use the country code (de, us, cn,...) Leave empty to count them all.', 'cpd') ?>
+		</td>
+	</tr>
+	<tr>
 		<th scope="row" style="white-space:nowrap"><?php _e('Anonymous IP', 'cpd') ?>:</th>
 		<td><label for="cpd_anoip"><input type="checkbox" name="cpd_anoip" id="cpd_anoip" <?php checked($o['anoip'], 1) ?> /> a.b.c.d &gt; a.b.c.x</label></td>
 	</tr>
@@ -867,8 +877,11 @@ switch($mode) {
 		<td>
 			<label for="cpd_referers"><input type="checkbox" name="cpd_referers" id="cpd_referers" <?php checked($o['referers'], 1) ?> />
 			<?php _e('Save and show clients and referrers.<br />Needs a lot of space in the database but gives you more detailed informations of your visitors.', 'cpd') ?> (1000000 <?php _e('Reads', 'cpd') ?> ~ 130 MB)</label><br/>
-			<label for="cpd_referers_cut"><input type="checkbox" name="cpd_referers_cut" id="cpd_referers_cut" <?php checked($o['referers_cut'], 1) ?> />
-			<?php _e('Save URL only, no query string.', 'cpd') ?> <code>http://example.com/webhp?hl=de#sclient=psy&amp;hl=de...</code> &gt; <code>http://example.com/webhp</code></label>
+			<label style="padding-top:10px" for="cpd_referers_cut"><input type="checkbox" name="cpd_referers_cut" id="cpd_referers_cut" <?php checked($o['referers_cut'], 1) ?> />
+			<?php _e('Save URL only, no query string.', 'cpd') ?><br/>
+			<code>http://example.com/webhp?hl=de#sclient=psy&amp;hl=de...</code> &gt; <code>http://example.com/webhp</code></label><br/>
+			<input class="code" style="margin-top:10px" type="text" name="cpd_fieldlen" size="3" value="<?php echo $o['fieldlen'] ?>" />
+			<?php _e('Limit the length to reduce database size. (max. 500 chars)', 'cpd') ?><br/>
 		</td>
 	</tr>
 	<tr>

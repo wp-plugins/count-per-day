@@ -17,7 +17,7 @@ class CpdGeoIp
  * @param $ip IP
  * @return array e.g. ( 'de', image div , 'Germany' )
  */
-function getCountry( $ip )
+static function getCountry( $ip )
 {
 	global $cpd_path;
 	
@@ -47,7 +47,7 @@ function getCountry( $ip )
 /**
  * updates CountPerDay table
  */
-function updateDB()
+static function updateDB()
 {
 	global $count_per_day, $cpd_path, $wpdb;
 	
@@ -105,7 +105,7 @@ function updateDB()
  * updates the GeoIP database file
  * works only if directory geoip has rights 777, set it in ftp client
  */
-function updateGeoIpFile()
+static function updateGeoIpFile()
 {
 	global $cpd_path;
 	
