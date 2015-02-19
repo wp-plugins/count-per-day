@@ -7,9 +7,8 @@ if (!session_id()) session_start();
 $cpd_wp = (!empty($_SESSION['cpd_wp'])) ? $_SESSION['cpd_wp'] : '../../../../';
 require_once($cpd_wp.'wp-load.php');
 require_once($cpd_path.'/geoip/geoip.php');
-$geoip = new GeoIPCpD();
-$data = array();
-
+$gi = cpd_geoip_open($cpd_path.'/geoip/GeoIP.dat', GEOIP_STANDARD);
+$data = array('-' => 0);
 $what = (empty($_GET['map'])) ? 'reads' : strip_tags($_GET['map']);
 
 if ( $what == 'online' )
@@ -19,13 +18,10 @@ if ( $what == 'online' )
 	foreach ($oc as $ip => $x)
 	{
 		if ( strpos($ip,'.') !== false && strpos($ip,':') === false)
-			// IPv4
-			$country = cpd_geoip_country_code_by_addr_v6($gi, '::'.$ip);
-		else
-			// IPv6
-			$country = cpd_geoip_country_code_by_addr_v6($gi, $ip);
-		$count = (isset($vo[$country])) ? $vo[$country][1] + 1 : 1;
-		$data[$country] = $count;
+			// IPv4 -> IPv6
+			$ip = '::'.$ip;
+		$country = strtoupper(cpd_geoip_country_code_by_addr_v6($gi, $ip));
+		$data[$country] = (isset($data[$country])) ? $data[$country] + 1 : 1;
 	}
 }
 else

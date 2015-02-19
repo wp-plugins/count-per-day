@@ -2,8 +2,8 @@
 Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
-Tested up to: 4.1
-Stable tag: 3.3
+Tested up to: 4.2
+Stable tag: 3.4
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -309,6 +309,14 @@ show( $before, $after, $show, $count, $page )'
 
 
 == Changelog ==
+
+= 3.4 =
++ New: limit the length of client and referer to reduce database size and eliminate MySql strict mode errors
++ New: exclude countries you not want to count
++ New: Flash free World map
++ New: Flag of Malawi
++ Bugfix: language support without WPLANG constant
++ Bugfix: get temp directory
 
 = 3.3 =
 + New: List of most industrious Visitors
