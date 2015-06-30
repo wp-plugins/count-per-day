@@ -2,8 +2,8 @@
 Contributors: Tom Braider
 Tags: counter, count, posts, visits, reads, dashboard, widget, shortcode
 Requires at least: 3.0
-Tested up to: 4.2
-Stable tag: 3.4
+Tested up to: 4.3
+Stable tag: 3.4.1
 License: Postcardware :)
 Donate link: http://www.tomsdimension.de/postcards
 
@@ -309,6 +309,9 @@ show( $before, $after, $show, $count, $page )'
 
 
 == Changelog ==
+
+= 3.4.1 =
++ Bugfix: Security fix backup download
 
 = 3.4 =
 + New: limit the length of client and referer to reduce database size and eliminate MySql strict mode errors
