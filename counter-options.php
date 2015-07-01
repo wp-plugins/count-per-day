@@ -166,7 +166,7 @@ if(!empty($_POST['do']))
 			delete_option('count_per_day_posts');
 		}
 		
-		$keep = (isset($_POST['cpd_keep_month'])) ? $_POST['cpd_keep_month'] : 6;
+		$keep = (isset($_POST['cpd_keep_month'])) ? intval($_POST['cpd_keep_month']) : 6;
 		
 		$d = array(); // month data
 		$t = array(); // temp country data
