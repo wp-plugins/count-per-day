@@ -11,6 +11,15 @@ if ( file_exists($cpd_path.'geoip/geoip.php') )
 	include_once($cpd_path.'geoip/geoip.php');
 $cpd_geoip = ( class_exists('CpdGeoIp') && file_exists($cpd_path.'geoip/GeoIP.dat') ) ? 1 : 0;
 
+//
+// 
+if(!function_exists('mysql_errno')){
+	function mysql_errno($link_identifier = null){ return null; }
+}
+if(!function_exists('mysql_error')){
+	function mysql_error ($link_identifier = null){ return ''; }
+}
+
 /**
  * helper functions
  */
